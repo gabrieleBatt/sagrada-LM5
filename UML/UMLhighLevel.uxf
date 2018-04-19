@@ -1,0 +1,1937 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>2</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>836</x>
+      <y>508</y>
+      <w>42</w>
+      <h>16</h>
+    </coordinates>
+    <panel_attributes>/Objective/
+-
+-
+/+ scorePoints(:Window): int/
+/+ getName(): String/
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>868</x>
+      <y>558</y>
+      <w>38</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>/PublicObjective/
+--
+--
+/+ scorePoints(:Window): int/
+/+ getName(): String/
+/+ getPoints(): char/
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>856</x>
+      <y>522</y>
+      <w>36</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+group=3</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0;160.0;100.0;160.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>826</x>
+      <y>522</y>
+      <w>36</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+group=3</panel_attributes>
+    <additional_attributes>160.0;10.0;160.0;100.0;10.0;100.0;10.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>810</x>
+      <y>558</y>
+      <w>38</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>/PrivateObjective/
+--
+--
+/+ scorePoints(:Window): int/
+/+ getName(): String/
+/+ getPoints(): char/
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>934</x>
+      <y>554</y>
+      <w>60</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>Table
+--
+--
++ Table(:List&lt;Player&gt;)
++ setPublicObjective(:List&lt;PublicObjective&gt;)
++ setTools(:List&lt;Tool&gt;)
++ getPlayers(): List&lt;Player&gt;
++ getPublicObjectives(): List&lt;PublicObjective&gt;
++ getTools(): List&lt;Tool&gt;
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>904</x>
+      <y>566</y>
+      <w>34</w>
+      <h>8</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=3
+m2=0..n
+group=3</panel_attributes>
+    <additional_attributes>10.0;10.0;150.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>816</x>
+      <y>592</y>
+      <w>60</w>
+      <h>46</h>
+    </coordinates>
+    <panel_attributes>Player
+--
+- nickname: String
+- tokens: int
+--
++ Player(nickname: String)
++ getNickname(): String
++ getWindow(): Window
++ setWindow(:Window)
++ getTokens(): int
++ setTokens(): int
++ getPrivateObjective(): List&lt;PrivateObjective&gt;
++ addPrivateObjective(:PrivateObjective)
++ addPrivateObjective(:List&lt;PrivateObjective&gt;)
++ isConnected(): boolean
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>874</x>
+      <y>580</y>
+      <w>84</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..4
+m2=1
+group=3</panel_attributes>
+    <additional_attributes>10.0;110.0;400.0;110.0;400.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>956</x>
+      <y>614</y>
+      <w>70</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>Cell
+--
+- die: Die
+- colorRestriction: DieColor
+- numberRestriction: int
+--
++ Cell(colorRestriction: DieColor, numberRestriction:int)
++ isOccuped(): boolean
++ getDie(): Die
++ hasRestriction(): boolean
++ getColorRestriction(): DieColor
++ getNumberRestriction(): Integer
++ isActive(): boolean
++ setActive(:boolean)
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>840</x>
+      <y>636</y>
+      <w>48</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=1
+m2=1
+
+group=3</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0;220.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>884</x>
+      <y>612</y>
+      <w>58</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>Window
+--
+- difficulty: int
+- name: String
+--
++ Window(:File)
++ getDifficulty(): int
++ getName(): String
++ getCell(x: int, y: int): Cell
++ getAdiecentDice(x: int, y: int): List&lt;Cell&gt;
++ hasSurroundingDice(x: int, y: int): boolean
++ getRow(x: int): List&lt;Cell&gt;
++ getColoumn(y: int): list&lt;Cell&gt;
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>940</x>
+      <y>626</y>
+      <w>20</w>
+      <h>8</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=20
+group=3</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1056</x>
+      <y>604</y>
+      <w>54</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>Die
+--
+- color: DieColor
+- number: int
+--
++ Die(color: DieColor, number: int)
++ getColor(): DieColor
++ getNumber(): int
++ setNumber(:int)
++ isActive(): boolean
++ setActive(:boolean)
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1064</x>
+      <y>654</y>
+      <w>26</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+DieColor
+-
+RED
+GREEN
+YELLOW
+CYAN
+MAGENTA
+
+
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1074</x>
+      <y>634</y>
+      <w>10</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=0..n
+m2=1
+is
+group=3</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>826</x>
+      <y>574</y>
+      <w>28</w>
+      <h>22</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1,2
+m2=0..n
+group=3</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0;100.0;40.0;100.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1066</x>
+      <y>526</y>
+      <w>40</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>RoundTrack
+--
+- round: int
+- track: List&lt;Die&gt;[]
+--
++ getRound(): int
++ nextRound(:List&lt;Die&gt;)
++ getDice(): List&lt;Die&gt;
+
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>992</x>
+      <y>538</y>
+      <w>78</w>
+      <h>34</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1
+group=3</panel_attributes>
+    <additional_attributes>370.0;10.0;70.0;10.0;70.0;140.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1080</x>
+      <y>550</y>
+      <w>16</w>
+      <h>58</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=0..n
+m2=0,1
+contains
+group=3</panel_attributes>
+    <additional_attributes>10.0;270.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1016</x>
+      <y>568</y>
+      <w>38</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>Pool
+--
+- pool: List&lt;Die&gt;
+--
++ getDice(): List&lt;Die&gt;
++ setDice(:List&lt;Die&gt;)
++ takeDie(:Die)
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>992</x>
+      <y>572</y>
+      <w>28</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1
+group=3</panel_attributes>
+    <additional_attributes>120.0;70.0;70.0;70.0;70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1052</x>
+      <y>580</y>
+      <w>24</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=0..n
+m2=0,1
+group=3</panel_attributes>
+    <additional_attributes>80.0;120.0;80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>942</x>
+      <y>506</y>
+      <w>38</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>/Tool/
+--
+--
+/+ getName(): String/
+/+ getActionCommand(): ActionCommand/
+/+ isUsed(): boolean/
+/+ addTokens()/
+/+ addDie(:Die)/
+/+ getTokens(): int/
+/+ + isActive(): boolean/
+/+ setActive(:boolean)/
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>958</x>
+      <y>536</y>
+      <w>10</w>
+      <h>22</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=3
+m2=0..n
+group=3</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>684</x>
+      <y>156</y>
+      <w>58</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>GameController
+--
+- table: Table
+- rules: Rules
+- history: List&lt;String&gt;
+- actions: Stack&lt;ActionCommand&gt;
+- effects: List&lt;Effect&gt;
+- players: HashMap&lt;ServerChannel, Player&gt;
+--
++ setRules(:Rules)
++ getHistory(): List&lt;String&gt;
++ addAction(:Action)
++ addAction(:Stack&lt;Action&gt;)
++ addEffect(:Effect)
++ getPlayers(): List&lt;Player&gt;
++ start()
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>774</x>
+      <y>110</y>
+      <w>64</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>/Rules/
+--
+- actionReciver: GameController
+--
++ setActionReciver(:GameController)
+/+ getGameActions(): Stack&lt;ActionCommand&gt;/
+/+ getRoundActions(): Stack&lt;ActionCommand&gt;/
+/+ getTurnActions(): Stack&lt;ActionCommand&gt;/
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>672</x>
+      <y>102</y>
+      <w>52</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>Effect
+--
+- action: ActionCommand
+--
++ hasEffect(:ActionCommand): boolean
++ getAction(): ActionCommand
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>770</x>
+      <y>166</y>
+      <w>66</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>/ActionCommand/
+--
+- actionReciver: GameController
+--
++ ActionCommand(actionReciver: GameController)
+/+ getDescription: String/
+/+ execute()/
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>740</x>
+      <y>172</y>
+      <w>34</w>
+      <h>8</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..n
+m2=1
+group=2</panel_attributes>
+    <additional_attributes>150.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>740</x>
+      <y>184</y>
+      <w>34</w>
+      <h>8</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
+m1=0..n
+m2=1
+group=2</panel_attributes>
+    <additional_attributes>150.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>768</x>
+      <y>216</y>
+      <w>66</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>GivePrivateObjectiveCommand
+--
+- description: String
+- actionReciver: GameController
+--
++ ActionCommand(actionReciver: GameController)
++ getDescription: String
++ execute()
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>796</x>
+      <y>190</y>
+      <w>6</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+group=2</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>736</x>
+      <y>134</y>
+      <w>14</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+reciver
+fg=gray
+group=2</panel_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>720</x>
+      <y>132</y>
+      <w>18</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+invoker
+fg=gray
+group=2</panel_attributes>
+    <additional_attributes>10.0;120.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>742</x>
+      <y>132</y>
+      <w>40</w>
+      <h>38</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+command
+fg=gray
+group=2</panel_attributes>
+    <additional_attributes>180.0;170.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>518</x>
+      <y>136</y>
+      <w>64</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>Server
+--
+_- instance: Server_
+- games: List&lt;GameController&gt;
+-
+--
+- newPlayer(:CommunicationChannel)
+_+ main(String[] args): void_
++ getInstance()
++ rmiLogin(:RemoteGameScreen, :String)
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>540</x>
+      <y>86</y>
+      <w>52</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>The client of the command pattern,
+chooses the set of rules to use
+and the set of action to be performed
+fg=gray
+bg=white
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>562</x>
+      <y>102</y>
+      <w>6</w>
+      <h>38</h>
+    </coordinates>
+    <panel_attributes>lt=.
+group=2</panel_attributes>
+    <additional_attributes>10.0;170.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>740</x>
+      <y>132</y>
+      <w>64</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=0..n
+invokes
+commands
+from 
+set
+group=2</panel_attributes>
+    <additional_attributes>230.0;10.0;230.0;150.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>772</x>
+      <y>118</y>
+      <w>146</w>
+      <h>14</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+command
+set
+fg=gray
+group=2</panel_attributes>
+    <additional_attributes>10.0;10.0;710.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>696</x>
+      <y>120</y>
+      <w>10</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..n
+m2=1
+group=2</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>988</x>
+      <y>512</y>
+      <w>38</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>DiceBag
+--
+- HahsMap&lt;DieColor, int&gt;
+--
++ drawDice(:int): List&lt;Die&gt;
++ drawDie(): Die
++ placeDie(:Die)
+
+
+
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>978</x>
+      <y>536</y>
+      <w>26</w>
+      <h>22</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1
+
+group=3</panel_attributes>
+    <additional_attributes>110.0;10.0;110.0;50.0;10.0;50.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>162</y>
+      <w>108</w>
+      <h>8</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=0..n
+group=2</panel_attributes>
+    <additional_attributes>10.0;10.0;520.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>600</x>
+      <y>170</y>
+      <w>74</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>Lobby
+--
+- HashMap&lt;:CommunicationChannel, nickname: String&gt;
+--
++ Lobby(timeout: Time)
++ addPlayer(:CommunicationChannel, nickname: String)
++ isFull(): boolean
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>596</x>
+      <y>220</y>
+      <w>88</w>
+      <h>38</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;CommunicationChannel&gt;&gt;
+--
+- table: Table
+--
+/+ setTable()/
+/+ getNickname(): String/
+/+ isConnected(): boolean/
+/+ updateView()/
+/+ chooseWindow(:List&lt;Window&gt;): Window/
+/+ chooseAction(): Selectable/
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>682</x>
+      <y>202</y>
+      <w>34</w>
+      <h>34</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=1..4
+group=2</panel_attributes>
+    <additional_attributes>150.0;10.0;150.0;140.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>804</x>
+      <y>132</y>
+      <w>10</w>
+      <h>38</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=1
+m2=0..n
+group=2</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>562</x>
+      <y>184</y>
+      <w>38</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-
+group=2</panel_attributes>
+    <additional_attributes>170.0;230.0;10.0;230.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>180</y>
+      <w>24</w>
+      <h>8</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0,1
+m2=1
+group=2</panel_attributes>
+    <additional_attributes>100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>636</x>
+      <y>194</y>
+      <w>10</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=1,4
+group=2</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>658</x>
+      <y>298</y>
+      <w>64</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>RmiCommunicationChannel
+--
+- nickname: String
+--
++ setTable()
++ getNickname(): String
++ isConnected(): boolean
++ updateView()
++ chooseWindow(:List&lt;Window&gt;): Window
++ chooseAction(): Selectable
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>568</x>
+      <y>298</y>
+      <w>66</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>SocketCommunicationChannel
+--
+- nickname: String
+--
++ setTable()
++ getNickname(): String
++ isConnected(): boolean
++ updateView()
++ chooseWindow(:List&lt;Window&gt;): Window
++ chooseAction(): Selectable
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>588</x>
+      <y>256</y>
+      <w>52</w>
+      <h>46</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+group=2</panel_attributes>
+    <additional_attributes>240.0;10.0;240.0;90.0;10.0;90.0;10.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>634</x>
+      <y>256</y>
+      <w>48</w>
+      <h>46</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+group=2</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0;220.0;90.0;220.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>228</x>
+      <y>698</y>
+      <w>100</w>
+      <h>58</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;RemoteGameScreen&gt;&gt;
+--
+--
+/+ setNumberOfPlayers(:int)/
+/+ setNicknames(:List&lt;String&gt;)/
+/+ setPrivateObjectives(:List&lt;String&gt;)/
+/+ setPublicObjectives(:List&lt;String&gt;)/
+/+ setTools(:List&lt;String&gt;)/
+/+ setToolTokens(:String, int)/
+/+ setPlayerTokens(:String, int)/
+/+ setPlayerWindow(palyerName: String, windowName: String)/
+/+ loadPlayerWindow(palyerName: String, windowVector: String)/
+/+ setCellContent(:String, x: int, y: int, die: String)/
+/+ setPoolContent(:List&lt;String&gt;)/
+/+ setTrackContent(:List&lt;String&gt;)/
+
+/+ showAndChooseWindow(palyerName: String, windowVector: String): String/
+
+/+ getInput(): String/
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>198</x>
+      <y>518</y>
+      <w>34</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>CliGameScreen
+--
+--
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>404</x>
+      <y>466</y>
+      <w>32</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>GuiGameScreen
+--
+--
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>232</x>
+      <y>644</y>
+      <w>50</w>
+      <h>38</h>
+    </coordinates>
+    <panel_attributes>/RealGameScreen/
+--
+--
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>254</x>
+      <y>680</y>
+      <w>6</w>
+      <h>22</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+group=1</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>210</x>
+      <y>558</y>
+      <w>52</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+group=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;230.0;240.0;230.0;240.0;430.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>256</x>
+      <y>506</y>
+      <w>170</w>
+      <h>142</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+group=1</panel_attributes>
+    <additional_attributes>830.0;10.0;830.0;490.0;10.0;490.0;10.0;690.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>96</x>
+      <y>368</y>
+      <w>64</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>/ViewAbstractFactory/
+--
+--
+/+ makeGameScreen(): GameScreen/
+/+ makeConnectionScreen(): ConnectionScreen/
+/+ makeEndScreen(): EndScreen/
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>114</x>
+      <y>386</y>
+      <w>40</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+group=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;170.0;180.0;170.0;180.0;280.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>56</x>
+      <y>386</y>
+      <w>64</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+group=1</panel_attributes>
+    <additional_attributes>300.0;10.0;300.0;170.0;10.0;170.0;10.0;340.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>38</x>
+      <y>454</y>
+      <w>66</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>CliViewFactory
+--
+--
++ makeGameScreen(): CliGameScreen
++ makeConnectionScreen(): CliConnectionScreen
++ makeEndScreen(): CliEndScreen
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>128</x>
+      <y>442</y>
+      <w>66</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>GuiViewFactory
+--
+--
++ makeGameScreen(): GuiGameScreen
++ makeConnectionScreen(): GuiConnectionScreen
++ makeEndScreen(): GuiEndScreen
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>520</x>
+      <y>356</y>
+      <w>68</w>
+      <h>14</h>
+    </coordinates>
+    <panel_attributes>Client:
+ViewAbstractFactory factory = new CliViewFactory();
+GameScreen gs = factory.makeGameScreen();
+
+fg=gray
+bg=white
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>266</x>
+      <y>504</y>
+      <w>34</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>CliConnectionScreen
+--
+--
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>468</x>
+      <y>452</y>
+      <w>34</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>GuiConnectionScreen
+--
+--
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>310</x>
+      <y>630</y>
+      <w>50</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>/ConnectionScreen/
+--
+--
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>282</x>
+      <y>544</y>
+      <w>52</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+group=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;260.0;240.0;260.0;240.0;430.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>328</x>
+      <y>492</y>
+      <w>158</w>
+      <h>142</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+group=1</panel_attributes>
+    <additional_attributes>770.0;10.0;770.0;520.0;10.0;520.0;10.0;690.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>324</x>
+      <y>492</y>
+      <w>34</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>CliEndScreen
+--
+--
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>522</x>
+      <y>438</y>
+      <w>34</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>GuiEndScreen
+--
+--
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>340</x>
+      <y>532</y>
+      <w>72</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+group=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;250.0;340.0;250.0;340.0;430.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>406</x>
+      <y>478</y>
+      <w>136</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+group=1</panel_attributes>
+    <additional_attributes>660.0;10.0;660.0;520.0;10.0;520.0;10.0;700.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>388</x>
+      <y>618</y>
+      <w>50</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>/EndScreen/
+--
+--
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1024</x>
+      <y>524</y>
+      <w>60</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;
+m1=1
+m2=0..n
+group=3</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0;90.0;180.0;260.0;180.0;260.0;400.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1024</x>
+      <y>616</y>
+      <w>36</w>
+      <h>10</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=0..n
+m2=1
+contains
+group=3</panel_attributes>
+    <additional_attributes>10.0;20.0;160.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>558</x>
+      <y>636</y>
+      <w>36</w>
+      <h>46</h>
+    </coordinates>
+    <panel_attributes>Client
+--
+--
+_+ main(String[] args): void_
+
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>62</x>
+      <y>472</y>
+      <w>140</w>
+      <h>58</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+instaniate
+group=1</panel_attributes>
+    <additional_attributes>680.0;270.0;10.0;270.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>76</x>
+      <y>472</y>
+      <w>194</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+instaniate
+group=1</panel_attributes>
+    <additional_attributes>950.0;200.0;10.0;200.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>90</x>
+      <y>472</y>
+      <w>238</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+instaniate
+group=1</panel_attributes>
+    <additional_attributes>1170.0;140.0;10.0;140.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>172</x>
+      <y>460</y>
+      <w>236</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+instaniate
+group=1</panel_attributes>
+    <additional_attributes>1160.0;70.0;10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>192</x>
+      <y>456</y>
+      <w>280</w>
+      <h>8</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+instaniate
+group=1</panel_attributes>
+    <additional_attributes>1380.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>192</x>
+      <y>442</y>
+      <w>334</w>
+      <h>8</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+instaniate
+group=1</panel_attributes>
+    <additional_attributes>1650.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>280</x>
+      <y>674</y>
+      <w>282</w>
+      <h>6</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+group=1</panel_attributes>
+    <additional_attributes>10.0;10.0;1390.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>358</x>
+      <y>662</y>
+      <w>204</w>
+      <h>6</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+group=1</panel_attributes>
+    <additional_attributes>10.0;10.0;1000.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>436</x>
+      <y>650</y>
+      <w>126</w>
+      <h>6</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+group=1</panel_attributes>
+    <additional_attributes>10.0;10.0;610.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>158</x>
+      <y>378</y>
+      <w>434</w>
+      <h>262</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+group=1</panel_attributes>
+    <additional_attributes>10.0;10.0;2150.0;10.0;2150.0;1290.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>536</x>
+      <y>388</y>
+      <w>38</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=.
+Abstract
+Factory
+Pattern
+fg=gray
+bg=white
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>158</x>
+      <y>382</y>
+      <w>382</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+abstract factory
+fg=gray
+group=1</panel_attributes>
+    <additional_attributes>10.0;10.0;1890.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>102</x>
+      <y>398</y>
+      <w>438</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+concrete factory
+fg=gray
+group=1</panel_attributes>
+    <additional_attributes>10.0;280.0;270.0;40.0;2170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>192</x>
+      <y>398</y>
+      <w>348</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+concrete factory
+fg=gray
+group=1</panel_attributes>
+    <additional_attributes>10.0;220.0;80.0;130.0;1720.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>266</x>
+      <y>402</y>
+      <w>278</w>
+      <h>246</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+fg=gray
+group=1</panel_attributes>
+    <additional_attributes>10.0;1210.0;450.0;1030.0;670.0;170.0;1370.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>340</x>
+      <y>402</y>
+      <w>204</w>
+      <h>232</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+abstract
+products
+fg=gray
+group=1</panel_attributes>
+    <additional_attributes>10.0;1140.0;100.0;1050.0;320.0;190.0;1000.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>362</x>
+      <y>402</y>
+      <w>182</w>
+      <h>222</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+fg=gray
+group=1</panel_attributes>
+    <additional_attributes>130.0;1090.0;10.0;1070.0;230.0;210.0;890.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>556</x>
+      <y>406</y>
+      <w>24</w>
+      <h>234</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+client
+fg=gray
+group=1</panel_attributes>
+    <additional_attributes>70.0;1150.0;70.0;210.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>128</y>
+      <w>150</w>
+      <h>14</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+client
+fg=gray
+group=2</panel_attributes>
+    <additional_attributes>10.0;50.0;730.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>132</y>
+      <w>202</w>
+      <h>14</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=0..n
+m2=1
+group=2</panel_attributes>
+    <additional_attributes>10.0;40.0;990.0;40.0;990.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>726</x>
+      <y>124</y>
+      <w>24</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=.
+Command
+Pattern
+fg=gray
+bg=white
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>496</x>
+      <y>220</y>
+      <w>60</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;RemoteServer&gt;&gt;
+--
+--
+/+ rmiLlogin(:RemoteGameScreen, :String)/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>526</x>
+      <y>184</y>
+      <w>6</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;&gt;
+group=2</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>508</x>
+      <y>126</y>
+      <w>24</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=.
+Singleton
+Pattern
+fg=gray
+bg=white
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>404</x>
+      <y>128</y>
+      <w>100</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>main{
+
+   java.rmi.registry.LocateRegistry.createRegistry(1099);
+   RemoteServer rs = this.getInstance();
+   Naming.rebind( "ip", rs);
+
+   new Thread(() -&gt; {
+      while(true){
+         socket = serverSocket.accept()
+         Server.newPlayer(new SoketCommunicationChannel(:Socket));
+      }
+   }).start();
+
+}
+
+syncronized rmiLogin{
+   Server.newPlayer(new RmiCommunicationChannel(:RemoteGameScreen));
+}
+fg=gray
+bg=white
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>502</x>
+      <y>158</y>
+      <w>20</w>
+      <h>6</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fg=gray
+group=2</panel_attributes>
+    <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>680</x>
+      <y>142</y>
+      <w>16</w>
+      <h>6</h>
+    </coordinates>
+    <panel_attributes>Thread
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>686</x>
+      <y>146</y>
+      <w>6</w>
+      <h>14</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+group=2</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>624</x>
+      <y>276</y>
+      <w>24</w>
+      <h>14</h>
+    </coordinates>
+    <panel_attributes>lt=.
+Strategy
+Pattern
+fg=gray
+bg=white
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>628</x>
+      <y>102</y>
+      <w>24</w>
+      <h>14</h>
+    </coordinates>
+    <panel_attributes>lt=.
+Observer
+Pattern
+fg=gray
+bg=white
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>650</x>
+      <y>104</y>
+      <w>26</w>
+      <h>8</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+observer
+fg=gray
+group=2</panel_attributes>
+    <additional_attributes>110.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>640</x>
+      <y>114</y>
+      <w>48</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+subject
+fg=gray
+group=2</panel_attributes>
+    <additional_attributes>220.0;230.0;60.0;200.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>552</x>
+      <y>368</y>
+      <w>6</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+fg=gray
+group=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>728</x>
+      <y>202</y>
+      <w>222</w>
+      <h>356</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>1090.0;1760.0;10.0;180.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>682</x>
+      <y>248</y>
+      <w>262</w>
+      <h>310</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=1,4</panel_attributes>
+    <additional_attributes>1290.0;1530.0;140.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>736</x>
+      <y>202</y>
+      <w>84</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1,4
+m2=1</panel_attributes>
+    <additional_attributes>400.0;1970.0;200.0;1970.0;200.0;330.0;10.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>722</x>
+      <y>102</y>
+      <w>140</w>
+      <h>94</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=0..n
+group=2</panel_attributes>
+    <additional_attributes>570.0;440.0;680.0;440.0;680.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>830</x>
+      <y>190</y>
+      <w>126</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=0,1
+contains
+</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0;600.0;360.0;600.0;1580.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>830</x>
+      <y>158</y>
+      <w>28</w>
+      <h>16</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..n
+m2=0..n
+contains
+
+group=2</panel_attributes>
+    <additional_attributes>30.0;50.0;70.0;50.0;70.0;10.0;10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>326</x>
+      <y>326</y>
+      <w>368</w>
+      <h>396</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;1960.0;1820.0;1960.0;1820.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>526</x>
+      <y>230</y>
+      <w>102</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>340.0;2140.0;490.0;2140.0;490.0;680.0;10.0;440.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1022</x>
+      <y>664</y>
+      <w>30</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Selectable&gt;&gt;
+--
+--
+/+ isActive(): boolean/
+/+ setActive(:boolean)/
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1024</x>
+      <y>634</y>
+      <w>16</w>
+      <h>34</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+group=3</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0;60.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1042</x>
+      <y>634</y>
+      <w>28</w>
+      <h>34</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+group=3</panel_attributes>
+    <additional_attributes>120.0;10.0;120.0;50.0;10.0;50.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>960</x>
+      <y>496</y>
+      <w>186</w>
+      <h>196</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+group=3</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0;910.0;10.0;910.0;960.0;390.0;960.0;390.0;930.0</additional_attributes>
+  </element>
+</diagram>
