@@ -447,14 +447,13 @@ m2=0..n</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>5040</x>
-      <y>456</y>
+      <y>480</y>
       <w>408</w>
-      <h>192</h>
+      <h>168</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Rules&gt;&gt;
 --
 --
-_/+ getRandomTools(:int, :Game): List&lt;Tool&gt;/_
 _/+ getRandomWindows(:int): List&lt;Window&gt;/_
 _/+ getGameActions(:Game): Stack&lt;ActionCommand&gt;/_
 _/+ getRoundActions(:Game): Stack&lt;ActionCommand&gt;/_
@@ -635,15 +634,15 @@ set</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>4872</x>
-      <y>480</y>
+      <y>492</y>
       <w>192</w>
-      <h>132</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 command
 set
 fg=gray</panel_attributes>
-    <additional_attributes>140.0;10.0;10.0;90.0</additional_attributes>
+    <additional_attributes>140.0;10.0;10.0;80.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -736,7 +735,8 @@ m2=0..n</panel_attributes>
 /+ isConnected(): boolean/
 /+ updateView()/
 /+ chooseWindow(:List&lt;Window&gt;): Window/
-/+ chooseAction(): Selectable/</panel_attributes>
+/+ chooseAction(): Selectable/
+/+ chooseFrom(:List&lt;String&gt;): String/</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -811,7 +811,7 @@ nickname: String</panel_attributes>
       <x>4344</x>
       <y>1608</y>
       <w>384</w>
-      <h>180</h>
+      <h>204</h>
     </coordinates>
     <panel_attributes>RmiCommunicationChannel
 --
@@ -822,7 +822,8 @@ nickname: String</panel_attributes>
 + isConnected(): boolean
 + updateView()
 + chooseWindow(:List&lt;Window&gt;): Window
-+ chooseAction(): Selectable</panel_attributes>
++ chooseAction(): Selectable
++ chooseFrom(:List&lt;String&gt;): String</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -831,7 +832,7 @@ nickname: String</panel_attributes>
       <x>3804</x>
       <y>1608</y>
       <w>396</w>
-      <h>180</h>
+      <h>204</h>
     </coordinates>
     <panel_attributes>SocketCommunicationChannel
 --
@@ -842,7 +843,8 @@ nickname: String</panel_attributes>
 + isConnected(): boolean
 + updateView()
 + chooseWindow(:List&lt;Window&gt;): Window
-+ chooseAction(): Selectable</panel_attributes>
++ chooseAction(): Selectable
++ chooseFrom(:List&lt;String&gt;): String</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -1672,13 +1674,13 @@ m2=1</panel_attributes>
     <coordinates>
       <x>5400</x>
       <y>864</y>
-      <w>192</w>
+      <w>168</w>
       <h>252</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
 m2=0..n</panel_attributes>
-    <additional_attributes>10.0;10.0;120.0;10.0;120.0;190.0</additional_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0;100.0;190.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -1714,14 +1716,14 @@ contains
     <id>Relation</id>
     <coordinates>
       <x>1728</x>
-      <y>1776</y>
+      <y>1800</y>
       <w>2832</w>
-      <h>1692</h>
+      <h>1668</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=1
 m2=1</panel_attributes>
-    <additional_attributes>10.0;1380.0;2340.0;1370.0;2340.0;10.0</additional_attributes>
+    <additional_attributes>10.0;1360.0;2340.0;1350.0;2340.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -1801,13 +1803,13 @@ m2=1..4</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>3324</x>
-      <y>1776</y>
+      <y>1800</y>
       <w>696</w>
-      <h>1344</h>
+      <h>1320</h>
     </coordinates>
     <panel_attributes>lt=..
 &lt;&lt;socket communication&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;1100.0;560.0;1100.0;560.0;10.0</additional_attributes>
+    <additional_attributes>10.0;1080.0;560.0;1080.0;560.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -1820,7 +1822,6 @@ m2=1..4</panel_attributes>
     <panel_attributes>DefaultRules
 --
 --
-_+ getRandomTools(:int, :Game): List&lt;Tool&gt;_
 _+ getRandomWindows(:int): List&lt;Window&gt;_
 _+ getGameActions(:Game): Stack&lt;ActionCommand&gt;_
 _+ getRoundActions(:Game): Stack&lt;ActionCommand&gt;_
@@ -1838,7 +1839,6 @@ _+ getTurnActions(:Game): Stack&lt;ActionCommand&gt;_</panel_attributes>
     <panel_attributes>SoloRules
 --
 --
-_+ getRandomTools(:int, :Game): List&lt;Tool&gt;_
 _+ getRandomWindows(:int): List&lt;Window&gt;_
 _+ getGameActions(:Game): Stack&lt;ActionCommand&gt;_
 _+ getRoundActions(:Game): Stack&lt;ActionCommand&gt;_
@@ -1851,10 +1851,10 @@ _+ getTurnActions(:Game): Stack&lt;ActionCommand&gt;_</panel_attributes>
       <x>5220</x>
       <y>288</y>
       <w>288</w>
-      <h>192</h>
+      <h>216</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;140.0;10.0;90.0;220.0;90.0;220.0;10.0</additional_attributes>
+    <additional_attributes>10.0;160.0;10.0;90.0;220.0;90.0;220.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -1862,10 +1862,10 @@ _+ getTurnActions(:Game): Stack&lt;ActionCommand&gt;_</panel_attributes>
       <x>4992</x>
       <y>288</y>
       <w>264</w>
-      <h>192</h>
+      <h>216</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>200.0;140.0;200.0;90.0;10.0;90.0;10.0;10.0</additional_attributes>
+    <additional_attributes>200.0;160.0;200.0;90.0;10.0;90.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -2163,32 +2163,6 @@ m2=0..n</panel_attributes>
     <additional_attributes>10.0;10.0;130.0;10.0</additional_attributes>
   </element>
   <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>5460</x>
-      <y>420</y>
-      <w>264</w>
-      <h>84</h>
-    </coordinates>
-    <panel_attributes>ToolDeck
---
---
-_+ getRandomTools(:int, :Game):_
-_    List&lt;Tool&gt;_</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>5328</x>
-      <y>420</y>
-      <w>156</w>
-      <h>60</h>
-    </coordinates>
-    <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;30.0;10.0;10.0;110.0;10.0</additional_attributes>
-  </element>
-  <element>
     <id>UMLPackage</id>
     <coordinates>
       <x>648</x>
@@ -2224,11 +2198,10 @@ layer=0</panel_attributes>
       <x>1608</x>
       <y>444</y>
       <w>264</w>
-      <h>672</h>
+      <h>612</h>
     </coordinates>
     <panel_attributes>Model
 --
-
 
 SoloRules               
 Effect
@@ -2238,7 +2211,6 @@ DiceBag
 Die
 Window
 Cell
-ToolDeck
 &lt;&lt;Rules&gt;&gt;
 Player
 /Objective/
