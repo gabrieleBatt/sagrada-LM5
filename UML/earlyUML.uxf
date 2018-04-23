@@ -174,9 +174,7 @@ m2=1</panel_attributes>
 + Cell(Restriction: DieValue)
 + isOccuped(): boolean
 + getDie(): Die
-+ hasRestriction(): boolean
-+ getColorRestriction(): DieValue
-+ getNumberRestriction(): Integer
++ isAllowed(:Die): boolean
 + isActive(): boolean
 + setActive(:boolean)</panel_attributes>
     <additional_attributes/>
@@ -201,7 +199,7 @@ m2=1
       <x>5700</x>
       <y>2664</y>
       <w>348</w>
-      <h>276</h>
+      <h>216</h>
     </coordinates>
     <panel_attributes>Window
 --
@@ -212,10 +210,6 @@ m2=1
 + getDifficulty(): int
 + getName(): String
 + getCell(x: int, y: int): Cell
-+ getAdiecentDice(x: int, y: int): List&lt;Cell&gt;
-+ hasSurroundingDice(x: int, y: int): boolean
-+ getRow(x: int): List&lt;Cell&gt;
-+ getColoumn(y: int): list&lt;Cell&gt;
 + availebleCells(:List&lt;PlacementRestrition&gt;,
 	    :Die): List&lt;Cells&gt;</panel_attributes>
     <additional_attributes/>
@@ -338,7 +332,7 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>6876</x>
+      <x>6888</x>
       <y>2244</y>
       <w>96</w>
       <h>396</h>
@@ -1876,17 +1870,6 @@ _+ getTurnActions(:Game): Stack&lt;ActionCommand&gt;_</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>5100</x>
-      <y>2148</y>
-      <w>120</w>
-      <h>36</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
       <x>5532</x>
       <y>2208</y>
       <w>168</w>
@@ -1894,132 +1877,6 @@ _+ getTurnActions(:Game): Stack&lt;ActionCommand&gt;_</panel_attributes>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;160.0;10.0;90.0;120.0;90.0;120.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>5328</x>
-      <y>1956</y>
-      <w>396</w>
-      <h>180</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;310.0;10.0;310.0;130.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>4836</x>
-      <y>2100</y>
-      <w>276</w>
-      <h>120</h>
-    </coordinates>
-    <panel_attributes>ColorPrivateObjective
---
---
-+ ColorPrivateObjectove(:DieValue)
-+ scorePoints(:Window): int
-+ getName(): String
-+ getPoints(): char</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>4944</x>
-      <y>2208</y>
-      <w>1860</w>
-      <h>996</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;
-m1=0..n
-m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;800.0;1530.0;800.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>5040</x>
-      <y>1896</y>
-      <w>300</w>
-      <h>120</h>
-    </coordinates>
-    <panel_attributes>SetPublicObjective
---
---
-+ SetPublicObjective(:List&lt;DieValue&gt;)
-+ scorePoints(:Window): int
-+ getName(): String
-+ getPoints(): char</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>5160</x>
-      <y>2004</y>
-      <w>1644</w>
-      <h>1164</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;
-m1=0..n
-m2=2..6</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;940.0;1350.0;940.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>4896</x>
-      <y>1752</y>
-      <w>444</w>
-      <h>120</h>
-    </coordinates>
-    <panel_attributes>DiverseLinePublicObjective
---
---
-+ DiverseLinePublicObjective(row:boolean, color: boolean)
-+ scorePoints(:Window): int
-+ getName(): String
-+ getPoints(): char</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>5328</x>
-      <y>1812</y>
-      <w>396</w>
-      <h>324</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;310.0;10.0;310.0;250.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>5328</x>
-      <y>1680</y>
-      <w>396</w>
-      <h>456</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;310.0;10.0;310.0;360.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>5040</x>
-      <y>1608</y>
-      <w>300</w>
-      <h>120</h>
-    </coordinates>
-    <panel_attributes>DiagonalObjective
---
---
-+ scorePoints(:Window): int
-+ getName(): String
-+ getPoints(): char</panel_attributes>
-    <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
@@ -2541,6 +2398,130 @@ bg=blue</panel_attributes>
 for extensions(?)
 fg=gray
 bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5328</x>
+      <y>1812</y>
+      <w>396</w>
+      <h>324</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;310.0;10.0;310.0;250.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5328</x>
+      <y>1680</y>
+      <w>396</w>
+      <h>456</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;310.0;10.0;310.0;360.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>5040</x>
+      <y>1608</y>
+      <w>300</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>DiagonalObjective
+--
+--
++ scorePoints(:Window): int
++ getName(): String
++ getPoints(): char</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>4896</x>
+      <y>1752</y>
+      <w>444</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>DiverseLinePublicObjective
+--
+--
++ DiverseLinePublicObjective(row:boolean, color: boolean)
++ scorePoints(:Window): int
++ getName(): String
++ getPoints(): char</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>5040</x>
+      <y>1896</y>
+      <w>300</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>SetPublicObjective
+--
+--
++ SetPublicObjective(:List&lt;DieValue&gt;)
++ scorePoints(:Window): int
++ getName(): String
++ getPoints(): char</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5328</x>
+      <y>1956</y>
+      <w>396</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;310.0;10.0;310.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5160</x>
+      <y>2004</y>
+      <w>1644</w>
+      <h>1164</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=0..n
+m2=2..6</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;940.0;1350.0;940.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5100</x>
+      <y>2148</y>
+      <w>120</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>4836</x>
+      <y>2100</y>
+      <w>276</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>ColorPrivateObjective
+--
+--
++ ColorPrivateObjectove(:DieValue)
++ scorePoints(:Window): int
++ getName(): String
++ getPoints(): char</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>
