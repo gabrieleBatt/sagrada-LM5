@@ -128,7 +128,7 @@ m2=0..n</panel_attributes>
       <x>4890</x>
       <y>2120</y>
       <w>300</w>
-      <h>210</h>
+      <h>240</h>
     </coordinates>
     <panel_attributes>Player
 --
@@ -183,15 +183,15 @@ m2=1</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>5010</x>
-      <y>2320</y>
+      <y>2350</y>
       <w>240</w>
-      <h>80</h>
+      <h>50</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 m1=1
 m2=1
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;50.0;220.0;50.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;20.0;220.0;20.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -259,7 +259,7 @@ m2=20</panel_attributes>
 DieColor
 --
 ONE
-TOW
+TWO
 THREE
 FOUR
 FIVE
@@ -2133,5 +2133,18 @@ by tool cards
 fg=gray
 bg=white</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5850</x>
+      <y>2360</y>
+      <w>300</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=0..n
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0;280.0;120.0</additional_attributes>
   </element>
 </diagram>
