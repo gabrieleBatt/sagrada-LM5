@@ -166,7 +166,7 @@ m2=1</panel_attributes>
       <x>5590</x>
       <y>2230</y>
       <w>350</w>
-      <h>170</h>
+      <h>140</h>
     </coordinates>
     <panel_attributes>Cell
 --
@@ -176,9 +176,7 @@ m2=1</panel_attributes>
 + placeDie(:Die)
 + isOccuped(): boolean
 + getDie(): Die
-+ isAllowed(:Die): boolean
-+ isActive(): boolean
-+ setActive(:boolean)</panel_attributes>
++ isAllowed(:Die): boolean</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -236,7 +234,7 @@ m2=20</panel_attributes>
       <x>6090</x>
       <y>2180</y>
       <w>270</w>
-      <h>160</h>
+      <h>140</h>
     </coordinates>
     <panel_attributes>Die
 --
@@ -246,8 +244,6 @@ m2=20</panel_attributes>
 + getColor(): DieValue
 + getNumber(): DieValue
 + setNumber(:DieValue)
-+ isActive(): boolean
-+ setActive(:boolean)
 + roll()</panel_attributes>
     <additional_attributes/>
   </element>
@@ -281,15 +277,15 @@ MAGENTA
     <id>Relation</id>
     <coordinates>
       <x>6180</x>
-      <y>2330</y>
+      <y>2310</y>
       <w>50</w>
-      <h>120</h>
+      <h>140</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 m1=0..n
 m2=2
 is</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -409,9 +405,7 @@ m2=0,1</panel_attributes>
 + isUsed(): boolean
 + addTokens()
 + addDie(:Die)
-+ getTokens(): int
-+ isActive(): boolean
-+ setActive(:boolean)</panel_attributes>
++ getTokens(): int</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -828,7 +822,7 @@ nickname: String</panel_attributes>
 + isConnected(): boolean
 + updateView()
 + chooseWindow(:List&lt;Window&gt;): Window
-+ chooseAction(): Selectable
++ chooseAction(:List&lt;String&gt;): String
 + chooseFrom(:List&lt;String&gt;): String</panel_attributes>
     <additional_attributes/>
   </element>
