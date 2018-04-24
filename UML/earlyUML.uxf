@@ -461,7 +461,6 @@ m2=0..n</panel_attributes>
     <panel_attributes>&lt;&lt;Rules&gt;&gt;
 --
 --
-_/+ getRandomWindows(:int): List&lt;Window&gt;/_
 _/+ getGameActions(:Game): Stack&lt;ActionCommand&gt;/_
 _/+ getRoundActions(:Game): Stack&lt;ActionCommand&gt;/_
 _/+ getTurnActions(:Game): Stack&lt;ActionCommand&gt;/_</panel_attributes>
@@ -1738,7 +1737,6 @@ m2=1..4</panel_attributes>
     <panel_attributes>DefaultRules
 --
 --
-_+ getRandomWindows(:int): List&lt;Window&gt;_
 _+ getGameActions(:Game): Stack&lt;ActionCommand&gt;_
 _+ getRoundActions(:Game): Stack&lt;ActionCommand&gt;_
 _+ getTurnActions(:Game): Stack&lt;ActionCommand&gt;_</panel_attributes>
@@ -1755,7 +1753,6 @@ _+ getTurnActions(:Game): Stack&lt;ActionCommand&gt;_</panel_attributes>
     <panel_attributes>SoloRules
 --
 --
-_+ getRandomWindows(:int): List&lt;Window&gt;_
 _+ getGameActions(:Game): Stack&lt;ActionCommand&gt;_
 _+ getRoundActions(:Game): Stack&lt;ActionCommand&gt;_
 _+ getTurnActions(:Game): Stack&lt;ActionCommand&gt;_</panel_attributes>
@@ -2200,5 +2197,32 @@ layer=-1
 fg=dark_gray
 bg=light_gray</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>4716</x>
+      <y>2259</y>
+      <w>207</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>WindowsDeck
+--
+--
+_+ draw(:int): List&lt;Window&gt;_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4815</x>
+      <y>2160</y>
+      <w>54</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=12..n</panel_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>
