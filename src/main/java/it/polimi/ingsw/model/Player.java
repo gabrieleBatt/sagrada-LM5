@@ -8,6 +8,7 @@ public class Player {
     private int tokens;
     private DashBoard dashBoard;
     private ArrayList<PrivateObjective> privateObjective;
+    private boolean connected;
 
     public Player(String nickname)
     {
@@ -33,5 +34,19 @@ public class Player {
     }
     public List<PrivateObjective> getPrivateObjective(){
         return (List<PrivateObjective>)privateObjective.clone();
+    }
+    public void addPrivateObjective (PrivateObjective newPrivateObjective){
+        this.privateObjective.add(newPrivateObjective);
+    }
+    public void addPrivateObjective(List<PrivateObjective> newPrivateObjective){
+        this.privateObjective.addAll(newPrivateObjective);
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 }
