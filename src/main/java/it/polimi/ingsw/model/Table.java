@@ -2,7 +2,6 @@ package it.polimi.ingsw.model;
 
 import javafx.scene.effect.Effect;
 
-import javax.tools.Tool;
 import java.util.List;
 
 public class Table {
