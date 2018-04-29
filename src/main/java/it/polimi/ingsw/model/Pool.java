@@ -12,13 +12,8 @@ public class Pool {
     public void addDice(List<Die> diceOnTable){
         this.diceOnTable = diceOnTable;
     }
-    public void takeDie(int dieId){
-        for(Die d: diceOnTable){
-            if (d.getId() == dieId) {
-                diceOnTable.remove(d);
-                return;
-            }
-        }
+    public void takeDie(Die die){
+        diceOnTable.remove(die);
     }
     public void roll(){
         for(Die d: diceOnTable) {

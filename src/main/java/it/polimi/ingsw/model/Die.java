@@ -59,4 +59,11 @@ public class Die {
             number--;
     }
 
+    @Override
+    public boolean equals(Object die){
+        if (die instanceof Die){
+            return ((Die)die).getId() == this.getId();
+        }else
+            return false;
+    }
 }
