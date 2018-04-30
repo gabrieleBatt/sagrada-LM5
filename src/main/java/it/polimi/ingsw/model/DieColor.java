@@ -8,9 +8,18 @@ public enum DieColor{
 
     Color color;
 
+    /**
+     * Color assignment
+     * @param color
+     */
     private DieColor(Color color){
         this.color = color;
     }
+
+    /**
+     * Getting a die color
+     * @return: die color
+     */
 
     public Color getColor(){
         return color;
