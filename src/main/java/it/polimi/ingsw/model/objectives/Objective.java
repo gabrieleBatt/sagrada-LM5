@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.objectives;
 
-import it.polimi.ingsw.model.Dashboard;
+import it.polimi.ingsw.model.DashBoard;
 
 public abstract class Objective {
 
@@ -12,7 +12,7 @@ public abstract class Objective {
         this.points = points;
     }
 
-    public abstract int scorePoints(Dashboard dashboard);
+    public abstract int scorePoints(DashBoard dashboard);
 
     public char getPoints() {
         return points;
