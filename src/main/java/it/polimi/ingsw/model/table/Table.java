@@ -1,5 +1,7 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.table;
 
+import it.polimi.ingsw.model.objective.PublicObjective;
+import it.polimi.ingsw.model.tool.Tool;
 import javafx.scene.effect.Effect;
 
 import java.util.Set;

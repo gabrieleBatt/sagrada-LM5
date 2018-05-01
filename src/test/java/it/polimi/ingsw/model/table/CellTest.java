@@ -1,11 +1,13 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.table;
 
+import it.polimi.ingsw.model.exception.EmptyCellException;
+import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.dieNotAllowedException;
+import it.polimi.ingsw.model.table.Cell;
+import it.polimi.ingsw.model.table.Die;
+import it.polimi.ingsw.model.table.DieColor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.time.Year;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CellTest {
 

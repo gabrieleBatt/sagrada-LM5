@@ -1,24 +1,24 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.table;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PoolTest {
+class RoundTrackTest {
+
+    @Test
+    void getRound() {
+    }
+
+    @Test
+    void endRound() {
+    }
 
     @Test
     void getDice() {
     }
 
     @Test
-    void addDice() {
-    }
-
-    @Test
-    void takeDie() {
-    }
-
-    @Test
-    void roll() {
+    void switchDie() {
     }
 }

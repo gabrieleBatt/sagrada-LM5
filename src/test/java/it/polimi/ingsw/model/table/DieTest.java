@@ -1,9 +1,10 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.table;
 
+import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.table.Die;
+import it.polimi.ingsw.model.table.DieColor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.Random;
 
 
 class DieTest {

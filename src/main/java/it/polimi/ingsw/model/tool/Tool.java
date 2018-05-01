@@ -1,4 +1,6 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.tool;
+
+import it.polimi.ingsw.model.command.ActionCommand;
 
 public class Tool {
     private ActionCommand actionCommand;

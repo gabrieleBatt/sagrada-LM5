@@ -1,13 +1,12 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.table;
 
+import it.polimi.ingsw.model.objective.PublicObjective;
+import it.polimi.ingsw.model.table.Table;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class TableTest {
 

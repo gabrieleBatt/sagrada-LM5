@@ -1,7 +1,7 @@
-package it.polimi.ingsw.model;
-import java.util.concurrent.ThreadLocalRandom;
+package it.polimi.ingsw.model.table;
+import it.polimi.ingsw.model.exception.NotValidNumberException;
 
-import static it.polimi.ingsw.model.DieColor.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Die {
     private final DieColor color;
