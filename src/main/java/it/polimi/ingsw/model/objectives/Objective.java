@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model.objectives;
 
-import it.polimi.ingsw.model.DashBoard;
-
 public abstract class Objective {
 
     private String name;
