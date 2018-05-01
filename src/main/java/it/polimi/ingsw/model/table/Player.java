@@ -62,7 +62,7 @@ public class Player {
     }
 
     /**
-     * Gets private objectives
+     * Gets private objective
      * @return list of private objective
      */
     public List<PrivateObjective> getPrivateObjective(){
@@ -78,8 +78,8 @@ public class Player {
     }
 
     /**
-     * Adds private objectives
-     * @param newPrivateObjective list of private objectives to be added
+     * Adds private objective
+     * @param newPrivateObjective list of private objective to be added
      */
     public void addPrivateObjective(List<PrivateObjective> newPrivateObjective){
         this.privateObjective.addAll(newPrivateObjective);

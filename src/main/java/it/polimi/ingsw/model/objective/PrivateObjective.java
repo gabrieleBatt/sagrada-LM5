@@ -1,5 +1,9 @@
 package it.polimi.ingsw.model.objective;
 
 public abstract class PrivateObjective extends Objective {
-    //TODO
+
+    public PrivateObjective(String name, char points) {
+        super(name, points);
+    }
+
 }

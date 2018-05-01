@@ -25,8 +25,8 @@ public class Table {
     }
 
     /**
-     * Sets public objectives
-     * @param publicObjective Set of public objectives
+     * Sets public objective
+     * @param publicObjective Set of public objective
      */
     public void setPublicObjective(Set<PublicObjective> publicObjective){
         this.publicObjectives = publicObjective;
@@ -49,8 +49,8 @@ public class Table {
     }
 
     /**
-     * Gets public objectives
-     * @return a Set of public objectives
+     * Gets public objective
+     * @return a Set of public objective
      */
     public Set<PublicObjective> getPublicObjectives() {
         return publicObjectives;
