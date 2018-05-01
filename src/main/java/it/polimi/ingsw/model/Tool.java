@@ -7,7 +7,7 @@ public class Tool {
     private int tokens;
 
     /**
-     * Creating a tool
+     * Creates a tool
      * @param actionCommand action that has to be performed by the tool
      */
     public Tool(ActionCommand actionCommand){
@@ -15,7 +15,7 @@ public class Tool {
     }
 
     /**
-     * Getting tool name
+     * Gets tool name
      * @return tool name
      */
     public String getName() {
@@ -23,7 +23,7 @@ public class Tool {
     }
 
     /**
-     * Getting action command
+     * Gets action command
      * @return tool action command
      */
     public ActionCommand getActionCommand() {
@@ -31,7 +31,7 @@ public class Tool {
     }
 
     /**
-     * Setting tool use
+     * Sets tool use
      * @param used boolean, set true if the tool is used
      */
     public void setUsed(boolean used) {
@@ -39,7 +39,7 @@ public class Tool {
     }
 
     /**
-     * Getting tool use
+     * Gets tool use
      * @return, boolean, true if is used
      */
     public boolean isUsed() {
@@ -47,7 +47,7 @@ public class Tool {
     }
 
     /**
-     * Getting number of tokens on the tool
+     * Gets number of tokens on the tool
      * @return number of tokens
      */
     public int getTokens() {
@@ -55,7 +55,7 @@ public class Tool {
     }
 
     /**
-     * Adding tokens to the tool
+     * Adds tokens to the tool
      */
     public void addTokens(){
         if (isUsed())

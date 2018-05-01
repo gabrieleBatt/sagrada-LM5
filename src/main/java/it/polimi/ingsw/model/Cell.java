@@ -9,7 +9,7 @@ public class Cell {
     private Optional<Die> die;
 
     /**
-     *Creation of a cell with no restrictions
+     *Creates a cell with no restrictions
      */
     public Cell(){
         colorRestriction = Optional.empty();
@@ -18,7 +18,7 @@ public class Cell {
     }
 
     /**
-     * Creation of a cell with color restriction
+     * Creates of a cell with color restriction
      * @param restriction: color restriction of the cell
      */
     public Cell(DieColor restriction){
@@ -28,23 +28,12 @@ public class Cell {
     }
 
     /**
-     * Creation of a cell with numeric value restriction
+     * Creates of a cell with numeric value restriction
      * @param restriction numeric value restriction of the cell
      */
     public Cell(int restriction){
         numberRestriction = Optional.of(restriction);
         colorRestriction = Optional.empty();
-        die = Optional.empty();
-    }
-
-    /**
-     * Creation of a cell with both numeric value and color restrictions
-     * @param color: color restriction of the cell
-     * @param num: numeric value restriction of the cell
-     */
-    public Cell(int num, DieColor color){
-        numberRestriction = Optional.of(num);
-        colorRestriction = Optional.of(color);
         die = Optional.empty();
     }
 
@@ -73,7 +62,7 @@ public class Cell {
     }
 
     /**
-     * Getting the die which occupies a cell, if it's present
+     * Gets the die which occupies a cell, if it's present
      * @return: object die in the cell
      * @throws EmptyCellException thrown if the cell is empty
      */
@@ -85,7 +74,7 @@ public class Cell {
     }
 
     /**
-     * Checking if a die cen be placed in the cell despite eventual restrictions
+     * Checks if a die cen be placed in the cell despite eventual restrictions
      * @param die object die to be placed
      * @return: true if the value can be placed in the cell
      */

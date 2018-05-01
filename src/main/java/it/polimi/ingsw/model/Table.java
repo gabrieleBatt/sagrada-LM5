@@ -14,7 +14,7 @@ public class Table {
     private List<Effect> effects;
 
     /**
-     * Creating table, setting players and dicebag
+     * Creates table, setting players and dicebag
      * @param players list of players
      */
     public Table(List<Player> players){
@@ -23,7 +23,7 @@ public class Table {
     }
 
     /**
-     * Setting public objectives
+     * Sets public objectives
      * @param publicObjective list of public objectives
      */
     public void setPublicObjective(List<PublicObjective> publicObjective){
@@ -31,7 +31,7 @@ public class Table {
     }
 
     /**
-     * Setting tools
+     * Sets tools
      * @param tools list of tools to be set
      */
     public void setTools(List<Tool> tools){
@@ -39,7 +39,7 @@ public class Table {
     }
 
     /**
-     * Getting players
+     * Gets players
      * @return a list of players
      */
     public List<Player> getPlayers() {
@@ -47,7 +47,7 @@ public class Table {
     }
 
     /**
-     * Getting public objectives
+     * Gets public objectives
      * @return a list of public objectives
      */
     public List<PublicObjective> getPublicObjectives() {
@@ -55,7 +55,7 @@ public class Table {
     }
 
     /**
-     * Getting tools
+     * Gets tools
      * @return a list of tools
      */
     public List<Tool> getTools() {
@@ -63,7 +63,7 @@ public class Table {
     }
 
     /**
-     * Getting the dice bag
+     * Gets the dice bag
      * @return object dice bag
      */
     public DiceBag getDiceBag(){
@@ -71,7 +71,7 @@ public class Table {
     }
 
     /**
-     * Getting pool
+     * Gets pool
      * @return object pool
      */
     public Pool getPool() {
@@ -79,7 +79,7 @@ public class Table {
     }
 
     /**
-     * Getting round track
+     * Gets round track
      * @return object roundTrack
      */
     public RoundTrack getRoundTrack() {
@@ -87,7 +87,7 @@ public class Table {
     }
 
     /**
-     * Getting effects active in this game
+     * Gets effects active in this game
      * @return list of effects
      */
     public List<Effect> getActiveEffects() {
@@ -95,7 +95,7 @@ public class Table {
     }
 
     /**
-     * Adding effects to the effect's list
+     * Adds effects to the effect's list
      * @param effect to be added
      */
     public void addEffect(Effect effect){

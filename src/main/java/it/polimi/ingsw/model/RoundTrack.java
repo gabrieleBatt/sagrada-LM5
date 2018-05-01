@@ -9,7 +9,7 @@ public class RoundTrack {
     private List<ArrayList<Die>> dice;
 
     /**
-     * Creating a roundtrack
+     * Creates a roundtrack
      */
     public RoundTrack() {
         round = 1;
@@ -17,7 +17,7 @@ public class RoundTrack {
     }
 
     /**
-     * Getting actual round
+     * Gets actual round
      * @return actual round
      */
     public int getRound(){
@@ -25,7 +25,7 @@ public class RoundTrack {
     }
 
     /**
-     * Skipping to the next round, ending game in it's over
+     * Skips to the next round, ending game in it's over
      * @param d a list of dice
      * @throws EndGameException exception thrown if the game is over
      */
@@ -39,7 +39,7 @@ public class RoundTrack {
     }
 
     /**
-     * Getting a dice from the roundtrack
+     * Gets a dice from the roundtrack
      * @param round corresponding to the die or dice to be got
      * @return a clone of the corresponding dice list
      */
@@ -48,7 +48,7 @@ public class RoundTrack {
     }
 
     /**
-     * Switching a die on the roundtrack
+     * Switches a die on the roundtrack
      * @param toPlace object die to be placed
      * @param toRemove object die to be removed
      */

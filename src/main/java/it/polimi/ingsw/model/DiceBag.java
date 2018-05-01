@@ -2,14 +2,13 @@ package it.polimi.ingsw.model;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-// red = 1, green = 2, yellow = 3; cyan = 4; magenta = 5;
 
 
 public class DiceBag {
     private List<Die> bag;
 
     /**
-     * Creating the dice bag and all the dice in it, 18 per each color
+     * Creates the dice bag and all the dice in it, 18 per each color
      */
     public DiceBag(){
 
@@ -25,7 +24,7 @@ public class DiceBag {
     }
 
     /**
-     * Drawing a specific number of dice from the dice bag
+     * Draws a specific number of dice from the dice bag
      * @param num number of dice to be drawn
      * @return: list of dice drawn
      */
@@ -38,7 +37,7 @@ public class DiceBag {
     }
 
     /**
-     * Drawing a die from the dice bag; removing die from the dice bag
+     * Draws a die from the dice bag; removing die from the dice bag
      * @return the die drown
      */
     private Die drawDie(){
@@ -49,7 +48,7 @@ public class DiceBag {
     }
 
     /**
-     * Adding a die to the dice beg (tool effect)
+     * Adds a die to the dice beg (tool effect)
      * @param die object die placed in the dice bag
      */
     public void placeDie (Die die){

@@ -9,7 +9,7 @@ public class Die {
     private final int id;
 
     /**
-     * Creating a die, setting both color and numeric value
+     * Creates a die, setting both color and numeric value
      * @param color die color
      * @param number die numeric value
      * @param id die id code
@@ -22,7 +22,7 @@ public class Die {
     }
 
     /**
-     * Creating a die, setting just color (useful with tools)
+     * Creates a die, setting just color (useful with tools)
      * @param color die color
      * @param id die id code
      */
@@ -34,7 +34,7 @@ public class Die {
     }
 
     /**
-     * Getting the die ID
+     * Gets the die ID
      * @return: int, die ID code
      */
     public int getId (){
@@ -42,7 +42,7 @@ public class Die {
     }
 
     /**
-     * Getting the die color
+     * Gets the die color
      * @return: color of the die
      */
     public DieColor getColor(){
@@ -50,7 +50,7 @@ public class Die {
     }
 
     /**
-     * Getting die numeric value
+     * Gets die numeric value
      * @return: int, numeric value of the die
      */
     public int getNumber(){
@@ -58,7 +58,7 @@ public class Die {
     }
 
     /**
-     * Setting the numeric value of a die
+     * Sets the numeric value of a die
      * @param number numeric value that has to be set
      * @throws NotValidNumberException exception thrown whether
      */
@@ -71,7 +71,7 @@ public class Die {
     }
 
     /**
-     * Generate a casual number between 1 and 6
+     * Rolls the dice setting its numeric value to a random number form 1 to 6
      */
     public void roll(){
         this.number = ThreadLocalRandom.current().nextInt(1, 6 + 1);
@@ -79,7 +79,7 @@ public class Die {
     }
 
     /**
-     * Increase the number given unless its' value is 6
+     * Increases the number given unless its value is 6
      * @throws NotValidNumberException exception thrown whether the number is 6
      */
     public void increase() throws NotValidNumberException{
@@ -90,7 +90,7 @@ public class Die {
     }
 
     /**
-     * Decrease the number given unless its' value is 1
+     * Decreases the number given unless its value is 1
      * @throws NotValidNumberException exception thrown whether the number is 1
      */
     public void decrease() throws NotValidNumberException{
@@ -101,7 +101,7 @@ public class Die {
     }
 
     /**
-     * Comparing dices id to check if they're the same
+     * Compares dices id to check if they're the same
      * @param die: object to match with this the
      * @return true if dice match
      */
