@@ -2,63 +2,63 @@ package it.polimi.ingsw.model;
 
 import javafx.scene.effect.Effect;
 
-import java.util.List;
+import java.util.Set;
 
 public class Table {
-    private final List<Player> players;
-    private List<PublicObjective> publicObjectives;
-    private List<Tool> tools;
+    private final Set<Player> players;
+    private Set<PublicObjective> publicObjectives;
+    private Set<Tool> tools;
     private final DiceBag diceBag;
     private Pool pool;
     private RoundTrack roundTrack;
-    private List<Effect> effects;
+    private Set<Effect> effects;
 
     /**
      * Creates table, setting players and dicebag
-     * @param players list of players
+     * @param players Set of players
      */
-    public Table(List<Player> players){
+    public Table(Set<Player> players){
         this.players = players;
         diceBag = new DiceBag();
     }
 
     /**
      * Sets public objectives
-     * @param publicObjective list of public objectives
+     * @param publicObjective Set of public objectives
      */
-    public void setPublicObjective(List<PublicObjective> publicObjective){
+    public void setPublicObjective(Set<PublicObjective> publicObjective){
         this.publicObjectives = publicObjective;
     }
 
     /**
      * Sets tools
-     * @param tools list of tools to be set
+     * @param tools Set of tools to be set
      */
-    public void setTools(List<Tool> tools){
+    public void setTools(Set<Tool> tools){
         this.tools = tools;
     }
 
     /**
      * Gets players
-     * @return a list of players
+     * @return a Set of players
      */
-    public List<Player> getPlayers() {
+    public Set<Player> getPlayers() {
         return players;
     }
 
     /**
      * Gets public objectives
-     * @return a list of public objectives
+     * @return a Set of public objectives
      */
-    public List<PublicObjective> getPublicObjectives() {
+    public Set<PublicObjective> getPublicObjectives() {
         return publicObjectives;
     }
 
     /**
      * Gets tools
-     * @return a list of tools
+     * @return a Set of tools
      */
-    public List<Tool> getTools() {
+    public Set<Tool> getTools() {
         return tools;
     }
 
@@ -88,14 +88,14 @@ public class Table {
 
     /**
      * Gets effects active in this game
-     * @return list of effects
+     * @return Set of effects
      */
-    public List<Effect> getActiveEffects() {
+    public Set<Effect> getActiveEffects() {
         return effects;
     }
 
     /**
-     * Adds effects to the effect's list
+     * Adds effects to the effect's Set
      * @param effect to be added
      */
     public void addEffect(Effect effect){
