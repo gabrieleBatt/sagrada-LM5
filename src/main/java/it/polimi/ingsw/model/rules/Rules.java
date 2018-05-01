@@ -8,5 +8,7 @@ import java.util.List;
 public interface Rules {
 
     List<ActionCommand> getGameActions();
+    List<ActionCommand> getRoundActions();
+    List<ActionCommand> getTurnActions();
 
 }
