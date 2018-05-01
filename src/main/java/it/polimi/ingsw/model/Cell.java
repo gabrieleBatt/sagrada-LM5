@@ -40,10 +40,8 @@ public class Cell {
     /**
      * Aim: disable the restriction of a specific cell
      * @param die: die that has to be positioned
-     * @param ignoreRestriction:boolean which indicates whether the restriction
-     *                           has to be ignored or not
-     * @throws dieNotAllowedException:Exception thrown if die can't be placed despite
-     *                                restriction has been ignored
+     * @param ignoreRestriction:boolean which indicates whether the restriction has to be ignored or not
+     * @throws dieNotAllowedException:Exception thrown if die can't be placed despite restriction has been ignored
      */
     public void placeDie(Die die, boolean ignoreRestriction) throws dieNotAllowedException {
         if(ignoreRestriction || isAllowed(die)){
