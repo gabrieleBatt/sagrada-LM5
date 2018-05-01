@@ -6,7 +6,7 @@ public class Game {
 
     HashMap<String, String> variables;
 
-    public HashMap<String, String> getVariables() {
+    public HashMap<String, String> getVariables() { 
         return variables;
     }
 

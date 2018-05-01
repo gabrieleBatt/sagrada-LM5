@@ -41,6 +41,29 @@ public class DefaultRules implements Rules {
         };
     }
 
+    private static ActionCommand getRoundCommand(int numOfPlayers){
+        return (actionReceiver) -> {
+            //TODO
+        };
+    }
+
+    private static ActionCommand getTurnCommand(int numOfPlayers){
+        return (actionReceiver) -> {
+            //TODO
+        };
+    }
+
+    private static ActionCommand getScoreCommand(){
+        return (actionReceiver) -> {
+            //TODO
+        };
+    }
+
+    private static ActionCommand getUseToolCommand(){
+        return (actionReceiver) -> {
+            //TODO
+        };
+    }
 
     @Override
     public List<ActionCommand> getGameActions() {
