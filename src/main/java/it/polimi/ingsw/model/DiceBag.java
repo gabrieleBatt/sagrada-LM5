@@ -3,7 +3,6 @@ package it.polimi.ingsw.model;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-
 public class DiceBag {
     private List<Die> bag;
 

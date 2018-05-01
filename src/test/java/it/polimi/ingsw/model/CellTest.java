@@ -35,19 +35,36 @@ class CellTest {
 
     private void assertTruePlace(Cell cell, Die die , boolean isTrue) throws dieNotAllowedException, EmptyCellException {
         cell.placeDie(die,isTrue);
-        Assertions.assertTrue(cell.getDie().equals(die));
+        Assertions.assertEquals(cell.getDie(),die);
     }
 
     @Test
-    void isOccupied() {
-
+    void isOccupied() throws dieNotAllowedException {
+        Cell cell = new Cell();
+        Die die = new Die(DieColor.RED, 10);
+        Assertions.assertFalse(cell.isOccupied());
+        cell.placeDie(die, false);
+        Assertions.assertTrue(cell.isOccupied());
     }
 
     @Test
-    void getDie() {
+    void getDie() throws dieNotAllowedException, EmptyCellException {
+        Cell cell = new Cell();
+        Die die = new Die(DieColor.RED, 10);
+        Assertions.assertThrows(EmptyCellException.class, () -> cell.getDie());
+        cell.placeDie(die, false);
+        Assertions.assertEquals(cell.getDie(),die);
     }
 
     @Test
-    void isAllowed() {
+    void isAllowed() throws NotValidNumberException {
+        Cell cell_colour_restr = new Cell(DieColor.YELLOW);
+        Cell cell_number_restr = new Cell(3);
+        Die dieY = new Die(DieColor.YELLOW, 3,10);
+        Die dieC = new Die(DieColor.CYAN, 5,11);
+        Assertions.assertTrue(cell_colour_restr.isAllowed(dieY));
+        Assertions.assertTrue(cell_number_restr.isAllowed(dieY));
+        Assertions.assertFalse(cell_colour_restr.isAllowed(dieC));
+        Assertions.assertFalse(cell_number_restr.isAllowed(dieC));
     }
 }

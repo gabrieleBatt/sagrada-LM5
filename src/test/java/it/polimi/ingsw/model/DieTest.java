@@ -3,13 +3,25 @@ package it.polimi.ingsw.model;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Random;
+
 
 class DieTest {
 
     @Test
+    void setNumber() throws NotValidNumberException {
+        Die die = new Die(DieColor.CYAN,9);
+        for (int i=1; i<=6; i++){
+        Assertions.assertTrue(die.setNumber(i).getNumber() == i);
+        }
+        Assertions.assertThrows(NotValidNumberException.class, () -> die.setNumber(0));
+    }
+
+
+    @Test
     void getId() {
         Die die = new Die(DieColor.CYAN, 8);
-        Assertions.assertTrue(die.getId().equals(die.getNumber()+die.getColor().toString()+8));
+        Assertions.assertEquals(die.getId(),die.getNumber()+die.getColor().toString()+8);
     }
 
     @Test
@@ -45,6 +57,7 @@ class DieTest {
         Die die2 = new Die(DieColor.RED, 9);
         Assertions.assertTrue(die.equals(die));
         Assertions.assertFalse(die.equals(die2));
+        Assertions.assertFalse(die.getClass().equals(Object.class));
 
     }
 }
