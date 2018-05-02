@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.table.dice.DiceBag;
 import it.polimi.ingsw.model.tool.Tool;
 import javafx.scene.effect.Effect;
 
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Table {
@@ -12,40 +15,45 @@ public class Table {
     private Set<PublicObjective> publicObjectives;
     private Set<Tool> tools;
     private final DiceBag diceBag;
-    private Pool pool;
-    private RoundTrack roundTrack;
+    private final Pool pool;
+    private final RoundTrack roundTrack;
     private Set<Effect> effects;
 
     /**
-     * Creates table, setting players and dicebag
+     * Creates table with all the players
      * @param players Set of players
      */
-    public Table(Set<Player> players){
-        this.players = players;
-        diceBag = new DiceBag();
+    public Table(Collection<Player> players){
+        this.players = new HashSet<>(players);
+        this.diceBag = new DiceBag();
+        this.roundTrack = new RoundTrack();
+        this.effects = new HashSet<>();
+        this.pool = new Pool();
+        this.publicObjectives = new HashSet<>();
+        this.tools = new HashSet<>();
     }
 
     /**
      * Sets public objective
      * @param publicObjective Set of public objective
      */
-    public void setPublicObjective(Set<PublicObjective> publicObjective){
-        this.publicObjectives = publicObjective;
+    public void setPublicObjective(Collection<PublicObjective> publicObjective){
+        this.publicObjectives = new HashSet<>(publicObjective);
     }
 
     /**
      * Sets tools
      * @param tools Set of tools to be set
      */
-    public void setTools(Set<Tool> tools){
-        this.tools = tools;
+    public void setTools(Collection<Tool> tools){
+        this.tools = new HashSet<>(tools);
     }
 
     /**
      * Gets players
      * @return a Set of players
      */
-    public Set<Player> getPlayers() {
+    public Collection<Player> getPlayers() {
         return players;
     }
 
@@ -53,7 +61,7 @@ public class Table {
      * Gets public objective
      * @return a Set of public objective
      */
-    public Set<PublicObjective> getPublicObjectives() {
+    public Collection<PublicObjective> getPublicObjectives() {
         return publicObjectives;
     }
 
@@ -61,7 +69,7 @@ public class Table {
      * Gets tools
      * @return a Set of tools
      */
-    public Set<Tool> getTools() {
+    public Collection<Tool> getTools() {
         return tools;
     }
 
@@ -93,7 +101,7 @@ public class Table {
      * Gets effects active in this game
      * @return Set of effects
      */
-    public Set<Effect> getActiveEffects() {
+    public Collection<Effect> getActiveEffects() {
         return effects;
     }
 

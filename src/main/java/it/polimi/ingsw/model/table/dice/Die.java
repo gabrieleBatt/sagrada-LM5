@@ -30,7 +30,6 @@ public class Die {
         this.color = color;
         this.id = id;
         roll();
-
     }
 
     /**

@@ -2,26 +2,27 @@ package it.polimi.ingsw.model.table;
 
 import it.polimi.ingsw.model.table.dice.Die;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Pool {
-    private List<Die> diceOnTable;
+    private Set<Die> diceOnTable;
 
     /**
      * Creates the list of dice in the pool
      * @return a list of dice
      */
-    public List<Die> getDice(){
-        return new ArrayList<>(diceOnTable);
+    public Collection<Die> getDice(){
+        return new HashSet<>(diceOnTable);
     }
 
     /**
      * Adds a list of die to the table
      * @param diceOnTable parameter that has to be set
      */
-    public void addDice(List<Die> diceOnTable){
-        this.diceOnTable = diceOnTable;
+    public void addDice(Collection<Die> diceOnTable){
+        this.diceOnTable = new HashSet<>(diceOnTable);
     }
 
     /**

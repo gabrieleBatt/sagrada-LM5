@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.table.dice;
 
+import it.polimi.ingsw.model.exception.BagEmptyException;
+
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -10,7 +12,6 @@ public class DiceBag {
      * Creates the dice bag and all the dice in it, 18 per each color
      */
     public DiceBag(){
-
        bag = new ArrayList<>();
        for(int i=0; i<18; i++){
            bag.add(new Die(DieColor.RED, i));
@@ -26,8 +27,11 @@ public class DiceBag {
      * @param num number of dice to be drawn
      * @return: list of dice drawn
      */
-    public List<Die> drawDice(int num){
-        List<Die> ret = new ArrayList<>();
+    public Collection<Die> drawDice(int num) throws BagEmptyException {
+        if (bag.size() < num){
+            throw new BagEmptyException();
+        }
+        Collection<Die> ret = new ArrayList<>();
         for(int i=0; i < num ; i++){
             ret.add(drawDie());
         }
@@ -38,7 +42,10 @@ public class DiceBag {
      * Draws a die from the dice bag; removing die from the dice bag
      * @return the die drown
      */
-    private Die drawDie(){
+    private Die drawDie() throws BagEmptyException {
+        if (bag.size() == 0){
+            throw new BagEmptyException();
+        }
         int randomNum = ThreadLocalRandom.current().nextInt(0, bag.size() );
         Die ret = bag.get(randomNum);
         bag.remove(randomNum);

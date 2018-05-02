@@ -6,13 +6,13 @@ public class Tool {
     private ActionCommand actionCommand;
     private String name;
     private boolean used;
-    private int tokens;
 
     /**
      * Creates a tool
      * @param actionCommand action that has to be performed by the tool
      */
-    public Tool(ActionCommand actionCommand){
+    public Tool(ActionCommand actionCommand, String name){
+        this.name = name;
         this.actionCommand = actionCommand;
     }
 

@@ -13,7 +13,7 @@ public enum DieColor{
      * Color assignment
      * @param color
      */
-    private DieColor(Color color, String toString){
+    DieColor(Color color, String toString){
         this.toString = toString;
         this.color = color;
     }
