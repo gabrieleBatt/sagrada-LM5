@@ -1,15 +1,17 @@
 package it.polimi.ingsw.model.tool;
 
+import it.polimi.ingsw.controller.ActionCommand;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ToolTest {
 
-    //TODO
-
     @Test
     void getName() {
+
+
+
     }
 
     @Test
