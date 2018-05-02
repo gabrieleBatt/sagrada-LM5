@@ -62,10 +62,17 @@ public class DiceBag {
 
     /**
      * method used for testing;
-     * @return the amount of remaining dice
+     * @return amount of remaining dice
      */
     int bagSize(){
         return bag.size();
     }
+
+    /**
+     * method used for testing;
+     * @param die object, true if it's contained in bagDice
+     * @return boolean: true if the die is contained
+     */
+    boolean bagContains(Die die){return bag.contains(die);}
 
 }

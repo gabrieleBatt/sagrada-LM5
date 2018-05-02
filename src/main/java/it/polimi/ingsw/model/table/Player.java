@@ -34,6 +34,7 @@ public class Player {
     /**
      * Gets the dashboard
      * @return: dashboard
+     * @throws DashBoardException exception thrown if there's no dashBoard
      */
     public DashBoard getDashBoard() throws DashBoardException {
         if(dashBoard.isPresent())
