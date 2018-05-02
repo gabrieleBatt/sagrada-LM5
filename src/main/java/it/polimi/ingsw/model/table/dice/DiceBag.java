@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.table;
+package it.polimi.ingsw.model.table.dice;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -19,7 +19,6 @@ public class DiceBag {
            bag.add(new Die(DieColor.MAGENTA, 54+i));
            bag.add(new Die(DieColor.CYAN, 72+i));
        }
-
     }
 
     /**
@@ -54,5 +53,12 @@ public class DiceBag {
         bag.add(die);
     }
 
+    /**
+     * method used for testing;
+     * @return the amount of remaining dice
+     */
+    int bagSize(){
+        return bag.size();
+    }
 
 }

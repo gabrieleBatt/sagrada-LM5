@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.table;
+package it.polimi.ingsw.model.table.dice;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -22,7 +22,7 @@ public class Die {
     }
 
     /**
-     * Creates a die, setting just color (useful with tools)
+     * Creates a die, setting just color
      * @param color die color
      * @param id die id code
      */

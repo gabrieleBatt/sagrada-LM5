@@ -1,10 +1,11 @@
 package it.polimi.ingsw.model.table;
 
 import it.polimi.ingsw.model.exception.EmptyCellException;
-import it.polimi.ingsw.model.exception.dieNotAllowedException;
+import it.polimi.ingsw.model.exception.DieNotAllowedException;
+import it.polimi.ingsw.model.table.dice.Die;
+import it.polimi.ingsw.model.table.dice.DieColor;
 
 import java.util.Optional;
-
 
 public class Cell {
     private Optional<DieColor> colorRestriction;
@@ -44,14 +45,14 @@ public class Cell {
      * Aim: disable the restriction of a specific cell
      * @param die: die that has to be positioned
      * @param ignoreRestriction:boolean which indicates whether the restriction has to be ignored or not
-     * @throws dieNotAllowedException :Exception thrown if die can't be placed despite restriction has been ignored
+     * @throws DieNotAllowedException :Exception thrown if die can't be placed due to restrictions
      */
-    public void placeDie(Die die, boolean ignoreRestriction) throws dieNotAllowedException {
+    public void placeDie(Die die, boolean ignoreRestriction) throws DieNotAllowedException {
         if(ignoreRestriction || isAllowed(die)){
             this.die = Optional.of(die);
         }
         else
-            throw new dieNotAllowedException();
+            throw new DieNotAllowedException();
     }
 
     /**

@@ -1,8 +1,8 @@
-package it.polimi.ingsw.model.table;
+package it.polimi.ingsw.model.table.dice;
 
 import it.polimi.ingsw.model.exception.NotValidNumberException;
-import it.polimi.ingsw.model.table.Die;
-import it.polimi.ingsw.model.table.DieColor;
+import it.polimi.ingsw.model.table.dice.Die;
+import it.polimi.ingsw.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

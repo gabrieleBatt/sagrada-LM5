@@ -3,7 +3,11 @@ package it.polimi.ingsw.model.rules;
 import it.polimi.ingsw.controller.ActionCommand;
 
 import java.util.List;
+import java.util.Set;
 
+/**
+ * The default rules generate all the actions needed in a default game
+ */
 public class DefaultRules implements Rules {
 
     private DefaultRules defaultRules = new DefaultRules();
@@ -76,7 +80,7 @@ public class DefaultRules implements Rules {
     }
 
     @Override
-    public List<ActionCommand> getTurnActions() {
+    public Set<ActionCommand> getTurnActions() {
         return null;
     }
 

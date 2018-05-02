@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.table;
 
 import it.polimi.ingsw.model.objective.PublicObjective;
+import it.polimi.ingsw.model.table.dice.DiceBag;
 import it.polimi.ingsw.model.tool.Tool;
 import javafx.scene.effect.Effect;
 

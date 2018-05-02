@@ -2,17 +2,16 @@ package it.polimi.ingsw.model.table;
 
 import it.polimi.ingsw.model.exception.EmptyCellException;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
-import it.polimi.ingsw.model.exception.dieNotAllowedException;
-import it.polimi.ingsw.model.table.Cell;
-import it.polimi.ingsw.model.table.Die;
-import it.polimi.ingsw.model.table.DieColor;
+import it.polimi.ingsw.model.exception.DieNotAllowedException;
+import it.polimi.ingsw.model.table.dice.Die;
+import it.polimi.ingsw.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class CellTest {
 
     @Test
-    void placeDie() throws NotValidNumberException, dieNotAllowedException, EmptyCellException {
+    void placeDie() throws NotValidNumberException, DieNotAllowedException, EmptyCellException {
         Cell cell_colour_restr = new Cell(DieColor.YELLOW);
         Cell cell_number_restr = new Cell(3);
         Die dieY = new Die(DieColor.YELLOW, 3,10);
@@ -30,18 +29,18 @@ class CellTest {
         //placing die with numeric value 5 in a cell with numeric restriction: 3, ignoring restrictions
         assertTruePlace(cell_number_restr, dieC, true);
         //placing a cyan die in a cell with colour restriction: yellow
-        Assertions.assertThrows(dieNotAllowedException.class, () -> cell_colour_restr.placeDie(dieC, false));
+        Assertions.assertThrows(DieNotAllowedException.class, () -> cell_colour_restr.placeDie(dieC, false));
         //placing die with numeric value 5 in a cell with numeric restriction: 3
-        Assertions.assertThrows(dieNotAllowedException.class, () -> cell_number_restr.placeDie(dieC,false));
+        Assertions.assertThrows(DieNotAllowedException.class, () -> cell_number_restr.placeDie(dieC,false));
     }
 
-    private void assertTruePlace(Cell cell, Die die , boolean isTrue) throws dieNotAllowedException, EmptyCellException {
+    private void assertTruePlace(Cell cell, Die die , boolean isTrue) throws DieNotAllowedException, EmptyCellException {
         cell.placeDie(die,isTrue);
         Assertions.assertEquals(cell.getDie(),die);
     }
 
     @Test
-    void isOccupied() throws dieNotAllowedException {
+    void isOccupied() throws DieNotAllowedException {
         Cell cell = new Cell();
         Die die = new Die(DieColor.RED, 10);
         Assertions.assertFalse(cell.isOccupied());
@@ -50,7 +49,7 @@ class CellTest {
     }
 
     @Test
-    void getDie() throws dieNotAllowedException, EmptyCellException {
+    void getDie() throws DieNotAllowedException, EmptyCellException {
         Cell cell = new Cell();
         Die die = new Die(DieColor.RED, 10);
         Assertions.assertThrows(EmptyCellException.class, () -> cell.getDie());

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.table;
 
+import it.polimi.ingsw.model.table.dice.Die;
+
 import java.util.ArrayList;
 import java.util.List;
 

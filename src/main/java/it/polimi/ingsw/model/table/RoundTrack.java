@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.table;
 
 import it.polimi.ingsw.model.exception.EndGameException;
+import it.polimi.ingsw.model.table.dice.Die;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ public class RoundTrack {
     private List<ArrayList<Die>> dice;
 
     /**
-     * Creates a roundtrack
+     * Creates a roundTrack
      */
     public RoundTrack() {
         round = 1;
@@ -41,7 +42,7 @@ public class RoundTrack {
     }
 
     /**
-     * Gets a dice from the roundtrack
+     * Gets a dice from the roundTrack
      * @param round corresponding to the die or dice to be got
      * @return a clone of the corresponding dice list
      */
@@ -50,7 +51,7 @@ public class RoundTrack {
     }
 
     /**
-     * Switches a die on the roundtrack
+     * Switches a die on the roundTrack
      * @param toPlace object die to be placed
      * @param toRemove object die to be removed
      */

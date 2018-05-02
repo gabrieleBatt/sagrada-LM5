@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.table;
+package it.polimi.ingsw.model.table.dice;
 
 import java.awt.*;
 

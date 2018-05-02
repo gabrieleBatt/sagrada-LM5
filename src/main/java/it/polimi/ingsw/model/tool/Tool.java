@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.tool;
 
-import it.polimi.ingsw.model.command.ActionCommand;
+import it.polimi.ingsw.controller.ActionCommand;
 
 public class Tool {
     private ActionCommand actionCommand;
@@ -46,23 +46,5 @@ public class Tool {
      */
     public boolean isUsed() {
         return used;
-    }
-
-    /**
-     * Gets number of tokens on the tool
-     * @return number of tokens
-     */
-    public int getTokens() {
-        return tokens;
-    }
-
-    /**
-     * Adds tokens to the tool
-     */
-    public void addTokens(){
-        if (isUsed())
-            tokens = tokens +2;
-        else
-            tokens++;
     }
 }
