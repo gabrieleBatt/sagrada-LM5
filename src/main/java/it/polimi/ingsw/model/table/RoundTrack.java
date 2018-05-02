@@ -48,7 +48,7 @@ public class RoundTrack {
      * @return a clone of the corresponding dice list
      */
     public Collection<Die> getDice(int round){
-        return (Collection<Die>)dice.get(round).clone();
+        return (Collection<Die>)dice.get(round-1).clone();
     }
 
     /**
