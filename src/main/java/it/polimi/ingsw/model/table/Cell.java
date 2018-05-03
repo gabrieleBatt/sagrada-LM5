@@ -1,20 +1,23 @@
 package it.polimi.ingsw.model.table;
 
 import it.polimi.ingsw.model.exception.EmptyCellException;
-import it.polimi.ingsw.model.exception.dieNotAllowedException;
+import it.polimi.ingsw.model.exception.DieNotAllowedException;
+import it.polimi.ingsw.model.table.dice.Die;
+import it.polimi.ingsw.model.table.dice.DieColor;
 
 import java.util.Optional;
-
 
 public class Cell {
     private Optional<DieColor> colorRestriction;
     private Optional<Integer> numberRestriction;
     private Optional<Die> die;
+    private final String id;
 
     /**
      *Creates a cell with no restrictions
      */
-    public Cell(){
+    public Cell(String id){
+        this.id = id;
         colorRestriction = Optional.empty();
         numberRestriction = Optional.empty();
         die = Optional.empty();
@@ -24,7 +27,8 @@ public class Cell {
      * Creates of a cell with color restriction
      * @param restriction: color restriction of the cell
      */
-    public Cell(DieColor restriction){
+    public Cell(String id, DieColor restriction){
+        this.id = id;
         colorRestriction = Optional.of(restriction);
         numberRestriction = Optional.empty();
         die = Optional.empty();
@@ -34,7 +38,8 @@ public class Cell {
      * Creates of a cell with numeric value restriction
      * @param restriction numeric value restriction of the cell
      */
-    public Cell(int restriction){
+    public Cell(String id, int restriction){
+        this.id = id;
         numberRestriction = Optional.of(restriction);
         colorRestriction = Optional.empty();
         die = Optional.empty();
@@ -44,14 +49,14 @@ public class Cell {
      * Aim: disable the restriction of a specific cell
      * @param die: die that has to be positioned
      * @param ignoreRestriction:boolean which indicates whether the restriction has to be ignored or not
-     * @throws dieNotAllowedException :Exception thrown if die can't be placed despite restriction has been ignored
+     * @throws DieNotAllowedException :Exception thrown if die can't be placed due to restrictions
      */
-    public void placeDie(Die die, boolean ignoreRestriction) throws dieNotAllowedException {
+    public void placeDie(Die die, boolean ignoreRestriction) throws DieNotAllowedException {
         if(ignoreRestriction || isAllowed(die)){
             this.die = Optional.of(die);
         }
         else
-            throw new dieNotAllowedException();
+            throw new DieNotAllowedException();
     }
 
     /**
@@ -80,11 +85,28 @@ public class Cell {
      * @return: true if the value can be placed in the cell
      */
     public boolean isAllowed(Die die){
-        if (colorRestriction.isPresent() && die.getColor() != colorRestriction.get())
-            return false;
-        if (numberRestriction.isPresent() && die.getNumber() != numberRestriction.get())
-            return false;
-        return true;
+        return !((colorRestriction.isPresent() && die.getColor() != colorRestriction.get()) ||
+        (numberRestriction.isPresent() && die.getNumber() != numberRestriction.get()));
     }
 
+    /**
+     * gets the cell id
+     * @return  the string id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * checks if two cells are the same by id
+     * @param cell
+     * @return true if cells has the same id
+     */
+    @Override
+    public boolean equals(Object cell) {
+        if (cell instanceof Cell){
+            return ((Cell) cell).getId().equals(this.getId());
+        }else
+            return false;
+    }
 }

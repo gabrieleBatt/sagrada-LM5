@@ -1,65 +1,59 @@
 package it.polimi.ingsw.model.table;
 
-import it.polimi.ingsw.model.objective.PublicObjective;
-import it.polimi.ingsw.model.table.Table;
+
+import it.polimi.ingsw.model.table.dice.DiceBag;
+import it.polimi.ingsw.model.tool.Effect;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
+
 
 class TableTest {
 
-    //TODO
+    Player player1;
+    Player player2;
+    Player player3;
+    Collection<Player> players;
+
+    Table table;
+
+    @Test
+    @BeforeEach
+    void setup(){
+        player1 = new Player("p1");
+        player2 = new Player("p2");
+        player3 = new Player("p3");
+        players = new HashSet<>();
+        players.add(player1);
+        players.add(player2);
+        players.add(player3);
+
+        table = new Table(players);
+    }
+
     @Test
     void setPublicObjective() {
-        Table t = new Table(new HashSet<>());
-        PublicObjective p1 = new PublicObjective(){};
-        PublicObjective p2 = new PublicObjective(){};
-        PublicObjective p3 = new PublicObjective(){};
-        Set<PublicObjective> publicObjectiveSet = new HashSet<>();
-        publicObjectiveSet.add(p3);
-        publicObjectiveSet.add(p2);
-        publicObjectiveSet.add(p1);
-        t.setPublicObjective(publicObjectiveSet);
-
-
-        Assertions.assertEquals(publicObjectiveSet, t.getPublicObjectives());
     }
 
     @Test
     void setTools() {
+
     }
 
     @Test
     void getPlayers() {
+        Assertions.assertEquals(players, table.getPlayers());
     }
 
     @Test
-    void getPublicObjectives() {
-    }
-
-    @Test
-    void getTools() {
-    }
-
-    @Test
-    void getDiceBag() {
-    }
-
-    @Test
-    void getPool() {
-    }
-
-    @Test
-    void getRoundTrack() {
-    }
-
-    @Test
-    void getActiveEffects() {
-    }
-
-    @Test
-    void addEffect() {
+    void getEffects() {
+        Effect e = new Effect();
+        Assertions.assertEquals(0, table.getEffects().size());
+        table.addEffect(e);
+        Assertions.assertEquals(1, table.getEffects().size());
+        Assertions.assertTrue(table.getEffects().contains(e));
     }
 }

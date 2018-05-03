@@ -1,67 +1,74 @@
 package it.polimi.ingsw.model.table;
 
 import it.polimi.ingsw.model.objective.PublicObjective;
+import it.polimi.ingsw.model.table.dice.DiceBag;
+import it.polimi.ingsw.model.tool.Effect;
 import it.polimi.ingsw.model.tool.Tool;
-import javafx.scene.effect.Effect;
 
-import java.util.Set;
+import java.util.*;
 
 public class Table {
-    private final Set<Player> players;
+    private final List<Player> players;
     private Set<PublicObjective> publicObjectives;
     private Set<Tool> tools;
     private final DiceBag diceBag;
-    private Pool pool;
-    private RoundTrack roundTrack;
+    private final Pool pool;
+    private final RoundTrack roundTrack;
     private Set<Effect> effects;
 
     /**
-     * Creates table, setting players and dicebag
+     * Creates table with all the players
      * @param players Set of players
      */
-    public Table(Set<Player> players){
-        this.players = players;
-        diceBag = new DiceBag();
+    public Table(Collection<Player> players){
+        this.players = new ArrayList<>(players);
+        this.diceBag = new DiceBag();
+        this.roundTrack = new RoundTrack();
+        this.effects = new HashSet<>();
+        this.pool = new Pool();
+        this.publicObjectives = new HashSet<>();
+        this.tools = new HashSet<>();
     }
 
     /**
-     * Sets public objectives
-     * @param publicObjective Set of public objectives
+     * Sets public objective
+     * @param publicObjective Set of public objective
      */
-    public void setPublicObjective(Set<PublicObjective> publicObjective){
-        this.publicObjectives = publicObjective;
+    public void setPublicObjective(Collection<PublicObjective> publicObjective){
+        this.publicObjectives = new HashSet<>(publicObjective);
     }
 
     /**
      * Sets tools
      * @param tools Set of tools to be set
      */
-    public void setTools(Set<Tool> tools){
-        this.tools = tools;
+    public void setTools(Collection<Tool> tools){
+        this.tools = new HashSet<>(tools);
     }
 
     /**
      * Gets players
      * @return a Set of players
      */
-    public Set<Player> getPlayers() {
-        return players;
+    public Collection<Player> getPlayers() {
+        return new HashSet<>(players);
     }
 
     /**
-     * Gets public objectives
-     * @return a Set of public objectives
+     * Gets public objective
+     * @return a Set of public objective
      */
-    public Set<PublicObjective> getPublicObjectives() {
-        return publicObjectives;
+    public Collection<PublicObjective> getPublicObjectives() {
+        return
+                new HashSet<>(publicObjectives);
     }
 
     /**
      * Gets tools
      * @return a Set of tools
      */
-    public Set<Tool> getTools() {
-        return tools;
+    public Collection<Tool> getTools() {
+        return new HashSet<>(tools);
     }
 
     /**
@@ -92,8 +99,8 @@ public class Table {
      * Gets effects active in this game
      * @return Set of effects
      */
-    public Set<Effect> getActiveEffects() {
-        return effects;
+    public Collection<Effect> getEffects() {
+        return new HashSet<>(effects);
     }
 
     /**

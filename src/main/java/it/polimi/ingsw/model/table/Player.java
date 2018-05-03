@@ -1,15 +1,15 @@
 package it.polimi.ingsw.model.table;
 
+import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.objective.PrivateObjective;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Player {
-    private String nickname;
+    private final String nickname;
     private int tokens;
-    private DashBoard dashBoard;
-    private ArrayList<PrivateObjective> privateObjective;
+    private Optional<DashBoard> dashBoard;
+    private HashSet<PrivateObjective> privateObjective;
     private boolean connected;
 
     /**
@@ -18,6 +18,8 @@ public class Player {
      */
     public Player(String nickname)
     {
+        this.privateObjective = new HashSet<>();
+        dashBoard = Optional.empty();
         this.nickname = nickname;
     }
 
@@ -32,9 +34,12 @@ public class Player {
     /**
      * Gets the dashboard
      * @return: dashboard
+     * @throws CellNotFoundException exception thrown if there's no dashBoard
      */
-    public DashBoard getDashBoard() {
-        return dashBoard;
+    public DashBoard getDashBoard() throws CellNotFoundException {
+        if(dashBoard.isPresent())
+            return dashBoard.get();
+        else throw new CellNotFoundException();
     }
 
     /**
@@ -42,7 +47,7 @@ public class Player {
      * @param dashBoard
      */
     public void setDashBoard(DashBoard dashBoard){
-        this.dashBoard = dashBoard;
+        this.dashBoard = Optional.of(dashBoard);
     }
 
     /**
@@ -62,11 +67,11 @@ public class Player {
     }
 
     /**
-     * Gets private objectives
+     * Gets private objective
      * @return list of private objective
      */
-    public List<PrivateObjective> getPrivateObjective(){
-        return (List<PrivateObjective>)privateObjective.clone();
+    public Collection<PrivateObjective> getPrivateObjective(){
+        return (Collection<PrivateObjective>)privateObjective.clone();
     }
 
     /**
@@ -78,10 +83,10 @@ public class Player {
     }
 
     /**
-     * Adds private objectives
-     * @param newPrivateObjective list of private objectives to be added
+     * Adds private objective
+     * @param newPrivateObjective list of private objective to be added
      */
-    public void addPrivateObjective(List<PrivateObjective> newPrivateObjective){
+    public void addPrivateObjective(Collection<PrivateObjective> newPrivateObjective){
         this.privateObjective.addAll(newPrivateObjective);
     }
 
