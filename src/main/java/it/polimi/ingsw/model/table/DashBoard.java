@@ -1,30 +1,26 @@
 
 package it.polimi.ingsw.model.table;
 
-import it.polimi.ingsw.model.exception.DashBoardException;
+import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.EmptyCellException;
+import it.polimi.ingsw.model.exception.IllegalDashboardException;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
 import it.polimi.ingsw.model.table.dice.Die;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DashBoard {
     private String name;
     private int difficulty;
-    private Cell[][] dashBoard;
+    private List<Cell> cellList;
 
-    public DashBoard(String name, int difficulty){
+    public DashBoard(String name, int difficulty, List<Cell> cells) throws IllegalDashboardException {
+        if (cells.size() != 20){
+            throw new IllegalDashboardException();
+        }
         this.name = name;
         this.difficulty = difficulty;
-    }
-
-    /**
-     * Sets the dashBoard cells array (used for testing)
-     * @param board two-dimensional array, list of cells
-     */
-    public void setDashBoard( Cell[][] board){
-        this.dashBoard=board;
+        this.cellList = new ArrayList<>(cells);
     }
 
     /**
@@ -44,15 +40,15 @@ public class DashBoard {
     }
 
     /**
-     * Gets the cell at the x,y coordinates
+     * Gets the cell at the x,y coordinates, the top left is the (0, 0)
      * @param x column
      * @param y row
      * @return Cell in x,y on the dashBoard
      * @throws NotValidNumberException Exception thrown whether column or row are not valid inputs
      */
     public Cell getCell(int x, int y) throws NotValidNumberException{
-        if (x>=0 && x<5 && y>=0 && y<4)
-            return dashBoard[x][y];
+        if (x>=0 && x<4 && y>=0 && y<5)
+            return cellList.get(x*5+y);
         else throw new NotValidNumberException();
     }
 
@@ -60,140 +56,153 @@ public class DashBoard {
      * Gets the cell in which there's a die having dieId Id
      * @param dieId String, value to look for
      * @return cell containing the die having dieId Id
-     * @throws DashBoardException Exception thrown whether dieId is not found
-     * @throws EmptyCellException Exception thrown whether
+     * @throws CellNotFoundException Exception thrown if dieId is not found
      */
-    public Cell getCell(String dieId) throws DashBoardException, EmptyCellException {
-        boolean found = false;
-        Cell cellFound = null;
-        for(int j=0; j<4; j++){
-            for(int i=0; i<5; i++) {
-                if(found == false && dashBoard[i][j].isOccupied() &&
-                        dashBoard[i][j].getDie().getId().equals(dieId)) {
-                    cellFound = dashBoard[i][j];
-                    found = true;
+    public Cell getCellByDie(String dieId) throws CellNotFoundException{
+        for(Cell c: cellList){
+            if (c.isOccupied()){
+                try {
+                    if (c.getDie().getId().equals(dieId)){
+                        return c;
+                    }
+                } catch (EmptyCellException e) {
+                    e.printStackTrace();
                 }
             }
         }
-        if(found == true)
-            return cellFound;
-        else
-            throw new DashBoardException();
+        throw new CellNotFoundException();
     }
 
     /**
-     * Checks condition on cells surrounding the one given
-     * @param x column
-     * @param y row
-     * @param die Object, checking conditions on it
-     * @return Boolean, true if its possible to place the die on that cell
-     * @throws EmptyCellException exception thrown whether an empty cell is accessed
+     * gets the row of the cell
+     * @param cell
+     * @return the row
+     * @throws CellNotFoundException if the cell is not in this dashboard
      */
-    public boolean areDiceNearby (int x, int y, Die die) throws EmptyCellException {
-        boolean diceNearby = false;
-        //checking sides
-        if(x>0) {
-            diceNearby = dashBoard[x-1][y].isOccupied();
-            if(!checkNearby(x-1,y,die))
-                return false;
-            //TODO
-        }if(x<4) {
-            diceNearby = dashBoard[x+1][y].isOccupied();
-            if(!checkNearby(x+1,y,die))
-                return false;
+    public int getRow(Cell cell) throws CellNotFoundException {
+        for (int i = 0; i < cellList.size(); i++) {
+            if(cellList.get(i).equals(cell)){
+                return i/5;
+            }
         }
-        if(y>0) {
-            diceNearby = dashBoard[x][y-1].isOccupied();
-            if(!checkNearby(x,y-1,die))
-                return false;
-        }
-        if(y<3) {
-            diceNearby = dashBoard[x][y+1].isOccupied();
-            if(!checkNearby(x,y+1,die))
-                return false;
-        }
-        //checking diagonals
-        if(x>0 && y>0 && !diceNearby)
-            diceNearby = dashBoard[x-1][y-1].isOccupied();
-        if(x>0 && y<4 && !diceNearby)
-            diceNearby = dashBoard[x-1][y+1].isOccupied();
-        if(x<5 && y>0 && !diceNearby)
-            diceNearby = dashBoard[x+1][y-1].isOccupied();
-        if(x<5 && y<4 && !diceNearby)
-            diceNearby = dashBoard[x+1][y+1].isOccupied();
+        throw new CellNotFoundException();
+    }
 
-        return diceNearby;
+    /**
+     * gets the column of the cell
+     * @param cell
+     * @return the column
+     * @throws CellNotFoundException if the cell is not in this dashboard
+     */
+    public int getColumn(Cell cell) throws CellNotFoundException {
+        for (int i = 0; i < cellList.size(); i++) {
+            if(cellList.get(i).equals(cell)){
+                return i%5;
+            }
+        }
+        throw new CellNotFoundException();
+    }
+
+    /**
+     * Checks if there are surrounding dice
+     * @param x row
+     * @param y column
+     * @return Boolean, true if there are surrounding dice
+     */
+    public boolean hasSurroundingDice (int x, int y) {
+        for(Cell c: this.getSurrounding(x, y)){
+            if(c.isOccupied()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Collection<Cell> getSurrounding(int x, int y){
+        Set<Cell> ret = new HashSet<>(this.getAdjacent(x, y));
+        try {
+            if(x<3 && y<4)ret.add(this.getCell(x+1,y+1));
+            if(x<3 && y>0)ret.add(this.getCell(x+1,y-1));
+            if(x>0 && y<4)ret.add(this.getCell(x-1,y+1));
+            if(x>0 && y>0)ret.add(this.getCell(x-1,y-1));
+        } catch (NotValidNumberException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
+    private Collection<Cell> getAdjacent(int x, int y){
+        Set<Cell> ret = new HashSet<>();
+        try {
+            if(x>0)ret.add(this.getCell(x-1,y));
+            if(x<3)ret.add(this.getCell(x+1,y));
+            if(y>0)ret.add(this.getCell(x,y-1));
+            if(y<4)ret.add(this.getCell(x,y+1));
+        } catch (NotValidNumberException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
     /**
      * Checks if there's a cell with the same numeric value or color of the placing die nearby
-     * @param sx column
-     * @param sy row
-     * @param die Object, die considered
-     * @return boolean, true if there's no conflict
-     * @throws EmptyCellException exception thrown whether an empty cell is accessed
+     * @param x column
+     * @param y row
+     * @param die Die considered for placing
+     * @return boolean, true if there's conflict
      */
-    public boolean checkNearby(int sx, int sy, Die die) throws EmptyCellException {
-        boolean AllowedDiceNearby = true;
-            if(dashBoard[sx][sy].getDie().getNumber()== die.getNumber()
-                    || dashBoard[sx][sy].getDie().getColor().toString().equals(die.getColor().toString()))
-                AllowedDiceNearby=false;
-        return AllowedDiceNearby;
+    public boolean hasAdjacentSimilar(int x, int y, Die die){
+        for(Cell c: this.getAdjacent(x, y)){
+            if(c.isOccupied()){
+                try {
+                    if (c.getDie().getColor().equals(die.getColor()) || c.getDie().getNumber() == die.getNumber()){
+                        return true;
+                    }
+                } catch (EmptyCellException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
     }
 
     /**
-     * Finds the list of available cells (on the border) in case there's no die placed yet
-     * @param die Object, die considered
-     * @return List of available cells
+     * Finds the collection of available cells (on the border)
+     * @return Collection of available cells
      */
-    public List<Cell> emptyDashBoard(Die die){
-        List<Cell> availableCells= new ArrayList<Cell>();
-        int i;
-        int j;
-        for(i=0,j=0; i<5; i++){
-            if(dashBoard[i][j].isAllowed(die))
-                availableCells.add(dashBoard[i][j]);
-        }
-        for(i=0,j=3; i<5; i++){
-            if(dashBoard[i][j].isAllowed(die))
-                availableCells.add(dashBoard[i][j]);
-        }
-        for(i=0,j=1; j<3; j++){
-            if(dashBoard[i][j].isAllowed(die))
-                availableCells.add(dashBoard[i][j]);
-        }
-        for(i=4,j=1; j<2; j++){
-            if(dashBoard[i][j].isAllowed(die))
-                availableCells.add(dashBoard[i][j]);
-        }
-        return availableCells;
+    public Collection<Cell> availableBorderCells(){
+        return (new ArrayList<Cell>(cellList)).stream().filter(c -> {
+            try {
+                return !c.isOccupied()
+                        && ((this.getColumn(c) == 0) || (this.getColumn(c) == 4)
+                                || (this.getRow(c) == 0) || (this.getRow(c) == 3));
+            } catch (CellNotFoundException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }).collect(Collectors.toList());
     }
 
-    /**
-     * Finds the list of cells where to place the die (parameter) according to rules
-     * @param die Object, die considered
-     * @return List of available cells
-     * @throws EmptyCellException exception thrown whether an empty cell is accessed
-     */
-    public List<Cell> availableCells(Die die) throws EmptyCellException {
-        List<Cell> availableCells= new ArrayList<Cell>();
-        Boolean isEmpty = true;
-        int i;
-        int j;
-        for(j=0; j<4; j++)
-            for(i=0; i<5; i++)
-                if(dashBoard[i][j].isOccupied() && isEmpty)
-                    isEmpty = false;
 
-        if(!isEmpty) {
-            for(j=0; j<4; j++)
-                for(i=0; i<5; i++)
-                    if(dashBoard[i][j].isAllowed(die) && areDiceNearby(i,j,die))
-                        availableCells.add(dashBoard[i][j]);
-        }else{
-            availableCells = emptyDashBoard(die);
-        }
-        return availableCells;
+    /**
+     * Finds the list of cells where to place the die according to adjacency restriction
+     * @param die die considered for placing
+     * @param ignoredSurroundingRestriction true to not consider surrounding restriction
+     * @return Collection of available cells
+     */
+    public Collection<Cell> availableCells(Die die, boolean ignoredSurroundingRestriction){
+        return (new ArrayList<>(cellList)).stream().filter(c ->
+                {
+                    try {
+                        return !hasAdjacentSimilar(getRow(c), getColumn(c), die)
+                                && (hasSurroundingDice(getRow(c), getColumn(c)) || ignoredSurroundingRestriction)
+                                && !c.isOccupied();
+                    } catch (CellNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }
+        ).collect(Collectors.toList());
 
     }
 }

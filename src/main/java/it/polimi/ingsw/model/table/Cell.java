@@ -11,11 +11,13 @@ public class Cell {
     private Optional<DieColor> colorRestriction;
     private Optional<Integer> numberRestriction;
     private Optional<Die> die;
+    private final String id;
 
     /**
      *Creates a cell with no restrictions
      */
-    public Cell(){
+    public Cell(String id){
+        this.id = id;
         colorRestriction = Optional.empty();
         numberRestriction = Optional.empty();
         die = Optional.empty();
@@ -25,7 +27,8 @@ public class Cell {
      * Creates of a cell with color restriction
      * @param restriction: color restriction of the cell
      */
-    public Cell(DieColor restriction){
+    public Cell(String id, DieColor restriction){
+        this.id = id;
         colorRestriction = Optional.of(restriction);
         numberRestriction = Optional.empty();
         die = Optional.empty();
@@ -35,7 +38,8 @@ public class Cell {
      * Creates of a cell with numeric value restriction
      * @param restriction numeric value restriction of the cell
      */
-    public Cell(int restriction){
+    public Cell(String id, int restriction){
+        this.id = id;
         numberRestriction = Optional.of(restriction);
         colorRestriction = Optional.empty();
         die = Optional.empty();
@@ -81,11 +85,28 @@ public class Cell {
      * @return: true if the value can be placed in the cell
      */
     public boolean isAllowed(Die die){
-        if (colorRestriction.isPresent() && die.getColor() != colorRestriction.get())
-            return false;
-        if (numberRestriction.isPresent() && die.getNumber() != numberRestriction.get())
-            return false;
-        return true;
+        return !((colorRestriction.isPresent() && die.getColor() != colorRestriction.get()) ||
+        (numberRestriction.isPresent() && die.getNumber() != numberRestriction.get()));
     }
 
+    /**
+     * gets the cell id
+     * @return  the string id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * checks if two cells are the same by id
+     * @param cell
+     * @return true if cells has the same id
+     */
+    @Override
+    public boolean equals(Object cell) {
+        if (cell instanceof Cell){
+            return ((Cell) cell).getId().equals(this.getId());
+        }else
+            return false;
+    }
 }

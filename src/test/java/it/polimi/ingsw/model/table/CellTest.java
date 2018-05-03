@@ -12,8 +12,8 @@ class CellTest {
 
     @Test
     void placeDie() throws NotValidNumberException, DieNotAllowedException, EmptyCellException {
-        Cell cell_colour_restr = new Cell(DieColor.YELLOW);
-        Cell cell_number_restr = new Cell(3);
+        Cell cell_colour_restr = new Cell("", DieColor.YELLOW);
+        Cell cell_number_restr = new Cell("", 3);
         Die dieY = new Die(DieColor.YELLOW, 3,10);
         Die dieC = new Die(DieColor.CYAN, 5,11);
         //placing a yellow die in a cell with colour restriction: yellow
@@ -41,7 +41,7 @@ class CellTest {
 
     @Test
     void isOccupied() throws DieNotAllowedException {
-        Cell cell = new Cell();
+        Cell cell = new Cell("");
         Die die = new Die(DieColor.RED, 10);
         Assertions.assertFalse(cell.isOccupied());
         cell.placeDie(die, false);
@@ -50,7 +50,7 @@ class CellTest {
 
     @Test
     void getDie() throws DieNotAllowedException, EmptyCellException {
-        Cell cell = new Cell();
+        Cell cell = new Cell("");
         Die die = new Die(DieColor.RED, 10);
         Assertions.assertThrows(EmptyCellException.class, () -> cell.getDie());
         cell.placeDie(die, false);
@@ -59,8 +59,8 @@ class CellTest {
 
     @Test
     void isAllowed() throws NotValidNumberException {
-        Cell cell_colour_restr = new Cell(DieColor.YELLOW);
-        Cell cell_number_restr = new Cell(3);
+        Cell cell_colour_restr = new Cell("", DieColor.YELLOW);
+        Cell cell_number_restr = new Cell("", 3);
         Die dieY = new Die(DieColor.YELLOW, 3,10);
         Die dieC = new Die(DieColor.CYAN, 5,11);
         Assertions.assertTrue(cell_colour_restr.isAllowed(dieY));

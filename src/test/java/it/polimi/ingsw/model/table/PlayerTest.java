@@ -1,11 +1,11 @@
 package it.polimi.ingsw.model.table;
 
-import it.polimi.ingsw.model.exception.DashBoardException;
-import it.polimi.ingsw.model.objective.PrivateObjective;
+import it.polimi.ingsw.model.exception.CellNotFoundException;
+import it.polimi.ingsw.model.exception.IllegalDashboardException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
 
 class PlayerTest {
 
@@ -16,17 +16,6 @@ class PlayerTest {
     }
 
     @Test
-    void getDashBoard() throws DashBoardException {
-        String nome = "nome";
-        Player player = new Player(nome);
-        Assertions.assertThrows(DashBoardException.class, () -> player.getDashBoard());
-        DashBoard dashBoard = new DashBoard("name",'d');
-        player.setDashBoard(dashBoard);
-        Assertions.assertEquals(dashBoard, player.getDashBoard());
-    }
-
-
-    @Test
     void getTokens() {
         Player player = new Player("player");
         for(int i = 3; i<7; i++) {
@@ -34,14 +23,6 @@ class PlayerTest {
             Assertions.assertEquals(player.getTokens(), i);
         }
 
-    }
-
-    @Test
-    void getPrivateObjective() {
-    }
-
-    @Test
-    void addPrivateObjective() {
     }
 
     @Test

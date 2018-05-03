@@ -2,16 +2,13 @@ package it.polimi.ingsw.model.table;
 
 import it.polimi.ingsw.model.objective.PublicObjective;
 import it.polimi.ingsw.model.table.dice.DiceBag;
+import it.polimi.ingsw.model.tool.Effect;
 import it.polimi.ingsw.model.tool.Tool;
-import javafx.scene.effect.Effect;
 
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Table {
-    private final Set<Player> players;
+    private final List<Player> players;
     private Set<PublicObjective> publicObjectives;
     private Set<Tool> tools;
     private final DiceBag diceBag;
@@ -24,7 +21,7 @@ public class Table {
      * @param players Set of players
      */
     public Table(Collection<Player> players){
-        this.players = new HashSet<>(players);
+        this.players = new ArrayList<>(players);
         this.diceBag = new DiceBag();
         this.roundTrack = new RoundTrack();
         this.effects = new HashSet<>();
@@ -54,7 +51,7 @@ public class Table {
      * @return a Set of players
      */
     public Collection<Player> getPlayers() {
-        return players;
+        return new HashSet<>(players);
     }
 
     /**
@@ -62,7 +59,8 @@ public class Table {
      * @return a Set of public objective
      */
     public Collection<PublicObjective> getPublicObjectives() {
-        return publicObjectives;
+        return
+                new HashSet<>(publicObjectives);
     }
 
     /**
@@ -70,7 +68,7 @@ public class Table {
      * @return a Set of tools
      */
     public Collection<Tool> getTools() {
-        return tools;
+        return new HashSet<>(tools);
     }
 
     /**
@@ -101,8 +99,8 @@ public class Table {
      * Gets effects active in this game
      * @return Set of effects
      */
-    public Collection<Effect> getActiveEffects() {
-        return effects;
+    public Collection<Effect> getEffects() {
+        return new HashSet<>(effects);
     }
 
     /**
