@@ -12,28 +12,9 @@ abstract class Objective {
 
     /**
      * @param name name of the objective to create
-     * @param points points scored for each time the objective is completed
-     *               or '#' if the scoring involves a special scoring
      */
-    Objective(String name, char points){
+    Objective(String name){
         this.name = name;
-        this.points = points;
-    }
-
-    /**
-     * scores the points of the objective only
-     * @param dashboard on witch score the point of the objective
-     * @return points scored on the dashboard
-     */
-    abstract int scorePoints(DashBoard dashboard);
-
-    /**
-     * gets the points scored for each time the objective is completed
-     * or '#' if the scoring involves a special scoring
-     * @return the char value representing the points
-     */
-    char getPoints() {
-        return points;
     }
 
     /**
@@ -43,4 +24,13 @@ abstract class Objective {
     String getName() {
         return name;
     }
+
+
+    /**
+     * scores the points of the objective only
+     * @param dashboard on witch score the point of the objective
+     * @return points scored on the dashboard
+     */
+    public abstract int scorePoints(DashBoard dashboard);
+
 }

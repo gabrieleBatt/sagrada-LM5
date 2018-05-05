@@ -19,10 +19,4 @@ public interface Rules {
      * @return the List of actions to execute during the game
      */
     List<ActionCommand> getGameActions(Game game);
-
-    /**
-     * @return the Set of possible actions in a round
-     */
-    Set<ActionCommand> getTurnActions();
-
 }

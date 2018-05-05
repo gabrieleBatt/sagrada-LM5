@@ -151,13 +151,7 @@ public class DefaultRules implements Rules {
         return null;
     }
 
-    @Override
-    public Set<ActionCommand> getTurnActions() {
-        return null;
-    }
-
     public DefaultRules getDefaultRules() {
-
         return defaultRules;
     }
 }
