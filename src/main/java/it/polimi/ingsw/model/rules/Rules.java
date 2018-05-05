@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.rules;
 
 
 import it.polimi.ingsw.controller.ActionCommand;
+import it.polimi.ingsw.controller.Game;
 
 import java.util.List;
 import java.util.Set;
@@ -13,14 +14,11 @@ import java.util.Set;
 public interface Rules {
 
     /**
+     * sets up the action to do in the game and returns them
+     * @param game the game getting the actions
      * @return the List of actions to execute during the game
      */
-    List<ActionCommand> getGameActions();
-
-    /**
-     * @return the List of actions in a round
-     */
-    List<ActionCommand> getRoundActions();
+    List<ActionCommand> getGameActions(Game game);
 
     /**
      * @return the Set of possible actions in a round

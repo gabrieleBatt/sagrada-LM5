@@ -48,10 +48,35 @@ public class Table {
 
     /**
      * Gets players
-     * @return a Set of players
+     * @return a Collection of players
      */
-    public Collection<Player> getPlayers() {
-        return new HashSet<>(players);
+    public List<Player> getPlayers() {
+        return new ArrayList<>(players);
+    }
+
+    /**
+     * Cycles phe players form the first
+     * @param first player to start from
+     * @return the iterator
+     */
+    public Iterator<Player> getPlayersIterator(Player first){
+        return new Iterator<Player>() {
+
+            int i = 0;
+            int next = players.indexOf(first);
+
+            @Override
+            public boolean hasNext() {
+                return i < players.size();
+            }
+
+            @Override
+            public Player next() {
+                Player next = players.get((players.indexOf(first) + i)%players.size());
+                i++;
+                return next;
+            }
+        };
     }
 
     /**

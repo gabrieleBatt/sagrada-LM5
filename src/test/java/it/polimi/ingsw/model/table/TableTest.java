@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 
 
 class TableTest {
@@ -34,18 +35,22 @@ class TableTest {
         table = new Table(players);
     }
 
-    @Test
-    void setPublicObjective() {
-    }
-
-    @Test
-    void setTools() {
-
-    }
 
     @Test
     void getPlayers() {
         Assertions.assertEquals(players, table.getPlayers());
+    }
+
+    @Test
+    void getItPlayers() {
+        Iterator<Player> iterator = table.getPlayersIterator(player2);
+        Assertions.assertTrue(iterator.hasNext());
+        Assertions.assertEquals(player2, iterator.next());
+        Assertions.assertTrue(iterator.hasNext());
+        Assertions.assertEquals(player3, iterator.next());
+        Assertions.assertTrue(iterator.hasNext());
+        Assertions.assertEquals(player1, iterator.next());
+        Assertions.assertFalse(iterator.hasNext());
     }
 
     @Test
