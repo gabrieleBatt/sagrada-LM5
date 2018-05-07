@@ -1,11 +1,9 @@
 package it.polimi.ingsw.model.rules;
 
 
-import it.polimi.ingsw.controller.ActionCommand;
 import it.polimi.ingsw.controller.Game;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Contains all the actions involved in a game

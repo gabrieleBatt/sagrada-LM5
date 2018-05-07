@@ -1,15 +1,14 @@
 package it.polimi.ingsw.model.table;
 
-
-import it.polimi.ingsw.model.table.dice.DiceBag;
 import it.polimi.ingsw.model.tool.Effect;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 
 class TableTest {
@@ -17,7 +16,7 @@ class TableTest {
     Player player1;
     Player player2;
     Player player3;
-    Collection<Player> players;
+    List<Player> players;
 
     Table table;
 
@@ -27,7 +26,7 @@ class TableTest {
         player1 = new Player("p1");
         player2 = new Player("p2");
         player3 = new Player("p3");
-        players = new HashSet<>();
+        players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
         players.add(player3);

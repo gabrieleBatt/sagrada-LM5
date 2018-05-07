@@ -1,5 +1,6 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.model.rules;
 
+import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.exception.BagEmptyException;
 import it.polimi.ingsw.model.exception.EndGameException;
 

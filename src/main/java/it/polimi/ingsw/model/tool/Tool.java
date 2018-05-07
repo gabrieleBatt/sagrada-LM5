@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.tool;
 
-import it.polimi.ingsw.controller.ActionCommand;
+import it.polimi.ingsw.model.rules.ActionCommand;
 
 public class Tool {
     private ActionCommand actionCommand;
@@ -14,6 +14,7 @@ public class Tool {
     public Tool(ActionCommand actionCommand, String name){
         this.name = name;
         this.actionCommand = actionCommand;
+        used = false;
     }
 
     /**

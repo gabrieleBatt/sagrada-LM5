@@ -20,7 +20,7 @@ public class Table {
      * Creates table with all the players
      * @param players Set of players
      */
-    public Table(Collection<Player> players){
+    public Table(List<Player> players){
         this.players = new ArrayList<>(players);
         this.diceBag = new DiceBag();
         this.roundTrack = new RoundTrack();
