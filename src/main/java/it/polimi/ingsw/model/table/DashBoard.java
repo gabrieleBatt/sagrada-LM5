@@ -167,14 +167,13 @@ public class DashBoard {
     }
 
     /**
-     * Finds the collection of available cells (on the border)
+     * Finds the collection of cells on the border
      * @return Collection of available cells
      */
-    public Collection<Cell> availableBorderCells(){
+    private Collection<Cell> borderCells(){
         return (new ArrayList<Cell>(cellList)).stream().filter(c -> {
             try {
-                return !c.isOccupied()
-                        && ((this.getColumn(c) == 0) || (this.getColumn(c) == 4)
+                return ((this.getColumn(c) == 0) || (this.getColumn(c) == 4)
                                 || (this.getRow(c) == 0) || (this.getRow(c) == 3));
             } catch (CellNotFoundException e) {
                 e.printStackTrace();
@@ -191,6 +190,8 @@ public class DashBoard {
      * @return Collection of available cells
      */
     public Collection<Cell> availableCells(Die die, boolean ignoredSurroundingRestriction){
+        if(this.isEmpty())
+            return borderCells();
         return (new ArrayList<>(cellList)).stream().filter(c ->
                 {
                     try {
@@ -204,6 +205,18 @@ public class DashBoard {
                 }
         ).collect(Collectors.toList());
 
+    }
+
+    /**
+     * Checks if dashboard is empty
+     * @return true if there's no die placed
+     */
+    private boolean isEmpty(){
+        for(Cell c: this.cellList){
+            if(c.isOccupied())
+                return false;
+        }
+        return  true;
     }
 }
 

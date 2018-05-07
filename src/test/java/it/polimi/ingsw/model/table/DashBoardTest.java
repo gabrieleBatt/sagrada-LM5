@@ -69,13 +69,6 @@ class DashBoardTest {
     }
 
     @Test
-    void availableBorderCells() {
-        List<Cell> list = new ArrayList<>(db.availableBorderCells());
-        Assertions.assertFalse(list.contains(cells.get(5)));
-        Assertions.assertEquals(13, list.size());
-    }
-
-    @Test
     void availableCells() throws NotValidNumberException {
         List<Cell> list = new ArrayList<>(db.availableCells(new Die(DieColor.RED, 4, 1), false));
         Assertions.assertTrue(list.contains(cells.get(0)));
@@ -88,4 +81,5 @@ class DashBoardTest {
         Assertions.assertFalse(list.contains(cells.get(5)));
         Assertions.assertEquals(19, list.size());
     }
+
 }
