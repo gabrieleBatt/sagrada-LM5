@@ -40,7 +40,7 @@ public class RoundTrack {
             round++;
             dice.add(new ArrayList<>(d));
         }else
-            throw new EndGameException();
+            throw new EndGameException("Game over, can't add\n"+d.toString());
 
     }
 

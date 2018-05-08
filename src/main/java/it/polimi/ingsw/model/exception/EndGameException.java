@@ -8,6 +8,4 @@ public class EndGameException extends Exception {
         super(message);
     }
 
-    public EndGameException(){
-    }
 }

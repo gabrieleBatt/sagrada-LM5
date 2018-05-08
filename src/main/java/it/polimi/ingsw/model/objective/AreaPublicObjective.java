@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.objective;
 
+import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.EmptyCellException;
 import it.polimi.ingsw.model.exception.IllegalObjectiveException;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
@@ -18,7 +19,7 @@ public class AreaPublicObjective extends PublicObjective {
     public AreaPublicObjective(String name, int points, List<Integer> area, List<List<Integer>> multiplicity) throws IllegalObjectiveException {
         super(name);
         if(area.size()%2 != 0 || multiplicity.size() != 11){
-            throw new IllegalObjectiveException();
+            throw new IllegalObjectiveException("Can't make objective\narea:"+ area.size()+"\nmult:"+multiplicity.size());
         }
         this.area = new ArrayList<>();
         for (int i = 0; i < area.size(); i+=2) {
@@ -59,7 +60,7 @@ public class AreaPublicObjective extends PublicObjective {
                     case YELLOW: actualMultiplicity[10]++; break;
                 }
             }
-        }catch (NotValidNumberException | EmptyCellException e) {
+        }catch (CellNotFoundException | EmptyCellException e) {
             e.printStackTrace();
         }
 

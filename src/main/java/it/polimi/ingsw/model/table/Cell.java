@@ -60,7 +60,7 @@ public class Cell {
             this.die = Optional.of(die);
         }
         else
-            throw new DieNotAllowedException();
+            throw new DieNotAllowedException(this.toString()+ "\n" + die.toString() + " is not allowed");
     }
 
     /**
@@ -80,7 +80,7 @@ public class Cell {
         if (die.isPresent()){
             return die.get();
         }else
-            throw new EmptyCellException();
+            throw new EmptyCellException(die.toString() +"\nis not present");
     }
 
     /**

@@ -69,7 +69,7 @@ public class Die {
      */
     public Die setNumber(int number) throws NotValidNumberException {
         if (number <1 || number > 6 ){
-            throw new NotValidNumberException();
+            throw new NotValidNumberException(number + " is not a valid number");
         }
         else this.number = number;
         return this;
@@ -90,7 +90,7 @@ public class Die {
      */
     public Die increase() throws NotValidNumberException{
         if (this.number == 6)
-            throw new NotValidNumberException();
+            throw new NotValidNumberException("Die is already at the maximum value");
         else
             this.number++;
         return this;
@@ -103,7 +103,7 @@ public class Die {
      */
     public Die decrease() throws NotValidNumberException{
         if (number == 1)
-            throw new NotValidNumberException();
+            throw new NotValidNumberException("Die is already at the minimum value");
         else
             number--;
         return this;

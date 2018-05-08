@@ -33,7 +33,7 @@ public class DiceBag {
      */
     public Collection<Die> drawDice(int num) throws BagEmptyException {
         if (bag.size() < num){
-            throw new BagEmptyException();
+            throw new BagEmptyException("Dice in bag: " + bag.size()+"\nDice requested "+ num);
         }
         Collection<Die> ret = new ArrayList<>();
         for(int i=0; i < num ; i++){
@@ -48,7 +48,7 @@ public class DiceBag {
      */
     private Die drawDie() throws BagEmptyException {
         if (bag.size() == 0){
-            throw new BagEmptyException();
+            throw new BagEmptyException("Dice in bag: " + bag.size()+"\nDice requested 0");
         }
         int randomNum = ThreadLocalRandom.current().nextInt(0, bag.size() );
         Die ret = bag.get(randomNum);

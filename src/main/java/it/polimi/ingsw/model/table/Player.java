@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.table;
 
 import it.polimi.ingsw.model.exception.CellNotFoundException;
+import it.polimi.ingsw.model.exception.DashBoardNotFoundException;
 import it.polimi.ingsw.model.objective.PrivateObjective;
 
 import java.util.*;
@@ -40,10 +41,10 @@ public class Player {
      * @return: dashboard
      * @throws CellNotFoundException exception thrown if there's no dashBoard
      */
-    public DashBoard getDashBoard() throws CellNotFoundException {
+    public DashBoard getDashBoard() throws DashBoardNotFoundException {
         if(dashBoard.isPresent())
             return dashBoard.get();
-        else throw new CellNotFoundException();
+        else throw new DashBoardNotFoundException("The player"+ this.nickname +"hasn't a dashboard");
     }
 
     /**

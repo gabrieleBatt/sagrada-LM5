@@ -7,5 +7,4 @@ public class IllegalObjectiveException extends Exception {
     public IllegalObjectiveException(String message){
         super(message);
     }
-    public IllegalObjectiveException(){}
 }

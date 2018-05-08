@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model.objective;
 
-import it.polimi.ingsw.model.exception.DieNotAllowedException;
-import it.polimi.ingsw.model.exception.IllegalDashboardException;
-import it.polimi.ingsw.model.exception.IllegalObjectiveException;
-import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.exception.*;
 import it.polimi.ingsw.model.table.Cell;
 import it.polimi.ingsw.model.table.DashBoard;
 import it.polimi.ingsw.model.table.dice.Die;
@@ -19,7 +16,7 @@ class AreaPublicObjectiveTest {
 
     @DisplayName("Scoring column color objective")
     @Test
-    void scorePoints() throws IllegalObjectiveException, IllegalDashboardException, NotValidNumberException, DieNotAllowedException {
+    void scorePoints() throws IllegalObjectiveException, IllegalDashboardException, CellNotFoundException, DieNotAllowedException {
         DashBoard dashBoard;
         List<Cell> cells;
 

@@ -10,6 +10,4 @@ public class CellNotFoundException extends Exception {
         super(message);
     }
 
-    public CellNotFoundException(){
-    }
 }

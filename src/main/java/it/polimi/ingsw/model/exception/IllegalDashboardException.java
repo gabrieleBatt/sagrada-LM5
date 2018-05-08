@@ -7,6 +7,4 @@ public class IllegalDashboardException extends Exception {
     public IllegalDashboardException(String message){
         super(message);
     }
-    public IllegalDashboardException(){}
-
 }

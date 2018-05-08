@@ -77,6 +77,7 @@ public class Table {
 
             @Override
             public Player next() {
+                if(!hasNext()) throw new NoSuchElementException();
                 Player next = players.get((players.indexOf(first) + i)%players.size());
                 i++;
                 return next;

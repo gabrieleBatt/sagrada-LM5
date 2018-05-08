@@ -20,7 +20,7 @@ public class DashBoard {
 
     public DashBoard(String name, int difficulty, List<Cell> cells) throws IllegalDashboardException {
         if (cells.size() != 20){
-            throw new IllegalDashboardException();
+            throw new IllegalDashboardException("Dashboard size can't be"+cells.size());
         }
         this.name = name;
         this.difficulty = difficulty;
@@ -48,12 +48,12 @@ public class DashBoard {
      * @param x column
      * @param y row
      * @return Cell in x,y on the dashBoard
-     * @throws NotValidNumberException Exception thrown whether column or row are not valid inputs
+     * @throws CellNotFoundException Exception thrown whether column or row are not valid inputs
      */
-    public Cell getCell(int x, int y) throws NotValidNumberException{
+    public Cell getCell(int x, int y) throws CellNotFoundException{
         if (x>=0 && x<4 && y>=0 && y<5)
             return cellList.get(x*5+y);
-        else throw new NotValidNumberException();
+        else throw new CellNotFoundException("Can't find cell at (" +x+", "+y+")");
     }
 
     /**
@@ -74,7 +74,7 @@ public class DashBoard {
                 }
             }
         }
-        throw new CellNotFoundException();
+        throw new CellNotFoundException("There's no die whit the id "+ dieId +"in your dashboard");
     }
 
     /**
@@ -89,7 +89,7 @@ public class DashBoard {
                 return i/5;
             }
         }
-        throw new CellNotFoundException();
+        throw new CellNotFoundException("The cell"+ cell.toString() +"is not in your dashboard");
     }
 
     /**
@@ -104,7 +104,7 @@ public class DashBoard {
                 return i%5;
             }
         }
-        throw new CellNotFoundException();
+        throw new CellNotFoundException("The cell"+ cell.toString() +"is not in your dashboard");
     }
 
     /**
@@ -129,7 +129,7 @@ public class DashBoard {
             if(x<3 && y>0)ret.add(this.getCell(x+1,y-1));
             if(x>0 && y<4)ret.add(this.getCell(x-1,y+1));
             if(x>0 && y>0)ret.add(this.getCell(x-1,y-1));
-        } catch (NotValidNumberException e) {
+        } catch (CellNotFoundException e) {
             e.printStackTrace();
         }
         return ret;
@@ -142,7 +142,7 @@ public class DashBoard {
             if(x<3)ret.add(this.getCell(x+1,y));
             if(y>0)ret.add(this.getCell(x,y-1));
             if(y<4)ret.add(this.getCell(x,y+1));
-        } catch (NotValidNumberException e) {
+        } catch (CellNotFoundException e) {
             e.printStackTrace();
         }
         return ret;
@@ -237,10 +237,9 @@ public class DashBoard {
                             ret = ret + this.getCell(i, j).getDie().toString() + "  ";
                         else
                             ret = ret + "empty  ";
-                    } catch (EmptyCellException e) {
+                    } catch (EmptyCellException | CellNotFoundException e) {
                         e.printStackTrace();
-                    } catch (NotValidNumberException e) {
-                        e.printStackTrace();
+
                     }
                 }
                 ret = ret + "\n";

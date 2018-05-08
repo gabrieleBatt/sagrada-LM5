@@ -7,7 +7,4 @@ public class DieNotAllowedException extends Exception {
     public DieNotAllowedException(String message){
         super(message);
     }
-
-    public  DieNotAllowedException(){}
-
 }

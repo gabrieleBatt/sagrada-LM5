@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.objective;
 
+import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.EmptyCellException;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
 import it.polimi.ingsw.model.table.DashBoard;
@@ -31,7 +32,7 @@ public class NumberSetPublicObjective extends PublicObjective {
                                 newRet++;
                             }
                         }
-                    } catch (NotValidNumberException | EmptyCellException e) {
+                    } catch (CellNotFoundException | EmptyCellException e) {
                         e.printStackTrace();
                     }
                 }
