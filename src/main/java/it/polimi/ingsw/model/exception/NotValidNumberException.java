@@ -1,7 +1,11 @@
 package it.polimi.ingsw.model.exception;
 
 /**
- * threw each time a die is to be set to an not valid number
+ * thrown by server whether there's an attempt to put a parameter or some parameters which are not allowed
  */
 public class NotValidNumberException extends Exception {
+    public NotValidNumberException(String message){
+        super(message);
+    }
+    public NotValidNumberException(){}
 }
