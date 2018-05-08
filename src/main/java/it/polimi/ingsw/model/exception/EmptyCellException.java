@@ -1,7 +1,12 @@
 package it.polimi.ingsw.model.exception;
 
 /**
- * threw if trying to get a die from an empty cell
+ * thrown by server whether there's an attempt to get a die from an empty cell
  */
 public class EmptyCellException extends Exception {
+    public EmptyCellException(String message){
+        super(message);
+    }
+    public EmptyCellException(){
+    }
 }

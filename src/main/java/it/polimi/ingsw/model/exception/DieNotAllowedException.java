@@ -1,8 +1,13 @@
 package it.polimi.ingsw.model.exception;
 
 /**
- * threw if trying to violate cell restrictions, and not ignoring
+ * thrown by server whether there's a cell restriction's violation, and not ignoring
  */
 public class DieNotAllowedException extends Exception {
+    public DieNotAllowedException(String message){
+        super(message);
+    }
+
+    public  DieNotAllowedException(){}
 
 }
