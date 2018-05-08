@@ -33,7 +33,7 @@ public class ColorPrivateObjective extends PrivateObjective {
                         }
                     }
                 } catch (CellNotFoundException | EmptyCellException e) {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());;
                 }
             }
         }

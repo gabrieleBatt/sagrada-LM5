@@ -41,7 +41,7 @@ public class ColorSetPublicObjective extends PublicObjective {
                             }
                         }
                     } catch (CellNotFoundException | EmptyCellException e) {
-                        e.printStackTrace();
+                        System.out.println(e.getMessage());;
                     }
                 }
             }

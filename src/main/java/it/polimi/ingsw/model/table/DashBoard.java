@@ -70,7 +70,7 @@ public class DashBoard {
                         return c;
                     }
                 } catch (EmptyCellException e) {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
             }
         }
@@ -130,7 +130,7 @@ public class DashBoard {
             if(x>0 && y<4)ret.add(this.getCell(x-1,y+1));
             if(x>0 && y>0)ret.add(this.getCell(x-1,y-1));
         } catch (CellNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return ret;
     }
@@ -143,7 +143,7 @@ public class DashBoard {
             if(y>0)ret.add(this.getCell(x,y-1));
             if(y<4)ret.add(this.getCell(x,y+1));
         } catch (CellNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return ret;
     }
@@ -163,7 +163,7 @@ public class DashBoard {
                         return true;
                     }
                 } catch (EmptyCellException e) {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
             }
         }
@@ -180,7 +180,7 @@ public class DashBoard {
                 return ((this.getColumn(c) == 0) || (this.getColumn(c) == 4)
                                 || (this.getRow(c) == 0) || (this.getRow(c) == 3));
             } catch (CellNotFoundException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
             return false;
         }).collect(Collectors.toList());
@@ -203,7 +203,7 @@ public class DashBoard {
                                 && (hasSurroundingDice(getRow(c), getColumn(c)) || ignoredSurroundingRestriction)
                                 && !c.isOccupied();
                     } catch (CellNotFoundException e) {
-                        e.printStackTrace();
+                        System.out.println(e.getMessage());
                     }
                     return false;
                 }
@@ -238,7 +238,7 @@ public class DashBoard {
                         else
                             ret = ret + "empty  ";
                     } catch (EmptyCellException | CellNotFoundException e) {
-                        e.printStackTrace();
+                        System.out.println(e.getMessage());
 
                     }
                 }

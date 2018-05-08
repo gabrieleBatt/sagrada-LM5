@@ -129,7 +129,7 @@ public class Cell {
             try {
                 ret = ret + "contains a die:" + this.getDie().toString();
             } catch (EmptyCellException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }else
             ret = ret + "is empty";

@@ -61,7 +61,7 @@ public class AreaPublicObjective extends PublicObjective {
                 }
             }
         }catch (CellNotFoundException | EmptyCellException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
         for (int i = 0; i < actualMultiplicity.length; i++) {
