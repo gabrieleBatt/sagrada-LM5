@@ -1,25 +1,25 @@
 
-package it.polimi.ingsw.model.table.dashboard;
+package it.polimi.ingsw.model.table.glassWindow;
 
 import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.EmptyCellException;
-import it.polimi.ingsw.model.exception.IllegalDashboardException;
+import it.polimi.ingsw.model.exception.IllegalGlassWindowException;
 import it.polimi.ingsw.model.table.dice.Die;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * DashBoard is a concrete class representing a player's dashboard. It's implemented as a collection of cells.
+ * GlassWindow is a concrete class representing a player's glassWindow. It's implemented as a collection of cells.
  */
 
-public class DashBoard {
+public class GlassWindow {
     private String name;
     private int difficulty;
     private List<Cell> cellList;
 
-    public DashBoard(String name, int difficulty, List<Cell> cells) throws IllegalDashboardException {
+    public GlassWindow(String name, int difficulty, List<Cell> cells) throws IllegalGlassWindowException {
         if (cells.size() != 20){
-            throw new IllegalDashboardException("Dashboard size can't be"+cells.size());
+            throw new IllegalGlassWindowException("GlassWindow size can't be"+cells.size());
         }
         this.name = name;
         this.difficulty = difficulty;
@@ -27,16 +27,16 @@ public class DashBoard {
     }
 
     /**
-     * Gets the dashBoard difficulty
-     * @return int, dashBoard difficulty
+     * Gets the glassWindow difficulty
+     * @return int, glassWindow difficulty
      */
     public int getDifficulty(){
         return this.difficulty;
     }
 
     /**
-     * Gets the dashBoard name
-     * @return String, dashBoard name
+     * Gets the glassWindow name
+     * @return String, glassWindow name
      */
     public String getName(){
         return this.name;
@@ -46,7 +46,7 @@ public class DashBoard {
      * Gets the cell at the x,y coordinates, the top left is the (0, 0)
      * @param x column
      * @param y row
-     * @return Cell in x,y on the dashBoard
+     * @return Cell in x,y on the glassWindow
      * @throws CellNotFoundException Exception thrown whether column or row are not valid inputs
      */
     public Cell getCell(int x, int y) throws CellNotFoundException{
@@ -73,14 +73,14 @@ public class DashBoard {
                 }
             }
         }
-        throw new CellNotFoundException("There's no die whit the id "+ dieId +"in your dashboard");
+        throw new CellNotFoundException("There's no die whit the id "+ dieId +"in your glassWindow");
     }
 
     /**
      * gets the row of the cell
      * @param cell
      * @return the row
-     * @throws CellNotFoundException if the cell is not in this dashboard
+     * @throws CellNotFoundException if the cell is not in this glassWindow
      */
     public int getRow(Cell cell) throws CellNotFoundException {
         for (int i = 0; i < cellList.size(); i++) {
@@ -88,14 +88,14 @@ public class DashBoard {
                 return i/5;
             }
         }
-        throw new CellNotFoundException("The cell"+ cell.toString() +"is not in your dashboard");
+        throw new CellNotFoundException("The cell"+ cell.toString() +"is not in your glassWindow");
     }
 
     /**
      * gets the column of the cell
      * @param cell
      * @return the column
-     * @throws CellNotFoundException if the cell is not in this dashboard
+     * @throws CellNotFoundException if the cell is not in this glassWindow
      */
     public int getColumn(Cell cell) throws CellNotFoundException {
         for (int i = 0; i < cellList.size(); i++) {
@@ -103,7 +103,7 @@ public class DashBoard {
                 return i%5;
             }
         }
-        throw new CellNotFoundException("The cell"+ cell.toString() +"is not in your dashboard");
+        throw new CellNotFoundException("The cell"+ cell.toString() +"is not in your glassWindow");
     }
 
     /**
@@ -211,7 +211,7 @@ public class DashBoard {
     }
 
     /**
-     * Checks if dashboard is empty
+     * Checks if glassWindow is empty
      * @return true if there's no die placed
      */
     private boolean isEmpty(){
@@ -224,11 +224,11 @@ public class DashBoard {
 
     /**
      * Method used for testing
-     * @return String representing a dashboard
+     * @return String representing a glassWindow
      */
     @Override
     public String toString(){
-        String ret = "This dashBoard contains\n";
+        String ret = "This glassWindow contains\n";
             for(int i = 0; i<4;i++) {
                 for (int j = 0; j < 5; j++) {
                     try {
@@ -247,7 +247,7 @@ public class DashBoard {
     }
 
     /**
-     * Prints the override toString of an object DashBoard
+     * Prints the override toString of an object GlassWindow
      */
     public void dump(){
         System.out.println(this);

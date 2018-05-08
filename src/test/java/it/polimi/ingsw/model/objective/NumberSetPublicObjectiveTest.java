@@ -1,10 +1,10 @@
 package it.polimi.ingsw.model.objective;
 
 import it.polimi.ingsw.model.exception.DieNotAllowedException;
-import it.polimi.ingsw.model.exception.IllegalDashboardException;
+import it.polimi.ingsw.model.exception.IllegalGlassWindowException;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
-import it.polimi.ingsw.model.table.dashboard.Cell;
-import it.polimi.ingsw.model.table.dashboard.DashBoard;
+import it.polimi.ingsw.model.table.glassWindow.Cell;
+import it.polimi.ingsw.model.table.glassWindow.GlassWindow;
 import it.polimi.ingsw.model.table.dice.Die;
 import it.polimi.ingsw.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;
@@ -17,12 +17,12 @@ import java.util.HashSet;
 import java.util.List;
 
 class NumberSetPublicObjectiveTest {
-    DashBoard dashBoard;
+    GlassWindow glassWindow;
     List<Cell> cells;
 
     @DisplayName("Scoring set of 3 and 5")
     @Test
-    void scorePoints() throws NotValidNumberException, DieNotAllowedException, IllegalDashboardException {
+    void scorePoints() throws NotValidNumberException, DieNotAllowedException, IllegalGlassWindowException {
         cells = new ArrayList<>();
 
         for (int i = 0; i < 20; i++) {
@@ -36,8 +36,8 @@ class NumberSetPublicObjectiveTest {
         for (int i=0; i<20; i++){
             cells.get(i).placeDie(new Die(DieColor.CYAN, 1, i ), false);
         }
-        dashBoard = new DashBoard("test", 4, new ArrayList<>(cells));
-        Assertions.assertEquals(objective.scorePoints(dashBoard),0*4);
+        glassWindow = new GlassWindow("test", 4, new ArrayList<>(cells));
+        Assertions.assertEquals(objective.scorePoints(glassWindow),0*4);
 
         cells.get(0).placeDie(new Die(DieColor.CYAN, 1, 0 ), false);
         cells.get(1).placeDie(new Die(DieColor.MAGENTA, 2, 1 ), false);
@@ -48,7 +48,7 @@ class NumberSetPublicObjectiveTest {
         for (int i=6; i<20; i++){
             cells.get(i).placeDie(new Die(DieColor.CYAN, 1, i ), false);
         }
-        Assertions.assertEquals(objective.scorePoints(dashBoard),1*4);
+        Assertions.assertEquals(objective.scorePoints(glassWindow),1*4);
 
         cells.get(0).placeDie(new Die(DieColor.CYAN, 1, 0 ), false);
         cells.get(1).placeDie(new Die(DieColor.CYAN, 2, 1 ), false);
@@ -72,7 +72,7 @@ class NumberSetPublicObjectiveTest {
         cells.get(19).placeDie(new Die(DieColor.CYAN, 3, 1 ), false);
 
 
-        Assertions.assertEquals(objective.scorePoints(dashBoard),3*4);
+        Assertions.assertEquals(objective.scorePoints(glassWindow),3*4);
 
         for (int i= 0; i< 10; i++){
             cells.get(i).placeDie(new Die(DieColor.YELLOW, 3,i), false);
@@ -80,13 +80,13 @@ class NumberSetPublicObjectiveTest {
         for (int i= 10; i< 20; i++) {
             cells.get(i).placeDie(new Die(DieColor.YELLOW, 5, i), false);
         }
-        Assertions.assertEquals(objective.scorePoints(dashBoard),10*4);
+        Assertions.assertEquals(objective.scorePoints(glassWindow),10*4);
 
         for (int i= 0; i< 19; i++){
             cells.get(i).placeDie(new Die(DieColor.YELLOW, 3,i), false);
         }
         cells.get(19).placeDie(new Die(DieColor.YELLOW, 5, 19), false);
-        Assertions.assertEquals(objective.scorePoints(dashBoard),1*4);
+        Assertions.assertEquals(objective.scorePoints(glassWindow),1*4);
 
     }
 }

@@ -1,20 +1,20 @@
 package it.polimi.ingsw.model.table;
 
 import it.polimi.ingsw.model.exception.CellNotFoundException;
-import it.polimi.ingsw.model.exception.DashBoardNotFoundException;
+import it.polimi.ingsw.model.exception.GlassWindowNotFoundException;
 import it.polimi.ingsw.model.objective.PrivateObjective;
-import it.polimi.ingsw.model.table.dashboard.DashBoard;
+import it.polimi.ingsw.model.table.glassWindow.GlassWindow;
 
 import java.util.*;
 
 /**
- * Player is a concrete class representing a game's player. Its' main attributes are nickname, tokens, dashBoard,
+ * Player is a concrete class representing a game's player. Its' main attributes are nickname, tokens, glassWindow,
  * privateObjective. It has also a boolean indicating whether it's connected or not.
  */
 public class Player {
     private final String nickname;
     private int tokens;
-    private Optional<DashBoard> dashBoard;
+    private Optional<GlassWindow> glassWindow;
     private HashSet<PrivateObjective> privateObjective;
     private boolean connected;
 
@@ -25,7 +25,7 @@ public class Player {
     public Player(String nickname)
     {
         this.privateObjective = new HashSet<>();
-        dashBoard = Optional.empty();
+        glassWindow = Optional.empty();
         this.nickname = nickname;
     }
 
@@ -38,22 +38,22 @@ public class Player {
     }
 
     /**
-     * Gets the dashboard
-     * @return: dashboard
-     * @throws CellNotFoundException exception thrown if there's no dashBoard
+     * Gets the glassWindow
+     * @return: glassWindow
+     * @throws CellNotFoundException exception thrown if there's no glassWindow
      */
-    public DashBoard getDashBoard() throws DashBoardNotFoundException {
-        if(dashBoard.isPresent())
-            return dashBoard.get();
-        else throw new DashBoardNotFoundException("The player"+ this.nickname +"hasn't a dashboard");
+    public GlassWindow getGlassWindow() throws GlassWindowNotFoundException {
+        if(glassWindow.isPresent())
+            return glassWindow.get();
+        else throw new GlassWindowNotFoundException("The player"+ this.nickname +"hasn't a glassWindow");
     }
 
     /**
-     * Sets the dashboard
-     * @param dashBoard
+     * Sets the glassWindow
+     * @param glassWindow
      */
-    public void setDashBoard(DashBoard dashBoard){
-        this.dashBoard = Optional.of(dashBoard);
+    public void setGlassWindow(GlassWindow glassWindow){
+        this.glassWindow = Optional.of(glassWindow);
     }
 
     /**
@@ -118,7 +118,7 @@ public class Player {
     @Override
     public String toString(){
         String ret = "Player ";
-        ret = ret + this.nickname + "has:\n" + this.tokens + "number of tokens\n"+ this.dashBoard.toString() + "\n" +
+        ret = ret + this.nickname + "has:\n" + this.tokens + "number of tokens\n"+ this.glassWindow.toString() + "\n" +
         "private objective:" + this.privateObjective.toString() + "\n";
         if(this.isConnected())
             ret = ret + "is connected\n";

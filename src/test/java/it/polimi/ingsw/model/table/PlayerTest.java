@@ -1,12 +1,8 @@
 package it.polimi.ingsw.model.table;
 
-import it.polimi.ingsw.model.exception.CellNotFoundException;
-import it.polimi.ingsw.model.exception.IllegalDashboardException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 
 class PlayerTest {
 

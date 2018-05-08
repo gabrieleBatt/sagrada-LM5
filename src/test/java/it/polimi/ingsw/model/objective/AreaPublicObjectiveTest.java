@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model.objective;
 
 import it.polimi.ingsw.model.exception.*;
-import it.polimi.ingsw.model.table.dashboard.Cell;
-import it.polimi.ingsw.model.table.dashboard.DashBoard;
+import it.polimi.ingsw.model.table.glassWindow.Cell;
+import it.polimi.ingsw.model.table.glassWindow.GlassWindow;
 import it.polimi.ingsw.model.table.dice.Die;
 import it.polimi.ingsw.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;
@@ -16,8 +16,8 @@ class AreaPublicObjectiveTest {
 
     @DisplayName("Scoring column color objective")
     @Test
-    void scorePoints() throws IllegalObjectiveException, IllegalDashboardException, CellNotFoundException, DieNotAllowedException {
-        DashBoard dashBoard;
+    void scorePoints() throws IllegalObjectiveException, IllegalGlassWindowException, CellNotFoundException, DieNotAllowedException {
+        GlassWindow glassWindow;
         List<Cell> cells;
 
         AreaPublicObjective areaPublicObjective;
@@ -54,22 +54,22 @@ class AreaPublicObjectiveTest {
         for (int i = 0; i < 20; i++) {
             cells.add(new Cell(""+i));
         }
-        dashBoard = new DashBoard("name", 4,cells);
+        glassWindow = new GlassWindow("name", 4,cells);
 
-        Assertions.assertEquals(0, areaPublicObjective.scorePoints(dashBoard));
-        dashBoard.getCell(0,0).placeDie(new Die(DieColor.CYAN, 0), false);
-        dashBoard.getCell(1,0).placeDie(new Die(DieColor.RED, 0), false);
-        Assertions.assertEquals(0, areaPublicObjective.scorePoints(dashBoard));
-        dashBoard.getCell(2,0).placeDie(new Die(DieColor.GREEN, 0), false);
-        dashBoard.getCell(3,0).placeDie(new Die(DieColor.MAGENTA, 0), false);
-        Assertions.assertEquals(5, areaPublicObjective.scorePoints(dashBoard));
+        Assertions.assertEquals(0, areaPublicObjective.scorePoints(glassWindow));
+        glassWindow.getCell(0,0).placeDie(new Die(DieColor.CYAN, 0), false);
+        glassWindow.getCell(1,0).placeDie(new Die(DieColor.RED, 0), false);
+        Assertions.assertEquals(0, areaPublicObjective.scorePoints(glassWindow));
+        glassWindow.getCell(2,0).placeDie(new Die(DieColor.GREEN, 0), false);
+        glassWindow.getCell(3,0).placeDie(new Die(DieColor.MAGENTA, 0), false);
+        Assertions.assertEquals(5, areaPublicObjective.scorePoints(glassWindow));
 
-        dashBoard.getCell(0,2).placeDie(new Die(DieColor.CYAN, 0), false);
-        dashBoard.getCell(1,2).placeDie(new Die(DieColor.RED, 0), false);
-        Assertions.assertEquals(5, areaPublicObjective.scorePoints(dashBoard));
-        dashBoard.getCell(2,2).placeDie(new Die(DieColor.GREEN, 0), false);
-        dashBoard.getCell(3,2).placeDie(new Die(DieColor.MAGENTA, 0), false);
-        Assertions.assertEquals(10, areaPublicObjective.scorePoints(dashBoard));
+        glassWindow.getCell(0,2).placeDie(new Die(DieColor.CYAN, 0), false);
+        glassWindow.getCell(1,2).placeDie(new Die(DieColor.RED, 0), false);
+        Assertions.assertEquals(5, areaPublicObjective.scorePoints(glassWindow));
+        glassWindow.getCell(2,2).placeDie(new Die(DieColor.GREEN, 0), false);
+        glassWindow.getCell(3,2).placeDie(new Die(DieColor.MAGENTA, 0), false);
+        Assertions.assertEquals(10, areaPublicObjective.scorePoints(glassWindow));
 
     }
 

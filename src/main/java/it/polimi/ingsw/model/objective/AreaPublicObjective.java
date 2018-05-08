@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.objective;
 import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.EmptyCellException;
 import it.polimi.ingsw.model.exception.IllegalObjectiveException;
-import it.polimi.ingsw.model.table.dashboard.DashBoard;
+import it.polimi.ingsw.model.table.glassWindow.GlassWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +29,11 @@ public class AreaPublicObjective extends PublicObjective {
     }
 
     @Override
-    public int scorePoints(DashBoard dashboard) {
+    public int scorePoints(GlassWindow glassWindow) {
         int ret = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
-                if (checkMultiplicityInArea(dashboard, i, j, area, multiplicity)){
+                if (checkMultiplicityInArea(glassWindow, i, j, area, multiplicity)){
                     ret += points;
                 }
             }
@@ -41,7 +41,7 @@ public class AreaPublicObjective extends PublicObjective {
         return ret;
     }
 
-    private static boolean checkMultiplicityInArea(DashBoard dashboard, int row, int column, List<Coordinate> area, List<List<Integer>> multiplicity){
+    private static boolean checkMultiplicityInArea(GlassWindow glassWindow, int row, int column, List<Coordinate> area, List<List<Integer>> multiplicity){
         Integer[] actualMultiplicity = new Integer[11];
         for (int i = 0; i < 11; i++) {
             actualMultiplicity[i] = new Integer(0);
@@ -49,9 +49,9 @@ public class AreaPublicObjective extends PublicObjective {
         try {
             for (Coordinate c : area) {
                 if(row + c.x >= 4 || row + c.x < 0 || column + c.y >= 5 || column + c.y < 0) return false;
-                if(!dashboard.getCell(row+c.x, column+c.y).isOccupied()) return false;
-                actualMultiplicity[dashboard.getCell(row+c.x, column+c.y).getDie().getNumber()-1]++;
-                switch (dashboard.getCell(row+c.x, column+c.y).getDie().getColor()){
+                if(!glassWindow.getCell(row+c.x, column+c.y).isOccupied()) return false;
+                actualMultiplicity[glassWindow.getCell(row+c.x, column+c.y).getDie().getNumber()-1]++;
+                switch (glassWindow.getCell(row+c.x, column+c.y).getDie().getColor()){
                     case CYAN: actualMultiplicity[6]++; break;
                     case GREEN: actualMultiplicity[7]++; break;
                     case MAGENTA: actualMultiplicity[8]++; break;

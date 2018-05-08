@@ -1,11 +1,9 @@
-package it.polimi.ingsw.model.table.dashboard;
+package it.polimi.ingsw.model.table.glassWindow;
 
 import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.DieNotAllowedException;
-import it.polimi.ingsw.model.exception.IllegalDashboardException;
+import it.polimi.ingsw.model.exception.IllegalGlassWindowException;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
-import it.polimi.ingsw.model.table.dashboard.Cell;
-import it.polimi.ingsw.model.table.dashboard.DashBoard;
 import it.polimi.ingsw.model.table.dice.Die;
 import it.polimi.ingsw.model.table.dice.DieColor;
 import org.junit.jupiter.api.*;
@@ -13,9 +11,9 @@ import org.junit.jupiter.api.*;
 import java.util.ArrayList;
 import java.util.List;
 
-class DashBoardTest {
+class GlassWindowTest {
 
-    DashBoard db;
+    GlassWindow db;
     List<Cell> cells;
 
     @Test
@@ -29,8 +27,8 @@ class DashBoardTest {
         cells.add(new Cell("18", 1));
         cells.add(new Cell("19", DieColor.CYAN));
         try {
-            db = new DashBoard("test", 4, new ArrayList<>(cells));
-        } catch (IllegalDashboardException e) {
+            db = new GlassWindow("test", 4, new ArrayList<>(cells));
+        } catch (IllegalGlassWindowException e) {
             e.printStackTrace();
         }
     }
@@ -68,7 +66,7 @@ class DashBoardTest {
         Assertions.assertTrue(db.hasAdjacentSimilar(2, 0, (new Die(DieColor.RED, 5, 1))));
     }
 
-    @DisplayName("Available cells for a die in dashboard")
+    @DisplayName("Available cells for a die in glassWindow")
     @Test
     void availableCells() throws NotValidNumberException {
         List<Cell> list = new ArrayList<>(db.availableCells(new Die(DieColor.RED, 4, 1), false));

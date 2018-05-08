@@ -2,10 +2,10 @@ package it.polimi.ingsw.model.objective;
 
 import it.polimi.ingsw.model.exception.DieNotAllowedException;
 import it.polimi.ingsw.model.exception.EmptyCellException;
-import it.polimi.ingsw.model.exception.IllegalDashboardException;
+import it.polimi.ingsw.model.exception.IllegalGlassWindowException;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
-import it.polimi.ingsw.model.table.dashboard.Cell;
-import it.polimi.ingsw.model.table.dashboard.DashBoard;
+import it.polimi.ingsw.model.table.glassWindow.Cell;
+import it.polimi.ingsw.model.table.glassWindow.GlassWindow;
 import it.polimi.ingsw.model.table.dice.Die;
 import it.polimi.ingsw.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;
@@ -19,7 +19,7 @@ class ColorPrivateObjectiveTest {
 
     @DisplayName("Scoring cyan private objective")
     @Test
-    void scorePoints() throws IllegalDashboardException, NotValidNumberException, DieNotAllowedException, EmptyCellException {
+    void scorePoints() throws IllegalGlassWindowException, NotValidNumberException, DieNotAllowedException, EmptyCellException {
         List<Cell> cells = new ArrayList<>();
         ColorPrivateObjective c_objective = new ColorPrivateObjective("test", DieColor.CYAN);
         int k=0;
@@ -35,8 +35,8 @@ class ColorPrivateObjectiveTest {
         cells.get(0).placeDie((new Die(DieColor.YELLOW, 3, 0)), true);
         cells.get(1).placeDie((new Die(DieColor.MAGENTA, 4, 1)), true);
 
-        DashBoard dashBoard = new DashBoard("test", 4, new ArrayList<>(cells));
-        Assertions.assertEquals(c_objective.scorePoints(dashBoard),14);
+        GlassWindow glassWindow = new GlassWindow("test", 4, new ArrayList<>(cells));
+        Assertions.assertEquals(c_objective.scorePoints(glassWindow),14);
 
 
     }

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.objective;
 
-import it.polimi.ingsw.model.table.dashboard.DashBoard;
+import it.polimi.ingsw.model.table.glassWindow.GlassWindow;
 
 /**
  * Class representing the scoring rules for the players
@@ -28,9 +28,9 @@ abstract class Objective {
 
     /**
      * scores the points of the objective only
-     * @param dashboard on witch score the point of the objective
-     * @return points scored on the dashboard
+     * @param glassWindow on witch score the point of the objective
+     * @return points scored on the glassWindow
      */
-    public abstract int scorePoints(DashBoard dashboard);
+    public abstract int scorePoints(GlassWindow glassWindow);
 
 }

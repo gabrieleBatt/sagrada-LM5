@@ -1,9 +1,8 @@
-package it.polimi.ingsw.model.table.dashboard;
+package it.polimi.ingsw.model.table.glassWindow;
 
 import it.polimi.ingsw.model.exception.EmptyCellException;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
 import it.polimi.ingsw.model.exception.DieNotAllowedException;
-import it.polimi.ingsw.model.table.dashboard.Cell;
 import it.polimi.ingsw.model.table.dice.Die;
 import it.polimi.ingsw.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;

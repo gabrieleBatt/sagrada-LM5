@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.table.dashboard;
+package it.polimi.ingsw.model.table.glassWindow;
 
 import it.polimi.ingsw.model.exception.EmptyCellException;
 import it.polimi.ingsw.model.exception.DieNotAllowedException;
@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.table.dice.DieColor;
 import java.util.Optional;
 
 /**
- * Cell is a concrete class representing a single cell of a dashboard. It has information about restrictions and the
+ * Cell is a concrete class representing a single cell of a glassWindow. It has information about restrictions and the
  * eventual presence of a die on.
  */
 public class Cell {
@@ -122,9 +122,9 @@ public class Cell {
     public String toString(){
         String ret = "This cell:";
         if(this.colorRestriction.isPresent())
-            ret = ret + "has a color restriction:" +this.colorRestriction+"," ;
+            ret = ret + "has a color restriction:" +this.colorRestriction.get()+"," ;
         if(this.numberRestriction.isPresent())
-            ret = ret + "has a number restriction:"+this.numberRestriction+"," ;
+            ret = ret + "has a number restriction:"+this.numberRestriction.get()+"," ;
         if(this.isOccupied()) {
             try {
                 ret = ret + "contains a die:" + this.getDie().toString();

@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.objective;
 
 import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.EmptyCellException;
-import it.polimi.ingsw.model.table.dashboard.DashBoard;
+import it.polimi.ingsw.model.table.glassWindow.GlassWindow;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,15 +19,15 @@ public class NumberSetPublicObjective extends PublicObjective {
     }
 
     @Override
-    public int scorePoints(DashBoard dashboard) {
+    public int scorePoints(GlassWindow glassWindow) {
         int ret = 20;
         for(Integer n: numbers){
             int newRet = 0;
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 5; j++) {
                     try {
-                        if (dashboard.getCell(i, j).isOccupied()){
-                            if(dashboard.getCell(i, j).getDie().getNumber() == n){
+                        if (glassWindow.getCell(i, j).isOccupied()){
+                            if(glassWindow.getCell(i, j).getDie().getNumber() == n){
                                 newRet++;
                             }
                         }
