@@ -14,11 +14,13 @@ public class AreaPublicObjective extends PublicObjective {
     private List<List<Integer>> multiplicity;
     private int points;
 
+    //TODO improve class
     public AreaPublicObjective(String name, int points, List<Integer> area, List<List<Integer>> multiplicity) throws IllegalObjectiveException {
         super(name);
         if(area.size()%2 != 0 || multiplicity.size() != 11){
             throw new IllegalObjectiveException();
         }
+        this.area = new ArrayList<>();
         for (int i = 0; i < area.size(); i+=2) {
             this.area.add(new Coordinate(area.get(i), area.get(i+1)));
         }
