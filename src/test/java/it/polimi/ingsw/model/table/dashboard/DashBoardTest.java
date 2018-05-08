@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.table;
+package it.polimi.ingsw.model.table.dashboard;
 
 import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.DieNotAllowedException;

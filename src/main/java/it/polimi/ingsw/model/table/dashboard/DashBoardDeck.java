@@ -8,18 +8,22 @@ import java.util.List;
 
 public class DashBoardDeck implements Deck {
 
-    private DashBoardDeck dashBoardDeck = new DashBoardDeck();
+    private static DashBoardDeck dashBoardDeck = new DashBoardDeck();
     private List<DashBoardCard> dashBoardCards;
 
 
     //TODO
-    
+
+    private DashBoardDeck(){
+
+    }
+
     @Override
-    public Object draw(int num) throws DeckTooSmallException {
+    public List<DashBoard> draw(int num) throws DeckTooSmallException {
         return new ArrayList<>();
     }
 
-    public DashBoardDeck getDashBoardDeck() {
+    public static DashBoardDeck getDashBoardDeck() {
         return dashBoardDeck;
     }
 

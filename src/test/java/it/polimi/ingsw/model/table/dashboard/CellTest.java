@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.table;
+package it.polimi.ingsw.model.table.dashboard;
 
 import it.polimi.ingsw.model.exception.EmptyCellException;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
