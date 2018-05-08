@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.table;
 import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.DashBoardNotFoundException;
 import it.polimi.ingsw.model.objective.PrivateObjective;
+import it.polimi.ingsw.model.table.dashboard.DashBoard;
 
 import java.util.*;
 

@@ -2,9 +2,7 @@ package it.polimi.ingsw.model.objective;
 
 import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.EmptyCellException;
-import it.polimi.ingsw.model.exception.NotValidNumberException;
-import it.polimi.ingsw.model.table.DashBoard;
-import it.polimi.ingsw.model.table.dice.Die;
+import it.polimi.ingsw.model.table.dashboard.DashBoard;
 import it.polimi.ingsw.model.table.dice.DieColor;
 
 import java.util.Collection;

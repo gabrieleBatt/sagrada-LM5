@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.objective;
 
-import it.polimi.ingsw.model.table.DashBoard;
+import it.polimi.ingsw.model.table.dashboard.DashBoard;
 
 /**
  * Class representing the scoring rules for the players

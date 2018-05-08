@@ -3,8 +3,7 @@ package it.polimi.ingsw.model.objective;
 import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.EmptyCellException;
 import it.polimi.ingsw.model.exception.IllegalObjectiveException;
-import it.polimi.ingsw.model.exception.NotValidNumberException;
-import it.polimi.ingsw.model.table.DashBoard;
+import it.polimi.ingsw.model.table.dashboard.DashBoard;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model.objective;
 
 import it.polimi.ingsw.model.exception.*;
-import it.polimi.ingsw.model.table.Cell;
-import it.polimi.ingsw.model.table.DashBoard;
+import it.polimi.ingsw.model.table.dashboard.Cell;
+import it.polimi.ingsw.model.table.dashboard.DashBoard;
 import it.polimi.ingsw.model.table.dice.Die;
 import it.polimi.ingsw.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;
