@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.table.dice.Die;
 import it.polimi.ingsw.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ class ColorSetPublicObjectiveTest {
     DashBoard db;
     List<Cell> cells;
 
+    @DisplayName("Scoring color set objective")
     @Test
     void scorePoints() throws NotValidNumberException, DieNotAllowedException, IllegalDashboardException {
         cells = new ArrayList<>();

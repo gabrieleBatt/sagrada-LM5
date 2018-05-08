@@ -3,18 +3,21 @@ package it.polimi.ingsw.model.table;
 import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.IllegalDashboardException;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
 class PlayerTest {
 
+    @DisplayName("Player nickname")
     @Test
     void getNickname() {
         Player player = new Player("player");
         Assertions.assertEquals(player.getNickname(),"player");
     }
 
+    @DisplayName("Player tokens")
     @Test
     void getTokens() {
         Player player = new Player("player");
@@ -25,6 +28,7 @@ class PlayerTest {
 
     }
 
+    @DisplayName("Player connection")
     @Test
     void setConnected() {
         Player player = new Player("player");

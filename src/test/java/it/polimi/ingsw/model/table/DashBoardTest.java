@@ -6,10 +6,7 @@ import it.polimi.ingsw.model.exception.IllegalDashboardException;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
 import it.polimi.ingsw.model.table.dice.Die;
 import it.polimi.ingsw.model.table.dice.DieColor;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,34 +37,40 @@ class DashBoardTest {
         }
     }
 
+    @DisplayName("Find cell by die inside")
     @Test
     void getCellByDie() throws CellNotFoundException {
         Assertions.assertEquals(db.getCellByDie("5Y0"), cells.get(5));
         Assertions.assertThrows(CellNotFoundException.class, () -> db.getCellByDie("3R3"));
     }
 
+    @DisplayName("Get row in witch a die is")
     @Test
     void getRow() throws CellNotFoundException {
         Assertions.assertEquals(1, db.getRow(cells.get(5)));
     }
 
+    @DisplayName("Get column in witch a die is")
     @Test
     void getColumn() throws CellNotFoundException {
         Assertions.assertEquals(0, db.getColumn(cells.get(5)));
     }
 
+    @DisplayName("Check for surrounding dice")
     @Test
     void hasSurroundingDice(){
         Assertions.assertFalse(db.hasSurroundingDice(1, 0));
         Assertions.assertTrue(db.hasSurroundingDice(2, 0));
     }
 
+    @DisplayName("Check if a cell has dice adjacent and similar to a die")
     @Test
     void hasAdjacentSimilar() throws NotValidNumberException {
         Assertions.assertFalse(db.hasAdjacentSimilar(2, 0, (new Die(DieColor.RED, 4, 1))));
         Assertions.assertTrue(db.hasAdjacentSimilar(2, 0, (new Die(DieColor.RED, 5, 1))));
     }
 
+    @DisplayName("Available cells for a die in dashboard")
     @Test
     void availableCells() throws NotValidNumberException {
         List<Cell> list = new ArrayList<>(db.availableCells(new Die(DieColor.RED, 4, 1), false));

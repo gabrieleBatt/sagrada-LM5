@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.exception.EndGameException;
 import it.polimi.ingsw.model.rules.ActionCommand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class ToolTest {
@@ -20,16 +21,19 @@ class ToolTest {
         tool = new Tool(actionCommand, "test");
     }
 
+    @DisplayName("Get tool name")
     @Test
     void getName() {
         Assertions.assertEquals("test", tool.getName());
     }
 
+    @DisplayName("Get tool action")
     @Test
     void getActionCommand() {
         Assertions.assertEquals(actionCommand, tool.getActionCommand());
     }
 
+    @DisplayName("Use tool")
     @Test
     void isUsed() {
         Assertions.assertFalse(tool.isUsed());

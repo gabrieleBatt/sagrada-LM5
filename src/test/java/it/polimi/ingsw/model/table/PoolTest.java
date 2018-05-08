@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.table;
 import it.polimi.ingsw.model.table.dice.Die;
 import it.polimi.ingsw.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -12,10 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PoolTest {
 
-    @Test
-    void getDice() {
-    }
-
+    @DisplayName("Add dice to pool")
     @Test
     void addDice() {
         Set diceToBe = new HashSet();
@@ -30,6 +28,7 @@ class PoolTest {
         Assertions.assertEquals(p.getDice(),diceToBe);
     }
 
+    @DisplayName("Remove die from pool")
     @Test
     void takeDie() {
         Pool p = new Pool();
@@ -50,9 +49,9 @@ class PoolTest {
         dice.remove(d2);
         Assertions.assertEquals(dice,p.getDice());
 
-
     }
 
+    @DisplayName("Roll all dice in pool")
     @Test
     void roll() {
         Pool p = new Pool();

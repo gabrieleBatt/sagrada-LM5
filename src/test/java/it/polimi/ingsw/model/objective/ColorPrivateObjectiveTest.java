@@ -9,15 +9,15 @@ import it.polimi.ingsw.model.table.DashBoard;
 import it.polimi.ingsw.model.table.dice.Die;
 import it.polimi.ingsw.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ColorPrivateObjectiveTest {
 
+    @DisplayName("Scoring cyan private objective")
     @Test
     void scorePoints() throws IllegalDashboardException, NotValidNumberException, DieNotAllowedException, EmptyCellException {
         List<Cell> cells = new ArrayList<>();

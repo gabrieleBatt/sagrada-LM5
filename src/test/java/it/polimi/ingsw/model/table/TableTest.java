@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.table;
 import it.polimi.ingsw.model.tool.Effect;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -34,12 +35,13 @@ class TableTest {
         table = new Table(players);
     }
 
-
+    @DisplayName("Get players in table")
     @Test
     void getPlayers() {
         Assertions.assertEquals(players, table.getPlayers());
     }
 
+    @DisplayName("Iterate players")
     @Test
     void getItPlayers() {
         Iterator<Player> iterator = table.getPlayersIterator(player2);
@@ -52,6 +54,7 @@ class TableTest {
         Assertions.assertFalse(iterator.hasNext());
     }
 
+    @DisplayName("Get current effects")
     @Test
     void getEffects() {
         Effect e = new Effect();

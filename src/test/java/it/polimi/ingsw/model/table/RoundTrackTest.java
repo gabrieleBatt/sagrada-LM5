@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.exception.EndGameException;
 import it.polimi.ingsw.model.table.dice.Die;
 import it.polimi.ingsw.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -14,10 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RoundTrackTest {
 
-    @Test
-    void getRound() {
-    }
-
+    @DisplayName("End round adding dice")
     @Test
     void endRound() throws EndGameException {
         RoundTrack roundTrack = new RoundTrack();
@@ -38,11 +36,7 @@ class RoundTrackTest {
         }
     }
 
-    @Test
-    void getDice() {
-
-    }
-
+    @DisplayName("Remove a die from roundTrack placing another in its place")
     @Test
     void switchDie() throws EndGameException {
         RoundTrack roundTrack = new RoundTrack();

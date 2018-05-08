@@ -3,13 +3,14 @@ package it.polimi.ingsw.model.table.dice;
 import it.polimi.ingsw.model.exception.BagEmptyException;
 import it.polimi.ingsw.model.table.dice.DiceBag;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
 class DiceBagTest {
 
-
+    @DisplayName("Create and empty the bag")
     @Test
     void drawDie() throws BagEmptyException {
         DiceBag db = new DiceBag();
@@ -22,6 +23,7 @@ class DiceBagTest {
         Assertions.assertTrue(sd.size() == 90);
     }
 
+    @DisplayName("Draw multiple times multiple dice")
     @Test
     void drawDice() throws BagEmptyException {
         DiceBag db = new DiceBag();
@@ -37,6 +39,7 @@ class DiceBagTest {
 
     }
 
+    @DisplayName("Place one extra die in the bag")
     @Test
     void placeDie() {
         DiceBag db = new DiceBag();

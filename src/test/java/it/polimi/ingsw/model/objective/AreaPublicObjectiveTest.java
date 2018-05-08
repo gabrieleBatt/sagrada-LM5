@@ -9,14 +9,15 @@ import it.polimi.ingsw.model.table.DashBoard;
 import it.polimi.ingsw.model.table.dice.Die;
 import it.polimi.ingsw.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class AreaPublicObjectiveTest {
+
+    @DisplayName("Scoring column color objective")
     @Test
     void scorePoints() throws IllegalObjectiveException, IllegalDashboardException, NotValidNumberException, DieNotAllowedException {
         DashBoard dashBoard;
@@ -74,6 +75,8 @@ class AreaPublicObjectiveTest {
         Assertions.assertEquals(10, areaPublicObjective.scorePoints(dashBoard));
 
     }
+
+    @DisplayName("Illegal creation of objective")
     @Test
     void scorePointsException(){
         List<Integer> area = new ArrayList<>();
@@ -86,6 +89,8 @@ class AreaPublicObjectiveTest {
         }
         Assertions.assertThrows(IllegalObjectiveException.class, ()->new AreaPublicObjective("test", 5, area, multiplicity));
     }
+
+    @DisplayName("Illegal creation of objective")
     @Test
     void scorePointsException1(){
         List<Integer> area = new ArrayList<>();

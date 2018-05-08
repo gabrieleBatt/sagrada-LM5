@@ -6,10 +6,12 @@ import it.polimi.ingsw.model.exception.DieNotAllowedException;
 import it.polimi.ingsw.model.table.dice.Die;
 import it.polimi.ingsw.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class CellTest {
 
+    @DisplayName("Place die in cell, various restrictions")
     @Test
     void placeDie() throws NotValidNumberException, DieNotAllowedException, EmptyCellException {
         Cell cell_colour_restr = new Cell("", DieColor.YELLOW);
@@ -39,6 +41,7 @@ class CellTest {
         Assertions.assertEquals(cell.getDie(),die);
     }
 
+    @DisplayName("Check empty and full cell")
     @Test
     void isOccupied() throws DieNotAllowedException {
         Cell cell = new Cell("");
@@ -48,6 +51,7 @@ class CellTest {
         Assertions.assertTrue(cell.isOccupied());
     }
 
+    @DisplayName("Place and get die")
     @Test
     void getDie() throws DieNotAllowedException, EmptyCellException {
         Cell cell = new Cell("");
@@ -57,6 +61,7 @@ class CellTest {
         Assertions.assertEquals(cell.getDie(),die);
     }
 
+    @DisplayName("Check allowed dice considering several restrictions")
     @Test
     void isAllowed() throws NotValidNumberException {
         Cell cell_colour_restr = new Cell("", DieColor.YELLOW);
