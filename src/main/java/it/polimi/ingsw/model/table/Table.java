@@ -140,28 +140,4 @@ public class Table {
     public void addEffect(Effect effect){
         effects.add(effect);
     }
-    /**
-     * Method used for testing
-     * @return String representing the table
-     */
-    @Override
-    public String toString(){
-        String ret = "This table is composed by:\nPlayers:";
-        for(Player py : this.players)
-            ret = ret + py.toString();
-        ret = ret + "\n";
-        for(PublicObjective po : this.publicObjectives)
-            ret = ret + po.toString();
-        ret = ret + "\n";
-        for()
-
-        return ret;
-    }
-
-    /**
-     * Prints the override toString of an object Table
-     */
-    public void dump(){
-        System.out.println(this);
-    }
 }
