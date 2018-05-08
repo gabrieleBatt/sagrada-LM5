@@ -9,6 +9,10 @@ import it.polimi.ingsw.model.table.dice.Die;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * DashBoard is a concrete class representing a player's dashboard. It's implemented as a collection of cells.
+ */
+
 public class DashBoard {
     private String name;
     private int difficulty;
@@ -217,6 +221,38 @@ public class DashBoard {
                 return false;
         }
         return  true;
+    }
+
+    /**
+     * Method used for testing
+     * @return String representing a dashboard
+     */
+    @Override
+    public String toString(){
+        String ret = "This dashBoard contains\n";
+            for(int i = 0; i<4;i++) {
+                for (int j = 0; j < 5; j++) {
+                    try {
+                        if (this.getCell(i, j).isOccupied())
+                            ret = ret + this.getCell(i, j).getDie().toString() + "  ";
+                        else
+                            ret = ret + "empty  ";
+                    } catch (EmptyCellException e) {
+                        e.printStackTrace();
+                    } catch (NotValidNumberException e) {
+                        e.printStackTrace();
+                    }
+                }
+                ret = ret + "\n";
+            }
+            return ret;
+    }
+
+    /**
+     * Prints the override toString of an object DashBoard
+     */
+    public void dump(){
+        System.out.println(this);
     }
 }
 

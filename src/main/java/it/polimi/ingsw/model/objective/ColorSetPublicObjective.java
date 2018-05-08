@@ -20,6 +20,11 @@ public class ColorSetPublicObjective extends PublicObjective {
         this.colors = new HashSet<>(colors);
     }
 
+    /**
+     *
+     * @param dashboard on witch score the point of the objective
+     * @return
+     */
     @Override
     public int scorePoints(DashBoard dashboard) {
         int ret = 20;

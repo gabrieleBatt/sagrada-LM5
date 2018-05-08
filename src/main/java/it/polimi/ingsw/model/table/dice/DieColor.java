@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.table.dice;
 
 import java.awt.*;
 
+/**
+ *Die color is a concrete class containing an enum of the colors which a die can be characterized with.
+ */
 public enum DieColor{
 
     RED(Color.RED, "R"), GREEN(Color.GREEN, "G"), YELLOW(Color.YELLOW, "Y"), CYAN(Color.CYAN, "C"), MAGENTA(Color.MAGENTA, "M");

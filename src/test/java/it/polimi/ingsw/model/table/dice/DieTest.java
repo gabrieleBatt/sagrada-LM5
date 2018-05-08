@@ -61,4 +61,11 @@ class DieTest {
         Assertions.assertFalse(die.getClass().equals(Object.class));
 
     }
+
+    @Test
+    void toStringTest() throws NotValidNumberException {
+         Die die = new Die(DieColor.CYAN, 4,12);
+         Assertions.assertEquals(die.toString(),"Die color:" + die.getColor() + "Die value" + die.getNumber() + "Die id" + 12);
+         //die.dump();
+     }
 }

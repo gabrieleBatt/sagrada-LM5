@@ -5,6 +5,10 @@ import it.polimi.ingsw.model.objective.PrivateObjective;
 
 import java.util.*;
 
+/**
+ * Player is a concrete class representing a game's player. Its' main attributes are nickname, tokens, dashBoard,
+ * privateObjective. It has also a boolean indicating whether it's connected or not.
+ */
 public class Player {
     private final String nickname;
     private int tokens;
@@ -104,5 +108,27 @@ public class Player {
      */
     public boolean isConnected() {
         return connected;
+    }
+    /**
+     * Method used for testing
+     * @return String representing a player
+     */
+    @Override
+    public String toString(){
+        String ret = "Player ";
+        ret = ret + this.nickname + "has:\n" + this.tokens + "number of tokens\n"+ this.dashBoard.toString() + "\n" +
+        "private objective:" + this.privateObjective.toString() + "\n";
+        if(this.isConnected())
+            ret = ret + "is connected\n";
+        else
+            ret = ret + "is not connected\n";
+        return ret;
+    }
+
+    /**
+     * Prints the override toString of an object Player
+     */
+    public void dump(){
+        System.out.println(this);
     }
 }

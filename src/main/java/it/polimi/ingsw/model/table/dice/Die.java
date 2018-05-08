@@ -3,6 +3,11 @@ import it.polimi.ingsw.model.exception.NotValidNumberException;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Die is the concrete class representing a die in the game. It is characterized by a specific color, a number (randomly
+ * extracted whether it's not specified) and an Id which can uniquely represent a die. It contains also all the methods
+ * regarding the die and the tools which can have an effect on it.
+ */
 public class Die {
     private final DieColor color;
     private int number;
@@ -115,5 +120,21 @@ public class Die {
             return ((Die)die).getId().equals(this.getId());
         }else
             return false;
+    }
+
+    /**
+     * Method used for testing
+     * @return String representing a die
+     */
+    @Override
+    public String toString(){
+        return ("Die color:" + this.color + "Die value" + this.number + "Die id" + this.id);
+    }
+
+    /**
+     * Prints the override toString of an object Die
+     */
+    public void dump(){
+        System.out.println(this);
     }
 }

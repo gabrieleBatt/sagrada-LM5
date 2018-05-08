@@ -7,6 +7,10 @@ import it.polimi.ingsw.model.table.dice.DieColor;
 
 import java.util.Optional;
 
+/**
+ * Cell is a concrete class representing a single cell of a dashboard. It has information about restrictions and the
+ * eventual presence of a die on.
+ */
 public class Cell {
     private Optional<DieColor> colorRestriction;
     private Optional<Integer> numberRestriction;
@@ -108,5 +112,34 @@ public class Cell {
             return ((Cell) cell).getId().equals(this.getId());
         }else
             return false;
+    }
+
+    /**
+     * Method used for testing
+     * @return String representing a cell
+     */
+    @Override
+    public String toString(){
+        String ret = "This cell:";
+        if(this.colorRestriction.isPresent())
+            ret = ret + "has a color restriction:" +this.colorRestriction+"," ;
+        if(this.numberRestriction.isPresent())
+            ret = ret + "has a number restriction:"+this.numberRestriction+"," ;
+        if(this.isOccupied()) {
+            try {
+                ret = ret + "contains a die:" + this.getDie().toString();
+            } catch (EmptyCellException e) {
+                e.printStackTrace();
+            }
+        }else
+            ret = ret + "is empty";
+        return ret;
+    }
+
+    /**
+     * Prints the override toString of an object Cell
+     */
+    public void dump(){
+        System.out.println(this);
     }
 }

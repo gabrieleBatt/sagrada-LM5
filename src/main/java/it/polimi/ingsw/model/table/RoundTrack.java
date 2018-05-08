@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
+/**
+ * Round track is a concrete class representing the round track's game. it has some dice on every cell of the ended turn;
+ */
 public class RoundTrack {
     private int round;
     private List<ArrayList<Die>> dice;
@@ -64,6 +66,24 @@ public class RoundTrack {
                 return;
             }
         }
+    }
+    /**
+     * Method used for testing
+     * @return String representing a round track
+     */
+    @Override
+    public String toString(){
+        String ret = "The round track contains:";
+        for (int i=1; i<10; i++)
+            ret = ret + "Round " + i + ": " + this.getDice(i).toString();
+        return ret;
+    }
+
+    /**
+     * Prints the override toString of an object RoundTrack
+     */
+    public void dump(){
+        System.out.println(this);
     }
 
 }

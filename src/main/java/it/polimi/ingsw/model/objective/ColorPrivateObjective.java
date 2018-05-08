@@ -13,6 +13,11 @@ public class ColorPrivateObjective extends PrivateObjective {
         super(name);
     }
 
+    /**
+     * Returns the score the player gets due to the private objective
+     * @param dashboard
+     * @return
+     */
     @Override
     public int scorePoints(DashBoard dashboard) {
         int ret = 0;

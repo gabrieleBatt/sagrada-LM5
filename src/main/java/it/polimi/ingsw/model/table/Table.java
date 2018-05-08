@@ -7,6 +7,11 @@ import it.polimi.ingsw.model.tool.Tool;
 
 import java.util.*;
 
+/**
+ * Table is a concrete class representing the state of the game and offering a general prospecting on the game status.
+ * It has as attributes the list of players, public objectives and tools; the dice bag, the pool, the round track and
+ * the effects.
+ */
 public class Table {
     private final List<Player> players;
     private Set<PublicObjective> publicObjectives;
@@ -134,5 +139,29 @@ public class Table {
      */
     public void addEffect(Effect effect){
         effects.add(effect);
+    }
+    /**
+     * Method used for testing
+     * @return String representing the table
+     */
+    @Override
+    public String toString(){
+        String ret = "This table is composed by:\nPlayers:";
+        for(Player py : this.players)
+            ret = ret + py.toString();
+        ret = ret + "\n";
+        for(PublicObjective po : this.publicObjectives)
+            ret = ret + po.toString();
+        ret = ret + "\n";
+        for()
+
+        return ret;
+    }
+
+    /**
+     * Prints the override toString of an object Table
+     */
+    public void dump(){
+        System.out.println(this);
     }
 }

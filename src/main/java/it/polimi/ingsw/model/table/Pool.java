@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Pool is a concrete class representing the dice "on the table" in a round.
+ */
 public class Pool {
     private Set<Die> diceOnTable;
 
@@ -40,5 +43,24 @@ public class Pool {
         for(Die d: diceOnTable) {
             d.roll();
         }
+    }
+    /**
+     * Method used for testing
+     * @return String representing a pool
+     */
+    @Override
+    public String toString(){
+        String ret = "On the table there are:\n";
+        for (Die die: diceOnTable){
+            ret = ret + die.toString();
+        }
+        return ret;
+    }
+
+    /**
+     * Prints the override toString of an object Pool
+     */
+    public void dump(){
+        System.out.println(this);
     }
 }

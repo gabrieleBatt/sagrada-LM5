@@ -5,6 +5,10 @@ import it.polimi.ingsw.model.exception.BagEmptyException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * DiceBag is a concrete class representing the actual dice bag in the game: it contains all the left die, which are
+ * randomly extracted from it.
+ */
 public class DiceBag {
     private List<Die> bag;
 
@@ -74,5 +78,26 @@ public class DiceBag {
      * @return boolean: true if the die is contained
      */
     boolean bagContains(Die die){return bag.contains(die);}
+
+    /**
+     * Method used for testing
+     * @return String representing a diceBag
+     */
+    @Override
+    public String toString(){
+        String ret = "The dice bag contains:";
+        for(Die die: this.bag){
+            ret = ret + die.toString();
+        }
+        return ret;
+    }
+
+    /**
+     * Prints the override toString of an object DiceBag
+     */
+    public void dump(){
+        System.out.println(this);
+    }
+
 
 }
