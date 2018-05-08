@@ -20,6 +20,12 @@ public class ColorSetPublicObjective extends PublicObjective {
         this.colors = new HashSet<>(colors);
     }
 
+    /**
+     * Gets the number of occurrences of the less frequent color on the dashboard multiplied
+     * by the points given for every complete set at the end of the game.
+     * @param dashboard the dashboard to check
+     * @return int, points given for every complete set.
+     */
     @Override
     public int scorePoints(DashBoard dashboard) {
         int ret = 20;

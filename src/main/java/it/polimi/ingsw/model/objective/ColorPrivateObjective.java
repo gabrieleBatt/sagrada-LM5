@@ -10,7 +10,9 @@ public class ColorPrivateObjective extends PrivateObjective {
     private DieColor color;
 
     public ColorPrivateObjective(String name, DieColor color) {
+
         super(name);
+        this.color = color;
     }
 
     @Override
