@@ -14,7 +14,15 @@ public class AreaPublicObjective extends PublicObjective {
     private List<Area> areaList;
     private int points;
 
-    public AreaPublicObjective(String name, int points, List<Integer> area, List<List<Integer>> multiplicity) throws IllegalObjectiveException {
+    /**
+     * creates an objective from the data found in json already parsed
+     * @param name objective name
+     * @param points points for area respecting multiplicity
+     * @param area list of coordinates representing an area
+     * @param multiplicity multiplicity of die values(listed the numbers form one to six and then the colors in alphabetical order)
+     * @throws IllegalObjectiveException thrown if the parameters are not correct
+     */
+    public AreaPublicObjective(String name, int points, List<Coordinate> area, List<List<Integer>> multiplicity) throws IllegalObjectiveException {
         super(name);
 
         areaList = new ArrayList<>();
@@ -39,7 +47,7 @@ public class AreaPublicObjective extends PublicObjective {
         return ret;
     }
 
-    public void addArea(List<Integer> area, List<List<Integer>> multiplicity) throws IllegalObjectiveException {
+    public void addArea(List<Coordinate> area, List<List<Integer>> multiplicity) throws IllegalObjectiveException {
         areaList.add(new Area(area, multiplicity));
     }
 
@@ -71,36 +79,33 @@ public class AreaPublicObjective extends PublicObjective {
         return true;
     }
 
-
-
-    class Coordinate{
-        int x;
-        int y;
-
-        Coordinate(int x , int y){
-            this.x = x;
-            this.y = y;
-        }
-    }
-
     class Area{
         List<Coordinate> area;
         List<List<Integer>> multiplicity;
 
-        public Area(List<Integer> area, List<List<Integer>> multiplicity) throws IllegalObjectiveException {
-            if( multiplicity.size() != 11 || area.size()%2 != 0){
-                throw new IllegalObjectiveException("Can't make objective\nmultiplicity expected 11, found:"+multiplicity.size()+"\narea expected even, found:"+ area.size());
+        public Area(List<Coordinate> area, List<List<Integer>> multiplicity) throws IllegalObjectiveException {
+            if( multiplicity.size() != 11){
+                throw new IllegalObjectiveException("Can't make objective\nmultiplicity expected 11, found:"+multiplicity.size());
             }
             this.multiplicity = new ArrayList<>();
             for(List<Integer> il: multiplicity){
                 this.multiplicity.add(new ArrayList<>(il));
             }
 
-            this.area = new ArrayList<>();
-            for (int i = 0; i < area.size(); i+=2) {
-                this.area.add(new Coordinate(area.get(i), area.get(i+1)));
-            }
+            this.area = new ArrayList<>(area);
         }
+    }
+}
+
+
+
+class Coordinate{
+    int x;
+    int y;
+
+    Coordinate(int x , int y){
+        this.x = x;
+        this.y = y;
     }
 }
 

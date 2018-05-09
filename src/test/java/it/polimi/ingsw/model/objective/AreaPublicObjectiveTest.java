@@ -22,15 +22,11 @@ class AreaPublicObjectiveTest {
 
         AreaPublicObjective areaPublicObjective;
 
-        List<Integer> area = new ArrayList<>();
-        area.add(0);
-        area.add(0);
-        area.add(1);
-        area.add(0);
-        area.add(2);
-        area.add(0);
-        area.add(3);
-        area.add(0);
+        List<Coordinate> area = new ArrayList<>();
+        area.add(new Coordinate(0, 0));
+        area.add(new Coordinate(1, 0));
+        area.add(new Coordinate(2, 0));
+        area.add(new Coordinate(3, 0));
 
         List<List<Integer>> multiplicity = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
@@ -94,35 +90,27 @@ class AreaPublicObjectiveTest {
             multiplicity.get(i).add(2);
         }
 
-        List<Integer> area = new ArrayList<>();
-        area.add(0);
-        area.add(0);
-        area.add(1);
-        area.add(1);
+        List<Coordinate> area = new ArrayList<>();
+        area.add(new Coordinate(0, 0));
+        area.add(new Coordinate(1, 1));
 
         areaPublicObjective = new AreaPublicObjective("test", 1, area, multiplicity);
 
         area = new ArrayList<>();
-        area.add(0);
-        area.add(0);
-        area.add(-1);
-        area.add(1);
+        area.add(new Coordinate(0, 0));
+        area.add(new Coordinate(-1, 1));
 
         areaPublicObjective.addArea(area, multiplicity);
 
         area = new ArrayList<>();
-        area.add(0);
-        area.add(0);
-        area.add(1);
-        area.add(-1);
+        area.add(new Coordinate(0, 0));
+        area.add(new Coordinate(1, -1));
 
         areaPublicObjective.addArea(area, multiplicity);
 
         area = new ArrayList<>();
-        area.add(0);
-        area.add(0);
-        area.add(-1);
-        area.add(-1);
+        area.add(new Coordinate(0, 0));
+        area.add(new Coordinate(-1, -1));
 
         areaPublicObjective.addArea(area, multiplicity);
 
@@ -150,25 +138,11 @@ class AreaPublicObjectiveTest {
     @DisplayName("Illegal creation of objective")
     @Test
     void scorePointsException(){
-        List<Integer> area = new ArrayList<>();
-        area.add(0);
-        area.add(0);
+        List<Coordinate> area = new ArrayList<>();
+        area.add(new Coordinate(0, 0));
 
         List<List<Integer>> multiplicity = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
-            multiplicity.add(new ArrayList<>());
-        }
-        Assertions.assertThrows(IllegalObjectiveException.class, ()->new AreaPublicObjective("test", 5, area, multiplicity));
-    }
-
-    @DisplayName("Illegal creation of objective")
-    @Test
-    void scorePointsException1(){
-        List<Integer> area = new ArrayList<>();
-        area.add(0);
-
-        List<List<Integer>> multiplicity = new ArrayList<>();
-        for (int i = 0; i < 11; i++) {
             multiplicity.add(new ArrayList<>());
         }
         Assertions.assertThrows(IllegalObjectiveException.class, ()->new AreaPublicObjective("test", 5, area, multiplicity));
