@@ -1,13 +1,10 @@
 package it.polimi.ingsw.model.objective;
 
 import it.polimi.ingsw.model.exception.DeckTooSmallException;
-import it.polimi.ingsw.model.exception.IllegalGlassWindowException;
 import it.polimi.ingsw.model.exception.IllegalObjectiveException;
+import it.polimi.ingsw.model.exception.InvalidJSONException;
 import it.polimi.ingsw.model.table.Deck;
 import it.polimi.ingsw.model.table.dice.DieColor;
-import it.polimi.ingsw.model.table.glassWindow.Cell;
-import it.polimi.ingsw.model.table.glassWindow.GlassWindow;
-import it.polimi.ingsw.model.table.glassWindow.GlassWindowDeck;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -29,7 +26,7 @@ public class PublicObjectiveDeck implements Deck {
     private PublicObjectiveDeck(){
         publicObjectives = new ArrayList<>();
         try {
-            Files.list(Paths.get("resources/ServerResources/objectives/public/area"))
+            Files.list(Paths.get("resources/ServerResources/objectives/public"))
                     .forEach((f) -> addCard(f.toFile()));
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -62,12 +59,45 @@ public class PublicObjectiveDeck implements Deck {
         }
 
         for(Integer i: integerSet){
-            ret.add(readCard(publicObjectives.get(i)));
+            try {
+                ret.add(readCard(publicObjectives.get(i)));
+            } catch (InvalidJSONException e) {
+                System.out.println(e.getMessage());
+            }
 
         }
 
 
         return ret;
+    }
+
+    private PublicObjective readCard(JSONObject jsonObject) throws InvalidJSONException {
+        if ((jsonObject.get("type")).equals("area")) return readAreaCard(jsonObject);
+        else if ((jsonObject.get("type")).equals("set")) return readSetCard(jsonObject);
+        else throw new InvalidJSONException(jsonObject + " is not a valid public objective");
+    }
+
+    private PublicObjective readSetCard(JSONObject jsonObject) {
+
+        Iterator<String> iterator = ((JSONArray)jsonObject.get("set")).iterator();
+
+        List<Integer> numbers = new ArrayList<>();
+        List<DieColor> colors = new ArrayList<>();
+
+        while(iterator.hasNext()){
+            String s = iterator.next();
+            switch (s){
+                case "R":colors.add(DieColor.RED); break;
+                case "G":colors.add(DieColor.GREEN); break;
+                case "M":colors.add(DieColor.MAGENTA); break;
+                case "Y":colors.add(DieColor.YELLOW); break;
+                case "C":colors.add(DieColor.CYAN); break;
+                default:numbers.add(Integer.decode(s));
+            }
+        }
+
+        return new SetPublicObjective((String)jsonObject.get("name"),  Math.toIntExact((long)jsonObject.get("points")),
+                numbers, colors);
     }
 
     private void addMult(String s, JSONObject multiplicity, List<List<Integer>> mult ){
@@ -78,7 +108,8 @@ public class PublicObjectiveDeck implements Deck {
         }
     }
 
-    private PublicObjective readCard(JSONObject jsonPublicObjective) {
+
+    private PublicObjective readAreaCard(JSONObject jsonPublicObjective) {
         String name = (String) jsonPublicObjective.get("name");
         int points = Math.toIntExact((long)jsonPublicObjective.get("points"));
 
