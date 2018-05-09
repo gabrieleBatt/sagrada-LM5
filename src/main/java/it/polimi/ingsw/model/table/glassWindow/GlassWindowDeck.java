@@ -17,10 +17,13 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Contains always all possible GlassWindows, if GlassWindows are drawn they do not disappear from deck
+ */
 public class GlassWindowDeck implements Deck {
 
     private static GlassWindowDeck glassWindowDeck = new GlassWindowDeck();
-    private List<GlassWindowCard> glassWindowCards;
+    private List<JSONObject> glassWindowCards;
 
     private GlassWindowDeck(){
         glassWindowCards = new ArrayList<>();
@@ -33,6 +36,12 @@ public class GlassWindowDeck implements Deck {
 
     }
 
+    /**
+     * draws the twice the specified amount of different GlassWindow from deck, paired correctly
+     * @param num - number of cards in deck to draw, half og GlassWindows drawn
+     * @return GlassWindows drawn
+     * @throws DeckTooSmallException is thrown if there are not enough GlassWindows in the deck
+     */
     @Override
     public List<GlassWindow> draw(int num) throws DeckTooSmallException {
         List<GlassWindow> ret = new ArrayList<>();
@@ -45,8 +54,13 @@ public class GlassWindowDeck implements Deck {
         }
 
         for(Integer i: integerSet){
-            ret.add(glassWindowCards.get(i).getD1());
-            ret.add(glassWindowCards.get(i).getD2());
+            try {
+                ret.add(readCard(glassWindowCards.get(i), 1));
+                ret.add(readCard(glassWindowCards.get(i), 2));
+            } catch (IllegalGlassWindowException e) {
+                e.printStackTrace();
+            }
+
         }
 
         return ret;
@@ -55,12 +69,8 @@ public class GlassWindowDeck implements Deck {
     private void addCard(File file){
         JSONParser parser = new JSONParser();
         try {
-
-            JSONObject jsonGlassWindow = (JSONObject)parser.parse(new FileReader(file));
-
-            glassWindowCards.add(new GlassWindowCard(this.readCard(jsonGlassWindow, 1), this.readCard(jsonGlassWindow, 2)));
-
-        } catch (ParseException | IOException | IllegalGlassWindowException e) {
+            glassWindowCards.add((JSONObject)parser.parse(new FileReader(file)));
+        } catch (IOException | ParseException e) {
             System.out.println(e.getMessage());
         }
     }
