@@ -58,7 +58,7 @@ public class GlassWindowDeck implements Deck {
                 ret.add(readCard(glassWindowCards.get(i), 1));
                 ret.add(readCard(glassWindowCards.get(i), 2));
             } catch (IllegalGlassWindowException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
 
         }
