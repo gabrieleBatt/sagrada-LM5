@@ -16,7 +16,7 @@ class AreaPublicObjectiveTest {
 
     @DisplayName("Scoring column color objective")
     @Test
-    void scorePoints() throws IllegalObjectiveException, IllegalGlassWindowException, CellNotFoundException, DieNotAllowedException {
+    void scorePoints1() throws IllegalObjectiveException, IllegalGlassWindowException, CellNotFoundException, DieNotAllowedException {
         GlassWindow glassWindow;
         List<Cell> cells;
 
@@ -70,6 +70,80 @@ class AreaPublicObjectiveTest {
         glassWindow.getCell(2,2).placeDie(new Die(DieColor.GREEN, 0), false);
         glassWindow.getCell(3,2).placeDie(new Die(DieColor.MAGENTA, 0), false);
         Assertions.assertEquals(10, areaPublicObjective.scorePoints(glassWindow));
+
+    }
+
+    @DisplayName("Scoring diagonal color objective")
+    @Test
+    void scorePoints2() throws IllegalObjectiveException, IllegalGlassWindowException, CellNotFoundException, DieNotAllowedException {
+        GlassWindow glassWindow;
+        List<Cell> cells;
+
+        AreaPublicObjective areaPublicObjective;
+
+        List<List<Integer>> multiplicity = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            multiplicity.add(new ArrayList<>());
+            multiplicity.get(i).add(0);
+            multiplicity.get(i).add(1);
+            multiplicity.get(i).add(2);
+        }
+        for (int i = 6; i < 11; i++) {
+            multiplicity.add(new ArrayList<>());
+            multiplicity.get(i).add(0);
+            multiplicity.get(i).add(2);
+        }
+
+        List<Integer> area = new ArrayList<>();
+        area.add(0);
+        area.add(0);
+        area.add(1);
+        area.add(1);
+
+        areaPublicObjective = new AreaPublicObjective("test", 1, area, multiplicity);
+
+        area = new ArrayList<>();
+        area.add(0);
+        area.add(0);
+        area.add(-1);
+        area.add(1);
+
+        areaPublicObjective.addArea(area, multiplicity);
+
+        area = new ArrayList<>();
+        area.add(0);
+        area.add(0);
+        area.add(1);
+        area.add(-1);
+
+        areaPublicObjective.addArea(area, multiplicity);
+
+        area = new ArrayList<>();
+        area.add(0);
+        area.add(0);
+        area.add(-1);
+        area.add(-1);
+
+        areaPublicObjective.addArea(area, multiplicity);
+
+
+        cells = new ArrayList<>();
+
+        for (int i = 0; i < 20; i++) {
+            cells.add(new Cell(""+i));
+        }
+        glassWindow = new GlassWindow("name", 4, cells);
+
+        Assertions.assertEquals(0, areaPublicObjective.scorePoints(glassWindow));
+        glassWindow.getCell(0,0).placeDie(new Die(DieColor.CYAN, 0), false);
+        Assertions.assertEquals(0, areaPublicObjective.scorePoints(glassWindow));
+        glassWindow.getCell(1,1).placeDie(new Die(DieColor.CYAN, 0), false);
+        glassWindow.getCell(2,2).placeDie(new Die(DieColor.MAGENTA, 0), false);
+        Assertions.assertEquals(2, areaPublicObjective.scorePoints(glassWindow));
+
+        glassWindow.getCell(3,3).placeDie(new Die(DieColor.MAGENTA, 0), false);
+        glassWindow.getCell(3,1).placeDie(new Die(DieColor.MAGENTA, 0), false);
+        Assertions.assertEquals(5, areaPublicObjective.scorePoints(glassWindow));
 
     }
 

@@ -8,24 +8,19 @@ import it.polimi.ingsw.model.table.glassWindow.GlassWindow;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class AreaPublicObjective extends PublicObjective {
 
-    private List<Coordinate> area;
-    private List<List<Integer>> multiplicity;
+    private List<Area> areaList;
     private int points;
 
-    //TODO improve class
     public AreaPublicObjective(String name, int points, List<Integer> area, List<List<Integer>> multiplicity) throws IllegalObjectiveException {
         super(name);
-        if(area.size()%2 != 0 || multiplicity.size() != 11){
-            throw new IllegalObjectiveException("Can't make objective\narea:"+ area.size()+"\nmult:"+multiplicity.size());
-        }
-        this.area = new ArrayList<>();
-        for (int i = 0; i < area.size(); i+=2) {
-            this.area.add(new Coordinate(area.get(i), area.get(i+1)));
-        }
+
+        areaList = new ArrayList<>();
+        areaList.add(new Area(area, multiplicity));
+
         this.points = points;
-        this.multiplicity = new ArrayList<>(multiplicity);
     }
 
     @Override
@@ -33,12 +28,19 @@ public class AreaPublicObjective extends PublicObjective {
         int ret = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
-                if (checkMultiplicityInArea(glassWindow, i, j, area, multiplicity)){
-                    ret += points;
+                for(Area a: areaList) {
+                    if (checkMultiplicityInArea(glassWindow, i, j, a.area, a.multiplicity)) {
+                        ret += points;
+                        break;
+                    }
                 }
             }
         }
         return ret;
+    }
+
+    public void addArea(List<Integer> area, List<List<Integer>> multiplicity) throws IllegalObjectiveException {
+        areaList.add(new Area(area, multiplicity));
     }
 
     private static boolean checkMultiplicityInArea(GlassWindow glassWindow, int row, int column, List<Coordinate> area, List<List<Integer>> multiplicity){
@@ -68,14 +70,38 @@ public class AreaPublicObjective extends PublicObjective {
         }
         return true;
     }
-}
 
-class Coordinate{
-    int x;
-    int y;
 
-    Coordinate(int x , int y){
-        this.x = x;
-        this.y = y;
+
+    class Coordinate{
+        int x;
+        int y;
+
+        Coordinate(int x , int y){
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    class Area{
+        List<Coordinate> area;
+        List<List<Integer>> multiplicity;
+
+        public Area(List<Integer> area, List<List<Integer>> multiplicity) throws IllegalObjectiveException {
+            if( multiplicity.size() != 11 || area.size()%2 != 0){
+                throw new IllegalObjectiveException("Can't make objective\nmultiplicity expected 11, found:"+multiplicity.size()+"\narea expected even, found:"+ area.size());
+            }
+            this.multiplicity = new ArrayList<>();
+            for(List<Integer> il: multiplicity){
+                this.multiplicity.add(new ArrayList<>(il));
+            }
+
+            this.area = new ArrayList<>();
+            for (int i = 0; i < area.size(); i+=2) {
+                this.area.add(new Coordinate(area.get(i), area.get(i+1)));
+            }
+        }
     }
 }
+
+
