@@ -40,13 +40,13 @@ class GlassWindowTest {
         Assertions.assertThrows(CellNotFoundException.class, () -> db.getCellByDie("3R3"));
     }
 
-    @DisplayName("Get row in witch a die is")
+    @DisplayName("Get row in which a die is")
     @Test
     void getRow() throws CellNotFoundException {
         Assertions.assertEquals(1, db.getRow(cells.get(5)));
     }
 
-    @DisplayName("Get column in witch a die is")
+    @DisplayName("Get column in which a die is")
     @Test
     void getColumn() throws CellNotFoundException {
         Assertions.assertEquals(0, db.getColumn(cells.get(5)));
