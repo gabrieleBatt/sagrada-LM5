@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.objective;
 
+import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.model.exception.DeckTooSmallException;
 import it.polimi.ingsw.model.exception.IllegalObjectiveException;
 import it.polimi.ingsw.model.exception.InvalidJSONException;
@@ -17,10 +18,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PrivateObjectiveDeck implements Deck {
 
-        private static PrivateObjectiveDeck privateObjectiveDeck = new PrivateObjectiveDeck();
+    private static final Logger logger = LogMaker.getLogger(PrivateObjectiveDeck.class.getName(), Level.ALL);
+    private static PrivateObjectiveDeck privateObjectiveDeck = new PrivateObjectiveDeck();
         private List<JSONObject> privateObjectives;
 
         private PrivateObjectiveDeck(){
@@ -29,7 +33,7 @@ public class PrivateObjectiveDeck implements Deck {
                 Files.list(Paths.get("resources/ServerResources/objectives/private"))
                         .forEach((f) -> addCard(f.toFile()));
             } catch (IOException e) {
-                System.out.println(e.getMessage());
+                logger.log(Level.WARNING, e.getMessage(), e);
             }
 
         }
@@ -43,7 +47,7 @@ public class PrivateObjectiveDeck implements Deck {
                 try {
                     privateObjectives.add((JSONObject)parser.parse(new FileReader(file)));
                 } catch (IOException | ParseException e) {
-                    System.out.println(e.getMessage());
+                    logger.log(Level.WARNING, e.getMessage(), e);
                 }
         }
 
@@ -62,7 +66,7 @@ public class PrivateObjectiveDeck implements Deck {
                 try {
                     ret.add(readCard(privateObjectives.get(i)));
                 } catch (InvalidJSONException e) {
-                    System.out.println(e.getMessage());
+                    logger.log(Level.WARNING, e.getMessage(), e);
                 }
 
             }

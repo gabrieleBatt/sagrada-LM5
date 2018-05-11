@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class SocketCommunicationChannel implements CommunicationChannel {
 
-    public SocketCommunicationChannel(Socket socket) {
+    public SocketCommunicationChannel(Socket socket, String nickname) {
     }
 }
 

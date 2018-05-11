@@ -1,8 +1,15 @@
 package it.polimi.ingsw.model.tool;
 
+import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.model.rules.ActionCommand;
+import it.polimi.ingsw.model.table.Player;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Tool {
+
+    private static final Logger logger = LogMaker.getLogger(Tool.class.getName(), Level.ALL);
     private ActionCommand actionCommand;
     private String name;
     private boolean used;

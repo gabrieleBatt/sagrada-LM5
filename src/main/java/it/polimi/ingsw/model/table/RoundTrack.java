@@ -1,16 +1,21 @@
 package it.polimi.ingsw.model.table;
 
+import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.model.exception.EndGameException;
 import it.polimi.ingsw.model.table.dice.Die;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Round track is a concrete class representing the round track's game. it has some dice on every cell of the ended turn;
  */
 public class RoundTrack {
+
+    private static final Logger logger = LogMaker.getLogger(RoundTrack.class.getName(), Level.ALL);
     private int round;
     private List<ArrayList<Die>> dice;
 

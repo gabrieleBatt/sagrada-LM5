@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.objective;
 
+import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.EmptyCellException;
 import it.polimi.ingsw.model.table.dice.DieColor;
@@ -7,9 +8,13 @@ import it.polimi.ingsw.model.table.glassWindow.GlassWindow;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SetPublicObjective extends PublicObjective {
 
+    private static final Logger logger = LogMaker.getLogger(SetPublicObjective.class.getName(), Level.ALL);
     private int points;
     private Collection<Integer> numbers;
     private Collection<DieColor> colors;
@@ -35,7 +40,8 @@ public class SetPublicObjective extends PublicObjective {
                             }
                         }
                     } catch (CellNotFoundException | EmptyCellException e) {
-                        System.out.println(e.getMessage());;
+                        logger.log(Level.WARNING, e.getMessage(), e);
+
                     }
                 }
             }
@@ -54,7 +60,7 @@ public class SetPublicObjective extends PublicObjective {
                             }
                         }
                     } catch (CellNotFoundException | EmptyCellException e) {
-                        System.out.println(e.getMessage());;
+                        logger.log(Level.WARNING, e.getMessage(), e);
                     }
                 }
             }

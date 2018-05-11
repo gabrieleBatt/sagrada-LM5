@@ -1,7 +1,9 @@
 package it.polimi.ingsw.model.table.glassWindow;
 
+import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.model.exception.DeckTooSmallException;
 import it.polimi.ingsw.model.exception.IllegalGlassWindowException;
+import it.polimi.ingsw.model.objective.SetPublicObjective;
 import it.polimi.ingsw.model.table.Deck;
 import it.polimi.ingsw.model.table.dice.DieColor;
 import org.json.simple.JSONArray;
@@ -16,12 +18,15 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Contains always all possible GlassWindows, if GlassWindows are drawn they do not disappear from deck
  */
 public class GlassWindowDeck implements Deck {
 
+    private static final Logger logger = LogMaker.getLogger(GlassWindowDeck.class.getName(), Level.ALL);
     private static GlassWindowDeck glassWindowDeck = new GlassWindowDeck();
     private List<JSONObject> glassWindowCards;
 
@@ -31,7 +36,7 @@ public class GlassWindowDeck implements Deck {
             Files.list(Paths.get("resources/ServerResources/glassWindow"))
                     .forEach((f) -> addCard(f.toFile()));
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
 
     }
@@ -58,7 +63,7 @@ public class GlassWindowDeck implements Deck {
                 ret.add(readCard(glassWindowCards.get(i), 1));
                 ret.add(readCard(glassWindowCards.get(i), 2));
             } catch (IllegalGlassWindowException e) {
-                System.out.println(e.getMessage());
+                logger.log(Level.WARNING, e.getMessage(), e);
             }
 
         }
@@ -71,7 +76,7 @@ public class GlassWindowDeck implements Deck {
         try {
             glassWindowCards.add((JSONObject)parser.parse(new FileReader(file)));
         } catch (IOException | ParseException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
 

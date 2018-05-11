@@ -1,11 +1,15 @@
 
 package it.polimi.ingsw.model.table.glassWindow;
 
+import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.EmptyCellException;
 import it.polimi.ingsw.model.exception.IllegalGlassWindowException;
+import it.polimi.ingsw.model.objective.SetPublicObjective;
 import it.polimi.ingsw.model.table.dice.Die;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -13,6 +17,8 @@ import java.util.stream.Collectors;
  */
 
 public class GlassWindow {
+
+    private static final Logger logger = LogMaker.getLogger(GlassWindow.class.getName(), Level.ALL);
     private String name;
     private int difficulty;
     private List<Cell> cellList;
@@ -69,7 +75,7 @@ public class GlassWindow {
                         return c;
                     }
                 } catch (EmptyCellException e) {
-                    System.out.println(e.getMessage());
+                    logger.log(Level.WARNING, e.getMessage(), e);
                 }
             }
         }
@@ -129,7 +135,7 @@ public class GlassWindow {
             if(x>0 && y<4)ret.add(this.getCell(x-1,y+1));
             if(x>0 && y>0)ret.add(this.getCell(x-1,y-1));
         } catch (CellNotFoundException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
         return ret;
     }
@@ -142,7 +148,7 @@ public class GlassWindow {
             if(y>0)ret.add(this.getCell(x,y-1));
             if(y<4)ret.add(this.getCell(x,y+1));
         } catch (CellNotFoundException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
         return ret;
     }
@@ -162,7 +168,7 @@ public class GlassWindow {
                         return true;
                     }
                 } catch (EmptyCellException e) {
-                    System.out.println(e.getMessage());
+                    logger.log(Level.WARNING, e.getMessage(), e);
                 }
             }
         }
@@ -179,7 +185,7 @@ public class GlassWindow {
                 return ((this.getColumn(c) == 0) || (this.getColumn(c) == 4)
                                 || (this.getRow(c) == 0) || (this.getRow(c) == 3));
             } catch (CellNotFoundException e) {
-                System.out.println(e.getMessage());
+                logger.log(Level.WARNING, e.getMessage(), e);
             }
             return false;
         }).collect(Collectors.toList());
@@ -202,7 +208,7 @@ public class GlassWindow {
                                 && (hasSurroundingDice(getRow(c), getColumn(c)) || ignoredSurroundingRestriction)
                                 && !c.isOccupied();
                     } catch (CellNotFoundException e) {
-                        System.out.println(e.getMessage());
+                        logger.log(Level.WARNING, e.getMessage(), e);
                     }
                     return false;
                 }
@@ -237,7 +243,7 @@ public class GlassWindow {
                         else
                             ret = ret + "empty  ";
                     } catch (EmptyCellException | CellNotFoundException e) {
-                        System.out.println(e.getMessage());
+                        logger.log(Level.WARNING, e.getMessage(), e);
 
                     }
                 }

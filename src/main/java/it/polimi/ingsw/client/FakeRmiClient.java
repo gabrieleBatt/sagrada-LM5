@@ -10,7 +10,7 @@ public class FakeRmiClient {
         String host = "localhost";
         try {
             RemoteServer remoteServer = (RemoteServer) LocateRegistry.getRegistry(1100).lookup("Server");
-            remoteServer.rmiLogin(new FakeGameScreen() {}, "test");
+            remoteServer.rmiLogin(new FakeGameScreen() {}, "testR");
 
         } catch (Exception e) {
             System.err.println("client exception: " + e.toString());

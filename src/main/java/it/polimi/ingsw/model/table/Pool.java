@@ -1,15 +1,21 @@
 package it.polimi.ingsw.model.table;
 
+import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.model.table.dice.Die;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Pool is a concrete class representing the dice "on the table" in a round.
  */
 public class Pool {
+
+    private static final Logger logger = LogMaker.getLogger(Pool.class.getName(), Level.ALL);
+
     private Set<Die> diceOnTable = new HashSet<>();
 
     /**

@@ -1,17 +1,23 @@
 package it.polimi.ingsw.model.table;
 
+import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.GlassWindowNotFoundException;
 import it.polimi.ingsw.model.objective.PrivateObjective;
+import it.polimi.ingsw.model.objective.SetPublicObjective;
 import it.polimi.ingsw.model.table.glassWindow.GlassWindow;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Player is a concrete class representing a game's player. Its' main attributes are nickname, tokens, glassWindow,
  * privateObjective. It has also a boolean indicating whether it's connected or not.
  */
 public class Player {
+
+    private static final Logger logger = LogMaker.getLogger(Player.class.getName(), Level.ALL);
     private final String nickname;
     private int tokens;
     private Optional<GlassWindow> glassWindow;

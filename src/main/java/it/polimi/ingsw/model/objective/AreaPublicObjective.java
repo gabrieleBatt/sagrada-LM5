@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.objective;
 
+import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.controller.Lobby;
 import it.polimi.ingsw.model.exception.CellNotFoundException;
 import it.polimi.ingsw.model.exception.EmptyCellException;
 import it.polimi.ingsw.model.exception.IllegalObjectiveException;
@@ -7,10 +9,13 @@ import it.polimi.ingsw.model.table.glassWindow.GlassWindow;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class AreaPublicObjective extends PublicObjective {
 
+    private static final Logger logger = LogMaker.getLogger(AreaPublicObjective.class.getName(), Level.ALL);
     private List<Area> areaList;
     private int points;
 
@@ -70,7 +75,7 @@ public class AreaPublicObjective extends PublicObjective {
                 }
             }
         }catch (CellNotFoundException | EmptyCellException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
 
         for (int i = 0; i < actualMultiplicity.length; i++) {

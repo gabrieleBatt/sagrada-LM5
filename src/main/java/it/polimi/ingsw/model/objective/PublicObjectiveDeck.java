@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.objective;
 
+import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.model.exception.DeckTooSmallException;
 import it.polimi.ingsw.model.exception.IllegalObjectiveException;
 import it.polimi.ingsw.model.exception.InvalidJSONException;
@@ -17,9 +18,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PublicObjectiveDeck implements Deck {
 
+    private static final Logger logger = LogMaker.getLogger(PublicObjectiveDeck.class.getName(), Level.ALL);
     private static PublicObjectiveDeck publicObjectiveDeck = new PublicObjectiveDeck();
     private List<JSONObject> publicObjectives;
 
@@ -29,7 +33,7 @@ public class PublicObjectiveDeck implements Deck {
             Files.list(Paths.get("resources/ServerResources/objectives/public"))
                     .forEach((f) -> addCard(f.toFile()));
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
 
     }
@@ -39,7 +43,7 @@ public class PublicObjectiveDeck implements Deck {
         try {
             publicObjectives.add((JSONObject)parser.parse(new FileReader(file)));
         } catch (IOException | ParseException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
@@ -62,7 +66,7 @@ public class PublicObjectiveDeck implements Deck {
             try {
                 ret.add(readCard(publicObjectives.get(i)));
             } catch (InvalidJSONException e) {
-                System.out.println(e.getMessage());
+                logger.log(Level.WARNING, e.getMessage(), e);
             }
 
         }
@@ -145,7 +149,7 @@ public class PublicObjectiveDeck implements Deck {
         try {
             ret = new AreaPublicObjective(name, points, area, mult);
         } catch (IllegalObjectiveException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
 
 
@@ -176,7 +180,7 @@ public class PublicObjectiveDeck implements Deck {
             try {
                 ret.addArea(area, mult);
             } catch (IllegalObjectiveException e) {
-                System.out.println(e.getMessage());
+                logger.log(Level.WARNING, e.getMessage(), e);
             }
         }
 

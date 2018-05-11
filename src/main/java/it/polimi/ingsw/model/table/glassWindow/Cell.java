@@ -1,17 +1,23 @@
 package it.polimi.ingsw.model.table.glassWindow;
 
+import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.model.exception.EmptyCellException;
 import it.polimi.ingsw.model.exception.DieNotAllowedException;
+import it.polimi.ingsw.model.objective.SetPublicObjective;
 import it.polimi.ingsw.model.table.dice.Die;
 import it.polimi.ingsw.model.table.dice.DieColor;
 
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Cell is a concrete class representing a single cell of a glassWindow. It has information about restrictions and the
  * eventual presence of a die on.
  */
 public class Cell {
+
+    private static final Logger logger = LogMaker.getLogger(Cell.class.getName(), Level.ALL);
     private Optional<DieColor> colorRestriction;
     private Optional<Integer> numberRestriction;
     private Optional<Die> die;
@@ -129,7 +135,7 @@ public class Cell {
             try {
                 ret = ret + "contains a die:" + this.getDie().toString();
             } catch (EmptyCellException e) {
-                System.out.println(e.getMessage());
+                logger.log(Level.WARNING, e.getMessage(), e);
             }
         }else
             ret = ret + "is empty";

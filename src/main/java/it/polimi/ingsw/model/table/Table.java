@@ -1,12 +1,15 @@
 package it.polimi.ingsw.model.table;
 
 import it.polimi.ingsw.model.exception.PlayerNotFoundException;
+import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.model.objective.PublicObjective;
 import it.polimi.ingsw.model.table.dice.DiceBag;
 import it.polimi.ingsw.model.tool.Effect;
 import it.polimi.ingsw.model.tool.Tool;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Table is a concrete class representing the state of the game and offering a general prospecting on the game status.
@@ -14,6 +17,8 @@ import java.util.*;
  * the effects.
  */
 public class Table {
+
+    private static final Logger logger = LogMaker.getLogger(Table.class.getName(), Level.ALL);
     private final List<Player> players;
     private Set<PublicObjective> publicObjectives;
     private Set<Tool> tools;
