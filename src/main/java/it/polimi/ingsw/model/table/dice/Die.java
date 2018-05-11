@@ -1,7 +1,11 @@
 package it.polimi.ingsw.model.table.dice;
+import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.model.exception.NotValidNumberException;
+import it.polimi.ingsw.model.table.Player;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Die is the concrete class representing a die in the game. It is characterized by a specific color, a number (randomly
@@ -9,6 +13,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * regarding the die and the tools which can have an effect on it.
  */
 public class Die {
+
+    private static final Logger logger = LogMaker.getLogger(Die.class.getName(), Level.ALL);
     private final DieColor color;
     private int number;
     private final int id;
@@ -72,6 +78,7 @@ public class Die {
             throw new NotValidNumberException(number + " is not a valid number");
         }
         else this.number = number;
+        logger.log(Level.FINEST, "Die set to "+getId());
         return this;
     }
 
@@ -80,7 +87,7 @@ public class Die {
      */
     public void roll(){
         this.number = ThreadLocalRandom.current().nextInt(1, 6 + 1);
-
+        logger.log(Level.FINEST, "Die rolled to "+getId());
     }
 
     /**
@@ -93,6 +100,7 @@ public class Die {
             throw new NotValidNumberException("Die is already at the maximum value");
         else
             this.number++;
+        logger.log(Level.FINEST, "Die increased to "+getId());
         return this;
     }
 
@@ -106,6 +114,7 @@ public class Die {
             throw new NotValidNumberException("Die is already at the minimum value");
         else
             number--;
+        logger.log(Level.FINEST, "Die decreased to "+getId());
         return this;
     }
 
