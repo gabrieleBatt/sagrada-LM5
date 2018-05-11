@@ -68,6 +68,8 @@ public class Player {
      */
     public void setGlassWindow(GlassWindow glassWindow){
         this.glassWindow = Optional.of(glassWindow);
+        logger.log(Level.FINEST, "GlassWindow" + glassWindow.getName() + "have been set", this);
+
     }
 
     /**
@@ -84,6 +86,8 @@ public class Player {
      */
     public void setTokens(int tokens){
         this.tokens = tokens;
+        logger.log(Level.FINEST, tokens + "tokens have been set", this);
+
     }
 
     /**
@@ -100,6 +104,8 @@ public class Player {
      */
     public void addPrivateObjective (PrivateObjective newPrivateObjective){
         this.privateObjective.add(newPrivateObjective);
+        logger.log(Level.FINEST, "This private objective:" + newPrivateObjective.toString()+ "has been added", this);
+
     }
 
     /**
@@ -108,6 +114,8 @@ public class Player {
      */
     public void addPrivateObjective(Collection<PrivateObjective> newPrivateObjective){
         this.privateObjective.addAll(newPrivateObjective);
+        logger.log(Level.FINEST, "These private objectives:"+ newPrivateObjective.toString() + "have been added", this);
+
     }
 
     /**
@@ -116,6 +124,8 @@ public class Player {
      */
     public void setConnected(boolean connected) {
         this.connected = connected;
+        logger.log(Level.FINEST, "This player:" + nickname + " has been set", this);
+
     }
 
     /**

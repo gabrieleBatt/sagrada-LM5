@@ -44,6 +44,10 @@ public class RoundTrack {
         if (round <10) {
             round++;
             dice.add(new ArrayList<>(d));
+            logger.log(Level.FINEST, "This round: " + getRound()+(-1) + " just ended, these dice remained on the table: "+ d, this);
+            logger.log(Level.FINEST, " This round: " + getRound() + " is started ", this);
+
+
         }else
             throw new EndGameException("Game over, can't add\n"+d.toString());
 
@@ -68,6 +72,7 @@ public class RoundTrack {
             if(ar.contains(toRemove)){
                 ar.remove(toRemove);
                 ar.add(toPlace);
+                logger.log(Level.FINEST, "This die: " + toRemove + " has been changed with this other die: "+ toPlace, this);
                 return;
             }
         }

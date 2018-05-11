@@ -1,9 +1,12 @@
 package it.polimi.ingsw.server.model.table.dice;
 
+import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.model.exception.BagEmptyException;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * DiceBag is a concrete class representing the actual dice bag in the game: it contains all the left die, which are
@@ -11,6 +14,8 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class DiceBag {
     private List<Die> bag;
+    private static final Logger logger = LogMaker.getLogger(Die.class.getName(), Level.ALL);
+
 
     /**
      * Creates the dice bag and all the dice in it, 18 per each color
@@ -53,15 +58,17 @@ public class DiceBag {
         int randomNum = ThreadLocalRandom.current().nextInt(0, bag.size() );
         Die ret = bag.get(randomNum);
         bag.remove(randomNum);
+        logger.log(Level.FINEST, "drawn "+ ret.getId(), this);
         return ret;
     }
 
     /**
-     * Adds a die to the dice beg (tool effect)
+     * Adds a die to the dice bag (tool effect)
      * @param die object die placed in the dice bag
      */
     public void placeDie (Die die){
         bag.add(die);
+        logger.log(Level.FINEST, "This die has been placed in the diceBag: "+ die.getId(), this);
     }
 
     /**

@@ -45,7 +45,10 @@ public class PrivateObjectiveDeck implements Deck {
         private void addCard(File file) {
                 JSONParser parser = new JSONParser();
                 try {
-                    privateObjectives.add((JSONObject)parser.parse(new FileReader(file)));
+                    JSONObject js = (JSONObject)parser.parse(new FileReader(file));
+                    privateObjectives.add(js);
+                    logger.log(Level.FINEST,  "This private objective "+ js.get("name") +" has been added to privateObjectives", this);
+
                 } catch (IOException | ParseException e) {
                     logger.log(Level.WARNING, e.getMessage(), e);
                 }
@@ -70,6 +73,9 @@ public class PrivateObjectiveDeck implements Deck {
                 }
 
             }
+            logger.log(Level.FINEST, num + " private objectives have been drawn ", this);
+            logger.log(Level.FINEST, " These are private objectives added: " + ret, this);
+
             return ret;
         }
 

@@ -5,16 +5,17 @@ import java.util.logging.*;
 
 public class LogMaker {
 
+    private static final Level level = Level.OFF;
     private static FileHandler fh;
     private static ConsoleHandler ch;
 
     static {
         try {
             fh = new FileHandler("logs/serverLog.log");
-            fh.setLevel(Level.ALL);
+            fh.setLevel(level);
             fh.setFormatter(new SimpleFormatter());
             ch = new ConsoleHandler();
-            ch.setLevel(Level.ALL);
+            ch.setLevel(level);
         } catch (IOException e) {
             System.exit(-1);
         }
