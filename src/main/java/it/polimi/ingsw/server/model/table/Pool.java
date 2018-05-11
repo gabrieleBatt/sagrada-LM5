@@ -28,15 +28,17 @@ public class Pool {
 
     /**
      * Adds a list of die to the table
-     * @param diceOnTable parameter that has to be set
+     * @param diceOnTable parameter to be set
      */
     public void addDice(Collection<Die> diceOnTable){
         this.diceOnTable = new HashSet<>(diceOnTable);
+        logger.log(Level.FINEST, "These dice :" + diceOnTable + " have been added to the pool", this);
+
     }
 
     /**
      * Removes a die from the table
-     * @param die object die which has to be removed
+     * @param die object die has to be removed
      */
     public void takeDie(Die die){
         diceOnTable.remove(die);

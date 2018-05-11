@@ -46,6 +46,8 @@ public class Tool {
      */
     public void setUsed(boolean used) {
         this.used = used;
+        logger.log(Level.FINEST, "This tool: " + name+ " has been set used", this);
+
     }
 
     /**

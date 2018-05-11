@@ -47,6 +47,8 @@ public class Table {
      */
     public void setPublicObjective(Collection<PublicObjective> publicObjective){
         this.publicObjectives = new HashSet<>(publicObjective);
+        logger.log(Level.FINEST, "These public objectives: " + publicObjective+ " have been set", this);
+
     }
 
     /**
@@ -55,6 +57,8 @@ public class Table {
      */
     public void setTools(Collection<Tool> tools){
         this.tools = new HashSet<>(tools);
+        logger.log(Level.FINEST, "These tools: " + tools + " have been set", this);
+
     }
 
     /**
@@ -159,5 +163,7 @@ public class Table {
      */
     public void addEffect(Effect effect){
         effects.add(effect);
+        logger.log(Level.FINEST, "This effect: " + effect+ " has been added", this);
+
     }
 }
