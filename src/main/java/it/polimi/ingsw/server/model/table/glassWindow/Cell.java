@@ -64,6 +64,7 @@ public class Cell {
     public void placeDie(Die die, boolean ignoreRestriction) throws DieNotAllowedException {
         if(ignoreRestriction || isAllowed(die)){
             this.die = Optional.of(die);
+            logger.log(Level.FINEST, "This die "+ die.getId()+ " has been placed in this cell:" + this.getId(), this);
         }
         else
             throw new DieNotAllowedException(this.toString()+ "\n" + die.toString() + " is not allowed");

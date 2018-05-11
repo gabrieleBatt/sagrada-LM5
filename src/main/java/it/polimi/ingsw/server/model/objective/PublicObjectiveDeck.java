@@ -41,7 +41,9 @@ public class PublicObjectiveDeck implements Deck {
     private void addCard(File file) {
         JSONParser parser = new JSONParser();
         try {
-            publicObjectives.add((JSONObject)parser.parse(new FileReader(file)));
+            JSONObject js = (JSONObject)parser.parse(new FileReader(file));
+            publicObjectives.add(js);
+            logger.log(Level.FINEST,  "This public objective "+ js.get("name") +" has been added to publicObjectives", this);
         } catch (IOException | ParseException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }

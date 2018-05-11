@@ -54,6 +54,8 @@ public class AreaPublicObjective extends PublicObjective {
 
     public void addArea(List<Coordinate> area, List<List<Integer>> multiplicity) throws IllegalObjectiveException {
         areaList.add(new Area(area, multiplicity));
+        logger.log(Level.FINEST, "This area: " + area + " has been added to areaList", this);
+
     }
 
     private static boolean checkMultiplicityInArea(GlassWindow glassWindow, int row, int column, List<Coordinate> area, List<List<Integer>> multiplicity){
