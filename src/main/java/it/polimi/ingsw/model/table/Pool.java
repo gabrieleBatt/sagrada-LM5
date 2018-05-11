@@ -10,7 +10,7 @@ import java.util.Set;
  * Pool is a concrete class representing the dice "on the table" in a round.
  */
 public class Pool {
-    private Set<Die> diceOnTable;
+    private Set<Die> diceOnTable = new HashSet<>();
 
     /**
      * Creates the list of dice in the pool

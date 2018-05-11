@@ -49,6 +49,14 @@ public class Player {
     }
 
     /**
+     * Return true if there's a glass window, otherwise false
+     * @return true if there's a glass window, otherwise false
+     */
+    public boolean hasGlassWindow(){
+        return glassWindow.isPresent();
+    }
+
+    /**
      * Sets the glassWindow
      * @param glassWindow
      */

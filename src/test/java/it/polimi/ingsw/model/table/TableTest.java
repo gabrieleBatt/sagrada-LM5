@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.table;
 
+import it.polimi.ingsw.model.exception.PlayerNotFoundException;
 import it.polimi.ingsw.model.tool.Effect;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,5 +63,12 @@ class TableTest {
         table.addEffect(e);
         Assertions.assertEquals(1, table.getEffects().size());
         Assertions.assertTrue(table.getEffects().contains(e));
+    }
+
+    @DisplayName("Get players by name")
+    @Test
+    void getPlayer() throws PlayerNotFoundException {
+        Assertions.assertEquals(player1, table.getPlayer("p1"));
+        Assertions.assertThrows(PlayerNotFoundException.class, ()->table.getPlayer("p4"));
     }
 }
