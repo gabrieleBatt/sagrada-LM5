@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.rmiInterface.RemoteGameScreen;
+import it.polimi.ingsw.server.rmiInterface.RemoteGameScreen;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
