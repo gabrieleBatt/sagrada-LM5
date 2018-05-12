@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
 import it.polimi.ingsw.server.model.exception.BagEmptyException;
 import it.polimi.ingsw.server.model.exception.DeckTooSmallException;
 import it.polimi.ingsw.server.model.exception.EndGameException;

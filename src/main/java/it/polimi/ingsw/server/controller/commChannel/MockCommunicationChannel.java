@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.controller;
+package it.polimi.ingsw.server.controller.commChannel;
 
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 
@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Class used for testing; returns plausible object in each method.
  * Simulates a client behaviour.
  */
-public class MockCommunicationChannel extends CommunicationChannel{
+public class MockCommunicationChannel implements CommunicationChannel {
     String nickName;
 
     /**
