@@ -19,6 +19,7 @@ import it.polimi.ingsw.server.model.tool.Tool;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public class DefaultRules implements Rules {
 
@@ -30,6 +31,10 @@ public class DefaultRules implements Rules {
         return defaultRules;
     }
 
+    /**
+     * Gets the list of setup game actions.
+     * @return list of setup game actions.
+     */
     @Override
     public List<ActionCommand> getSetupGameActions() {
         List<ActionCommand> ret = new ArrayList<>();
@@ -47,6 +52,11 @@ public class DefaultRules implements Rules {
         };
     }
 
+    /**
+     * Gives an action command that deals the public objective on table.
+     * @param pubObjPerGame int, amount of public objective to set on table.
+     * @return ActionCommand that deals the public objective on table.
+     */
     ActionCommand dealPublicObjective(int pubObjPerGame) {
         return actionReceiver -> {
             List<PublicObjective> publicObjectives = null;
@@ -56,6 +66,10 @@ public class DefaultRules implements Rules {
         };
     }
 
+    /**
+     * Gives an action command that deals tokens to every player.
+     * @return ActionCommand that deals tokens to every player.
+     */
     protected ActionCommand giveTokens() {
         return actionReceiver -> {
             List<Player> players = actionReceiver.getTable().getPlayers();
@@ -67,6 +81,13 @@ public class DefaultRules implements Rules {
     }
 
 
+    /**
+     * Gives an action command that deal some glass windows to every player
+     * and catch the chosen one.
+     * @param perPlayer int, amount of glass window given to every player.
+     * @return ActionCommand that deal some glass windows to every player
+     * and catch the chosen one.
+     */
     protected ActionCommand dealGlassWindow(int perPlayer) {
         return actionReceiver -> {
             int playersSize = actionReceiver.getTable().getPlayers().size();
@@ -84,6 +105,11 @@ public class DefaultRules implements Rules {
         };
     }
 
+    /**
+     * Gives an action command that deals some private objective to every player.
+     * @param objPerPlayer amount of private objective to give to every player.
+     * @return ActionCommand that deals some private objective to every player.
+     */
     protected ActionCommand dealPrivateObjective(int objPerPlayer){
         return actionReceiver -> {
             int players = actionReceiver.getTable().getPlayers().size();
@@ -95,6 +121,10 @@ public class DefaultRules implements Rules {
         };
     }
 
+    /**
+     * Gets the setup round action.
+     * @return setup round action.
+     */
     @Override
     public ActionCommand getSetupRoundAction() {
         return actionReceiver -> {
@@ -105,11 +135,20 @@ public class DefaultRules implements Rules {
         };
     }
 
+    /**
+     * Gets the list of turn actions of a player.
+     * @param turnPlayer player whose turn is.
+     * @return list of turn actions of a player.
+     */
     @Override
     public List<ActionCommand> getTurnActions(Player turnPlayer) {
         return null;
     }
 
+    /**
+     * Gets the list of end round actions.
+     * @return list of end round actions.
+     */
     @Override
     public ActionCommand getEndRoundAction() {
         return actionReceiver -> {
@@ -121,18 +160,37 @@ public class DefaultRules implements Rules {
         };
     }
 
+    /**
+     * Gets the list of end game actions.
+     * @return list of end game actions.
+     */
     @Override
     public List<ActionCommand> getEndGameActions() {
         return null;
     }
 
+    /**
+     * Gets the list of draft actions.
+     * @param marker String, marker of the die drafted.
+     * @param dieColor DieColor, color of the die to draft.
+     * @param dieNumber Integer, numeric value of the die to draft.
+     * @return list of draft actions.
+     */
     @Override
-    public ActionCommand getDraftAction(String id, DieColor dieColor, int dieNumber) {
+    public ActionCommand getDraftAction(String marker, Optional<DieColor> dieColor, Optional<Integer> dieNumber) {
         return null;
     }
 
+    /**
+     * Gets the list of place actions.
+     * @param marker String, marker of the die placed.
+     * @param adjacencyRestriction boolean, true if there are adjacency restrictions.
+     * @param coloRestriction boolean, true if there are color restrictions.
+     * @param numberRestriction boolean, true if there are numeric restrictions.
+     * @return list of place actions.
+     */
     @Override
-    public ActionCommand getPlaceAction(String id, boolean adiacencyRestriction, boolean coloRestriction, boolean numberRestriction) {
+    public ActionCommand getPlaceAction(String marker, boolean adjacencyRestriction, boolean coloRestriction, boolean numberRestriction) {
         return null;
     }
 

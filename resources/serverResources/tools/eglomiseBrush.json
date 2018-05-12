@@ -1,0 +1,10 @@
+{
+  "name": "Eglomise Brush",
+  "conditions":["with drafting"],
+  "actions":1,
+  "action1": {
+    "type": "move",
+    "marker": "d1",
+    "restriction":["CLOSE", "NUMBER"]
+  }
+}

@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.model.exception.*;
-import it.polimi.ingsw.server.model.table.Player;
-import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,8 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class DefaultRulesTest {
 
@@ -21,8 +17,8 @@ class DefaultRulesTest {
     @Test
     void createGame(){
         List<CommunicationChannel> cc = new ArrayList<>();
-        cc.add(new MockComunicationChannell("player1"));
-        cc.add(new MockComunicationChannell("player2"));
+        cc.add(new MockCommunicationChannel("player1"));
+        cc.add(new MockCommunicationChannel("player2"));
         game = new Game(cc);
     }
 

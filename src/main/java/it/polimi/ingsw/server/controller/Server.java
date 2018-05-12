@@ -64,12 +64,16 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
 
     private static void socketLogin(Socket socket){
         try {
-            String nickname;
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            nickname = in.readLine();
-            logger.log(Level.FINE, nickname + " logged!");
-            synchronized (lobby){
-                lobby.addChannel(new SocketCommunicationChannel(socket, nickname));
+            String loginMessage = in.readLine();
+            if(loginMessage.substring(0, 6).equals("login|")) {
+                String nickname = loginMessage.substring(6, loginMessage.length());
+                logger.log(Level.FINE, nickname + " logged!");
+                synchronized (lobby) {
+                    lobby.addChannel(new SocketCommunicationChannel(socket, nickname));
+                }
+            }else{
+                throw new IOException();
             }
         } catch (IOException e) {
             logger.log(Level.WARNING, "Socket login failed", e);

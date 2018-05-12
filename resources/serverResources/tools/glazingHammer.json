@@ -1,0 +1,8 @@
+{
+  "name": "Glazing Hammer",
+  "conditions":["beforeDrafting" , "secondTurn"],
+  "actions":3,
+  "action1": {
+    "type": "rollPoll"
+  }
+}
