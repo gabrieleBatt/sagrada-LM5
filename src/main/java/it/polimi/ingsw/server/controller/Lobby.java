@@ -14,7 +14,7 @@ public class Lobby {
 
     private static final Logger logger = LogMaker.getLogger(Lobby.class.getName(), Level.ALL);
     private static final int timerSeconds = 10;
-    private Set<it.polimi.ingsw.server.controller.CommunicationChannel> commChannelSet;
+    private Set<CommunicationChannel> commChannelSet;
     private Timer timer;
 
     public Lobby(){
@@ -25,7 +25,7 @@ public class Lobby {
      * adds a channel, a client, to the lobby
      * @param communicationChannel
      */
-    public void addChannel(it.polimi.ingsw.server.controller.CommunicationChannel communicationChannel){
+    public void addChannel(CommunicationChannel communicationChannel){
         logger.log(Level.FINER, "Adding channel to lobby", communicationChannel);
         commChannelSet.add(communicationChannel);
         if(commChannelSet.size() > 1){
@@ -42,7 +42,7 @@ public class Lobby {
      * Returns a copied set og the channels in the lobby
      * @return the collection of channels
      */
-    public Collection<it.polimi.ingsw.server.controller.CommunicationChannel> getCommChannelSet() {
+    public Collection<CommunicationChannel> getCommChannelSet() {
         return new HashSet<>(commChannelSet);
     }
 

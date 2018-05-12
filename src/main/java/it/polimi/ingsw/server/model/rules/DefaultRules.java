@@ -1,21 +1,15 @@
-package it.polimi.ingsw.server.controller;
+package it.polimi.ingsw.server.model.rules;
 
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
-import it.polimi.ingsw.server.model.exception.BagEmptyException;
-import it.polimi.ingsw.server.model.exception.DeckTooSmallException;
-import it.polimi.ingsw.server.model.exception.EndGameException;
-import it.polimi.ingsw.server.model.exception.GlassWindowNotFoundException;
 import it.polimi.ingsw.server.model.objective.PrivateObjective;
 import it.polimi.ingsw.server.model.objective.PrivateObjectiveDeck;
 import it.polimi.ingsw.server.model.objective.PublicObjective;
 import it.polimi.ingsw.server.model.objective.PublicObjectiveDeck;
-import it.polimi.ingsw.server.model.rules.ActionCommand;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindowDeck;
-import it.polimi.ingsw.server.model.tool.Tool;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -142,7 +136,7 @@ public class DefaultRules implements Rules {
      * @return list of turn actions of a player.
      */
     @Override
-    public List<ActionCommand> getTurnActions(Player turnPlayer) {
+    public ActionCommand getTurnAction(Player turnPlayer) {
         return null;
     }
 
