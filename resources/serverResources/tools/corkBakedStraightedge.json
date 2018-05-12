@@ -1,0 +1,16 @@
+{
+  "name": "Cork-Baked Straightedge",
+  "conditions":["beforeDrafting"],
+  "actions":2,
+  "action1": {
+    "type": "draft",
+    "marker": "d1",
+    "color": "ANY",
+    "number": "ANY"
+  },
+  "action2": {
+    "type": "place",
+    "marker": "d1",
+    "restriction":["COLOR", "NUMBER"]
+  }
+}

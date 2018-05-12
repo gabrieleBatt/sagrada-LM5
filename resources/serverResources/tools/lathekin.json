@@ -1,9 +1,8 @@
 {
   "name": "Lathekin",
-  "conditions":["with drafting"],
+  "conditions":["withDrafting"],
   "actions":1,
   "action1": {
-
     "type": "move",
     "move": 2,
     "move1": {

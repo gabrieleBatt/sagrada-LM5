@@ -1,0 +1,26 @@
+{
+  "name": "Grinding Stone",
+  "conditions":["beforeDrafting"],
+  "actions":3,
+  "action1": {
+    "type": "draft",
+    "marker": "d1",
+    "color": "ANY",
+    "number": "ANY"
+  },
+  "action2": {
+    "type": "set",
+    "marker": "d1",
+    "set1": [6],
+    "set2": [5],
+    "set3": [4],
+    "set4": [3],
+    "set5": [2],
+    "set6": [1]
+  },
+  "action3": {
+    "type": "place",
+    "marker": "d1",
+    "restriction":["CLOSE", "COLOR", "NUMBER"]
+  }
+}
