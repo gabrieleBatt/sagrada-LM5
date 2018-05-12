@@ -1,0 +1,22 @@
+{
+  "name": "Lens Cutter",
+  "conditions":["beforeDrafting"],
+  "actions":3,
+  "action1": {
+    "type": "draft",
+    "marker": "d1",
+    "color": "ANY",
+    "number": "ANY"
+  },
+  "action2": {
+    "type": "swap",
+    "with": "RoundTrack",
+    "color": "ANY",
+    "number": "ANY"
+  },
+  "action3": {
+    "type": "place",
+    "marker": "d1",
+    "restriction":["CLOSE", "COLOR", "NUMBER"]
+  }
+}

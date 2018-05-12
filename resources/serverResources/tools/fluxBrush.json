@@ -1,0 +1,26 @@
+{
+  "name": "Flux Brush",
+  "conditions":["beforeDrafting"],
+  "actions":3,
+  "action1": {
+    "type": "draft",
+    "marker": "d1",
+    "color": "ANY",
+    "number": "ANY"
+  },
+  "action2": {
+    "type": "random",
+    "marker": "d1",
+    "random1": [1,2,3,4,5,6],
+    "random2": [1,2,3,4,5,6],
+    "random3": [1,2,3,4,5,6],
+    "random4": [1,2,3,4,5,6],
+    "random5": [1,2,3,4,5,6],
+    "random6": [1,2,3,4,5,6]
+  },
+  "action3": {
+    "type": "place",
+    "marker": "d1",
+    "restriction":["CLOSE", "COLOR", "NUMBER"]
+  }
+}
