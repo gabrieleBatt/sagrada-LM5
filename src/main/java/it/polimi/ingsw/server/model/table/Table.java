@@ -166,4 +166,5 @@ public class Table {
         logger.log(Level.FINEST, "This effect: " + effect+ " has been added", this);
 
     }
+
 }

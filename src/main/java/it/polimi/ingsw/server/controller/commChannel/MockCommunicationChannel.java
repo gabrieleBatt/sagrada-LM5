@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.controller.commChannel;
 
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -63,9 +64,13 @@ public class MockCommunicationChannel implements CommunicationChannel {
      * @return String ids, the one randomly chosen.
      */
     @Override
-    public String selectOption(List<String> ids) {
-        int index = ThreadLocalRandom.current().nextInt(0, ids.size());
-        return ids.get(index);
+    public String selectOption(List<String> ids, boolean canSkip, boolean undoEnabled) {
+        List<String> idList = new ArrayList<>(ids);
+        if (undoEnabled)
+            idList.add("undo");
+        if (canSkip)
+            idList.add("skip");
+        return idList.get(ThreadLocalRandom.current().nextInt(0, idList.size()));
     }
 
     /**
@@ -74,8 +79,12 @@ public class MockCommunicationChannel implements CommunicationChannel {
      * @return String option, the one randomly chosen.
      */
     @Override
-    public String chooseFrom(List<String> options) {
-        int index = ThreadLocalRandom.current().nextInt(0, options.size());
-        return options.get(index);
+    public String chooseFrom(List<String> options, String message, boolean canSkip, boolean undoEnabled) {
+        List<String> op = new ArrayList<>(options);
+        if (undoEnabled)
+            op.add("undo");
+        if (canSkip)
+            op.add("skip");
+        return op.get(ThreadLocalRandom.current().nextInt(0, op.size()));
     }
 }

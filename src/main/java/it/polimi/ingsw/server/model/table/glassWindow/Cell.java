@@ -7,6 +7,7 @@ import it.polimi.ingsw.server.model.objective.SetPublicObjective;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -148,5 +149,9 @@ public class Cell {
      */
     public void dump(){
         System.out.println(this);
+    }
+
+    public void placeOptionalDie(Optional<Die> die){
+        this.die=die;
     }
 }

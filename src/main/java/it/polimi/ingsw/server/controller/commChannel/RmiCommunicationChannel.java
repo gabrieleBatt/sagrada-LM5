@@ -32,12 +32,12 @@ public class RmiCommunicationChannel implements CommunicationChannel {
     }
 
     @Override
-    public String selectOption(List<String> ids) {
+    public String selectOption(List<String> ids, boolean canSkip, boolean undoEnabled) {
         return null;
     }
 
     @Override
-    public String chooseFrom(List<String> options) {
+    public String chooseFrom(List<String> options, String message, boolean canSkip, boolean undoEnabled) {
         return null;
     }
 }

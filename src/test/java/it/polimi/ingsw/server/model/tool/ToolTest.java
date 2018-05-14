@@ -9,6 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 class ToolTest {
 
     Tool tool;
@@ -17,8 +20,10 @@ class ToolTest {
     @BeforeEach
     @Test
     void setup(){
+        List<ActionCommand> acl = new ArrayList<>();
         actionCommand = actionReceiver -> {};
-        tool = new Tool(actionCommand, "test");
+        acl.add(actionCommand);
+        tool = new Tool(acl, "test");
     }
 
     @DisplayName("Get tool name")
@@ -30,7 +35,7 @@ class ToolTest {
     @DisplayName("Get tool action")
     @Test
     void getActionCommand() {
-        Assertions.assertEquals(actionCommand, tool.getActionCommand());
+        Assertions.assertTrue(tool.getActionCommandList().contains(actionCommand));
     }
 
     @DisplayName("Use tool")

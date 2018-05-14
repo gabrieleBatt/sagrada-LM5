@@ -3,23 +3,21 @@ package it.polimi.ingsw.server.model.table;
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.model.table.dice.Die;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Pool is a concrete class representing the dice "on the table" in a round.
  */
-public class Pool {
+public class Pool implements Memento {
 
     private static final Logger logger = LogMaker.getLogger(Pool.class.getName(), Level.ALL);
-
+    private Stack<List<Die>> poolMemento = new Stack<>();
     private Set<Die> diceOnTable = new HashSet<>();
 
     /**
-     * Creates the list of dice in the pool
+     * Gets the list of dice in the pool
      * @return a list of dice
      */
     public Collection<Die> getDice(){
@@ -70,5 +68,16 @@ public class Pool {
      */
     public void dump(){
         System.out.println(this);
+    }
+
+    @Override
+    public void addMemento() {
+        poolMemento.add((List<Die>)this.diceOnTable);
+
+    }
+
+    @Override
+    public void getMemento() {
+        this.addDice(poolMemento.peek());
     }
 }

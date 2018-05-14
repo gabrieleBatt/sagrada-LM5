@@ -1,23 +1,26 @@
 package it.polimi.ingsw.server.model.table;
 
 import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.server.model.exception.EmptyCellException;
 import it.polimi.ingsw.server.model.exception.EndGameException;
 import it.polimi.ingsw.server.model.table.dice.Die;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Round track is a concrete class representing the round track's game. it has some dice on every cell of the ended turn;
  */
-public class RoundTrack {
+public class RoundTrack implements Memento {
 
     private static final Logger logger = LogMaker.getLogger(RoundTrack.class.getName(), Level.ALL);
     private int round;
     private List<ArrayList<Die>> dice;
+    private Stack<List<ArrayList<Die>>> roundTrackMemento;
 
     /**
      * Creates a roundTrack
@@ -25,6 +28,7 @@ public class RoundTrack {
     public RoundTrack() {
         round = 1;
         dice = new ArrayList<>();
+        roundTrackMemento = new Stack<>();
     }
 
     /**
@@ -96,4 +100,20 @@ public class RoundTrack {
         System.out.println(this);
     }
 
+    @Override
+    public void addMemento() {
+        List<ArrayList<Die>> newMemento = new ArrayList<>();
+        for(int i= 0; i<10; i++) {
+            ArrayList<Die> list = new ArrayList<>();
+            for(Die die:this.getDice(i))
+                list.add(die);
+            newMemento.add(list);
+        }
+        roundTrackMemento.add(newMemento);
+    }
+
+    @Override
+    public void getMemento() {
+        this.dice = roundTrackMemento.peek();
+    }
 }

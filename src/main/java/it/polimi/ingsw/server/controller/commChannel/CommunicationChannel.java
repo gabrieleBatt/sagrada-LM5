@@ -35,12 +35,12 @@ public interface CommunicationChannel{
      * @param ids List of ids given.
      * @return String ids, the one chosen.
      */
-    String selectOption(List<String> ids);
+    String selectOption(List<String> ids, boolean canSkip, boolean undoEnabled);
 
     /**
      * Returns the chosen option among the given.
      * @param options List of options given.
      * @return String option, the one chosen.
      */
-    String chooseFrom(List<String> options);
+    String chooseFrom(List<String> options, String message, boolean canSkip, boolean undoEnabled);
 }
