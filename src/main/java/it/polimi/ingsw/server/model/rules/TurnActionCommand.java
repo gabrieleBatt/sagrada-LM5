@@ -13,9 +13,10 @@ import java.util.stream.Collectors;
 
 public class TurnActionCommand implements ActionCommand{
 
-    private static final String useTool = "Usa un tool";
-    private static final String drawDie = "Pesca un dado";
+    private static final String useTool = "UsaUnTool";
+    private static final String drawDie = "PescaUnDado";
     private static boolean reset;
+    private static boolean skip;
     private static CommunicationChannel cc;
 
     private Player player;
@@ -23,30 +24,32 @@ public class TurnActionCommand implements ActionCommand{
     public TurnActionCommand(Player player){
         this.player = player;
         this.reset = false;
+        this.skip = false;
     }
 
     @Override
-    public void execute(Game actionReceiver) throws EndGameException, BagEmptyException, DeckTooSmallException, GlassWindowNotFoundException, PlayerNotFoundException {
+    public void execute(Game actionReceiver) throws EndGameException, BagEmptyException, DeckTooSmallException, GlassWindowNotFoundException, PlayerNotFoundException, CellNotFoundException, DieNotAllowedException {
         backUp(actionReceiver);
         do {
             reset = false;
+            skip = false;
             cc = actionReceiver.getCommChannels().stream().filter(c -> c.getNickname().equals(player.getNickname())).findFirst().get();
             List<String> options = new ArrayList<>();
-            options.add(useTool);
+            //options.add(useTool);
             options.add(drawDie);
-            String message1 = "Seleziona la tua prossima mossa";
-            String message2 = "Cosa vuoi fare ora?";
+            String message1 = "SelezionaLaTuaProssimaMossa";
+            String message2 = "CosaVuoiFareOra?";
             String actionChosen = cc.chooseFrom(options, message1, true, false);
             doActionChosen(actionChosen,actionReceiver);
-            if(!reset) {
+            if(!reset && !skip) {
                 options.remove(actionChosen);
                 actionChosen = cc.chooseFrom(options, message2, true, true);
                 doActionChosen(actionChosen, actionReceiver);
             }
-        }while(!reset);
+        }while(reset);
     }
 
-    private void doActionChosen(String actionChosen, Game actionReceiver) throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, PlayerNotFoundException {
+    private void doActionChosen(String actionChosen, Game actionReceiver) throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, PlayerNotFoundException, CellNotFoundException, DieNotAllowedException {
         switch (actionChosen) {
             case useTool:
                 String toolChosen = cc.selectOption(actionReceiver.getTable().getTools().stream().map(t -> t.getName()).collect(Collectors.toList()), false, true);
@@ -63,12 +66,12 @@ public class TurnActionCommand implements ActionCommand{
                 break;
 
             case drawDie:
-                DefaultRules.getDefaultRules().getDraftAction("dieChosen", Optional.empty(), Optional.empty()).execute(actionReceiver);
+                DefaultRules.getDefaultRules().getDraftAction("dieChosen", Optional.empty(), Optional.empty(), player).execute(actionReceiver);
                 if(!reset)
-                    //è l'azione a cambiare il reset se a get place action viene risposto undo
-                    DefaultRules.getDefaultRules().getPlaceAction("dieChosen", true, true, true);
+                    DefaultRules.getDefaultRules().getPlaceAction("dieChosen", true, true, true, player).execute(actionReceiver);
                 break;
-
+            case "skip": skip = true; break;
+            case "undo": reset(actionReceiver); break;
         }
 
     }

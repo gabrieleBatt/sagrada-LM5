@@ -7,14 +7,13 @@ import it.polimi.ingsw.server.model.objective.*;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
+import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindowDeck;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class DefaultRules implements Rules {
 
@@ -131,7 +130,7 @@ public class DefaultRules implements Rules {
             Collection<Die> drawnDice = actionReceiver.getTable().getDiceBag().drawDice(players*2+1);
             actionReceiver.getTable().getPool().setDice(drawnDice);
             actionReceiver.updateAll();
-            Game.getLogger().log(Level.FINE, "dice drawn\n"+drawnDice.toString(), actionReceiver);
+            Game.getLogger().log(Level.FINE, "dice drawn " + drawnDice, actionReceiver);
         };
     }
 
@@ -183,11 +182,28 @@ public class DefaultRules implements Rules {
      * @param marker String, marker of the die drafted.
      * @param dieColor DieColor, color of the die to draft.
      * @param dieNumber Integer, numeric value of the die to draft.
+     * @param player Player, the one who drafts a die.
      * @return list of draft actions.
      */
     @Override
-    public ActionCommand getDraftAction(String marker, Optional<DieColor> dieColor, Optional<Integer> dieNumber) {
-        return actionReceiver -> {
+    public ActionCommand getDraftAction(String marker, Optional<DieColor> dieColor, Optional<Integer> dieNumber, Player player) {
+        return (Game actionReceiver) -> {
+            CommunicationChannel cc = actionReceiver.getCommChannels().stream().filter(c -> c.getNickname().equals(player.getNickname())).findFirst().get();
+            List<Die> dieOptions = new ArrayList<>(actionReceiver.getTable().getPool().getDice());
+            if(dieColor.isPresent())
+                dieOptions = dieOptions.stream().filter(d -> Optional.of(d.getColor()).equals(dieColor)).collect(Collectors.toList());
+            if(dieNumber.isPresent())
+                dieOptions = dieOptions.stream().filter(d->Optional.of(d.getNumber()) == dieNumber).collect(Collectors.toList());
+            List<String> options = dieOptions.stream().map(Die::getId).collect(Collectors.toList());
+            String dieChosen = cc.selectOption(options, false, true);
+            if (dieChosen.equals("undo")) {
+                actionReceiver.resetTurn();
+            }else {
+                Die die = dieOptions.stream().filter(d -> d.getId().equals(dieChosen)).findFirst().get();
+                actionReceiver.getTable().getPool().takeDie(die);
+                actionReceiver.getMap().put(marker, die);
+            }
+            Game.getLogger().log(Level.FINE,"Drafted die "+ dieChosen, this);
         };
     }
 
@@ -197,11 +213,28 @@ public class DefaultRules implements Rules {
      * @param adjacencyRestriction boolean, true if there are adjacency restrictions.
      * @param coloRestriction boolean, true if there are color restrictions.
      * @param numberRestriction boolean, true if there are numeric restrictions.
+     * @param player Player, the one who places a die.
      * @return list of place actions.
      */
     @Override
-    public ActionCommand getPlaceAction(String marker, boolean adjacencyRestriction, boolean coloRestriction, boolean numberRestriction) {
+    public ActionCommand getPlaceAction(String marker, boolean adjacencyRestriction, boolean coloRestriction, boolean numberRestriction, Player player) {
         return actionReceiver -> {
+            CommunicationChannel cc = actionReceiver.getCommChannels().stream().filter(c -> c.getNickname().equals(player.getNickname())).findFirst().get();
+            Die die = actionReceiver.getMap().get(marker);
+            List<String> cells = new ArrayList<>(player.getGlassWindow().availableCells(die, !adjacencyRestriction))
+                    .stream().filter(c -> c.isAllowed(die.getColor()) || !coloRestriction)
+                    .filter(c -> c.isAllowed(die.getNumber()) || !numberRestriction)
+                    .map(Cell::getId).collect(Collectors.toList());
+            String positionChosen = cc.selectOption(cells,false,true);
+            if (positionChosen.equals("undo")) {
+                actionReceiver.resetTurn();
+            }else {
+                player.getGlassWindow().getCellList().stream()
+                        .filter(c -> c.getId().equals(positionChosen)).findFirst().get()
+                        .placeDie(die, (coloRestriction||numberRestriction));
+            }
+            Game.getLogger().log(Level.FINE,"Placed die "+ die.toString() + " from "+ positionChosen, this);
+
         };
     }
 

@@ -63,7 +63,7 @@ public class Cell {
      * @throws DieNotAllowedException :Exception thrown if die can't be placed due to restrictions
      */
     public void placeDie(Die die, boolean ignoreRestriction) throws DieNotAllowedException {
-        if(ignoreRestriction || isAllowed(die)){
+        if(ignoreRestriction || (isAllowed(die.getNumber()) && isAllowed(die.getColor()))){
             this.die = Optional.of(die);
             logger.log(Level.FINEST, "This die "+ die.getId()+ " has been placed in this cell:" + this.getId(), this);
         }
@@ -93,12 +93,20 @@ public class Cell {
 
     /**
      * Checks if a die cen be placed in the cell despite eventual restrictions
-     * @param die object die to be placed
+     * @param number numeric value of die to place
      * @return: true if the value can be placed in the cell
      */
-    public boolean isAllowed(Die die){
-        return !((colorRestriction.isPresent() && die.getColor() != colorRestriction.get()) ||
-        (numberRestriction.isPresent() && die.getNumber() != numberRestriction.get()));
+    public boolean isAllowed(Integer number){
+        return !(numberRestriction.isPresent() && number != numberRestriction.get());
+    }
+
+    /**
+     * Checks if a die cen be placed in the cell despite eventual restrictions
+     * @param color color of die to place
+     * @return: true if the value can be placed in the cell
+     */
+    public boolean isAllowed(DieColor color){
+        return !((colorRestriction.isPresent() && color != colorRestriction.get()));
     }
 
     /**

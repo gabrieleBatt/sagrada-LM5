@@ -198,7 +198,7 @@ public class Player implements Memento {
             try {
                 this.getGlassWindow().getCellList().get(i).placeOptionalDie(dieList.get(i));
             } catch (GlassWindowNotFoundException e) {
-                System.out.println(e.getMessage());
+                logger.log(Level.WARNING,e.getMessage(),e);
             }
         }
     }

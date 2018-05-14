@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class DiceBag implements Memento{
     private List<Die> bag;
-    private static final Logger logger = LogMaker.getLogger(Die.class.getName(), Level.ALL);
+    private static final Logger logger = LogMaker.getLogger(DiceBag.class.getName(), Level.ALL);
     private Stack<List<Die>> diceBagMemento;
 
 

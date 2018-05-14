@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
 import it.polimi.ingsw.server.model.rules.ActionCommand;
+import it.polimi.ingsw.server.model.table.Memento;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Table;
 import it.polimi.ingsw.server.model.table.dice.Die;
@@ -20,22 +21,10 @@ public class Game {
     private Table table;
     private List<CommunicationChannel> commChannels;
     private List<Player> players;
-    /*private HashMap<String, Die> dice;
+    private HashMap<String, Die> dice;
 
     //TODO
 
-    restart hashmap da chiamare nel turn
-    public static Logger getLogger()
-    {
-        dice.put("d1", dado)
-
-        return logger;
-    }
-    */
-    /**
-     * Creates a game, setting players and table.
-     * @param commChannels Collection of communication channel, one per player.
-     */
     public Game(Collection<CommunicationChannel> commChannels){
         this.commChannels = new ArrayList<>(commChannels);
         players = new ArrayList<>();
@@ -43,6 +32,20 @@ public class Game {
             players.add(new Player(cc.getNickname()));
         }
         this.table = new Table(players);
+        this.dice = new HashMap<>();
+    }
+
+    //TODO
+    public void resetTurn(){
+
+    }
+
+    /**
+     * Gets the HashMap of chosen die.
+     * @return HashMap of chosen die.
+     */
+    public HashMap<String,Die> getMap(){
+        return this.dice;
     }
 
     /**

@@ -228,7 +228,7 @@ public class GlassWindow {
             if(c.isOccupied())
                 return false;
         }
-        return  true;
+        return true;
     }
 
     /**

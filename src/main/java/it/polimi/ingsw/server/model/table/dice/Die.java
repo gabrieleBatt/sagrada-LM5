@@ -137,7 +137,7 @@ public class Die {
      */
     @Override
     public String toString(){
-        return ("Die color:" + this.color + "Die value" + this.number + "Die id" + this.id);
+        return getId();
     }
 
     /**
