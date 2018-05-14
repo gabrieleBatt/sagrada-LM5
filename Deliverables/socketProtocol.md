@@ -14,8 +14,9 @@ c: optionSelected \<optionChosen>
 s: selectFrom \<message> \<option> [\<additionalOption>] [-s] [-u]\
 c: selected \<option>
 
-s: update [-p \<diceList>] [-rt \<diceList>] [-t \<toolList>] [-pub \<pubObjList>] 
-	[-prv \<prvObjList>] [-wl \<windowList>] [-tk \<tokenList>] 
-	[-w [\<nickname>] \<diceList> ] [-pl \<nicknameList>]
+s: update [-p \<diceList>] [-rt \<diceList> (round1:1R1, round2:3C4 ,...)] [-t \<toolList> (toolName-used)]
+    [-pub \<pubObjList>] 
+	[-prv \<prvObjList>] [-tk [\<nickname>] \<token>] 
+	[-w [\<nickname>] \<diceList> \<window>] [-pl \<nicknameList>]
 
-
+s: endGame \<nickname-score> \<nickname-score> [\<nickname-score>] (nickname1-57, nickname2-48) 
