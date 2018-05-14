@@ -49,7 +49,7 @@ public class TurnActionCommand implements ActionCommand{
     private void doActionChosen(String actionChosen, Game actionReceiver) throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, PlayerNotFoundException {
         switch (actionChosen) {
             case useTool:
-                String toolChosen = cc.selectOption(actionReceiver.getTable().getTools().stream().map(t -> t.getName()).collect(Collectors.toList()), false, true);
+                String toolChosen = cc.selectOption(actionReceiver.getTable().getTools().stream().map(t -> t.getName()).collect(Collectors.toList()), "table", false, true);
                 if(toolChosen.equals("undo"))
                     this.reset(actionReceiver);
                 if(!reset){

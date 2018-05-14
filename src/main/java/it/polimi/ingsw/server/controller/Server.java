@@ -15,8 +15,13 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Server extends UnicastRemoteObject implements RemoteServer {
 
@@ -24,7 +29,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
     private static final int rmiPortNumber = 1100;
     private static final int socketPortNumber = 1101;
     private static final Lobby lobby = new Lobby();
-
+    private static final long  loginTime = 10;
 
 
     private Server() throws RemoteException {
@@ -65,15 +70,25 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
     private static void socketLogin(Socket socket){
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String loginMessage = in.readLine();
-            if(loginMessage.substring(0, 6).equals("login|")) {
-                String nickname = loginMessage.substring(6, loginMessage.length());
-                logger.log(Level.FINE, nickname + " logged!");
-                synchronized (lobby) {
-                    lobby.addChannel(new SocketCommunicationChannel(socket, nickname));
+            String loginMessage;
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+
                 }
-            }else{
-                throw new IOException();
+            }, loginTime * 1000);
+
+            if((loginMessage = in.readLine()) != null) {
+                List<String> streamList = Stream.of(loginMessage.split(" ")).map(String::new).filter(x -> !x.equals("")).collect(Collectors.toList());
+                if (streamList.get(0).equals("login")) {
+                    String nickname = streamList.get(1);
+                    logger.log(Level.FINE, nickname + " logged!");
+                    synchronized (lobby) {
+                        lobby.addChannel(new SocketCommunicationChannel(socket, nickname));
+                    }
+                } else {
+                    throw new IOException();
+                }
             }
         } catch (IOException e) {
             logger.log(Level.WARNING, "Socket login failed", e);

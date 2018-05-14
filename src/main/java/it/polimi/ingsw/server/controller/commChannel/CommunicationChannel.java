@@ -30,12 +30,17 @@ public interface CommunicationChannel{
      */
     GlassWindow chooseWindow(List<GlassWindow> glassWindows);
 
+
+    //TODO
     /**
-     * Returns the chosen ids among the given.
-     * @param ids List of ids given.
-     * @return String ids, the one chosen.
+     * Returns the chosen String among the given.
+     * @param Strings List of Strings given.
+     * @param container it's an String that contains other String objects
+     * @param canSkip tells if the button canSkip is available for that player in that move
+     * @param undoEnabled tells if the button undo is available for that player in that move
+     * @return The String one chosen.
      */
-    String selectOption(List<String> ids, boolean canSkip, boolean undoEnabled);
+    String selectOption(List<String> Strings, String container, boolean canSkip, boolean undoEnabled);
 
     /**
      * Returns the chosen option among the given.

@@ -1,21 +1,17 @@
 Socket Protocol
 --
-c: login \<nickname>   [-gm \<gameMode>]
-
+c: login \<nickname> [-sp] \
 s: login \<result>
 
 s: send \<message>
 
-s: chooseWindow \<windowId> [-a \<additionalWindowId>]
-
+s: chooseWindow \<windowId> [\<additionalWindowId>]\
 c: windowChosen \<windowId>
 
-s: selectObject \<idObject> [-a \<additionalIdObject>]
+s: selectObject \<container> \<idObject> [\<additionalIdObject>] [-s] [-u]\
+c: optionSelected \<optionChosen>
 
-c: optionSelected \<idObject>
-
-s: selectFrom \<message> \<option> [-a \<additionalOption>]
-
+s: selectFrom \<message> \<option> [\<additionalOption>] [-s] [-u]\
 c: selected \<option>
 
 s: update [-p \<diceList>] [-rt \<diceList>] [-t \<toolList>] [-pub \<pubObjList>] 
