@@ -171,7 +171,11 @@ public class Player implements Memento {
         tokensMemento.push(this.tokens);
         try {
             for(Cell cell : this.getGlassWindow().getCellList())
-                newMemento.add(Optional.of(cell.getDie()));
+                if (cell.isOccupied()){
+                    newMemento.add(Optional.of(cell.getDie()));
+                }else{
+                    newMemento.add(Optional.empty());
+                }
         } catch (GlassWindowNotFoundException | EmptyCellException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.rules;
 
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.objective.*;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.dice.Die;
@@ -14,7 +15,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class DefaultRules implements Rules {
 
@@ -129,7 +129,7 @@ public class DefaultRules implements Rules {
         return actionReceiver -> {
             int players = actionReceiver.getTable().getPlayers().size();
             Collection<Die> drawnDice = actionReceiver.getTable().getDiceBag().drawDice(players*2+1);
-            actionReceiver.getTable().getPool().addDice(drawnDice);
+            actionReceiver.getTable().getPool().setDice(drawnDice);
             actionReceiver.updateAll();
             Game.getLogger().log(Level.FINE, "dice drawn\n"+drawnDice.toString(), actionReceiver);
         };
@@ -175,7 +175,6 @@ public class DefaultRules implements Rules {
 
     private ActionCommand scorePublicObjectivePoints() {
         return actionReceiver -> {
-
         };
     }
 
@@ -188,7 +187,8 @@ public class DefaultRules implements Rules {
      */
     @Override
     public ActionCommand getDraftAction(String marker, Optional<DieColor> dieColor, Optional<Integer> dieNumber) {
-        return null;
+        return actionReceiver -> {
+        };
     }
 
     /**
@@ -201,7 +201,8 @@ public class DefaultRules implements Rules {
      */
     @Override
     public ActionCommand getPlaceAction(String marker, boolean adjacencyRestriction, boolean coloRestriction, boolean numberRestriction) {
-        return null;
+        return actionReceiver -> {
+        };
     }
 
 

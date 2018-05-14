@@ -25,10 +25,10 @@ public class Pool implements Memento {
     }
 
     /**
-     * Adds a list of die to the table
+     * Sets dice in the pool
      * @param diceOnTable parameter to be set
      */
-    public void addDice(Collection<Die> diceOnTable){
+    public void setDice(Collection<Die> diceOnTable){
         this.diceOnTable = new HashSet<>(diceOnTable);
         logger.log(Level.FINEST, "These dice :" + diceOnTable + " have been added to the pool", this);
 
@@ -72,12 +72,12 @@ public class Pool implements Memento {
 
     @Override
     public void addMemento() {
-        poolMemento.add((List<Die>)this.diceOnTable);
+        poolMemento.push(new ArrayList<>(diceOnTable));
 
     }
 
     @Override
     public void getMemento() {
-        this.addDice(poolMemento.peek());
+        this.setDice(poolMemento.peek());
     }
 }

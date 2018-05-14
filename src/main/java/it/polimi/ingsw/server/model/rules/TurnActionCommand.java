@@ -46,7 +46,7 @@ public class TurnActionCommand implements ActionCommand{
         }while(!reset);
     }
 
-    public void doActionChosen(String actionChosen, Game actionReceiver) throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, PlayerNotFoundException {
+    private void doActionChosen(String actionChosen, Game actionReceiver) throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, PlayerNotFoundException {
         switch (actionChosen) {
             case useTool:
                 String toolChosen = cc.selectOption(actionReceiver.getTable().getTools().stream().map(t -> t.getName()).collect(Collectors.toList()), false, true);
@@ -81,7 +81,7 @@ public class TurnActionCommand implements ActionCommand{
         player.getMemento();
     }
 
-    public void backUp(Game actionReceiver)  {
+    private void backUp(Game actionReceiver)  {
         player.addMemento();
         actionReceiver.getTable().getPool().addMemento();
         actionReceiver.getTable().getDiceBag().addMemento();

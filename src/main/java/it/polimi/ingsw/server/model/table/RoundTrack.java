@@ -103,13 +103,10 @@ public class RoundTrack implements Memento {
     @Override
     public void addMemento() {
         List<ArrayList<Die>> newMemento = new ArrayList<>();
-        for(int i= 0; i<10; i++) {
-            ArrayList<Die> list = new ArrayList<>();
-            for(Die die:this.getDice(i))
-                list.add(die);
-            newMemento.add(list);
+        for(ArrayList<Die> ar : dice) {
+            newMemento.add(new ArrayList<>(ar));
         }
-        roundTrackMemento.add(newMemento);
+        roundTrackMemento.push(newMemento);
     }
 
     @Override

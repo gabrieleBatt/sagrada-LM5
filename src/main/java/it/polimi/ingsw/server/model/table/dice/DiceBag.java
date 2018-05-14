@@ -113,10 +113,7 @@ public class DiceBag implements Memento{
 
     @Override
     public void addMemento() {
-        List<Die> newMemento = new ArrayList<>();
-        for(Die die: this.bag)
-            newMemento.add(die);
-        diceBagMemento.add(newMemento);
+        diceBagMemento.push(new ArrayList<>(bag));
     }
 
     @Override
