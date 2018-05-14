@@ -195,7 +195,7 @@ public class DefaultRules implements Rules {
             if(dieNumber.isPresent())
                 dieOptions = dieOptions.stream().filter(d->Optional.of(d.getNumber()) == dieNumber).collect(Collectors.toList());
             List<String> options = dieOptions.stream().map(Die::getId).collect(Collectors.toList());
-            String dieChosen = cc.selectOption(options, false, true);
+            String dieChosen = cc.selectOption(options, actionReceiver.getTable().getPool(), false, true);
             if (dieChosen.equals("undo")) {
                 actionReceiver.resetTurn();
             }else {
@@ -225,7 +225,7 @@ public class DefaultRules implements Rules {
                     .stream().filter(c -> c.isAllowed(die.getColor()) || !coloRestriction)
                     .filter(c -> c.isAllowed(die.getNumber()) || !numberRestriction)
                     .map(Cell::getId).collect(Collectors.toList());
-            String positionChosen = cc.selectOption(cells,false,true);
+            String positionChosen = cc.selectOption(cells, player.getGlassWindow(), false,true);
             if (positionChosen.equals("undo")) {
                 actionReceiver.resetTurn();
             }else {

@@ -1,6 +1,6 @@
 {
   "name": "Copper Foil Burnisher",
-  "conditions": ["with drafting"],
+  "conditions": ["withDrafting"],
   "actions":1,
   "action1": {
     "type": "move",

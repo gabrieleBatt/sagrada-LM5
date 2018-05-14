@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.controller.commChannel;
 
-import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import it.polimi.ingsw.server.rmiInterface.RemoteGameScreen;
 
@@ -32,7 +31,7 @@ public class RmiCommunicationChannel implements CommunicationChannel {
     }
 
     @Override
-    public String selectOption(List<String> ids, boolean canSkip, boolean undoEnabled) {
+    public String selectOption(List<String> ids, Object container, boolean canSkip, boolean undoEnabled) {
         return null;
     }
 

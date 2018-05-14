@@ -61,19 +61,11 @@ class DieTest {
     @DisplayName("Confront dice")
     @Test
     void equals() {
-        Die die = new Die(DieColor.RED, 6 );
+        Die die = new Die(DieColor.RED, 6);
         Die die2 = new Die(DieColor.RED, 9);
         Assertions.assertTrue(die.equals(die));
         Assertions.assertFalse(die.equals(die2));
         Assertions.assertFalse(die.getClass().equals(Object.class));
 
     }
-
-    @DisplayName("Die to string")
-    @Test
-    void toStringTest() throws NotValidNumberException {
-         Die die = new Die(DieColor.CYAN, 4,12);
-         Assertions.assertEquals(die.toString(),"Die color:" + die.getColor() + "Die value" + die.getNumber() + "Die id" + 12);
-         //die.dump();
-     }
 }

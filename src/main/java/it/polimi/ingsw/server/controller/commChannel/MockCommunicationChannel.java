@@ -58,13 +58,9 @@ public class MockCommunicationChannel implements CommunicationChannel {
         return glassWindows.get(index);
     }
 
-    /**
-     * Returns the chosen ids among the given.
-     * @param ids List of ids given.
-     * @return String ids, the one randomly chosen.
-     */
     @Override
-    public String selectOption(List<String> ids, boolean canSkip, boolean undoEnabled) {
+    public String selectOption(List<String> ids, Object container, boolean canSkip, boolean undoEnabled) {
+        String message = "selectObject ";
         List<String> idList = new ArrayList<>(ids);
         /*if (undoEnabled)
             idList.add("undo");

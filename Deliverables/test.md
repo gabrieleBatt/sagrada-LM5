@@ -39,7 +39,6 @@
                 - Increase die value :heavy_check_mark:
                 - Decrease die value :heavy_check_mark:
                 - Confront dice :heavy_check_mark:
-                - Die to string :heavy_check_mark:
         -glassWindow
             - CellTest 
                 - Place die in cell, various restrictions :heavy_check_mark:
