@@ -106,6 +106,6 @@ buildNumber.properties
 /.idea
 *.idea
 *.iml
-/logs
+/logs/*
 
 # End of https://www.gitignore.io/api/java,maven,intellij
