@@ -44,10 +44,27 @@ class DiceBagTest {
     void placeDie() {
         DiceBag db = new DiceBag();
         Die die = new Die(DieColor.CYAN, 9);
-        Assertions.assertEquals(db.bagSize(), 90 );
+        Assertions.assertEquals(90, db.bagSize() );
         db.placeDie(die);
-        Assertions.assertEquals(db.bagSize(), 91);
+        Assertions.assertEquals(91, db.bagSize());
         Assertions.assertTrue(db.bagContains(die));
+        Assertions.assertThrows(BagEmptyException.class, () -> db.drawDice(100));
     }
 
+    @DisplayName("Testing memento")
+    @Test
+    void memento() throws BagEmptyException {
+        DiceBag db = new DiceBag();
+        Die die = new Die(DieColor.CYAN, 9);
+        db.addMemento();
+        db.placeDie(die);
+        db.getMemento();
+        Assertions.assertEquals(90,db.bagSize());
+        db.drawDice(10);
+        db.addMemento();
+        db.drawDice(20);
+        Assertions.assertEquals(60,db.bagSize());
+        db.getMemento();
+        Assertions.assertEquals(80,db.bagSize());
+    }
 }

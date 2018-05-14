@@ -5,5 +5,5 @@ import it.polimi.ingsw.server.model.exception.*;
 
 public interface ActionCommand {
 
-    void execute(Game actionReceiver) throws EndGameException, BagEmptyException, DeckTooSmallException, GlassWindowNotFoundException, PlayerNotFoundException;
+    void execute(Game actionReceiver) throws EndGameException, BagEmptyException, DeckTooSmallException, GlassWindowNotFoundException, CellNotFoundException, DieNotAllowedException;
 }

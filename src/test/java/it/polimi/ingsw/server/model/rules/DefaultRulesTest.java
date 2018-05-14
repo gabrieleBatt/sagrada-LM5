@@ -28,7 +28,7 @@ class DefaultRulesTest {
 
     @DisplayName("Give window and token test")
     @Test
-    void dealGlassWindow() throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, PlayerNotFoundException {
+    void dealGlassWindow() throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, CellNotFoundException, DieNotAllowedException {
         Assertions.assertThrows(GlassWindowNotFoundException.class,()->DefaultRules.getDefaultRules().giveTokens().execute(game));
         DefaultRules.getDefaultRules().dealGlassWindow(2).execute(game);
         Assertions.assertTrue(()-> game.getTable().getPlayers().stream().allMatch(p->(p.hasGlassWindow())));
@@ -36,21 +36,21 @@ class DefaultRulesTest {
 
     @DisplayName("Give private objective")
     @Test
-    void dealPrivateObjective() throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, PlayerNotFoundException {
+    void dealPrivateObjective() throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, CellNotFoundException, DieNotAllowedException {
         DefaultRules.getDefaultRules().dealPrivateObjective(1).execute(game);
         Assertions.assertTrue(()-> game.getTable().getPlayers().stream().allMatch(p->(p.getPrivateObjective().size() == 1)));
     }
 
     @DisplayName("Give public objectives")
     @Test
-    void dealPublicObjective() throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, PlayerNotFoundException {
+    void dealPublicObjective() throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, CellNotFoundException, DieNotAllowedException {
         DefaultRules.getDefaultRules().dealPublicObjective(3).execute(game);
         Assertions.assertEquals(3, game.getTable().getPublicObjectives().size());
     }
 
     @DisplayName("Testing round actions")
     @Test
-    void getRoundAction() throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, PlayerNotFoundException {
+    void getRoundAction() throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, CellNotFoundException, DieNotAllowedException {
         Assertions.assertEquals(0,game.getTable().getPool().getDice().size());
         DefaultRules.getDefaultRules().getSetupRoundAction().execute(game);
         Assertions.assertEquals(5,game.getTable().getPool().getDice().size());

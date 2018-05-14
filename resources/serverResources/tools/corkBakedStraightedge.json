@@ -1,5 +1,5 @@
 {
-  "name": "Cork-Baked Straightedge",
+  "name": "Cork-BakedStraightedge",
   "conditions":["beforeDrafting"],
   "actions":2,
   "action1": {

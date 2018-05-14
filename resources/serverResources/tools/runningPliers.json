@@ -1,5 +1,5 @@
 {
-  "name": "Running Pliers",
+  "name": "RunningPliers",
   "conditions":["firstTurn" , "skipNextTurn" , "withDrafting"],
   "actions":2,
   "action1": {

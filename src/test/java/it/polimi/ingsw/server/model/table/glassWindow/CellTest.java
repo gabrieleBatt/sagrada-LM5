@@ -68,9 +68,13 @@ class CellTest {
         Cell cell_number_restr = new Cell("", 3);
         Die dieY = new Die(DieColor.YELLOW, 3,10);
         Die dieC = new Die(DieColor.CYAN, 5,11);
-        Assertions.assertTrue(cell_colour_restr.isAllowed(dieY));
-        Assertions.assertTrue(cell_number_restr.isAllowed(dieY));
-        Assertions.assertFalse(cell_colour_restr.isAllowed(dieC));
-        Assertions.assertFalse(cell_number_restr.isAllowed(dieC));
+        Assertions.assertTrue(cell_colour_restr.isAllowed(dieY.getColor()));
+        Assertions.assertTrue(cell_number_restr.isAllowed(dieY.getNumber()));
+        Assertions.assertFalse(cell_colour_restr.isAllowed(dieC.getColor()));
+        Assertions.assertFalse(cell_number_restr.isAllowed(dieC.getNumber()));
+        Assertions.assertTrue(cell_colour_restr.isAllowed(dieY.getNumber()));
+        Assertions.assertTrue(cell_number_restr.isAllowed(dieY.getColor()));
+        Assertions.assertTrue(cell_colour_restr.isAllowed(dieC.getNumber()));
+        Assertions.assertTrue(cell_number_restr.isAllowed(dieC.getColor()));
     }
 }

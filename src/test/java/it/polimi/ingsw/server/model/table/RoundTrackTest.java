@@ -26,7 +26,7 @@ class RoundTrackTest {
         dice.add(d1);
         for (int i=1; i<15; i++){
 
-            if(i< 10) {
+            if(i<= 10) {
                 roundTrack.endRound(dice);
                 Assertions.assertEquals( dice,roundTrack.getDice(roundTrack.getRound()-1) );
 
@@ -62,5 +62,29 @@ class RoundTrackTest {
         Assertions.assertTrue(roundTrack.getDice(1).contains(d1));
         Assertions.assertTrue(roundTrack.getDice(2).contains(d3));
 
+    }
+
+    @DisplayName("Testing memento")
+    @Test
+    void memento() throws EndGameException {
+        RoundTrack roundTrack = new RoundTrack();
+        roundTrack.addMemento();
+        roundTrack.getMemento();
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> roundTrack.getDice(1).isEmpty());
+        Collection<Die> dice = new ArrayList<>();
+        Die d1 = new Die(DieColor.YELLOW, 4);
+        Die d2 = new Die(DieColor.YELLOW, 7);
+        Die d3 = new Die(DieColor.GREEN, 9);
+        dice.add(d1);
+        dice.add(d2);
+        roundTrack.endRound(dice);
+        roundTrack.getMemento();
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> roundTrack.getDice(1).isEmpty());
+        roundTrack.endRound(dice);
+        roundTrack.addMemento();
+        roundTrack.switchDie(d3,d1);
+        Assertions.assertTrue(roundTrack.getDice(1).contains(d3));
+        roundTrack.getMemento();
+        Assertions.assertTrue(roundTrack.getDice(1).contains(d1));
     }
 }

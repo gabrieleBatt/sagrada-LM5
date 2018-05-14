@@ -15,9 +15,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -29,17 +27,37 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
     private static final int rmiPortNumber = 1100;
     private static final int socketPortNumber = 1101;
     private static final Lobby lobby = new Lobby();
+    private static Set<Game> games = new HashSet<>();
     private static final long  loginTime = 10;
+    private static Server server;
 
+    static {
+        try {
+            server = new Server();
+        } catch (RemoteException e) {
+            logger.log(Level.SEVERE, "Server didn't started");
+            System.out.println(-1);
+        }
+    }
 
     private Server() throws RemoteException {
         super();
     }
 
+    public static Server getServer() {
+        return server;
+    }
+
+    public static void addGame(Game game){
+        games.add(game);
+        new Thread(game).start();
+    }
+
     public static void main(String args[]) {
         try {
-            Registry registry = LocateRegistry.createRegistry(rmiPortNumber);
-            registry.rebind("Server", new Server());
+            LocateRegistry.createRegistry(rmiPortNumber)
+                    .rebind("Server", server);
+
 
             logger.log(Level.CONFIG, "Rmi server ready");
         } catch (RemoteException e) {
@@ -79,7 +97,13 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
             }, loginTime * 1000);
 
             if((loginMessage = in.readLine()) != null) {
-                List<String> streamList = Stream.of(loginMessage.split(" ")).map(String::new).filter(x -> !x.equals("")).collect(Collectors.toList());
+
+
+                List<String> streamList =
+                        Stream.of(loginMessage.split(" ")).map(String::new)
+                                .filter(x -> !x.equals("")).collect(Collectors.toList());
+
+
                 if (streamList.get(0).equals("login")) {
                     String nickname = streamList.get(1);
                     logger.log(Level.FINE, nickname + " logged!");

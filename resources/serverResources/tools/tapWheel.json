@@ -1,5 +1,5 @@
 {
-  "name": "Tap Wheel",
+  "name": "TapWheel",
   "conditions":["withDrafting"],
   "actions":2,
   "action1": {

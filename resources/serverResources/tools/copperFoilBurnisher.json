@@ -1,5 +1,5 @@
 {
-  "name": "Copper Foil Burnisher",
+  "name": "CopperFoilBurnisher",
   "conditions": ["withDrafting"],
   "actions":1,
   "action1": {

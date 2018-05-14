@@ -69,7 +69,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     @Override
     public void updateView(RoundTrack roundTrack) {
         String message = "update -rt ";
-        for (int i = 1; i <= roundTrack.getRound(); i++) {
+        for (int i = 1; i < roundTrack.getRound(); i++) {
             for (Die die : roundTrack.getDice(i)) {
                 message += "round"+i + ":" + die.getId();
             }
@@ -128,7 +128,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
         }
 
-        message.append("-t ");
+        message.append("-tk ");
         if(!player.getNickname().equals(this.getNickname()))
             message.append(player.getNickname()).append(" ");
         message.append(player.getTokens()).append(" ");
@@ -188,7 +188,9 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
     @Override
     public String selectOption(List<String> ids, Object container, boolean canSkip, boolean undoEnabled) {
+
         String message = "selectObject " + container.getClass().getName() + " ";
+
 
         for ( String s : ids) {
             message = message + s + " ";
@@ -227,16 +229,14 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         }catch(IOException e){
             logger.log(Level.WARNING, e.getMessage(), e);
             disconnect();
-        }finally {
-            //TODO
-            int index = ThreadLocalRandom.current().nextInt(0, ids.size());
-            return ids.get(index);
         }
+        int index = ThreadLocalRandom.current().nextInt(0, ids.size());
+        return ids.get(index);
     }
 
     @Override
     public String chooseFrom(List<String> options, String message, boolean canSkip, boolean undoEnabled) {
-        String toSend = "selectFrom " + message;
+        String toSend = "selectFrom " + message + " ";
 
         for ( String s : options) {
             toSend = toSend + s + " ";
@@ -270,11 +270,13 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         }catch(IOException e){
             logger.log(Level.WARNING, e.getMessage(), e);
             disconnect();
-        }finally {
-            int index = ThreadLocalRandom.current().nextInt(0, options.size());
-            return options.get(index);
         }
-
+        if(undoEnabled)
+            return "undo";
+        else if(canSkip)
+            return "skip";
+        else
+            return options.get(ThreadLocalRandom.current().nextInt(0, options.size()));
     }
 }
 

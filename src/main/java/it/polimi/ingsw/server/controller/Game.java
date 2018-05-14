@@ -1,48 +1,86 @@
 package it.polimi.ingsw.server.controller;
 
+import com.sun.javafx.css.Rule;
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
+import it.polimi.ingsw.server.model.exception.*;
 import it.polimi.ingsw.server.model.rules.ActionCommand;
+import it.polimi.ingsw.server.model.rules.DefaultRules;
+import it.polimi.ingsw.server.model.rules.TurnActionCommand;
+import it.polimi.ingsw.server.model.table.Memento;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Table;
 import it.polimi.ingsw.server.model.table.dice.Die;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
-public class Game {
+public class Game implements Runnable {
 
     private static final Logger logger = LogMaker.getLogger(Game.class.getName(), Level.ALL);
     private Table table;
     private List<CommunicationChannel> commChannels;
-    private List<Player> players;
-    /*private HashMap<String, Die> dice;
+    private HashMap<String, Die> dice;
+    private List<ActionCommand> actionCommandList;
 
     //TODO
 
-    restart hashmap da chiamare nel turn
-    public static Logger getLogger()
-    {
-        dice.put("d1", dado)
-
-        return logger;
-    }
-    */
-    /**
-     * Creates a game, setting players and table.
-     * @param commChannels Collection of communication channel, one per player.
-     */
     public Game(Collection<CommunicationChannel> commChannels){
         this.commChannels = new ArrayList<>(commChannels);
-        players = new ArrayList<>();
-        for(CommunicationChannel cc: commChannels){
-            players.add(new Player(cc.getNickname()));
+        this.table = new Table(commChannels.stream()
+                .map(cc -> new Player(cc.getNickname()))
+                .collect(Collectors.toList()));
+        this.dice = new HashMap<>();
+        this.actionCommandList = new ArrayList<>();
+
+        actionCommandList.addAll(DefaultRules.getDefaultRules().getSetupGameActions());
+
+        Iterator<Player> players = getTable()
+                .getPlayersIterator(getTable().getPlayers().get(0), true);
+        for (int i = 0; i < 10; i++) {
+            actionCommandList.add(DefaultRules.getDefaultRules().getSetupRoundAction());
+            Iterator<Player> roundIterator = getTable()
+                    .getPlayersIterator(players.next(), false);
+            int x = 1;
+            while (roundIterator.hasNext()){
+                actionCommandList.add(actionCommandList.size() - x, DefaultRules.getDefaultRules().getTurnAction(roundIterator.next()));
+                actionCommandList.add(actionCommandList.size() - x, DefaultRules.getDefaultRules().getTurnAction(roundIterator.next()));
+                x++;
+            }
+            actionCommandList.add(DefaultRules.getDefaultRules().getEndRoundAction());
         }
-        this.table = new Table(players);
+        actionCommandList.addAll(DefaultRules.getDefaultRules().getEndGameActions());
+    }
+
+    @Override
+    public void run() {
+        while(!actionCommandList.isEmpty()){
+            try {
+                actionCommandList.get(0).execute(this);
+                actionCommandList.remove(0);
+            } catch (EndGameException | BagEmptyException | DeckTooSmallException | DieNotAllowedException | CellNotFoundException e) {
+                logger.log(Level.WARNING, e.getMessage(), e);
+            }
+        }
+    }
+
+    /**
+     * Reset the turn when called if the current action is a TurnActionCommand
+     */
+    public void resetTurn(){
+        if(actionCommandList.get(0) instanceof TurnActionCommand){
+            ((TurnActionCommand) actionCommandList.get(0)).reset(this);
+        }
+    }
+
+    /**
+     * Gets the HashMap of chosen die.
+     * @return HashMap of chosen die.
+     */
+    public HashMap<String,Die> getMap(){
+        return this.dice;
     }
 
     /**
@@ -69,12 +107,5 @@ public class Game {
         return new ArrayList<>(commChannels);
     }
 
-    /**
-     * Updates to every client the changes occurred in game.
-     */
-    public void updateAll(){
-        for (CommunicationChannel channel : this.getCommChannels()) {
-            channel.updateView();
-        }
-    }
+
 }

@@ -1,5 +1,5 @@
 {
-  "name": "Grozing Pliers",
+  "name": "GrozingPliers",
   "conditions":["beforeDrafting"],
   "actions":3,
   "action1": {

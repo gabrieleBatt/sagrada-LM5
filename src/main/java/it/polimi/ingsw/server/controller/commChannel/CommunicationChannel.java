@@ -73,6 +73,7 @@ public interface CommunicationChannel{
      */
     String selectOption(List<String> options, Object container, boolean canSkip, boolean undoEnabled);
 
+
     /**
      * Returns the chosen option among the given.
      * @param options List of options given.

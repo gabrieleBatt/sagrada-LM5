@@ -1,5 +1,5 @@
 {
-  "name": "Eglomise Brush",
+  "name": "EglomiseBrush",
   "conditions":["withDrafting"],
   "actions":1,
   "action1": {

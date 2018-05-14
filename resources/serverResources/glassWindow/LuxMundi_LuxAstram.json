@@ -1,7 +1,7 @@
 {	
 	"difficulty1":6,
 	"cells1":["W","W","1","W","W","1","G","3","C","2","C","5","4","6","G","W","C","5","G","W"],
-	"name1":"Lux Mundi",
+	"name1":"LuxMundi",
 	"difficulty2":5,
 	"cells2":["W","1","G","M","4","6","M","2","5","G","1","G","5","3","M","W","W","W","W","W"],
 	"name2":"LuxAstram"

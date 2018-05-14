@@ -1,6 +1,6 @@
 {
   "type":"set",
-  "name": "Shade Variety",
+  "name": "ShadeVariety",
   "points": 5,
   "set": ["1","2","3","4","5","6"]
 }

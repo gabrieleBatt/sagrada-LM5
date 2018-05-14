@@ -1,5 +1,5 @@
 {
-  "name": "Lens Cutter",
+  "name": "LensCutter",
   "conditions":["beforeDrafting"],
   "actions":3,
   "action1": {

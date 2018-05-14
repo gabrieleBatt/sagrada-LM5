@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class DiceBag implements Memento{
     private List<Die> bag;
-    private static final Logger logger = LogMaker.getLogger(Die.class.getName(), Level.ALL);
+    private static final Logger logger = LogMaker.getLogger(DiceBag.class.getName(), Level.ALL);
     private Stack<List<Die>> diceBagMemento;
 
 
@@ -111,13 +111,19 @@ public class DiceBag implements Memento{
     }
 
 
+    /**
+     * Adds the current dice bag state at the stack.
+     */
     @Override
     public void addMemento() {
         diceBagMemento.push(new ArrayList<>(bag));
     }
 
+    /**
+     * Gets the last round dice bag saved from the stack.
+     */
     @Override
     public void getMemento() {
-        this.bag = diceBagMemento.peek();
+        this.bag = new ArrayList<>(diceBagMemento.peek());
     }
 }

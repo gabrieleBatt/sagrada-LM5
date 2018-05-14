@@ -45,7 +45,7 @@ class TableTest {
     @DisplayName("Iterate players")
     @Test
     void getItPlayers() {
-        Iterator<Player> iterator = table.getPlayersIterator(player2);
+        Iterator<Player> iterator = table.getPlayersIterator(player2, false);
         Assertions.assertTrue(iterator.hasNext());
         Assertions.assertEquals(player2, iterator.next());
         Assertions.assertTrue(iterator.hasNext());
@@ -67,7 +67,7 @@ class TableTest {
 
     @DisplayName("Get players by name")
     @Test
-    void getPlayer() throws PlayerNotFoundException {
+    void getPlayer() {
         Assertions.assertEquals(player1, table.getPlayer("p1"));
         Assertions.assertThrows(PlayerNotFoundException.class, ()->table.getPlayer("p4"));
     }

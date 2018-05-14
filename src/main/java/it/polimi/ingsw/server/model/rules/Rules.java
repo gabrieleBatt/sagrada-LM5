@@ -45,9 +45,10 @@ public interface Rules {
      * @param marker String, marker of the die drafted.
      * @param dieColor DieColor, color of the die to draft.
      * @param dieNumber Integer, numeric value of the die to draft.
+     * @param player Player, the one who drafts a die.
      * @return list of draft actions.
      */
-    ActionCommand getDraftAction(String marker, Optional<DieColor> dieColor, Optional<Integer> dieNumber);
+    ActionCommand getDraftAction(String marker, Optional<DieColor> dieColor, Optional<Integer> dieNumber, Player player);
 
     /**
      * Gets the list of place actions.
@@ -55,8 +56,9 @@ public interface Rules {
      * @param adjacencyRestriction boolean, true if there are adjacency restrictions.
      * @param coloRestriction boolean, true if there are color restrictions.
      * @param numberRestriction boolean, true if there are numeric restrictions.
+     * @param player Player, the one who places a die.
      * @return list of place actions.
      */
-    ActionCommand getPlaceAction(String marker, boolean adjacencyRestriction, boolean coloRestriction, boolean numberRestriction);
+    ActionCommand getPlaceAction(String marker, boolean adjacencyRestriction, boolean coloRestriction, boolean numberRestriction, Player player);
 
 }

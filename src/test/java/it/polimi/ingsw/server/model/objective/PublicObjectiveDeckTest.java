@@ -36,7 +36,7 @@ class PublicObjectiveDeckTest {
     void parseTest1() throws DeckTooSmallException, CellNotFoundException, DieNotAllowedException, IllegalGlassWindowException {
         List<PublicObjective> cards = PublicObjectiveDeck.getPublicObjectiveDeck().draw(10);
 
-        PublicObjective publicObjective = cards.stream().filter(d -> d.getName().equals("Column Color Variety")).findFirst().get();
+        PublicObjective publicObjective = cards.stream().filter(d -> d.getName().equals("ColumnColorVariety")).findFirst().get();
 
         List<Cell> cells = new ArrayList<>();
 
@@ -66,7 +66,7 @@ class PublicObjectiveDeckTest {
     void parseTest2() throws NotValidNumberException, DieNotAllowedException, IllegalGlassWindowException, DeckTooSmallException {
         List<PublicObjective> cards = PublicObjectiveDeck.getPublicObjectiveDeck().draw(10);
 
-        PublicObjective publicObjective = cards.stream().filter(d -> d.getName().equals("Medium Shades")).findFirst().get();
+        PublicObjective publicObjective = cards.stream().filter(d -> d.getName().equals("MediumShades")).findFirst().get();
 
 
         List<Cell> cells = new ArrayList<>();

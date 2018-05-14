@@ -1,5 +1,5 @@
 {
-  "name": "Grinding Stone",
+  "name": "GrindingStone",
   "conditions":["beforeDrafting"],
   "actions":3,
   "action1": {

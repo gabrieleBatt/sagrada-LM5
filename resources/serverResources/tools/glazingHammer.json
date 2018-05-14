@@ -1,5 +1,5 @@
 {
-  "name": "Glazing Hammer",
+  "name": "GlazingHammer",
   "conditions":["beforeDrafting" , "secondTurn"],
   "actions":1,
   "action1": {

@@ -6,10 +6,12 @@ import java.rmi.registry.LocateRegistry;
 
 public class FakeRmiClient {
 
+    private static final  String host = "localhost";
+
     public static void main(String[] args){
-        String host = "localhost";
         try {
-            RemoteServer remoteServer = (RemoteServer) LocateRegistry.getRegistry(1100).lookup("Server");
+            RemoteServer remoteServer = (RemoteServer) LocateRegistry
+                    .getRegistry(1100).lookup("Server");
             remoteServer.rmiLogin(new FakeGameScreen() {}, "testR");
 
         } catch (Exception e) {

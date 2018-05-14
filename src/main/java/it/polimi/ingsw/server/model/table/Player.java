@@ -165,6 +165,10 @@ public class Player implements Memento {
         System.out.println(this);
     }
 
+    /**
+     * Adds the current glass window state and the current
+     * number of tokens at the stack.
+     */
     @Override
     public void addMemento() {
         List<Optional<Die>> newMemento = new ArrayList<>();
@@ -182,15 +186,19 @@ public class Player implements Memento {
         glassWindowMemento.push(newMemento);
     }
 
+    /**
+     * Gets the last  glass window state and current
+     * number of tokens saved from the stack.
+     */
     @Override
     public void getMemento() {
-        this.tokens = tokensMemento.peek();
-        List<Optional<Die>> dieList = glassWindowMemento.peek();
+        this.tokens = new Integer(tokensMemento.peek());
+        List<Optional<Die>> dieList = new ArrayList<>(glassWindowMemento.peek());
         for(int i = 0; i<20; i++) {
             try {
                 this.getGlassWindow().getCellList().get(i).placeOptionalDie(dieList.get(i));
             } catch (GlassWindowNotFoundException e) {
-                System.out.println(e.getMessage());
+                logger.log(Level.WARNING,e.getMessage(),e);
             }
         }
     }

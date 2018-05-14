@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
 import it.polimi.ingsw.server.controller.commChannel.MockCommunicationChannel;
 import it.polimi.ingsw.server.model.exception.*;
+import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,13 +31,16 @@ class TurnActionCommandTest {
 
     @DisplayName("Testing turn")
     @Test
-    void execute() throws PlayerNotFoundException, BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException {
+    void execute() throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, CellNotFoundException, DieNotAllowedException {
         for (ActionCommand actionCommand : DefaultRules.getDefaultRules().getSetupGameActions()) {
             actionCommand.execute(game);
         }
         DefaultRules.getDefaultRules().getSetupRoundAction().execute(game);
         DefaultRules.getDefaultRules().getTurnAction(game.getTable().getPlayer("p1")).execute(game);
-        Assertions.assertEquals((5|4),game.getTable().getPool().getDice().size());
+        Assertions.assertTrue( 4 <= game.getTable().getPool().getDice().size());
+        Assertions.assertTrue( 5 >= game.getTable().getPool().getDice().size());
+        Assertions.assertTrue(1 >= game.getTable().getPlayer("p1").getGlassWindow().getCellList().stream().filter(Cell::isOccupied).count());
+        Assertions.assertTrue(0 <= game.getTable().getPlayer("p1").getGlassWindow().getCellList().stream().filter(Cell::isOccupied).count());
         //TODO
         //Tools missing
     }

@@ -73,10 +73,9 @@ public class Table {
      * Gets the player having -nickName- as a nickname from the players' list.
      * @param nickName
      * @return Object Player if is present
-     * @throws PlayerNotFoundException exception thrown whether there's no player in player list
      * having -nickName- as nickname
      */
-    public Player getPlayer(String nickName) throws PlayerNotFoundException {
+    public Player getPlayer(String nickName){
         if(getPlayers().stream().filter(p -> p.getNickname().equals(nickName)).findFirst().isPresent())
             return getPlayers().stream().filter(p -> p.getNickname().equals(nickName)).findFirst().get();
         throw new PlayerNotFoundException("Player "+nickName +" can't be found");
@@ -85,9 +84,10 @@ public class Table {
     /**
      * Cycles phe players form the first
      * @param first player to start from
+     * @param infinite true for an iterator that never stops
      * @return the iterator
      */
-    public Iterator<Player> getPlayersIterator(Player first){
+    public Iterator<Player> getPlayersIterator(Player first, boolean infinite){
         return new Iterator<Player>() {
 
             int i = 0;
@@ -95,7 +95,7 @@ public class Table {
 
             @Override
             public boolean hasNext() {
-                return i < players.size();
+                return infinite || i < players.size();
             }
 
             @Override

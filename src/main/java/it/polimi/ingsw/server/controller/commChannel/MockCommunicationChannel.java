@@ -84,6 +84,7 @@ public class MockCommunicationChannel implements CommunicationChannel {
 
     @Override
     public String selectOption(List<String> ids, Object container, boolean canSkip, boolean undoEnabled) {
+        String message = "selectObject ";
         List<String> idList = new ArrayList<>(ids);
         if (undoEnabled)
             idList.add("undo");
@@ -100,8 +101,6 @@ public class MockCommunicationChannel implements CommunicationChannel {
     @Override
     public String chooseFrom(List<String> options, String message, boolean canSkip, boolean undoEnabled) {
         List<String> op = new ArrayList<>(options);
-        if (undoEnabled)
-            op.add("undo");
         if (canSkip)
             op.add("skip");
         return op.get(ThreadLocalRandom.current().nextInt(0, op.size()));

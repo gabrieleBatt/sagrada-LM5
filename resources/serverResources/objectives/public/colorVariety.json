@@ -1,6 +1,6 @@
 {
   "type":"set",
-  "name": "Color Variety",
+  "name": "ColorVariety",
   "points": 4,
   "set": ["R","Y","G","M","C"]
 }

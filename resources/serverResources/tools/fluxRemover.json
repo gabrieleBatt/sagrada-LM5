@@ -1,5 +1,5 @@
 {
-  "name": "Flux Remover",
+  "name": "FluxRemover",
   "conditions":["beforeDrafting"],
   "actions":4,
   "action1": {

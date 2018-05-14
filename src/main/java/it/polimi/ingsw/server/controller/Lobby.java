@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,7 +61,8 @@ public class Lobby {
     }
 
     private void startGame(){
-        //TODO
+        Game game = new Game(commChannelSet);
+        Server.addGame(game);
         commChannelSet = new HashSet<>();
     }
 
