@@ -25,7 +25,7 @@ public class Game implements Runnable {
     private HashMap<String, Die> dice;
     private List<ActionCommand> actionCommandList;
 
-    //TODO
+    //TODO--missing effects
 
     public Game(Collection<CommunicationChannel> commChannels){
         this.commChannels = new ArrayList<>(commChannels);
@@ -54,6 +54,9 @@ public class Game implements Runnable {
         actionCommandList.addAll(DefaultRules.getDefaultRules().getEndGameActions());
     }
 
+    /**
+     * Executes all action in list until empty
+     */
     @Override
     public void run() {
         while(!actionCommandList.isEmpty()){

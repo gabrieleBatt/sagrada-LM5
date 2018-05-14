@@ -76,6 +76,10 @@ public class TurnActionCommand implements ActionCommand{
 
     }
 
+    /**
+     * Resets the turn to the start or to the last checkpoint action (es. reRolling)
+     * @param actionReceiver
+     */
     public void reset(Game actionReceiver) {
         reset = true;
         actionReceiver.getTable().getRoundTrack().getMemento();
