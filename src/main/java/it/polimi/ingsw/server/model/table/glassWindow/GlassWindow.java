@@ -3,9 +3,11 @@ package it.polimi.ingsw.server.model.table.glassWindow;
 
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.model.exception.CellNotFoundException;
+import it.polimi.ingsw.server.model.exception.DieNotAllowedException;
 import it.polimi.ingsw.server.model.exception.EmptyCellException;
 import it.polimi.ingsw.server.model.exception.IllegalGlassWindowException;
 import it.polimi.ingsw.server.model.objective.SetPublicObjective;
+import it.polimi.ingsw.server.model.table.Memento;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import java.util.*;
 import java.util.logging.Level;
@@ -22,6 +24,7 @@ public class GlassWindow {
     private String name;
     private int difficulty;
     private List<Cell> cellList;
+    private HashMap<String, List<List<Optional<Die>>>> glassWindowMemento = null;
 
     public GlassWindow(String name, int difficulty, List<Cell> cells) throws IllegalGlassWindowException {
         if (cells.size() != 20){
@@ -253,10 +256,18 @@ public class GlassWindow {
     }
 
     /**
-     * Prints the override toString of an object GlassWindow
+     * Prints the override toString of an object GlassWindow.
      */
     public void dump(){
         System.out.println(this);
+    }
+
+    /**
+     * Gets the list of the cells of the glass window.
+     * @return list of the cells of te glass window.
+     */
+    public List<Cell> getCellList() {
+        return new ArrayList<>(cellList);
     }
 }
 

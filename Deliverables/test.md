@@ -18,6 +18,14 @@
         - SetPublicObjectiveTest
             - Scoring set of 3 and 5 :heavy_check_mark:
             - Scoring color set objective :heavy_check_mark:
+    - rules
+        - DefaultRulesTest 
+                - Give window and token test :heavy_check_mark:
+                - Give private objective :heavy_check_mark:
+                - Give public objectives :heavy_check_mark:
+                - Testing round actions :heavy_check_mark:
+        -TurnActionCommandTest
+                - Testing Turn
     - table
         - dice
             - DiceBagTest 
@@ -51,6 +59,7 @@
         - PlayerTest
             - Player nickname :heavy_check_mark:
             - Player tokens :heavy_check_mark:
+            - Testing memento :heavy_check_mark:
             - Player connection :heavy_check_mark:
         - PoolTest 
             - Add dice to pool :heavy_check_mark:
@@ -71,10 +80,5 @@
             - Use tool :heavy_check_mark:
 
 - controller
-    - DefaultRulesTest 
-        - Give window and token test :heavy_check_mark:
-        - Give private objective :heavy_check_mark:
-        - Give public objectives :heavy_check_mark:
-        - Testing round actions :heavy_check_mark:
     - LobbyTest
         - Add commChannel to lobby and make game start :heavy_check_mark:

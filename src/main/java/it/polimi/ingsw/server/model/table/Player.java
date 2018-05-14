@@ -2,9 +2,12 @@ package it.polimi.ingsw.server.model.table;
 
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.model.exception.CellNotFoundException;
+import it.polimi.ingsw.server.model.exception.EmptyCellException;
 import it.polimi.ingsw.server.model.exception.GlassWindowNotFoundException;
 import it.polimi.ingsw.server.model.objective.PrivateObjective;
 import it.polimi.ingsw.server.model.objective.SetPublicObjective;
+import it.polimi.ingsw.server.model.table.dice.Die;
+import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 
 import java.util.*;
@@ -15,7 +18,7 @@ import java.util.logging.Logger;
  * Player is a concrete class representing a game's player. Its' main attributes are nickname, tokens, glassWindow,
  * privateObjective. It has also a boolean indicating whether it's connected or not.
  */
-public class Player {
+public class Player implements Memento {
 
     private static final Logger logger = LogMaker.getLogger(Player.class.getName(), Level.ALL);
     private final String nickname;
@@ -23,6 +26,8 @@ public class Player {
     private Optional<GlassWindow> glassWindow;
     private HashSet<PrivateObjective> privateObjective;
     private boolean connected;
+    private Stack<List<Optional<Die>>> glassWindowMemento;
+    private Stack<Integer> tokensMemento;
 
     /**
      * Creates a player, setting the nickname
@@ -33,6 +38,8 @@ public class Player {
         this.privateObjective = new HashSet<>();
         glassWindow = Optional.empty();
         this.nickname = nickname;
+        tokensMemento = new Stack<>();
+        glassWindowMemento = new Stack<>();
     }
 
     /**
@@ -156,5 +163,35 @@ public class Player {
      */
     public void dump(){
         System.out.println(this);
+    }
+
+    @Override
+    public void addMemento() {
+        List<Optional<Die>> newMemento = new ArrayList<>();
+        tokensMemento.push(this.tokens);
+        try {
+            for(Cell cell : this.getGlassWindow().getCellList())
+                if (cell.isOccupied()){
+                    newMemento.add(Optional.of(cell.getDie()));
+                }else{
+                    newMemento.add(Optional.empty());
+                }
+        } catch (GlassWindowNotFoundException | EmptyCellException e) {
+            logger.log(Level.WARNING, e.getMessage(), e);
+        }
+        glassWindowMemento.push(newMemento);
+    }
+
+    @Override
+    public void getMemento() {
+        this.tokens = tokensMemento.peek();
+        List<Optional<Die>> dieList = glassWindowMemento.peek();
+        for(int i = 0; i<20; i++) {
+            try {
+                this.getGlassWindow().getCellList().get(i).placeOptionalDie(dieList.get(i));
+            } catch (GlassWindowNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }

@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class PoolTest {
 
     @DisplayName("Add dice to pool")
@@ -24,7 +22,7 @@ class PoolTest {
         diceToBe.add(d1);
         diceToBe.add(d2);
         diceToBe.add(d3);
-        p.addDice(diceToBe);
+        p.setDice(diceToBe);
         Assertions.assertEquals(p.getDice(),diceToBe);
     }
 
@@ -40,7 +38,7 @@ class PoolTest {
         dice.add(d2);
         dice.add(d3);
 
-        p.addDice(dice);
+        p.setDice(dice);
         Assertions.assertTrue(p.getDice().contains(d2));
 
         p.takeDie(d2);
@@ -63,7 +61,7 @@ class PoolTest {
         dice.add(d2);
         dice.add(d3);
 
-        p.addDice(dice);
+        p.setDice(dice);
         p.roll();
         Assertions.assertEquals(d1.getId().substring(1), "C4");
         Assertions.assertEquals(d2.getId().substring(1), "C6");

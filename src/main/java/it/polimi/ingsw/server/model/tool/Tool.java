@@ -4,23 +4,25 @@ import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.model.rules.ActionCommand;
 import it.polimi.ingsw.server.model.table.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Tool {
 
     private static final Logger logger = LogMaker.getLogger(Tool.class.getName(), Level.ALL);
-    private ActionCommand actionCommand;
+    private List<ActionCommand> actionCommandList;
     private String name;
     private boolean used;
 
     /**
      * Creates a tool
-     * @param actionCommand action that has to be performed by the tool
+     * @param actionCommandList action that has to be performed by the tool
      */
-    public Tool(ActionCommand actionCommand, String name){
+    public Tool(List<ActionCommand> actionCommandList, String name){
         this.name = name;
-        this.actionCommand = actionCommand;
+        this.actionCommandList = actionCommandList;
         used = false;
     }
 
@@ -36,8 +38,8 @@ public class Tool {
      * Gets action command
      * @return tool action command
      */
-    public ActionCommand getActionCommand() {
-        return actionCommand;
+    public List<ActionCommand> getActionCommandList() {
+        return new ArrayList<>(actionCommandList);
     }
 
     /**

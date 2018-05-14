@@ -2,6 +2,8 @@ package it.polimi.ingsw.server.model.table.dice;
 
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.model.exception.BagEmptyException;
+import it.polimi.ingsw.server.model.exception.EmptyCellException;
+import it.polimi.ingsw.server.model.table.Memento;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -12,9 +14,10 @@ import java.util.logging.Logger;
  * DiceBag is a concrete class representing the actual dice bag in the game: it contains all the left die, which are
  * randomly extracted from it.
  */
-public class DiceBag {
+public class DiceBag implements Memento{
     private List<Die> bag;
     private static final Logger logger = LogMaker.getLogger(Die.class.getName(), Level.ALL);
+    private Stack<List<Die>> diceBagMemento;
 
 
     /**
@@ -22,6 +25,7 @@ public class DiceBag {
      */
     public DiceBag(){
        bag = new ArrayList<>();
+       diceBagMemento = new Stack<>();
        for(int i=0; i<18; i++){
            bag.add(new Die(DieColor.RED, i));
            bag.add(new Die(DieColor.GREEN, 18 + i));
@@ -107,4 +111,13 @@ public class DiceBag {
     }
 
 
+    @Override
+    public void addMemento() {
+        diceBagMemento.push(new ArrayList<>(bag));
+    }
+
+    @Override
+    public void getMemento() {
+        this.bag = diceBagMemento.peek();
+    }
 }

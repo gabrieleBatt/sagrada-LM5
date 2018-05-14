@@ -1,26 +1,20 @@
-package it.polimi.ingsw.server.controller;
+package it.polimi.ingsw.server.model.rules;
 
+import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
-import it.polimi.ingsw.server.model.exception.BagEmptyException;
-import it.polimi.ingsw.server.model.exception.DeckTooSmallException;
-import it.polimi.ingsw.server.model.exception.EndGameException;
-import it.polimi.ingsw.server.model.exception.GlassWindowNotFoundException;
-import it.polimi.ingsw.server.model.objective.PrivateObjective;
-import it.polimi.ingsw.server.model.objective.PrivateObjectiveDeck;
-import it.polimi.ingsw.server.model.objective.PublicObjective;
-import it.polimi.ingsw.server.model.objective.PublicObjectiveDeck;
-import it.polimi.ingsw.server.model.rules.ActionCommand;
+import it.polimi.ingsw.server.model.exception.*;
+import it.polimi.ingsw.server.model.objective.*;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindowDeck;
-import it.polimi.ingsw.server.model.tool.Tool;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
 
 public class DefaultRules implements Rules {
 
@@ -64,6 +58,7 @@ public class DefaultRules implements Rules {
             publicObjectives = PublicObjectiveDeck.getPublicObjectiveDeck().draw(pubObjPerGame);
             actionReceiver.getTable().setPublicObjective(publicObjectives);
             actionReceiver.updateAll();
+            Game.getLogger().log(Level.FINE, publicObjectives.toString(), actionReceiver);
         };
     }
 
@@ -78,6 +73,7 @@ public class DefaultRules implements Rules {
                     player.setTokens(player.getGlassWindow().getDifficulty());
             }
             actionReceiver.updateAll();
+            Game.getLogger().log(Level.FINE, "Tokens given", actionReceiver);
         };
     }
 
@@ -103,6 +99,7 @@ public class DefaultRules implements Rules {
 
             }
             actionReceiver.updateAll();
+            Game.getLogger().log(Level.FINE, "Glass windows dealt", actionReceiver);
         };
     }
 
@@ -119,6 +116,7 @@ public class DefaultRules implements Rules {
                 for(int j=0;j<objPerPlayer;j++)
                      actionReceiver.getTable().getPlayers().get(i).addPrivateObjective(privateObjectives.get(i*objPerPlayer + j));
             actionReceiver.updateAll();
+            Game.getLogger().log(Level.FINE, "Private objectives dealt\n" + privateObjectives.toString(), actionReceiver);
         };
     }
 
@@ -131,8 +129,9 @@ public class DefaultRules implements Rules {
         return actionReceiver -> {
             int players = actionReceiver.getTable().getPlayers().size();
             Collection<Die> drawnDice = actionReceiver.getTable().getDiceBag().drawDice(players*2+1);
-            actionReceiver.getTable().getPool().addDice(drawnDice);
+            actionReceiver.getTable().getPool().setDice(drawnDice);
             actionReceiver.updateAll();
+            Game.getLogger().log(Level.FINE, "dice drawn\n"+drawnDice.toString(), actionReceiver);
         };
     }
 
@@ -142,8 +141,8 @@ public class DefaultRules implements Rules {
      * @return list of turn actions of a player.
      */
     @Override
-    public List<ActionCommand> getTurnActions(Player turnPlayer) {
-        return null;
+    public ActionCommand getTurnAction(Player turnPlayer) {
+        return new TurnActionCommand(turnPlayer);
     }
 
     /**
@@ -158,6 +157,8 @@ public class DefaultRules implements Rules {
               actionReceiver.getTable().getPool().takeDie(die);
           }
           actionReceiver.getTable().getRoundTrack().endRound(diceLeft);
+          actionReceiver.updateAll();
+          Game.getLogger().log(Level.FINE, "dice left set in the round rack\n"+diceLeft.toString(), actionReceiver);
         };
     }
 
@@ -167,7 +168,14 @@ public class DefaultRules implements Rules {
      */
     @Override
     public List<ActionCommand> getEndGameActions() {
-        return null;
+        List<ActionCommand> ret = new ArrayList<>();
+        ret.add(scorePublicObjectivePoints());
+        return ret;
+    }
+
+    private ActionCommand scorePublicObjectivePoints() {
+        return actionReceiver -> {
+        };
     }
 
     /**
@@ -179,7 +187,8 @@ public class DefaultRules implements Rules {
      */
     @Override
     public ActionCommand getDraftAction(String marker, Optional<DieColor> dieColor, Optional<Integer> dieNumber) {
-        return null;
+        return actionReceiver -> {
+        };
     }
 
     /**
@@ -192,7 +201,8 @@ public class DefaultRules implements Rules {
      */
     @Override
     public ActionCommand getPlaceAction(String marker, boolean adjacencyRestriction, boolean coloRestriction, boolean numberRestriction) {
-        return null;
+        return actionReceiver -> {
+        };
     }
 
 
