@@ -48,15 +48,24 @@ public class FakeSocketClient {
                         List<String> streamList = Stream.of(command.split(" ")).map(String::new).filter(x -> !x.equals("")).collect(Collectors.toList());
                         if (streamList.get(0).equals("chooseWindow")) {
                             List windowNameList = streamList.subList(1, streamList.size());
-                            out.println("windowChosen " + windowNameList.get(ThreadLocalRandom.current().nextInt(0, windowNameList.size())));
+                            System.out.println("Choose among these windows: " + windowNameList.subList(1,windowNameList.size()));
+                            System.out.println(" Type the displayed name of your choice only ");
+                            out.println("windowChosen" + System.in);
+                            //out.println("windowChosen " + windowNameList.get(ThreadLocalRandom.current().nextInt(0, windowNameList.size())));
                             out.flush();
                         } else if (streamList.get(0).equals("selectObject")) {
-                            out.println("optionSelected " + streamList
-                                    .get(ThreadLocalRandom.current().nextInt(2, streamList.size())));
+                            System.out.println("Choose among these : " + streamList.subList(1, streamList.size()));
+                            System.out.println(" Type the displayed name of your choice only ");
+                            out.println("optionSelected " + System.in);
+                            //out.println("optionSelected " + streamList
+                                    //.get(ThreadLocalRandom.current().nextInt(2, streamList.size())));
                             out.flush();
                         } else if (streamList.get(0).equals("selectFrom")) {
-                            out.println("selected " + streamList
-                                    .get(ThreadLocalRandom.current().nextInt(2, streamList.size())));
+                            System.out.println("Choose among these : " + streamList.subList(1,streamList.size()));
+                            System.out.println(" Type the displayed name of your choice only ");
+                            out.println("selected " + System.in);
+                            //out.println("selected " + streamList
+                              //      .get(ThreadLocalRandom.current().nextInt(2, streamList.size())));
                             out.flush();
                         }
                     }
