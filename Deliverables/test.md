@@ -32,6 +32,7 @@
                 - Create and empty the bag :heavy_check_mark:
                 - Draw multiple times multiple dice :heavy_check_mark:
                 - Place one extra die in the bag :heavy_check_mark:
+                - Testing memento :heavy_check_mark:
             - DieTest
                 - Set die numeric value :heavy_check_mark:
                 - Get die id :heavy_check_mark:
@@ -65,9 +66,11 @@
             - Add dice to pool :heavy_check_mark:
             - Remove die from pool :heavy_check_mark:
             - Roll all dice in pool :heavy_check_mark:
+            - Testing memento :heavy_check_mark:
         - RoundTrackTest 
             - End round adding dice :heavy_check_mark:
             - Remove a die from roundTrack placing another in its place :heavy_check_mark:
+            - Testing memento :heavy_check_mark:       
         - TableTest
             - Get players in table :heavy_check_mark:
             - Iterate players :heavy_check_mark:

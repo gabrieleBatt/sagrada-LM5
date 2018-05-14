@@ -70,14 +70,20 @@ public class Pool implements Memento {
         System.out.println(this);
     }
 
+    /**
+     * Adds the current pool state at the stack.
+     */
     @Override
     public void addMemento() {
         poolMemento.push(new ArrayList<>(diceOnTable));
 
     }
 
+    /**
+     * Gets the last pool state saved from the stack.
+     */
     @Override
     public void getMemento() {
-        this.setDice(poolMemento.peek());
+        this.setDice(new ArrayList<>(poolMemento.peek()));
     }
 }

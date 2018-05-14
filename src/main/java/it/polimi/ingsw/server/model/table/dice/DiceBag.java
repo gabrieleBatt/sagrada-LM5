@@ -111,13 +111,19 @@ public class DiceBag implements Memento{
     }
 
 
+    /**
+     * Adds the current dice bag state at the stack.
+     */
     @Override
     public void addMemento() {
         diceBagMemento.push(new ArrayList<>(bag));
     }
 
+    /**
+     * Gets the last round dice bag saved from the stack.
+     */
     @Override
     public void getMemento() {
-        this.bag = diceBagMemento.peek();
+        this.bag = new ArrayList<>(diceBagMemento.peek());
     }
 }

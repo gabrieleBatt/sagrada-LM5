@@ -100,6 +100,9 @@ public class RoundTrack implements Memento {
         System.out.println(this);
     }
 
+    /**
+     * Adds the current round track state at the stack.
+     */
     @Override
     public void addMemento() {
         List<ArrayList<Die>> newMemento = new ArrayList<>();
@@ -109,8 +112,15 @@ public class RoundTrack implements Memento {
         roundTrackMemento.push(newMemento);
     }
 
+    /**
+     * Gets the last round track state saved from the stack.
+     */
     @Override
     public void getMemento() {
-        this.dice = roundTrackMemento.peek();
+        List<ArrayList<Die>> old = new ArrayList<>(roundTrackMemento.peek());
+        for(ArrayList<Die> ar : roundTrackMemento.peek()) {
+            old.add(new ArrayList<>(ar));
+        }
+        this.dice = old;
     }
 }
