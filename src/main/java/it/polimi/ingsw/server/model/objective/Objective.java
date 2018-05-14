@@ -13,7 +13,7 @@ abstract class Objective {
     /**
      * @param name name of the objective to create
      */
-    Objective(String name){
+    public Objective(String name){
         this.name = name;
     }
 
@@ -21,7 +21,7 @@ abstract class Objective {
      * gets the name of the objective
      * @return the string with the name
      */
-    String getName() {
+    public String getName() {
         return name;
     }
 

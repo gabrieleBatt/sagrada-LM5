@@ -19,7 +19,7 @@ class ColorPrivateObjectiveTest {
 
     @DisplayName("Scoring cyan private objective")
     @Test
-    void scorePoints() throws IllegalGlassWindowException, NotValidNumberException, DieNotAllowedException, EmptyCellException {
+    void scorePoints() throws IllegalGlassWindowException, NotValidNumberException, DieNotAllowedException {
         List<Cell> cells = new ArrayList<>();
         ColorPrivateObjective c_objective = new ColorPrivateObjective("test", DieColor.CYAN);
         int k=0;

@@ -84,7 +84,7 @@ public class Cell {
      * @return: object die in the cell
      * @throws EmptyCellException thrown if the cell is empty
      */
-    public Die getDie() throws EmptyCellException {
+    public Die getDie() {
         if (die.isPresent()){
             return die.get();
         }else
@@ -134,11 +134,7 @@ public class Cell {
         if(this.numberRestriction.isPresent())
             ret = ret + "has a number restriction:"+this.numberRestriction.get()+"," ;
         if(this.isOccupied()) {
-            try {
-                ret = ret + "contains a die:" + this.getDie().toString();
-            } catch (EmptyCellException e) {
-                logger.log(Level.WARNING, e.getMessage(), e);
-            }
+            ret = ret + "contains a die:" + this.getDie().toString();
         }else
             ret = ret + "is empty";
         return ret;

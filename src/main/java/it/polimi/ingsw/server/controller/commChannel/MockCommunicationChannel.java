@@ -1,8 +1,14 @@
 package it.polimi.ingsw.server.controller.commChannel;
 
+import it.polimi.ingsw.server.model.table.Player;
+import it.polimi.ingsw.server.model.table.Pool;
+import it.polimi.ingsw.server.model.table.RoundTrack;
+import it.polimi.ingsw.server.model.table.Table;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -39,13 +45,31 @@ public class MockCommunicationChannel implements CommunicationChannel {
         return true;
     }
 
-    /**
-     * Updates any change occurred in the game.
-     */
     @Override
-    public void updateView() {
-        //TODO
+    public void updateView(Pool pool) {
+
     }
+
+    @Override
+    public void updateView(RoundTrack roundTrack) {
+
+    }
+
+    @Override
+    public void updateView(Table table) {
+
+    }
+
+    @Override
+    public void updateView(Player player) {
+
+    }
+
+    @Override
+    public void endGame(List<Pair<Player, Integer>> scores) {
+
+    }
+
 
     /**
      * Returns the chosen glassWindow among the given.
@@ -59,8 +83,7 @@ public class MockCommunicationChannel implements CommunicationChannel {
     }
 
     @Override
-    public String selectOption(List<String> ids, String container, boolean canSkip, boolean undoEnabled) {
-        String message = "selectObject ";
+    public String selectOption(List<String> ids, Object container, boolean canSkip, boolean undoEnabled) {
         List<String> idList = new ArrayList<>(ids);
         if (undoEnabled)
             idList.add("undo");

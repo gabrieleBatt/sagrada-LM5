@@ -39,7 +39,7 @@ public class SetPublicObjective extends PublicObjective {
                                 newRet++;
                             }
                         }
-                    } catch (CellNotFoundException | EmptyCellException e) {
+                    } catch (CellNotFoundException e) {
                         logger.log(Level.WARNING, e.getMessage(), e);
 
                     }
@@ -59,7 +59,7 @@ public class SetPublicObjective extends PublicObjective {
                                 newRet++;
                             }
                         }
-                    } catch (CellNotFoundException | EmptyCellException e) {
+                    } catch (CellNotFoundException e) {
                         logger.log(Level.WARNING, e.getMessage(), e);
                     }
                 }

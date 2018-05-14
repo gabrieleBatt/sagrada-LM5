@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 public class RoundTrack implements Memento {
 
     private static final Logger logger = LogMaker.getLogger(RoundTrack.class.getName(), Level.ALL);
-    private int round;
     private List<ArrayList<Die>> dice;
     private Stack<List<ArrayList<Die>>> roundTrackMemento;
 
@@ -26,7 +25,6 @@ public class RoundTrack implements Memento {
      * Creates a roundTrack
      */
     public RoundTrack() {
-        round = 1;
         dice = new ArrayList<>();
         roundTrackMemento = new Stack<>();
     }
@@ -36,7 +34,7 @@ public class RoundTrack implements Memento {
      * @return actual round
      */
     public int getRound(){
-        return round;
+        return dice.size()+1;
     }
 
     /**
@@ -45,13 +43,10 @@ public class RoundTrack implements Memento {
      * @throws EndGameException exception thrown if the game is over
      */
     public void endRound (Collection<Die> d) throws EndGameException {
-        if (round <10) {
-            round++;
+        if (dice.size() < 10) {
             dice.add(new ArrayList<>(d));
-            logger.log(Level.FINEST, "This round: " + getRound()+(-1) + " just ended, these dice remained on the table: "+ d, this);
+            logger.log(Level.FINEST, "This round: " + (getRound()+(-1)) + " just ended, these dice remained on the table: "+ d, this);
             logger.log(Level.FINEST, " This round: " + getRound() + " is started ", this);
-
-
         }else
             throw new EndGameException("Game over, can't add\n"+d.toString());
 

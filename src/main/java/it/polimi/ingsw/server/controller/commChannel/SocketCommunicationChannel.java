@@ -1,16 +1,27 @@
 package it.polimi.ingsw.server.controller.commChannel;
 
 import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.server.model.objective.PublicObjective;
+import it.polimi.ingsw.server.model.table.Player;
+import it.polimi.ingsw.server.model.table.Pool;
+import it.polimi.ingsw.server.model.table.RoundTrack;
+import it.polimi.ingsw.server.model.table.Table;
+import it.polimi.ingsw.server.model.table.dice.Die;
+import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
+import it.polimi.ingsw.server.model.tool.Tool;
+import javafx.util.Pair;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,6 +41,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
         out.println(nickname + " logged!");
+        logger.log(Level.FINE, nickname + " logged!");
         out.flush();
     }
 
@@ -44,13 +56,102 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     }
 
     @Override
-    public void updateView() {
+    public void updateView(Pool pool) {
+        String message = "update -p ";
+        for (Die die : pool.getDice()) {
+            message += die.getId();
+        }
+        out.println(message);
+        out.flush();
+        logger.log(Level.FINE, "Pool updated");
+    }
+
+    @Override
+    public void updateView(RoundTrack roundTrack) {
+        String message = "update -rt ";
+        for (int i = 1; i <= roundTrack.getRound(); i++) {
+            for (Die die : roundTrack.getDice(i)) {
+                message += "round"+i + ":" + die.getId();
+            }
+        }
+        out.println(message);
+        out.flush();
+        logger.log(Level.FINE, "RoundTrack updated");
+
+    }
+
+    @Override
+    public void updateView(Table table) {
+        StringBuilder message = new StringBuilder("update ");
+        if (!table.getPublicObjectives().isEmpty()){
+            message.append("-pub ");
+            table.getPublicObjectives().forEach(po -> message.append(po.getName()).append(" "));
+        }
+
+        if (!table.getTools().isEmpty()){
+            message.append("-t ");
+            table.getTools().forEach(t -> message.append(t.getName()).append("-").append(t.isUsed()).append(" "));
+
+        }
+
+        if (!table.getPlayers().isEmpty()){
+            message.append("-pl ");
+            table.getPlayers().forEach(p -> message.append(p.getNickname()).append(" "));
+        }
+
+        out.println(message);
+        out.flush();
+        logger.log(Level.FINE, "Table updated");
+
+    }
+
+    @Override
+    public void updateView(Player player) {
+        StringBuilder message = new StringBuilder("update ");
+        if(this.getNickname().equals(player.getNickname()) && !player.getPrivateObjective().isEmpty()) {
+            message.append("-prv ");
+            player.getPrivateObjective().forEach(p -> message.append(p.getName()).append(" "));
+        }
+
+        if(player.hasGlassWindow()){
+            message.append("-wd ");
+            if(!player.getNickname().equals(this.getNickname()))
+                message.append(player.getNickname()).append(" ");
+            message.append(player.getGlassWindow().getName()).append(" ");
+
+            for (Cell cell : player.getGlassWindow().getCellList()) {
+                if (cell.isOccupied())
+                    message.append(cell.getDie().getId()).append(" ");
+                else
+                    message.append("empty ");
+            }
+
+        }
+
+        message.append("-t ");
+        if(!player.getNickname().equals(this.getNickname()))
+            message.append(player.getNickname()).append(" ");
+        message.append(player.getTokens()).append(" ");
+
+        out.println(message);
+        out.flush();
+        logger.log(Level.FINE, "Player updated");
+    }
+
+    @Override
+    public void endGame(List<Pair<Player, Integer>> scores) {
+        StringBuilder message = new StringBuilder("endGame ");
+        scores.forEach(p -> message.append(p.getKey()).append("-").append(p.getValue()).append(" "));
+        
+        out.println(message);
+        out.flush();
+        logger.log(Level.FINE, "Game ended");
+
     }
 
     @Override
     public GlassWindow chooseWindow(List<GlassWindow> glassWindows) {
         String message = "chooseWindow ";
-        //glassWindows.forEach(gw -> message = message + gw.getName() + " ");
         for (GlassWindow glassWindow : glassWindows) {
             message = message + glassWindow.getName() + " ";
         }
@@ -86,8 +187,8 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     }
 
     @Override
-    public String selectOption(List<String> ids, String container, boolean canSkip, boolean undoEnabled) {
-        String message = "selectObject " + container + " ";
+    public String selectOption(List<String> ids, Object container, boolean canSkip, boolean undoEnabled) {
+        String message = "selectObject " + container.getClass().getName() + " ";
 
         for ( String s : ids) {
             message = message + s + " ";

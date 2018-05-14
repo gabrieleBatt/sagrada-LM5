@@ -13,7 +13,7 @@ class CellTest {
 
     @DisplayName("Place die in cell, various restrictions")
     @Test
-    void placeDie() throws NotValidNumberException, DieNotAllowedException, EmptyCellException {
+    void placeDie() throws NotValidNumberException, DieNotAllowedException {
         Cell cell_colour_restr = new Cell("", DieColor.YELLOW);
         Cell cell_number_restr = new Cell("", 3);
         Die dieY = new Die(DieColor.YELLOW, 3,10);
@@ -36,7 +36,7 @@ class CellTest {
         Assertions.assertThrows(DieNotAllowedException.class, () -> cell_number_restr.placeDie(dieC,false));
     }
 
-    private void assertTruePlace(Cell cell, Die die , boolean isTrue) throws DieNotAllowedException, EmptyCellException {
+    private void assertTruePlace(Cell cell, Die die , boolean isTrue) throws DieNotAllowedException {
         cell.placeDie(die,isTrue);
         Assertions.assertEquals(cell.getDie(),die);
     }
@@ -53,7 +53,7 @@ class CellTest {
 
     @DisplayName("Place and get die")
     @Test
-    void getDie() throws DieNotAllowedException, EmptyCellException {
+    void getDie() throws DieNotAllowedException {
         Cell cell = new Cell("");
         Die die = new Die(DieColor.RED, 10);
         Assertions.assertThrows(EmptyCellException.class, () -> cell.getDie());

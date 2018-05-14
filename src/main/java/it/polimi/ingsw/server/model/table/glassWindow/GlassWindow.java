@@ -73,13 +73,8 @@ public class GlassWindow {
     public Cell getCellByDie(String dieId) throws CellNotFoundException{
         for(Cell c: cellList){
             if (c.isOccupied()){
-                try {
-                    if (c.getDie().getId().equals(dieId)){
-                        return c;
-                    }
-                } catch (EmptyCellException e) {
-                    logger.log(Level.WARNING, e.getMessage(), e);
-                }
+                if (c.getDie().getId().equals(dieId))
+                    return c;
             }
         }
         throw new CellNotFoundException("There's no die whit the id "+ dieId +"in your glassWindow");
@@ -166,12 +161,8 @@ public class GlassWindow {
     public boolean hasAdjacentSimilar(int x, int y, Die die){
         for(Cell c: this.getAdjacent(x, y)){
             if(c.isOccupied()){
-                try {
-                    if (c.getDie().getColor().equals(die.getColor()) || c.getDie().getNumber() == die.getNumber()){
-                        return true;
-                    }
-                } catch (EmptyCellException e) {
-                    logger.log(Level.WARNING, e.getMessage(), e);
+                if (c.getDie().getColor().equals(die.getColor()) || c.getDie().getNumber() == die.getNumber()){
+                    return true;
                 }
             }
         }
@@ -245,7 +236,7 @@ public class GlassWindow {
                             ret = ret + this.getCell(i, j).getDie().toString() + "  ";
                         else
                             ret = ret + "empty  ";
-                    } catch (EmptyCellException | CellNotFoundException e) {
+                    } catch (CellNotFoundException e) {
                         logger.log(Level.WARNING, e.getMessage(), e);
 
                     }

@@ -176,7 +176,7 @@ public class Player implements Memento {
                 }else{
                     newMemento.add(Optional.empty());
                 }
-        } catch (GlassWindowNotFoundException | EmptyCellException e) {
+        } catch (GlassWindowNotFoundException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
         glassWindowMemento.push(newMemento);
