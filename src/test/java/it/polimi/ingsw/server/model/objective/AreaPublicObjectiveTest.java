@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.objective;
 
-import it.polimi.ingsw.server.model.exception.*;
+import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import it.polimi.ingsw.server.model.table.dice.Die;
@@ -16,7 +16,7 @@ class AreaPublicObjectiveTest {
 
     @DisplayName("Scoring column color objective")
     @Test
-    void scorePoints1() throws IllegalObjectiveException, IllegalGlassWindowException, CellNotFoundException, DieNotAllowedException {
+    void scorePoints1() throws DieNotAllowedException {
         GlassWindow glassWindow;
         List<Cell> cells;
 
@@ -71,7 +71,7 @@ class AreaPublicObjectiveTest {
 
     @DisplayName("Scoring diagonal color objective")
     @Test
-    void scorePoints2() throws IllegalObjectiveException, IllegalGlassWindowException, CellNotFoundException, DieNotAllowedException {
+    void scorePoints2() throws DieNotAllowedException {
         GlassWindow glassWindow;
         List<Cell> cells;
 
@@ -145,6 +145,6 @@ class AreaPublicObjectiveTest {
         for (int i = 0; i < 8; i++) {
             multiplicity.add(new ArrayList<>());
         }
-        Assertions.assertThrows(IllegalObjectiveException.class, ()->new AreaPublicObjective("test", 5, area, multiplicity));
+        Assertions.assertThrows(IllegalArgumentException.class, ()->new AreaPublicObjective("test", 5, area, multiplicity));
     }
 }

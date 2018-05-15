@@ -1,9 +1,7 @@
 package it.polimi.ingsw.server.model.table.glassWindow;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.model.exception.DeckTooSmallException;
-import it.polimi.ingsw.server.model.exception.IllegalGlassWindowException;
-import it.polimi.ingsw.server.model.objective.SetPublicObjective;
+import it.polimi.ingsw.server.exception.DeckTooSmallException;
 import it.polimi.ingsw.server.model.table.Deck;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import org.json.simple.JSONArray;
@@ -48,7 +46,7 @@ public class GlassWindowDeck implements Deck {
      * @throws DeckTooSmallException is thrown if there are not enough GlassWindows in the deck
      */
     @Override
-    public List<GlassWindow> draw(int num) throws DeckTooSmallException {
+    public List<GlassWindow> draw(int num) {
         List<GlassWindow> ret = new ArrayList<>();
 
         if(glassWindowCards.size() < num) throw new DeckTooSmallException(num + " cards requested, " + glassWindowCards + " in deck");
@@ -59,12 +57,8 @@ public class GlassWindowDeck implements Deck {
         }
 
         for(Integer i: integerSet){
-            try {
-                ret.add(readCard(glassWindowCards.get(i), 1));
-                ret.add(readCard(glassWindowCards.get(i), 2));
-            } catch (IllegalGlassWindowException e) {
-                logger.log(Level.WARNING, e.getMessage(), e);
-            }
+            ret.add(readCard(glassWindowCards.get(i), 1));
+            ret.add(readCard(glassWindowCards.get(i), 2));
 
         }
         logger.log(Level.FINEST, num + "GlassWindows have been drawn ", this);
@@ -84,7 +78,7 @@ public class GlassWindowDeck implements Deck {
         }
     }
 
-    private GlassWindow readCard(JSONObject jsonGlassWindow, int x) throws IllegalGlassWindowException {
+    private GlassWindow readCard(JSONObject jsonGlassWindow, int x) {
         String name = (String) jsonGlassWindow.get("name"+x);
         int difficulty = Math.toIntExact((long)jsonGlassWindow.get("difficulty"+x));
         List<Cell> cells = new ArrayList<>();

@@ -1,8 +1,7 @@
 package it.polimi.ingsw.server.model.table.glassWindow;
 
-import it.polimi.ingsw.server.model.exception.EmptyCellException;
-import it.polimi.ingsw.server.model.exception.NotValidNumberException;
-import it.polimi.ingsw.server.model.exception.DieNotAllowedException;
+import it.polimi.ingsw.server.exception.EmptyCellException;
+import it.polimi.ingsw.server.exception.DieNotAllowedException;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +12,7 @@ class CellTest {
 
     @DisplayName("Place die in cell, various restrictions")
     @Test
-    void placeDie() throws NotValidNumberException, DieNotAllowedException {
+    void placeDie() throws DieNotAllowedException {
         Cell cell_colour_restr = new Cell("", DieColor.YELLOW);
         Cell cell_number_restr = new Cell("", 3);
         Die dieY = new Die(DieColor.YELLOW, 3,10);
@@ -63,7 +62,7 @@ class CellTest {
 
     @DisplayName("Check allowed dice considering several restrictions")
     @Test
-    void isAllowed() throws NotValidNumberException {
+    void isAllowed() {
         Cell cell_colour_restr = new Cell("", DieColor.YELLOW);
         Cell cell_number_restr = new Cell("", 3);
         Die dieY = new Die(DieColor.YELLOW, 3,10);

@@ -1,13 +1,11 @@
 package it.polimi.ingsw.server.controller;
 
-import com.sun.javafx.css.Rule;
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
-import it.polimi.ingsw.server.model.exception.*;
+import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.rules.ActionCommand;
 import it.polimi.ingsw.server.model.rules.DefaultRules;
 import it.polimi.ingsw.server.model.rules.TurnActionCommand;
-import it.polimi.ingsw.server.model.table.Memento;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Table;
 import it.polimi.ingsw.server.model.table.dice.Die;
@@ -63,7 +61,7 @@ public class Game implements Runnable {
             try {
                 actionCommandList.get(0).execute(this);
                 actionCommandList.remove(0);
-            } catch (EndGameException | BagEmptyException | DeckTooSmallException | DieNotAllowedException | CellNotFoundException e) {
+            } catch (DieNotAllowedException e) {
                 logger.log(Level.WARNING, e.getMessage(), e);
             }
         }

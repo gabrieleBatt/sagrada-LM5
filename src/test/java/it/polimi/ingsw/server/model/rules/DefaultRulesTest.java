@@ -3,8 +3,7 @@ package it.polimi.ingsw.server.model.rules;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
 import it.polimi.ingsw.server.controller.commChannel.MockCommunicationChannel;
-import it.polimi.ingsw.server.model.exception.*;
-import it.polimi.ingsw.server.model.rules.DefaultRules;
+import it.polimi.ingsw.server.exception.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 class DefaultRulesTest {
 
@@ -28,29 +28,29 @@ class DefaultRulesTest {
 
     @DisplayName("Give window and token test")
     @Test
-    void dealGlassWindow() throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, CellNotFoundException, DieNotAllowedException {
-        Assertions.assertThrows(GlassWindowNotFoundException.class,()->DefaultRules.getDefaultRules().giveTokens().execute(game));
+    void dealGlassWindow() throws DieNotAllowedException {
+        Assertions.assertThrows(NoSuchElementException.class,()->DefaultRules.getDefaultRules().giveTokens().execute(game));
         DefaultRules.getDefaultRules().dealGlassWindow(2).execute(game);
         Assertions.assertTrue(()-> game.getTable().getPlayers().stream().allMatch(p->(p.hasGlassWindow())));
     }
 
     @DisplayName("Give private objective")
     @Test
-    void dealPrivateObjective() throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, CellNotFoundException, DieNotAllowedException {
+    void dealPrivateObjective() throws DieNotAllowedException {
         DefaultRules.getDefaultRules().dealPrivateObjective(1).execute(game);
         Assertions.assertTrue(()-> game.getTable().getPlayers().stream().allMatch(p->(p.getPrivateObjective().size() == 1)));
     }
 
     @DisplayName("Give public objectives")
     @Test
-    void dealPublicObjective() throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, CellNotFoundException, DieNotAllowedException {
+    void dealPublicObjective() throws DieNotAllowedException {
         DefaultRules.getDefaultRules().dealPublicObjective(3).execute(game);
         Assertions.assertEquals(3, game.getTable().getPublicObjectives().size());
     }
 
     @DisplayName("Testing round actions")
     @Test
-    void getRoundAction() throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, CellNotFoundException, DieNotAllowedException {
+    void getRoundAction() throws DieNotAllowedException {
         Assertions.assertEquals(0,game.getTable().getPool().getDice().size());
         DefaultRules.getDefaultRules().getSetupRoundAction().execute(game);
         Assertions.assertEquals(5,game.getTable().getPool().getDice().size());

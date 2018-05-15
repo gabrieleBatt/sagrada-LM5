@@ -1,12 +1,9 @@
 package it.polimi.ingsw.server.model.objective;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.model.exception.DeckTooSmallException;
-import it.polimi.ingsw.server.model.exception.IllegalObjectiveException;
-import it.polimi.ingsw.server.model.exception.InvalidJSONException;
+import it.polimi.ingsw.server.exception.DeckTooSmallException;
 import it.polimi.ingsw.server.model.table.Deck;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -55,7 +52,7 @@ public class PrivateObjectiveDeck implements Deck {
         }
 
         @Override
-        public List<PrivateObjective> draw(int num) throws DeckTooSmallException {
+        public List<PrivateObjective> draw(int num) {
             List<PrivateObjective> ret = new ArrayList<>();
 
             if(privateObjectives.size() < num) throw new DeckTooSmallException(num + " cards requested, " + privateObjectives + " in deck");
@@ -66,11 +63,7 @@ public class PrivateObjectiveDeck implements Deck {
             }
 
             for(Integer i: integerSet){
-                try {
-                    ret.add(readCard(privateObjectives.get(i)));
-                } catch (InvalidJSONException e) {
-                    logger.log(Level.WARNING, e.getMessage(), e);
-                }
+                ret.add(readCard(privateObjectives.get(i)));
 
             }
             logger.log(Level.FINEST, num + " private objectives have been drawn ", this);
@@ -79,7 +72,7 @@ public class PrivateObjectiveDeck implements Deck {
             return ret;
         }
 
-        private PrivateObjective readCard(JSONObject jsonObject) throws InvalidJSONException {
+        private PrivateObjective readCard(JSONObject jsonObject){
                 return new ColorPrivateObjective((String)jsonObject.get("name"), DieColor.valueOf(((String)jsonObject.get("color"))));
         }
 

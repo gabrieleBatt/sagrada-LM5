@@ -1,8 +1,7 @@
 package it.polimi.ingsw.server.model.tool;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.model.exception.DeckTooSmallException;
-import it.polimi.ingsw.server.model.exception.InvalidJSONException;
+import it.polimi.ingsw.server.exception.DeckTooSmallException;
 import it.polimi.ingsw.server.model.table.Deck;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -57,7 +56,7 @@ public class ToolDeck implements Deck {
 
 
     @Override
-    public List<Tool> draw(int num) throws DeckTooSmallException {
+    public List<Tool> draw(int num){
         List<Tool> ret = new ArrayList<>();
 
         if(tools.size() < num) throw new DeckTooSmallException(num + " tools requested, " + tools );

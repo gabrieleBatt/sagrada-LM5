@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.exception;
+package it.polimi.ingsw.server.exception;
 
 /**
  * thrown by server whether there's an attempt to get a die from an empty cell

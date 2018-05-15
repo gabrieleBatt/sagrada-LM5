@@ -1,8 +1,7 @@
 package it.polimi.ingsw.server.model.table;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.model.exception.EmptyCellException;
-import it.polimi.ingsw.server.model.exception.EndGameException;
+import it.polimi.ingsw.server.exception.EndGameException;
 import it.polimi.ingsw.server.model.table.dice.Die;
 
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ public class RoundTrack implements Memento {
      * @param d a list of dice
      * @throws EndGameException exception thrown if the game is over
      */
-    public void endRound (Collection<Die> d) throws EndGameException {
+    public void endRound (Collection<Die> d) {
         if (dice.size() < 10) {
             dice.add(new ArrayList<>(d));
             logger.log(Level.FINEST, "This round: " + (getRound()+(-1)) + " just ended, these dice remained on the table: "+ d, this);

@@ -2,10 +2,8 @@ package it.polimi.ingsw.server.model.rules;
 
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
-import it.polimi.ingsw.server.model.exception.*;
+import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.table.Player;
-import it.polimi.ingsw.server.model.table.dice.Die;
-import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import it.polimi.ingsw.server.model.tool.Tool;
 
 import java.util.*;
@@ -28,7 +26,7 @@ public class TurnActionCommand implements ActionCommand{
     }
 
     @Override
-    public void execute(Game actionReceiver) throws EndGameException, BagEmptyException, DeckTooSmallException, GlassWindowNotFoundException, CellNotFoundException, DieNotAllowedException {
+    public void execute(Game actionReceiver) throws DieNotAllowedException {
         backUp(actionReceiver);
         do {
             reset = false;
@@ -49,7 +47,7 @@ public class TurnActionCommand implements ActionCommand{
         }while(reset);
     }
 
-    private void doActionChosen(String actionChosen, Game actionReceiver) throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, CellNotFoundException, DieNotAllowedException {
+    private void doActionChosen(String actionChosen, Game actionReceiver) throws DieNotAllowedException {
         switch (actionChosen) {
             case useTool:
                 String toolChosen = cc.selectOption(actionReceiver.getTable().getTools().stream().map(t -> t.getName()).collect(Collectors.toList()), "table", false, true);

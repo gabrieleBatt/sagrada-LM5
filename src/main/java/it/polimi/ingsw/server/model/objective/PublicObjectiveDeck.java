@@ -1,9 +1,7 @@
 package it.polimi.ingsw.server.model.objective;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.model.exception.DeckTooSmallException;
-import it.polimi.ingsw.server.model.exception.IllegalObjectiveException;
-import it.polimi.ingsw.server.model.exception.InvalidJSONException;
+import it.polimi.ingsw.server.exception.DeckTooSmallException;
 import it.polimi.ingsw.server.model.table.Deck;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import org.json.simple.JSONArray;
@@ -54,7 +52,7 @@ public class PublicObjectiveDeck implements Deck {
     }
 
     @Override
-    public List<PublicObjective> draw(int num) throws DeckTooSmallException {
+    public List<PublicObjective> draw(int num){
         List<PublicObjective> ret = new ArrayList<>();
 
         if(publicObjectives.size() < num) throw new DeckTooSmallException(num + " cards requested, " + publicObjectives + " in deck");
@@ -65,11 +63,7 @@ public class PublicObjectiveDeck implements Deck {
         }
 
         for(Integer i: integerSet){
-            try {
-                ret.add(readCard(publicObjectives.get(i)));
-            } catch (InvalidJSONException e) {
-                logger.log(Level.WARNING, e.getMessage(), e);
-            }
+            ret.add(readCard(publicObjectives.get(i)));
 
         }
 
@@ -77,10 +71,9 @@ public class PublicObjectiveDeck implements Deck {
         return ret;
     }
 
-    private PublicObjective readCard(JSONObject jsonObject) throws InvalidJSONException {
+    private PublicObjective readCard(JSONObject jsonObject){
         if ((jsonObject.get("type")).equals("area")) return readAreaCard(jsonObject);
-        else if ((jsonObject.get("type")).equals("set")) return readSetCard(jsonObject);
-        else throw new InvalidJSONException(jsonObject + " is not a valid public objective");
+        else return readSetCard(jsonObject);
     }
 
     private PublicObjective readSetCard(JSONObject jsonObject) {
@@ -148,11 +141,7 @@ public class PublicObjectiveDeck implements Deck {
 
 
         AreaPublicObjective ret = null;
-        try {
-            ret = new AreaPublicObjective(name, points, area, mult);
-        } catch (IllegalObjectiveException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
+        ret = new AreaPublicObjective(name, points, area, mult);
 
 
         while(iterator.hasNext()){
@@ -179,11 +168,7 @@ public class PublicObjectiveDeck implements Deck {
             addMult("Red",  multiplicity, mult);
             addMult("Yellow",  multiplicity, mult);
 
-            try {
-                ret.addArea(area, mult);
-            } catch (IllegalObjectiveException e) {
-                logger.log(Level.WARNING, e.getMessage(), e);
-            }
+            ret.addArea(area, mult);
         }
 
 

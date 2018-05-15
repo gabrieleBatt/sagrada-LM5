@@ -2,12 +2,6 @@
 package it.polimi.ingsw.server.model.table.glassWindow;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.model.exception.CellNotFoundException;
-import it.polimi.ingsw.server.model.exception.DieNotAllowedException;
-import it.polimi.ingsw.server.model.exception.EmptyCellException;
-import it.polimi.ingsw.server.model.exception.IllegalGlassWindowException;
-import it.polimi.ingsw.server.model.objective.SetPublicObjective;
-import it.polimi.ingsw.server.model.table.Memento;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import java.util.*;
 import java.util.logging.Level;
@@ -26,9 +20,9 @@ public class GlassWindow {
     private List<Cell> cellList;
     private HashMap<String, List<List<Optional<Die>>>> glassWindowMemento = null;
 
-    public GlassWindow(String name, int difficulty, List<Cell> cells) throws IllegalGlassWindowException {
+    public GlassWindow(String name, int difficulty, List<Cell> cells) {
         if (cells.size() != 20){
-            throw new IllegalGlassWindowException("GlassWindow size can't be"+cells.size());
+            throw new IllegalArgumentException("GlassWindow size can't be"+cells.size());
         }
         this.name = name;
         this.difficulty = difficulty;
@@ -56,58 +50,58 @@ public class GlassWindow {
      * @param x column
      * @param y row
      * @return Cell in x,y on the glassWindow
-     * @throws CellNotFoundException Exception thrown whether column or row are not valid inputs
+     * @throws IndexOutOfBoundsException Exception thrown whether column or row are not valid inputs
      */
-    public Cell getCell(int x, int y) throws CellNotFoundException{
+    public Cell getCell(int x, int y){
         if (x>=0 && x<4 && y>=0 && y<5)
             return cellList.get(x*5+y);
-        else throw new CellNotFoundException("Can't find cell at (" +x+", "+y+")");
+        else throw new IndexOutOfBoundsException("Can't find cell at (" +x+", "+y+")");
     }
 
     /**
      * Gets the cell in which there's a die having dieId Id
      * @param dieId String, value to look for
      * @return cell containing the die having dieId Id
-     * @throws CellNotFoundException Exception thrown if dieId is not found
+     * @throws NoSuchElementException Exception thrown if dieId is not found
      */
-    public Cell getCellByDie(String dieId) throws CellNotFoundException{
+    public Cell getCellByDie(String dieId){
         for(Cell c: cellList){
             if (c.isOccupied()){
                 if (c.getDie().getId().equals(dieId))
                     return c;
             }
         }
-        throw new CellNotFoundException("There's no die whit the id "+ dieId +"in your glassWindow");
+        throw new NoSuchElementException("There's no die whit the id "+ dieId +"in your glassWindow");
     }
 
     /**
      * gets the row of the cell
      * @param cell
      * @return the row
-     * @throws CellNotFoundException if the cell is not in this glassWindow
+     * @throws NoSuchElementException if the cell is not in this glassWindow
      */
-    public int getRow(Cell cell) throws CellNotFoundException {
+    public int getRow(Cell cell) {
         for (int i = 0; i < cellList.size(); i++) {
             if(cellList.get(i).equals(cell)){
                 return i/5;
             }
         }
-        throw new CellNotFoundException("The cell"+ cell.toString() +"is not in your glassWindow");
+        throw new NoSuchElementException("The cell"+ cell.toString() +"is not in your glassWindow");
     }
 
     /**
      * gets the column of the cell
      * @param cell
      * @return the column
-     * @throws CellNotFoundException if the cell is not in this glassWindow
+     * @throws NoSuchElementException if the cell is not in this glassWindow
      */
-    public int getColumn(Cell cell) throws CellNotFoundException {
+    public int getColumn(Cell cell){
         for (int i = 0; i < cellList.size(); i++) {
             if(cellList.get(i).equals(cell)){
                 return i%5;
             }
         }
-        throw new CellNotFoundException("The cell"+ cell.toString() +"is not in your glassWindow");
+        throw new NoSuchElementException("The cell"+ cell.toString() +"is not in your glassWindow");
     }
 
     /**
@@ -127,27 +121,19 @@ public class GlassWindow {
 
     private Collection<Cell> getSurrounding(int x, int y){
         Set<Cell> ret = new HashSet<>(this.getAdjacent(x, y));
-        try {
-            if(x<3 && y<4)ret.add(this.getCell(x+1,y+1));
-            if(x<3 && y>0)ret.add(this.getCell(x+1,y-1));
-            if(x>0 && y<4)ret.add(this.getCell(x-1,y+1));
-            if(x>0 && y>0)ret.add(this.getCell(x-1,y-1));
-        } catch (CellNotFoundException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
+        if(x<3 && y<4)ret.add(this.getCell(x+1,y+1));
+        if(x<3 && y>0)ret.add(this.getCell(x+1,y-1));
+        if(x>0 && y<4)ret.add(this.getCell(x-1,y+1));
+        if(x>0 && y>0)ret.add(this.getCell(x-1,y-1));
         return ret;
     }
 
     private Collection<Cell> getAdjacent(int x, int y){
         Set<Cell> ret = new HashSet<>();
-        try {
-            if(x>0)ret.add(this.getCell(x-1,y));
-            if(x<3)ret.add(this.getCell(x+1,y));
-            if(y>0)ret.add(this.getCell(x,y-1));
-            if(y<4)ret.add(this.getCell(x,y+1));
-        } catch (CellNotFoundException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
+        if(x>0)ret.add(this.getCell(x-1,y));
+        if(x<3)ret.add(this.getCell(x+1,y));
+        if(y>0)ret.add(this.getCell(x,y-1));
+        if(y<4)ret.add(this.getCell(x,y+1));
         return ret;
     }
 
@@ -174,15 +160,10 @@ public class GlassWindow {
      * @return Collection of available cells
      */
     private Collection<Cell> borderCells(){
-        return (new ArrayList<Cell>(cellList)).stream().filter(c -> {
-            try {
-                return ((this.getColumn(c) == 0) || (this.getColumn(c) == 4)
-                                || (this.getRow(c) == 0) || (this.getRow(c) == 3));
-            } catch (CellNotFoundException e) {
-                logger.log(Level.WARNING, e.getMessage(), e);
-            }
-            return false;
-        }).collect(Collectors.toList());
+        return (new ArrayList<Cell>(cellList)).stream()
+                .filter(c -> ((this.getColumn(c) == 0) || (this.getColumn(c) == 4)
+                || (this.getRow(c) == 0) || (this.getRow(c) == 3)))
+                .collect(Collectors.toList());
     }
 
 
@@ -196,16 +177,9 @@ public class GlassWindow {
         if(this.isEmpty())
             return borderCells();
         return (new ArrayList<>(cellList)).stream().filter(c ->
-                {
-                    try {
-                        return !hasAdjacentSimilar(getRow(c), getColumn(c), die)
-                                && (hasSurroundingDice(getRow(c), getColumn(c)) || ignoredSurroundingRestriction)
-                                && !c.isOccupied();
-                    } catch (CellNotFoundException e) {
-                        logger.log(Level.WARNING, e.getMessage(), e);
-                    }
-                    return false;
-                }
+                !hasAdjacentSimilar(getRow(c), getColumn(c), die)
+                        && (hasSurroundingDice(getRow(c), getColumn(c)) || ignoredSurroundingRestriction)
+                        && !c.isOccupied()
         ).collect(Collectors.toList());
 
     }
@@ -231,15 +205,10 @@ public class GlassWindow {
         String ret = "This glassWindow contains\n";
             for(int i = 0; i<4;i++) {
                 for (int j = 0; j < 5; j++) {
-                    try {
-                        if (this.getCell(i, j).isOccupied())
-                            ret = ret + this.getCell(i, j).getDie().toString() + "  ";
-                        else
-                            ret = ret + "empty  ";
-                    } catch (CellNotFoundException e) {
-                        logger.log(Level.WARNING, e.getMessage(), e);
-
-                    }
+                    if (this.getCell(i, j).isOccupied())
+                        ret = ret + this.getCell(i, j).getDie().toString() + "  ";
+                    else
+                        ret = ret + "empty  ";
                 }
                 ret = ret + "\n";
             }

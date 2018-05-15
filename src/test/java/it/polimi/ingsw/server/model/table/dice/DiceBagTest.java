@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.model.table.dice;
 
-import it.polimi.ingsw.server.model.exception.BagEmptyException;
-import it.polimi.ingsw.server.model.table.dice.DiceBag;
+import it.polimi.ingsw.server.exception.BagEmptyException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,7 @@ class DiceBagTest {
 
     @DisplayName("Create and empty the bag")
     @Test
-    void drawDie() throws BagEmptyException {
+    void drawDie() {
         DiceBag db = new DiceBag();
         Set<String> sd = new HashSet<>();
         Assertions.assertTrue(db.bagSize() == 90);
@@ -25,7 +24,7 @@ class DiceBagTest {
 
     @DisplayName("Draw multiple times multiple dice")
     @Test
-    void drawDice() throws BagEmptyException {
+    void drawDice() {
         DiceBag db = new DiceBag();
         Collection<Die> diceDrown = new ArrayList<Die>();
         int n = 90;
@@ -53,7 +52,7 @@ class DiceBagTest {
 
     @DisplayName("Testing memento")
     @Test
-    void memento() throws BagEmptyException {
+    void memento() {
         DiceBag db = new DiceBag();
         Die die = new Die(DieColor.CYAN, 9);
         db.addMemento();

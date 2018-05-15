@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server.model.objective;
 
-import it.polimi.ingsw.server.model.exception.DieNotAllowedException;
-import it.polimi.ingsw.server.model.exception.IllegalGlassWindowException;
-import it.polimi.ingsw.server.model.exception.NotValidNumberException;
+import it.polimi.ingsw.server.exception.DieNotAllowedException;
 import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import it.polimi.ingsw.server.model.table.dice.Die;
@@ -22,7 +20,7 @@ class SetPublicObjectiveTest {
 
     @DisplayName("Scoring set of 3 and 5")
     @Test
-    void scorePoints1() throws NotValidNumberException, DieNotAllowedException, IllegalGlassWindowException {
+    void scorePoints1() throws DieNotAllowedException {
         cells = new ArrayList<>();
 
         for (int i = 0; i < 20; i++) {
@@ -92,7 +90,7 @@ class SetPublicObjectiveTest {
 
     @DisplayName("Scoring color set objective")
     @Test
-    void scorePoints2() throws NotValidNumberException, DieNotAllowedException, IllegalGlassWindowException {
+    void scorePoints2() throws  DieNotAllowedException {
         cells = new ArrayList<>();
 
         for (int i = 0; i < 20; i++) {

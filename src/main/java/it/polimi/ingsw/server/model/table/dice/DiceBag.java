@@ -1,8 +1,7 @@
 package it.polimi.ingsw.server.model.table.dice;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.model.exception.BagEmptyException;
-import it.polimi.ingsw.server.model.exception.EmptyCellException;
+import it.polimi.ingsw.server.exception.BagEmptyException;
 import it.polimi.ingsw.server.model.table.Memento;
 
 import java.util.*;
@@ -40,7 +39,7 @@ public class DiceBag implements Memento{
      * @param num number of dice to be drawn
      * @return: list of dice drawn
      */
-    public Collection<Die> drawDice(int num) throws BagEmptyException {
+    public Collection<Die> drawDice(int num) {
         if (bag.size() < num){
             throw new BagEmptyException("Dice in bag: " + bag.size()+"\nDice requested "+ num);
         }
@@ -55,7 +54,7 @@ public class DiceBag implements Memento{
      * Draws a die from the dice bag; removing die from the dice bag
      * @return the die drown
      */
-    private Die drawDie() throws BagEmptyException {
+    private Die drawDie() {
         if (bag.size() == 0){
             throw new BagEmptyException("Dice in bag: " + bag.size()+"\nDice requested 0");
         }

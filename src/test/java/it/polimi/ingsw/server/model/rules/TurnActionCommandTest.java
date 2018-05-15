@@ -3,7 +3,7 @@ package it.polimi.ingsw.server.model.rules;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
 import it.polimi.ingsw.server.controller.commChannel.MockCommunicationChannel;
-import it.polimi.ingsw.server.model.exception.*;
+import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class TurnActionCommandTest {
 
@@ -31,7 +29,7 @@ class TurnActionCommandTest {
 
     @DisplayName("Testing turn")
     @Test
-    void execute() throws BagEmptyException, GlassWindowNotFoundException, EndGameException, DeckTooSmallException, CellNotFoundException, DieNotAllowedException {
+    void execute() throws DieNotAllowedException {
         for (ActionCommand actionCommand : DefaultRules.getDefaultRules().getSetupGameActions()) {
             actionCommand.execute(game);
         }

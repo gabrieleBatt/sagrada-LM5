@@ -1,10 +1,7 @@
 package it.polimi.ingsw.server.model.objective;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.controller.Lobby;
-import it.polimi.ingsw.server.model.exception.CellNotFoundException;
-import it.polimi.ingsw.server.model.exception.EmptyCellException;
-import it.polimi.ingsw.server.model.exception.IllegalObjectiveException;
+import it.polimi.ingsw.server.exception.EmptyCellException;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 
 import java.util.ArrayList;
@@ -25,9 +22,9 @@ public class AreaPublicObjective extends PublicObjective {
      * @param points points for area respecting multiplicity
      * @param area list of coordinates representing an area
      * @param multiplicity multiplicity of die values(listed the numbers form one to six and then the colors in alphabetical order)
-     * @throws IllegalObjectiveException thrown if the parameters are not correct
+     * @throws IllegalArgumentException thrown if the parameters are not correct
      */
-    public AreaPublicObjective(String name, int points, List<Coordinate> area, List<List<Integer>> multiplicity) throws IllegalObjectiveException {
+    public AreaPublicObjective(String name, int points, List<Coordinate> area, List<List<Integer>> multiplicity) {
         super(name);
 
         areaList = new ArrayList<>();
@@ -52,7 +49,7 @@ public class AreaPublicObjective extends PublicObjective {
         return ret;
     }
 
-    public void addArea(List<Coordinate> area, List<List<Integer>> multiplicity) throws IllegalObjectiveException {
+    public void addArea(List<Coordinate> area, List<List<Integer>> multiplicity) {
         areaList.add(new Area(area, multiplicity));
         logger.log(Level.FINEST, "This area: " + area + " has been added to areaList", this);
 
@@ -76,7 +73,7 @@ public class AreaPublicObjective extends PublicObjective {
                     case YELLOW: actualMultiplicity[10]++; break;
                 }
             }
-        }catch (CellNotFoundException | EmptyCellException e) {
+        }catch (EmptyCellException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
 
@@ -90,9 +87,9 @@ public class AreaPublicObjective extends PublicObjective {
         List<Coordinate> area;
         List<List<Integer>> multiplicity;
 
-        public Area(List<Coordinate> area, List<List<Integer>> multiplicity) throws IllegalObjectiveException {
+        public Area(List<Coordinate> area, List<List<Integer>> multiplicity) {
             if( multiplicity.size() != 11){
-                throw new IllegalObjectiveException("Can't make objective\nmultiplicity expected 11, found:"+multiplicity.size());
+                throw new IllegalArgumentException("Can't make objective\nmultiplicity expected 11, found:"+multiplicity.size());
             }
             this.multiplicity = new ArrayList<>();
             for(List<Integer> il: multiplicity){

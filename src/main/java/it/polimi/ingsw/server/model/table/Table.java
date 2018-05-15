@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.model.table;
 
-import it.polimi.ingsw.server.model.exception.PlayerNotFoundException;
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.model.objective.PublicObjective;
 import it.polimi.ingsw.server.model.table.dice.DiceBag;
@@ -73,12 +72,15 @@ public class Table {
      * Gets the player having -nickName- as a nickname from the players' list.
      * @param nickName
      * @return Object Player if is present
-     * having -nickName- as nickname
+     *      having -nickName- as nickname
      */
     public Player getPlayer(String nickName){
-        if(getPlayers().stream().filter(p -> p.getNickname().equals(nickName)).findFirst().isPresent())
-            return getPlayers().stream().filter(p -> p.getNickname().equals(nickName)).findFirst().get();
-        throw new PlayerNotFoundException("Player "+nickName +" can't be found");
+        if(getPlayers().stream().anyMatch(p -> p.getNickname().equals(nickName)))
+            return getPlayers().stream().
+                    filter(p -> p.getNickname().equals(nickName))
+                    .findAny()
+                    .get();
+        else throw new NoSuchElementException("Player "+nickName +" can't be found");
     }
 
     /**

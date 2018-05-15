@@ -1,11 +1,7 @@
 package it.polimi.ingsw.server.model.table;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.model.exception.CellNotFoundException;
-import it.polimi.ingsw.server.model.exception.EmptyCellException;
-import it.polimi.ingsw.server.model.exception.GlassWindowNotFoundException;
 import it.polimi.ingsw.server.model.objective.PrivateObjective;
-import it.polimi.ingsw.server.model.objective.SetPublicObjective;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
@@ -53,12 +49,12 @@ public class Player implements Memento {
     /**
      * Gets the glassWindow
      * @return: glassWindow
-     * @throws CellNotFoundException exception thrown if there's no glassWindow
+     * @throws NoSuchElementException exception thrown if there's no glassWindow
      */
-    public GlassWindow getGlassWindow() throws GlassWindowNotFoundException {
+    public GlassWindow getGlassWindow(){
         if(glassWindow.isPresent())
             return glassWindow.get();
-        else throw new GlassWindowNotFoundException("The player"+ this.nickname +"hasn't a glassWindow");
+        else throw new NoSuchElementException("The player"+ this.nickname +"hasn't a glassWindow");
     }
 
     /**
@@ -173,15 +169,11 @@ public class Player implements Memento {
     public void addMemento() {
         List<Optional<Die>> newMemento = new ArrayList<>();
         tokensMemento.push(this.tokens);
-        try {
-            for(Cell cell : this.getGlassWindow().getCellList())
-                if (cell.isOccupied()){
-                    newMemento.add(Optional.of(cell.getDie()));
-                }else{
-                    newMemento.add(Optional.empty());
-                }
-        } catch (GlassWindowNotFoundException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
+        for(Cell cell : this.getGlassWindow().getCellList())
+            if (cell.isOccupied()){
+            newMemento.add(Optional.of(cell.getDie()));
+            }else{
+            newMemento.add(Optional.empty());
         }
         glassWindowMemento.push(newMemento);
     }
@@ -195,11 +187,7 @@ public class Player implements Memento {
         this.tokens = new Integer(tokensMemento.peek());
         List<Optional<Die>> dieList = new ArrayList<>(glassWindowMemento.peek());
         for(int i = 0; i<20; i++) {
-            try {
-                this.getGlassWindow().getCellList().get(i).placeOptionalDie(dieList.get(i));
-            } catch (GlassWindowNotFoundException e) {
-                logger.log(Level.WARNING,e.getMessage(),e);
-            }
+            this.getGlassWindow().getCellList().get(i).placeOptionalDie(dieList.get(i));
         }
     }
 }

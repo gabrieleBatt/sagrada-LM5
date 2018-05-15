@@ -36,8 +36,6 @@
             - DieTest
                 - Set die numeric value :heavy_check_mark:
                 - Get die id :heavy_check_mark:
-                - Increase die value :heavy_check_mark:
-                - Decrease die value :heavy_check_mark:
                 - Confront dice :heavy_check_mark:
         -glassWindow
             - CellTest 

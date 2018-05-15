@@ -1,13 +1,11 @@
 package it.polimi.ingsw.server.model.table.glassWindow;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.model.exception.EmptyCellException;
-import it.polimi.ingsw.server.model.exception.DieNotAllowedException;
-import it.polimi.ingsw.server.model.objective.SetPublicObjective;
+import it.polimi.ingsw.server.exception.EmptyCellException;
+import it.polimi.ingsw.server.exception.DieNotAllowedException;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;

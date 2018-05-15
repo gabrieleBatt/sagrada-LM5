@@ -1,12 +1,10 @@
 package it.polimi.ingsw.server.model.objective;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.model.exception.CellNotFoundException;
-import it.polimi.ingsw.server.model.exception.EmptyCellException;
+import it.polimi.ingsw.server.exception.EmptyCellException;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 
-import java.nio.file.Watchable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,7 +35,7 @@ public class ColorPrivateObjective extends PrivateObjective {
                             ret += glassWindow.getCell(i, j).getDie().getNumber();
                         }
                     }
-                } catch (CellNotFoundException | EmptyCellException e) {
+                } catch (EmptyCellException e) {
                     logger.log(Level.WARNING, e.getMessage(), e);
                 }
             }

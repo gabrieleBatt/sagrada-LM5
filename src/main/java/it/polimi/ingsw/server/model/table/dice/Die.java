@@ -1,7 +1,5 @@
 package it.polimi.ingsw.server.model.table.dice;
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.model.exception.NotValidNumberException;
-import it.polimi.ingsw.server.model.table.Player;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
@@ -24,9 +22,9 @@ public class Die {
      * @param color die color
      * @param number die numeric value
      * @param id die id code
-     * @throws NotValidNumberException exception thrown whether parameters are not legal
+     * @throws IllegalArgumentException exception thrown whether parameters are not legal
      */
-    public Die(DieColor color, int number, int id) throws NotValidNumberException {
+    public Die(DieColor color, int number, int id) {
         this.color = color;
         this.setNumber(number);
         this.id = id;
@@ -71,11 +69,11 @@ public class Die {
      * * Sets the numeric value of a die
      * @param number numeric value that has to be set
      * @return this
-     * @throws NotValidNumberException exception thrown whether
+     * @throws IllegalArgumentException exception thrown whether the number is not  between 1 and 6
      */
-    public Die setNumber(int number) throws NotValidNumberException {
+    public Die setNumber(int number) {
         if (number <1 || number > 6 ){
-            throw new NotValidNumberException(number + " is not a valid number");
+            throw new IllegalArgumentException(number + " is not a valid number");
         }
         else this.number = number;
         logger.log(Level.FINEST, "Die set to "+getId());
@@ -88,34 +86,6 @@ public class Die {
     public void roll(){
         this.number = ThreadLocalRandom.current().nextInt(1, 6 + 1);
         logger.log(Level.FINEST, "Die rolled to "+getId());
-    }
-
-    /**
-     * Increases the number given unless its value is 6
-     * @return this
-     * @throws NotValidNumberException exception thrown whether the number is 6
-     */
-    public Die increase() throws NotValidNumberException{
-        if (this.number == 6)
-            throw new NotValidNumberException("Die is already at the maximum value");
-        else
-            this.number++;
-        logger.log(Level.FINEST, "Die increased to "+getId());
-        return this;
-    }
-
-    /**
-     * Decreases the number given unless its value is 1
-     * @throws NotValidNumberException exception thrown whether the number is 1
-     * @return this
-     */
-    public Die decrease() throws NotValidNumberException{
-        if (number == 1)
-            throw new NotValidNumberException("Die is already at the minimum value");
-        else
-            number--;
-        logger.log(Level.FINEST, "Die decreased to "+getId());
-        return this;
     }
 
     /**

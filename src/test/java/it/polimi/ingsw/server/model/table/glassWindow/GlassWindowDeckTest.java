@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.model.table.glassWindow;
 
-import it.polimi.ingsw.server.model.exception.CellNotFoundException;
-import it.polimi.ingsw.server.model.exception.DeckTooSmallException;
+import it.polimi.ingsw.server.exception.DeckTooSmallException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,19 +12,19 @@ class GlassWindowDeckTest {
 
     @DisplayName("Draw 4 glassWindows")
     @Test
-    void draw() throws DeckTooSmallException {
+    void draw() {
         Assertions.assertEquals(2*2, GlassWindowDeck.getGlassWindowDeck().draw(2).size());
     }
 
     @DisplayName("Draw too many glassWindows")
     @Test
-    void drawTooMany() throws DeckTooSmallException {
+    void drawTooMany() {
         Assertions.assertThrows(DeckTooSmallException.class, () -> GlassWindowDeck.getGlassWindowDeck().draw(100));
     }
 
     @DisplayName("Parsing control")
     @Test
-    void drawRealTest() throws DeckTooSmallException, CellNotFoundException {
+    void drawRealTest(){
         List<GlassWindow> cards = GlassWindowDeck.getGlassWindowDeck().draw(12);
 
         GlassWindow glassWindow = cards.stream().filter(d -> d.getName().equals("Industria")).findFirst().get();

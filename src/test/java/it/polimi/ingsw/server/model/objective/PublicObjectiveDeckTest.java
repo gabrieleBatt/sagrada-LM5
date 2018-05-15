@@ -1,39 +1,34 @@
 package it.polimi.ingsw.server.model.objective;
 
-import it.polimi.ingsw.server.model.exception.*;
+import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
-import it.polimi.ingsw.server.model.table.glassWindow.GlassWindowDeck;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class PublicObjectiveDeckTest {
 
     @DisplayName("Draw 4 PublicObjective")
     @Test
-    void draw() throws DeckTooSmallException {
+    void draw(){
         Assertions.assertEquals(4, PublicObjectiveDeck.getPublicObjectiveDeck().draw(4).size());
     }
 
     @DisplayName("Draw too many PublicObjective")
     @Test
-    void drawTooMany() throws DeckTooSmallException {
+    void drawTooMany(){
         Assertions.assertThrows(DeckTooSmallException.class, () -> PublicObjectiveDeck.getPublicObjectiveDeck().draw(100));
     }
 
     @DisplayName("Area parsing control")
     @Test
-    void parseTest1() throws DeckTooSmallException, CellNotFoundException, DieNotAllowedException, IllegalGlassWindowException {
+    void parseTest1() throws DieNotAllowedException {
         List<PublicObjective> cards = PublicObjectiveDeck.getPublicObjectiveDeck().draw(10);
 
         PublicObjective publicObjective = cards.stream().filter(d -> d.getName().equals("ColumnColorVariety")).findFirst().get();
@@ -63,7 +58,7 @@ class PublicObjectiveDeckTest {
 
     @DisplayName("Set parsing control")
     @Test
-    void parseTest2() throws NotValidNumberException, DieNotAllowedException, IllegalGlassWindowException, DeckTooSmallException {
+    void parseTest2() throws DieNotAllowedException{
         List<PublicObjective> cards = PublicObjectiveDeck.getPublicObjectiveDeck().draw(10);
 
         PublicObjective publicObjective = cards.stream().filter(d -> d.getName().equals("MediumShades")).findFirst().get();

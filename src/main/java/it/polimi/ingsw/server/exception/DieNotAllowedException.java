@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.exception;
+package it.polimi.ingsw.server.exception;
 
 /**
  * thrown by server whether there's a cell restriction's violation, and not ignoring

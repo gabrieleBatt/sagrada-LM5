@@ -1,13 +1,10 @@
 package it.polimi.ingsw.server.model.table;
 
-import it.polimi.ingsw.server.model.exception.CellNotFoundException;
-import it.polimi.ingsw.server.model.exception.DeckTooSmallException;
-import it.polimi.ingsw.server.model.exception.DieNotAllowedException;
-import it.polimi.ingsw.server.model.exception.GlassWindowNotFoundException;
+import it.polimi.ingsw.server.exception.DeckTooSmallException;
+import it.polimi.ingsw.server.exception.DieNotAllowedException;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import it.polimi.ingsw.server.model.table.glassWindow.Cell;
-import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindowDeck;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -45,7 +42,7 @@ class PlayerTest {
 
     @DisplayName("Testing memento")
     @Test
-    void memento() throws DeckTooSmallException, GlassWindowNotFoundException, CellNotFoundException, DieNotAllowedException {
+    void memento() throws DieNotAllowedException {
         Player pl = new Player("name");
         pl.setGlassWindow(GlassWindowDeck.getGlassWindowDeck().draw(1).get(0));
         pl.addMemento();

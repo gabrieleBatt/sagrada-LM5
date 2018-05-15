@@ -1,15 +1,13 @@
 package it.polimi.ingsw.server.model.table.glassWindow;
 
-import it.polimi.ingsw.server.model.exception.CellNotFoundException;
-import it.polimi.ingsw.server.model.exception.DieNotAllowedException;
-import it.polimi.ingsw.server.model.exception.IllegalGlassWindowException;
-import it.polimi.ingsw.server.model.exception.NotValidNumberException;
+import it.polimi.ingsw.server.exception.DieNotAllowedException;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 class GlassWindowTest {
 
@@ -18,7 +16,7 @@ class GlassWindowTest {
 
     @Test
     @BeforeEach
-    void setup() throws NotValidNumberException, DieNotAllowedException {
+    void setup() throws  DieNotAllowedException {
         cells = new ArrayList<>();
         for (int i = 0; i < 18; i++) {
             cells.add(new Cell(""+i));
@@ -26,29 +24,25 @@ class GlassWindowTest {
         cells.get(5).placeDie((new Die(DieColor.YELLOW, 5, 0)), false);
         cells.add(new Cell("18", 1));
         cells.add(new Cell("19", DieColor.CYAN));
-        try {
-            db = new GlassWindow("test", 4, new ArrayList<>(cells));
-        } catch (IllegalGlassWindowException e) {
-            e.printStackTrace();
-        }
+        db = new GlassWindow("test", 4, new ArrayList<>(cells));
     }
 
     @DisplayName("Find cell by die inside")
     @Test
-    void getCellByDie() throws CellNotFoundException {
+    void getCellByDie() {
         Assertions.assertEquals(db.getCellByDie("5Y0"), cells.get(5));
-        Assertions.assertThrows(CellNotFoundException.class, () -> db.getCellByDie("3R3"));
+        Assertions.assertThrows(NoSuchElementException.class, () -> db.getCellByDie("3R3"));
     }
 
     @DisplayName("Get row in which a die is")
     @Test
-    void getRow() throws CellNotFoundException {
+    void getRow(){
         Assertions.assertEquals(1, db.getRow(cells.get(5)));
     }
 
     @DisplayName("Get column in which a die is")
     @Test
-    void getColumn() throws CellNotFoundException {
+    void getColumn(){
         Assertions.assertEquals(0, db.getColumn(cells.get(5)));
     }
 
@@ -61,14 +55,14 @@ class GlassWindowTest {
 
     @DisplayName("Check if a cell has dice adjacent and similar to a die")
     @Test
-    void hasAdjacentSimilar() throws NotValidNumberException {
+    void hasAdjacentSimilar() {
         Assertions.assertFalse(db.hasAdjacentSimilar(2, 0, (new Die(DieColor.RED, 4, 1))));
         Assertions.assertTrue(db.hasAdjacentSimilar(2, 0, (new Die(DieColor.RED, 5, 1))));
     }
 
     @DisplayName("Available cells for a die in glassWindow")
     @Test
-    void availableCells() throws NotValidNumberException {
+    void availableCells() {
         List<Cell> list = new ArrayList<>(db.availableCells(new Die(DieColor.RED, 4, 1), false));
         Assertions.assertTrue(list.contains(cells.get(0)));
         Assertions.assertTrue(list.contains(cells.get(1)));

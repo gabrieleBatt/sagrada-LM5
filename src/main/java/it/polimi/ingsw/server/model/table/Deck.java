@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.table;
 
-import it.polimi.ingsw.server.model.exception.DeckTooSmallException;
+import it.polimi.ingsw.server.exception.DeckTooSmallException;
 
 
 /**
@@ -14,6 +14,6 @@ public interface Deck {
      * @return cards drawn
      * @throws DeckTooSmallException is thrown if there are not enough cards in the deck
      */
-    Object draw(int num) throws DeckTooSmallException;
+    Object draw(int num);
 
 }

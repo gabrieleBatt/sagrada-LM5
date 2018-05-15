@@ -13,12 +13,15 @@ import java.util.List;
 
 public class RmiCommunicationChannel implements CommunicationChannel {
 
+    private final String nickname;
+
     public RmiCommunicationChannel(RemoteGameScreen gameScreen, String nickname) {
+        this.nickname = nickname;
     }
 
     @Override
     public String getNickname() {
-        return null;
+        return nickname;
     }
 
     @Override

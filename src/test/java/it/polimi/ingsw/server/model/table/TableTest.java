@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.model.table;
 
-import it.polimi.ingsw.server.model.exception.PlayerNotFoundException;
 import it.polimi.ingsw.server.model.tool.Effect;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,9 +7,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 class TableTest {
@@ -69,6 +68,6 @@ class TableTest {
     @Test
     void getPlayer() {
         Assertions.assertEquals(player1, table.getPlayer("p1"));
-        Assertions.assertThrows(PlayerNotFoundException.class, ()->table.getPlayer("p4"));
+        Assertions.assertThrows(NoSuchElementException.class, ()->table.getPlayer("p4"));
     }
 }

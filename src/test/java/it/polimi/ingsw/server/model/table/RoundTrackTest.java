@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.table;
 
-import it.polimi.ingsw.server.model.exception.EndGameException;
+import it.polimi.ingsw.server.exception.EndGameException;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;
@@ -9,15 +9,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class RoundTrackTest {
 
     @DisplayName("End round adding dice")
     @Test
-    void endRound() throws EndGameException {
+    void endRound() {
         RoundTrack roundTrack = new RoundTrack();
 
         Collection<Die> dice = new ArrayList<>();
@@ -38,7 +35,7 @@ class RoundTrackTest {
 
     @DisplayName("Remove a die from roundTrack placing another in its place")
     @Test
-    void switchDie() throws EndGameException {
+    void switchDie() {
         RoundTrack roundTrack = new RoundTrack();
         Collection<Die> dice = new ArrayList<>();
         Die d1 = new Die(DieColor.YELLOW, 4);
@@ -66,7 +63,7 @@ class RoundTrackTest {
 
     @DisplayName("Testing memento")
     @Test
-    void memento() throws EndGameException {
+    void memento() {
         RoundTrack roundTrack = new RoundTrack();
         roundTrack.addMemento();
         roundTrack.getMemento();

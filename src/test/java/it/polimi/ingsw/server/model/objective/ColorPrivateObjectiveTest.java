@@ -1,9 +1,6 @@
 package it.polimi.ingsw.server.model.objective;
 
-import it.polimi.ingsw.server.model.exception.DieNotAllowedException;
-import it.polimi.ingsw.server.model.exception.EmptyCellException;
-import it.polimi.ingsw.server.model.exception.IllegalGlassWindowException;
-import it.polimi.ingsw.server.model.exception.NotValidNumberException;
+import it.polimi.ingsw.server.exception.DieNotAllowedException;
 import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import it.polimi.ingsw.server.model.table.dice.Die;
@@ -19,7 +16,7 @@ class ColorPrivateObjectiveTest {
 
     @DisplayName("Scoring cyan private objective")
     @Test
-    void scorePoints() throws IllegalGlassWindowException, NotValidNumberException, DieNotAllowedException {
+    void scorePoints() throws DieNotAllowedException {
         List<Cell> cells = new ArrayList<>();
         ColorPrivateObjective c_objective = new ColorPrivateObjective("test", DieColor.CYAN);
         int k=0;
