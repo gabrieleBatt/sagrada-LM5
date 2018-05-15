@@ -177,8 +177,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
             logger.log(Level.WARNING, e.getMessage(), e);
             disconnect();
         }
-        int index = ThreadLocalRandom.current().nextInt(0, glassWindows.size());
-        return glassWindows.get(index);
+        return glassWindows.get(ThreadLocalRandom.current().nextInt(0, glassWindows.size()));
     }
 
     private void disconnect(){
@@ -187,9 +186,8 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
     @Override
     public String selectOption(List<String> ids, Object container, boolean canSkip, boolean undoEnabled) {
-
+        if(!isConnected()) return fakeResponse(canSkip, undoEnabled, ids);
         StringBuilder message = new StringBuilder("selectObject " + container.getClass().getName() + " ");
-
 
         for ( String s : ids) {
             message.append(s).append(" ");
@@ -224,38 +222,41 @@ public class SocketCommunicationChannel implements CommunicationChannel {
                     disconnect();
                 }
             }
-
         }catch(IOException e){
             logger.log(Level.WARNING, e.getMessage(), e);
             disconnect();
         }
-        int index = ThreadLocalRandom.current().nextInt(0, ids.size());
-        return ids.get(index);
+        return fakeResponse(canSkip, undoEnabled, ids);
     }
 
     @Override
     public String chooseFrom(List<String> options, String message, boolean canSkip, boolean undoEnabled) {
-        String toSend = "selectFrom " + message + " ";
+        if(!isConnected()) return fakeResponse(canSkip, undoEnabled, options);
+
+        StringBuilder toSend = new StringBuilder("selectFrom " + message + " ");
 
         for ( String s : options) {
-            toSend = toSend + s + " ";
+            toSend.append(s).append(" ");
         }
         if (canSkip)
-            toSend = toSend + " -s ";
+            toSend.append(" -s ");
         if(undoEnabled)
-            toSend = toSend + " -u ";
+            toSend.append(" -u ");
 
         out.println(toSend);
         out.flush();
-
         logger.log(Level.FINE, "Sent "+ toSend, this);
-
         String response;
-
         try {
             response = in.readLine();
             List<String> streamList = Stream.of(response.split(" ")).map(String::new).filter(x -> !x.equals("")).collect(Collectors.toList());
             if(streamList.get(0).equals("selected")){
+                if (streamList.get(1).equals("-u")) {
+                    return "undo";
+                }
+                if (streamList.get(1).equals("-s")) {
+                    return "skip";
+                }
                 Optional<String> selection = options.stream().filter(g -> g.equals(streamList.get(1))).findFirst();
                 if (selection.isPresent()){
                     return selection.get();
@@ -270,12 +271,16 @@ public class SocketCommunicationChannel implements CommunicationChannel {
             logger.log(Level.WARNING, e.getMessage(), e);
             disconnect();
         }
-        if(undoEnabled)
-            return "undo";
-        else if(canSkip)
+        return fakeResponse(canSkip, undoEnabled, options);
+    }
+
+    private String fakeResponse(boolean canSkip, boolean undoEnabled, List<String> op){
+        if(canSkip)
             return "skip";
+        else if(undoEnabled)
+            return "undo";
         else
-            return options.get(ThreadLocalRandom.current().nextInt(0, options.size()));
+            return op.get(ThreadLocalRandom.current().nextInt(0, op.size()));
     }
 }
 

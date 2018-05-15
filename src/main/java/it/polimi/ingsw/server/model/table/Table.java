@@ -84,12 +84,13 @@ public class Table {
     }
 
     /**
-     * Cycles phe players form the first
+     * Cycles the players form the first
      * @param first player to start from
      * @param infinite true for an iterator that never stops
+     * @param reverse true for an iterator that ends with first player
      * @return the iterator
      */
-    public Iterator<Player> getPlayersIterator(Player first, boolean infinite){
+    public Iterator<Player> getPlayersIterator(Player first, boolean infinite, boolean reverse){
         return new Iterator<Player>() {
 
             int i = 0;
@@ -103,7 +104,11 @@ public class Table {
             @Override
             public Player next() {
                 if(!hasNext()) throw new NoSuchElementException();
-                Player next = players.get((players.indexOf(first) + i)%players.size());
+                Player next;
+                if (!reverse)
+                    next = players.get((players.indexOf(first) + i)%players.size());
+                else
+                    next = players.get((players.indexOf(first) + (i+1)*players.size() - i - 1)%players.size());
                 i++;
                 return next;
             }

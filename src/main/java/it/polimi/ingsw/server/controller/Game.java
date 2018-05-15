@@ -39,11 +39,15 @@ public class Game implements Runnable {
         actionCommandList.addAll(rules.getSetupGameActions());
 
         Iterator<Player> players = getTable()
-                .getPlayersIterator(getTable().getPlayers().get(0), true);
+                .getPlayersIterator(getTable().getPlayers().get(0), true, false);
         for (int i = 0; i < 10; i++) {
             actionCommandList.add(rules.getSetupRoundAction());
-            Iterator<Player> roundIterator = getTable()
-                    .getPlayersIterator(players.next(), false);
+            Player firstOfRound = players.next();
+            Iterator<Player> roundIterator = getTable().getPlayersIterator(firstOfRound, false, false);
+            while (roundIterator.hasNext()){
+                actionCommandList.add(rules.getTurnAction(roundIterator.next()));
+            }
+            roundIterator = getTable().getPlayersIterator(firstOfRound, false, true);
             while (roundIterator.hasNext()){
                 actionCommandList.add(rules.getTurnAction(roundIterator.next()));
             }

@@ -44,13 +44,22 @@ class TableTest {
     @DisplayName("Iterate players")
     @Test
     void getItPlayers() {
-        Iterator<Player> iterator = table.getPlayersIterator(player2, false);
+        Iterator<Player> iterator = table.getPlayersIterator(player2, false, false);
         Assertions.assertTrue(iterator.hasNext());
         Assertions.assertEquals(player2, iterator.next());
         Assertions.assertTrue(iterator.hasNext());
         Assertions.assertEquals(player3, iterator.next());
         Assertions.assertTrue(iterator.hasNext());
         Assertions.assertEquals(player1, iterator.next());
+        Assertions.assertFalse(iterator.hasNext());
+
+        iterator = table.getPlayersIterator(player2, false, true);
+        Assertions.assertTrue(iterator.hasNext());
+        Assertions.assertEquals(player1, iterator.next());
+        Assertions.assertTrue(iterator.hasNext());
+        Assertions.assertEquals(player3, iterator.next());
+        Assertions.assertTrue(iterator.hasNext());
+        Assertions.assertEquals(player2, iterator.next());
         Assertions.assertFalse(iterator.hasNext());
     }
 

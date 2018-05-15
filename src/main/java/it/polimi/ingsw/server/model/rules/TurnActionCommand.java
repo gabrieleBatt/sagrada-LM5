@@ -13,6 +13,8 @@ public class TurnActionCommand implements ActionCommand{
 
     private static final String useTool = "UsaUnTool";
     private static final String drawDie = "PescaUnDado";
+    private static final String message1 = "SelezionaLaTuaProssimaMossa";
+    private static final String message2 = "CosaVuoiFareOra?";
     private static boolean reset;
     private static boolean skip;
     private static CommunicationChannel cc;
@@ -35,8 +37,6 @@ public class TurnActionCommand implements ActionCommand{
             List<String> options = new ArrayList<>();
             options.add(useTool);
             options.add(drawDie);
-            String message1 = "SelezionaLaTuaProssimaMossa";
-            String message2 = "CosaVuoiFareOra?";
             String actionChosen = cc.chooseFrom(options, message1, true, false);
             doActionChosen(actionChosen,actionReceiver);
             if(!reset && !skip) {
@@ -47,10 +47,10 @@ public class TurnActionCommand implements ActionCommand{
         }while(reset);
     }
 
-    private void doActionChosen(String actionChosen, Game actionReceiver) throws DieNotAllowedException {
+    private void doActionChosen(final String actionChosen, Game actionReceiver) throws DieNotAllowedException {
         switch (actionChosen) {
             case useTool:
-                String toolChosen = cc.selectOption(actionReceiver.getTable().getTools().stream().map(t -> t.getName()).collect(Collectors.toList()), "table", false, true);
+                String toolChosen = cc.selectOption(actionReceiver.getTable().getTools().stream().map(Tool::getName).collect(Collectors.toList()), "table", false, true);
                 if(toolChosen.equals("undo"))
                     this.reset(actionReceiver);
                 if(!reset){
@@ -68,13 +68,16 @@ public class TurnActionCommand implements ActionCommand{
                 if(!reset)
                     actionReceiver.getRules().getPlaceAction("dieChosen", true, true, true, player).execute(actionReceiver);
                 break;
-            case "skip": skip = true; break;
-            case "undo": actionReceiver.getCommChannels().forEach(c -> c.updateView(player));
-                         actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
-                         actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getRoundTrack()));
-                reset(actionReceiver); break;
+            case "skip":
+                skip = true;
+                break;
+            case "undo":
+                reset(actionReceiver);
+                actionReceiver.getCommChannels().forEach(c -> c.updateView(player));
+                actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
+                actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getRoundTrack()));
+                break;
         }
-
     }
 
     /**

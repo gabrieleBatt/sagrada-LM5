@@ -128,7 +128,6 @@ public class DefaultRules implements Rules {
         return actionReceiver -> {
             int players = actionReceiver.getTable().getPlayers().size();
             Collection<Die> drawnDice = actionReceiver.getTable().getDiceBag().drawDice(players*2+1);
-            System.out.println(drawnDice);
             actionReceiver.getTable().getPool().setDice(drawnDice);
             actionReceiver.getCommChannels().forEach(cc -> cc.updateView(actionReceiver.getTable().getPool()));
             Game.getLogger().log(Level.FINE, "dice drawn " + drawnDice, actionReceiver);

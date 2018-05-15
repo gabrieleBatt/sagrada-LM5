@@ -38,9 +38,7 @@ public class Pool implements Memento {
      * Removes a die from the table
      * @param die object die has to be removed
      */
-    public void takeDie(Die die){
-        diceOnTable.remove(die);
-    }
+    public void takeDie(Die die){ diceOnTable.remove(die); }
 
     /**
      * Rolls dice on table
@@ -71,16 +69,15 @@ public class Pool implements Memento {
     }
 
     /**
-     * Adds the current pool state at the stack.
+     * Adds the current pool state to the stack.
      */
     @Override
     public void addMemento() {
         poolMemento.push(new ArrayList<>(diceOnTable));
-
     }
 
     /**
-     * Gets the last pool state saved from the stack.
+     * Gets the last pool state saved in the stack.
      */
     @Override
     public void getMemento() {
