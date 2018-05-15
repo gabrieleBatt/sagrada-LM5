@@ -1,0 +1,5 @@
+{
+  "loginTime": 3,
+  "rmiPortNumber" : 50001,
+  "socketPortNumber": 50000
+}

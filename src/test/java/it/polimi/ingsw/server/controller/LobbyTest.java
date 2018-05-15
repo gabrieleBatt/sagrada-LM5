@@ -23,10 +23,10 @@ class LobbyTest {
     @Test
     void addChannel() throws IOException {
         Lobby lobby = new Lobby();
-        lobby.addChannel(new RmiCommunicationChannel(new RemoteGameScreen() {}, "testR"));
-        lobby.addChannel(new RmiCommunicationChannel(new RemoteGameScreen() {}, "testR"));
-        lobby.addChannel(new RmiCommunicationChannel(new RemoteGameScreen() {}, "testR"));
-        lobby.addChannel(new RmiCommunicationChannel(new RemoteGameScreen() {}, "testR"));
+        lobby.addChannel(new RmiCommunicationChannel(new RemoteGameScreen() {}, "testR1"));
+        lobby.addChannel(new RmiCommunicationChannel(new RemoteGameScreen() {}, "testR2"));
+        lobby.addChannel(new RmiCommunicationChannel(new RemoteGameScreen() {}, "testR3"));
+        lobby.addChannel(new RmiCommunicationChannel(new RemoteGameScreen() {}, "testR4"));
         Assertions.assertTrue(lobby.getCommChannelSet().isEmpty());
 
         CommunicationChannel cc = new RmiCommunicationChannel(new RemoteGameScreen() {}, "testR");

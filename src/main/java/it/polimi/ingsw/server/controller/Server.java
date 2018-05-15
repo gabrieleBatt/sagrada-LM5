@@ -6,11 +6,14 @@ import it.polimi.ingsw.server.controller.commChannel.RmiCommunicationChannel;
 import it.polimi.ingsw.server.controller.commChannel.SocketCommunicationChannel;
 import it.polimi.ingsw.server.rmiInterface.RemoteGameScreen;
 import it.polimi.ingsw.server.rmiInterface.RemoteServer;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
@@ -23,17 +26,25 @@ import java.util.stream.Stream;
 public class Server extends UnicastRemoteObject implements RemoteServer {
 
     private static Logger logger = LogMaker.getLogger(Server.class.getName(), Level.ALL);
-    private static final int rmiPortNumber = 1100;
-    private static final int socketPortNumber = 50000;
+    private static int rmiPortNumber;
+    private static int socketPortNumber;
     private static final Lobby lobby = new Lobby();
     private static Set<Game> games = new HashSet<>();
-    private static final long  loginTime = 10;
+    private static int loginTime;
     private static Server server;
 
     static {
+        loginTime = 60;
+        rmiPortNumber  = 50001;
+        socketPortNumber = 50000;
         try {
+            JSONParser parser = new JSONParser();
+            JSONObject config = (JSONObject)parser.parse(new FileReader(new File("resources/ServerResources/config.json")));
+            loginTime = Math.toIntExact((long)config.get("loginTime"));
+            rmiPortNumber  = Math.toIntExact((long)config.get("rmiPortNumber"));
+            socketPortNumber = Math.toIntExact((long)config.get("socketPortNumber"));
             server = new Server();
-        } catch (RemoteException e) {
+        } catch (IOException | ParseException e) {
             logger.log(Level.SEVERE, "Server didn't started");
             System.out.println(-1);
         }
