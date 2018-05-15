@@ -112,12 +112,12 @@ public class Game implements Runnable {
      * Gets the collection of communication channel.
      * @return Collection og communication channel.
      */
-    public Collection<CommunicationChannel> getCommChannels() {
+    public synchronized Collection<CommunicationChannel> getCommChannels() {
         return new ArrayList<>(commChannels);
     }
 
 
-    public void changeChannel(CommunicationChannel newCc){
+    public synchronized void changeChannel(CommunicationChannel newCc){
         commChannels = getCommChannels().stream()
                 .filter(cc -> !cc.getNickname().equals(newCc.getNickname()))
                 .collect(Collectors.toList());

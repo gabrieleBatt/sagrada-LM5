@@ -10,11 +10,9 @@ import it.polimi.ingsw.server.rmiInterface.RemoteServer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.logging.Level;
@@ -26,7 +24,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
 
     private static Logger logger = LogMaker.getLogger(Server.class.getName(), Level.ALL);
     private static final int rmiPortNumber = 1100;
-    private static final int socketPortNumber = 1101;
+    private static final int socketPortNumber = 50000;
     private static final Lobby lobby = new Lobby();
     private static Set<Game> games = new HashSet<>();
     private static final long  loginTime = 10;
@@ -118,6 +116,12 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
 
     private static void addToGame(CommunicationChannel ccToAdd, String nickname){
         Boolean alreadyInGame = false;
+        for (CommunicationChannel communicationChannel : lobby.getCommChannels()) {
+            if (communicationChannel.getNickname().equals(nickname)) {
+                alreadyInGame = true;
+                lobby.changeChannel(ccToAdd);
+            }
+        }
         for (Game game : games) {
             for (CommunicationChannel communicationChannel : game.getCommChannels()) {
                 if (communicationChannel.getNickname().equals(nickname)) {

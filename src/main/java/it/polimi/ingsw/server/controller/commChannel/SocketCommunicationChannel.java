@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.commChannel;
 
+import com.sun.jndi.ldap.Connection;
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.model.objective.PublicObjective;
 import it.polimi.ingsw.server.model.table.Player;
@@ -11,9 +12,12 @@ import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import it.polimi.ingsw.server.model.tool.Tool;
 import javafx.util.Pair;
+import sun.net.ConnectionResetException;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -268,7 +272,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
             }
 
         }catch(IOException e){
-            logger.log(Level.WARNING, e.getMessage(), e);
+            //logger.log(Level.WARNING, e.getMessage(), e);
             disconnect();
         }
         return fakeResponse(canSkip, undoEnabled, options);
