@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 public class FakeSocketClient {
 
     private static final Logger logger = LogMaker.getLogger(FakeSocketClient.class.getName(), Level.ALL);
-    private static final String nickname = "Giampi";
+    private static final String nickname = "Marco";
     public static void main(String args[]) {
         String hostName = "localhost";
         int portNumber = 1101;
@@ -31,6 +31,7 @@ public class FakeSocketClient {
             out.println("login "+nickname);
             out.flush();
             while((received = in.readLine()) != null) {
+                System.out.println(received);
                 List<String> streamList = Stream.of(received.split(" ")).map(String::new).filter(x -> !x.equals("")).collect(Collectors.toList());
                 if (received.equals(nickname+ " logged!")){
                     logger.log(Level.FINE, "Login success");

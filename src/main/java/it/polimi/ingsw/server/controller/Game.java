@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
 import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.rules.ActionCommand;
 import it.polimi.ingsw.server.model.rules.DefaultRules;
+import it.polimi.ingsw.server.model.rules.Rules;
 import it.polimi.ingsw.server.model.rules.TurnActionCommand;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Table;
@@ -22,10 +23,12 @@ public class Game implements Runnable {
     private List<CommunicationChannel> commChannels;
     private HashMap<String, Die> dice;
     private List<ActionCommand> actionCommandList;
+    private final Rules rules;
 
     //TODO--missing effects
 
     public Game(Collection<CommunicationChannel> commChannels){
+        this.rules = DefaultRules.getDefaultRules();
         this.commChannels = new ArrayList<>(commChannels);
         this.table = new Table(commChannels.stream()
                 .map(cc -> new Player(cc.getNickname()))
@@ -33,23 +36,24 @@ public class Game implements Runnable {
         this.dice = new HashMap<>();
         this.actionCommandList = new ArrayList<>();
 
-        actionCommandList.addAll(DefaultRules.getDefaultRules().getSetupGameActions());
+        actionCommandList.addAll(rules.getSetupGameActions());
 
         Iterator<Player> players = getTable()
                 .getPlayersIterator(getTable().getPlayers().get(0), true);
         for (int i = 0; i < 10; i++) {
-            actionCommandList.add(DefaultRules.getDefaultRules().getSetupRoundAction());
+            actionCommandList.add(rules.getSetupRoundAction());
             Iterator<Player> roundIterator = getTable()
                     .getPlayersIterator(players.next(), false);
-            int x = 1;
             while (roundIterator.hasNext()){
-                actionCommandList.add(actionCommandList.size() - x, DefaultRules.getDefaultRules().getTurnAction(roundIterator.next()));
-                actionCommandList.add(actionCommandList.size() - x, DefaultRules.getDefaultRules().getTurnAction(roundIterator.next()));
-                x++;
+                actionCommandList.add(rules.getTurnAction(roundIterator.next()));
             }
-            actionCommandList.add(DefaultRules.getDefaultRules().getEndRoundAction());
+            actionCommandList.add(rules.getEndRoundAction());
         }
-        actionCommandList.addAll(DefaultRules.getDefaultRules().getEndGameActions());
+        actionCommandList.addAll(rules.getEndGameActions());
+    }
+
+    public Rules getRules() {
+        return rules;
     }
 
     /**
@@ -108,5 +112,12 @@ public class Game implements Runnable {
         return new ArrayList<>(commChannels);
     }
 
+
+    public void changeChannel(CommunicationChannel newCc){
+        commChannels = getCommChannels().stream()
+                .filter(cc -> !cc.getNickname().equals(newCc.getNickname()))
+                .collect(Collectors.toList());
+        commChannels.add(newCc);
+    }
 
 }

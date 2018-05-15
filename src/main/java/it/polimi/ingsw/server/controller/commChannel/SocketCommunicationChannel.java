@@ -57,9 +57,9 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
     @Override
     public void updateView(Pool pool) {
-        String message = "update -p ";
+        StringBuilder message = new StringBuilder("update -p ");
         for (Die die : pool.getDice()) {
-            message += die.getId();
+            message.append(die.getId()).append(" ");
         }
         out.println(message);
         out.flush();
@@ -68,10 +68,10 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
     @Override
     public void updateView(RoundTrack roundTrack) {
-        String message = "update -rt ";
+        StringBuilder message = new StringBuilder("update -rt ");
         for (int i = 1; i < roundTrack.getRound(); i++) {
             for (Die die : roundTrack.getDice(i)) {
-                message += "round"+i + ":" + die.getId();
+                message.append("round").append(i).append(":").append(die.getId()).append(" ");
             }
         }
         out.println(message);
@@ -151,9 +151,9 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
     @Override
     public GlassWindow chooseWindow(List<GlassWindow> glassWindows) {
-        String message = "chooseWindow ";
+        StringBuilder message = new StringBuilder("chooseWindow ");
         for (GlassWindow glassWindow : glassWindows) {
-            message = message + glassWindow.getName() + " ";
+            message.append(glassWindow.getName()).append(" ");
         }
         out.println(message);
         out.flush();
@@ -163,7 +163,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
             response = in.readLine();
             List<String> streamList = Stream.of(response.split(" ")).map(String::new).filter(x -> !x.equals("")).collect(Collectors.toList());
             if(streamList.get(0).equals("windowChosen")){
-                Optional<GlassWindow> glassWindow = glassWindows.stream().filter(g -> g.equals(streamList.get(1))).findFirst();
+                Optional<GlassWindow> glassWindow = glassWindows.stream().filter(g -> g.getName().equals(streamList.get(1))).findFirst();
                 if (glassWindow.isPresent()){
                     return glassWindow.get();
                 }else{
@@ -176,10 +176,9 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         }catch(IOException e){
             logger.log(Level.WARNING, e.getMessage(), e);
             disconnect();
-        }finally {
-            int index = ThreadLocalRandom.current().nextInt(0, glassWindows.size());
-            return glassWindows.get(index);
         }
+        int index = ThreadLocalRandom.current().nextInt(0, glassWindows.size());
+        return glassWindows.get(index);
     }
 
     private void disconnect(){
@@ -189,16 +188,16 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     @Override
     public String selectOption(List<String> ids, Object container, boolean canSkip, boolean undoEnabled) {
 
-        String message = "selectObject " + container.getClass().getName() + " ";
+        StringBuilder message = new StringBuilder("selectObject " + container.getClass().getName() + " ");
 
 
         for ( String s : ids) {
-            message = message + s + " ";
+            message.append(s).append(" ");
         }
         if (canSkip)
-            message = message + " -s ";
+            message.append(" -s ");
         if(undoEnabled)
-            message = message + " -u ";
+            message.append(" -u ");
 
         out.println(message);
         out.flush();

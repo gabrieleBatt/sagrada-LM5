@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
 import it.polimi.ingsw.server.controller.commChannel.RmiCommunicationChannel;
 import it.polimi.ingsw.server.controller.commChannel.SocketCommunicationChannel;
 import it.polimi.ingsw.server.rmiInterface.RemoteGameScreen;
@@ -80,15 +81,15 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
     @Override
     public void rmiLogin(RemoteGameScreen gameScreen, String nickname) throws RemoteException {
         logger.log(Level.FINE, nickname + " logged!");
-        synchronized (lobby) {
-            lobby.addChannel(new RmiCommunicationChannel(gameScreen, nickname));
-        }
+
+        addToGame(new RmiCommunicationChannel(gameScreen, nickname), nickname);
     }
 
     private static void socketLogin(Socket socket){
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String loginMessage;
+
             new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -97,25 +98,38 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
             }, loginTime * 1000);
 
             if((loginMessage = in.readLine()) != null) {
-
-
                 List<String> streamList =
                         Stream.of(loginMessage.split(" ")).map(String::new)
                                 .filter(x -> !x.equals("")).collect(Collectors.toList());
-
-
                 if (streamList.get(0).equals("login")) {
                     String nickname = streamList.get(1);
                     logger.log(Level.FINE, nickname + " logged!");
-                    synchronized (lobby) {
-                        lobby.addChannel(new SocketCommunicationChannel(socket, nickname));
-                    }
+
+                    addToGame(new SocketCommunicationChannel(socket, nickname), nickname);
+
                 } else {
                     throw new IOException();
                 }
             }
         } catch (IOException e) {
             logger.log(Level.WARNING, "Socket login failed", e);
+        }
+    }
+
+    private static void addToGame(CommunicationChannel ccToAdd, String nickname){
+        Boolean alreadyInGame = false;
+        for (Game game : games) {
+            for (CommunicationChannel communicationChannel : game.getCommChannels()) {
+                if (communicationChannel.getNickname().equals(nickname)) {
+                    alreadyInGame = true;
+                    game.changeChannel(ccToAdd);
+                }
+            }
+        }
+        if (!alreadyInGame) {
+            synchronized (lobby) {
+                lobby.addChannel(ccToAdd);
+            }
         }
     }
 }

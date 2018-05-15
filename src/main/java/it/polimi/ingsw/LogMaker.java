@@ -5,7 +5,7 @@ import java.util.logging.*;
 
 public class LogMaker {
 
-    private static final Level level = Level.FINE;
+    private static final Level level = Level.OFF;
     private static FileHandler fh;
     private static ConsoleHandler ch;
 

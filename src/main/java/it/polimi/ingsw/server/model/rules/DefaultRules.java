@@ -94,7 +94,9 @@ public class DefaultRules implements Rules {
                     glassWindows.remove(0);
                 }
                 actionReceiver.getTable().getPlayer(communicationChannel.getNickname()).setGlassWindow(communicationChannel.chooseWindow(glassWindowsOptions));
-                actionReceiver.getCommChannels().forEach(cc -> cc.updateView(actionReceiver.getTable().getPlayer(communicationChannel.getNickname())));
+            }
+            for (Player player : actionReceiver.getTable().getPlayers()) {
+                actionReceiver.getCommChannels().forEach(cc -> cc.updateView(player));
             }
             Game.getLogger().log(Level.FINE, "Glass windows dealt", actionReceiver);
         };
@@ -126,6 +128,7 @@ public class DefaultRules implements Rules {
         return actionReceiver -> {
             int players = actionReceiver.getTable().getPlayers().size();
             Collection<Die> drawnDice = actionReceiver.getTable().getDiceBag().drawDice(players*2+1);
+            System.out.println(drawnDice);
             actionReceiver.getTable().getPool().setDice(drawnDice);
             actionReceiver.getCommChannels().forEach(cc -> cc.updateView(actionReceiver.getTable().getPool()));
             Game.getLogger().log(Level.FINE, "dice drawn " + drawnDice, actionReceiver);
@@ -186,14 +189,18 @@ public class DefaultRules implements Rules {
      */
     @Override
     public ActionCommand getDraftAction(String marker, Optional<DieColor> dieColor, Optional<Integer> dieNumber, Player player) {
-        return (Game actionReceiver) -> {
-            CommunicationChannel cc = actionReceiver.getCommChannels().stream().filter(c -> c.getNickname().equals(player.getNickname())).findFirst().get();
+        return actionReceiver -> {
+            CommunicationChannel cc = actionReceiver.getCommChannels()
+                    .stream().filter(c -> c.getNickname().equals(player.getNickname()))
+                    .findFirst().get();
             List<Die> dieOptions = new ArrayList<>(actionReceiver.getTable().getPool().getDice());
             if(dieColor.isPresent())
                 dieOptions = dieOptions.stream().filter(d -> Optional.of(d.getColor()).equals(dieColor)).collect(Collectors.toList());
             if(dieNumber.isPresent())
                 dieOptions = dieOptions.stream().filter(d->Optional.of(d.getNumber()) == dieNumber).collect(Collectors.toList());
-            List<String> options = dieOptions.stream().map(Die::getId).collect(Collectors.toList());
+            List<String> options = dieOptions.stream()
+                    .map(Die::getId)
+                    .collect(Collectors.toList());
             String dieChosen = cc.selectOption(options, actionReceiver.getTable().getPool(), false, true);
             if (dieChosen.equals("undo")) {
                 actionReceiver.resetTurn();
@@ -202,6 +209,10 @@ public class DefaultRules implements Rules {
                 actionReceiver.getTable().getPool().takeDie(die);
                 actionReceiver.getMap().put(marker, die);
             }
+
+            actionReceiver.getCommChannels().forEach(c -> c.updateView(player));
+            actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
+
             Game.getLogger().log(Level.FINE,"Drafted die "+ dieChosen, this);
         };
     }
@@ -232,6 +243,8 @@ public class DefaultRules implements Rules {
                         .filter(c -> c.getId().equals(positionChosen)).findFirst().get()
                         .placeDie(die, (coloRestriction||numberRestriction));
             }
+            actionReceiver.getCommChannels().forEach(c -> c.updateView(player));
+            actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
             Game.getLogger().log(Level.FINE,"Placed die "+ die.toString() + " from "+ positionChosen, this);
 
         };

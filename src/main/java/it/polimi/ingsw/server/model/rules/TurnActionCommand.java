@@ -33,7 +33,7 @@ public class TurnActionCommand implements ActionCommand{
             skip = false;
             cc = actionReceiver.getCommChannels().stream().filter(c -> c.getNickname().equals(player.getNickname())).findFirst().get();
             List<String> options = new ArrayList<>();
-            //options.add(useTool);
+            options.add(useTool);
             options.add(drawDie);
             String message1 = "SelezionaLaTuaProssimaMossa";
             String message2 = "CosaVuoiFareOra?";
@@ -64,12 +64,15 @@ public class TurnActionCommand implements ActionCommand{
                 break;
 
             case drawDie:
-                DefaultRules.getDefaultRules().getDraftAction("dieChosen", Optional.empty(), Optional.empty(), player).execute(actionReceiver);
+                actionReceiver.getRules().getDraftAction("dieChosen", Optional.empty(), Optional.empty(), player).execute(actionReceiver);
                 if(!reset)
-                    DefaultRules.getDefaultRules().getPlaceAction("dieChosen", true, true, true, player).execute(actionReceiver);
+                    actionReceiver.getRules().getPlaceAction("dieChosen", true, true, true, player).execute(actionReceiver);
                 break;
             case "skip": skip = true; break;
-            case "undo": reset(actionReceiver); break;
+            case "undo": actionReceiver.getCommChannels().forEach(c -> c.updateView(player));
+                         actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
+                         actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getRoundTrack()));
+                reset(actionReceiver); break;
         }
 
     }
