@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * The channels are added to the lobby witch when full or after a timer has elapsed starts the game
@@ -66,4 +67,14 @@ public class Lobby {
         commChannelSet = new HashSet<>();
     }
 
+    public Collection<CommunicationChannel> getCommChannels() {
+        return new HashSet<>(commChannelSet);
+    }
+
+    public void changeChannel(CommunicationChannel newCc){
+        commChannelSet = getCommChannels().stream()
+                .filter(cc -> !cc.getNickname().equals(newCc.getNickname()))
+                .collect(Collectors.toSet());
+        commChannelSet.add(newCc);
+    }
 }

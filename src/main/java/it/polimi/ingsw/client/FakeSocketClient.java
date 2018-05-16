@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 public class FakeSocketClient {
 
     private static final Logger logger = LogMaker.getLogger(FakeSocketClient.class.getName(), Level.ALL);
-    private static final String nickname = "Bernardo";
+    private static final String nickname = "Gabriele";
     public static void main(String args[]) {
         String hostName = "localhost";
         int portNumber = 50000;
