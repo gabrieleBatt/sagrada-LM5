@@ -69,7 +69,7 @@ public interface CommunicationChannel{
      * @param undoEnabled tells if the button undo is available for that player in that move
      * @return The option chosen.
      */
-    Identifiable selectObject(List<Identifiable> options, Object container, boolean canSkip, boolean undoEnabled);
+    Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled);
 
 
     /**

@@ -182,11 +182,11 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     }
 
     @Override
-    public Identifiable selectObject(List<Identifiable> options, Object container, boolean canSkip, boolean undoEnabled) {
+    public Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled) {
         if(!isConnected()) return fakeResponse(canSkip, undoEnabled, options);
 
         //Send message
-        StringBuilder message = new StringBuilder("selectObject " + container.getClass().getName() + " ");
+        StringBuilder message = new StringBuilder("selectObject " + container.getId() + " ");
         List<String> ids = options.stream().map(Identifiable::getId).collect(Collectors.toList());
         for (String s : ids) {
             message.append(s).append(" ");

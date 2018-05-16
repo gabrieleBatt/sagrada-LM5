@@ -60,7 +60,7 @@ public class RmiCommunicationChannel implements CommunicationChannel {
     }
 
     @Override
-    public Identifiable selectObject(List<Identifiable> options, Object container, boolean canSkip, boolean undoEnabled) {
+    public Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled) {
         return null;
     }
 

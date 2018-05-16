@@ -204,7 +204,7 @@ public class DefaultRules implements Rules {
                 dieOptions = dieOptions.stream().filter(d->Optional.of(d.getNumber()) == dieNumber).collect(Collectors.toList());
 
             //act on answer
-            Identifiable dieChosen = cc.selectObject(new ArrayList<>(dieOptions), actionReceiver.getTable().getPool(), false, true);
+            Identifiable dieChosen = cc.selectObject(new ArrayList<>(dieOptions), StdId.TABLE, false, true);
             if (dieChosen.getId().equals(StdId.UNDO.getId())) {
                 actionReceiver.resetTurn();
             }else {
@@ -249,7 +249,7 @@ public class DefaultRules implements Rules {
                     .collect(Collectors.toList());
 
             //act on answer
-            Identifiable positionChosen = cc.selectObject(new ArrayList<>(cells), player.getGlassWindow(), false,true);
+            Identifiable positionChosen = cc.selectObject(new ArrayList<>(cells), StdId.GLASS_WINDOW, false,true);
             if (positionChosen.getId().equals(StdId.UNDO.getId())) {
                 actionReceiver.resetTurn();
             }else {

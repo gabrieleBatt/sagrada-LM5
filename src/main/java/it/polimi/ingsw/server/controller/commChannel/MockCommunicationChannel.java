@@ -84,7 +84,7 @@ public class MockCommunicationChannel implements CommunicationChannel {
     }
 
     @Override
-    public Identifiable selectObject(List<Identifiable> options, Object container, boolean canSkip, boolean undoEnabled) {
+    public Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled) {
         List<Identifiable> idList = new ArrayList<>(options);
         if (undoEnabled)
             idList.add(() -> "undo");

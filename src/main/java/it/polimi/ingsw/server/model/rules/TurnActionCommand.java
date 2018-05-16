@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.rules;
 
 import it.polimi.ingsw.server.controller.Game;
+import it.polimi.ingsw.server.controller.StdId;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
 import it.polimi.ingsw.server.controller.Identifiable;
 import it.polimi.ingsw.server.exception.*;
@@ -54,7 +55,7 @@ public class TurnActionCommand implements ActionCommand{
 
     private void doActionChosen(final Identifiable actionChosen, Game actionReceiver) throws DieNotAllowedException {
         if(actionChosen.getId().equals(USE_TOOL.getId())) {
-            Identifiable toolChosen = cc.selectObject(new ArrayList<>(actionReceiver.getTable().getTools()), Table.class, false, true);
+            Identifiable toolChosen = cc.selectObject(new ArrayList<>(actionReceiver.getTable().getTools()), StdId.TABLE, false, true);
             if (toolChosen.getId().equals(UNDO.getId()))
                 this.reset(actionReceiver);
             if (!reset) {
