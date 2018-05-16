@@ -71,7 +71,7 @@ public class GlassWindowDeck implements Deck {
         try {
             JSONObject js = (JSONObject)parser.parse(new FileReader(file));
             glassWindowCards.add(js);
-            logger.log(Level.FINEST,  "GlassWindow "+ js.get("name") +" has been added to glassWindowCards", this);
+            logger.log(Level.FINEST,  "GlassWindow "+ js.get("name1") + "/" + js.get("name2") +" has been added to glassWindowCards", this);
 
         } catch (IOException | ParseException e) {
             logger.log(Level.WARNING, e.getMessage(), e);

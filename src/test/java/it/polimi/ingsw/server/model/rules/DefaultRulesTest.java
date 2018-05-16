@@ -4,14 +4,22 @@ import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
 import it.polimi.ingsw.server.controller.commChannel.MockCommunicationChannel;
 import it.polimi.ingsw.server.exception.*;
+import it.polimi.ingsw.server.model.objective.ColorPrivateObjective;
+import it.polimi.ingsw.server.model.objective.PublicObjective;
+import it.polimi.ingsw.server.model.objective.SetPublicObjective;
+import it.polimi.ingsw.server.model.table.Player;
+import it.polimi.ingsw.server.model.table.dice.Die;
+import it.polimi.ingsw.server.model.table.dice.DieColor;
+import it.polimi.ingsw.server.model.table.glassWindow.Cell;
+import javafx.util.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 class DefaultRulesTest {
 
@@ -59,4 +67,44 @@ class DefaultRulesTest {
         Assertions.assertEquals(5,game.getTable().getRoundTrack().getDice(1).size());
     }
 
+    @DisplayName("Testing end game action")
+    @Test
+    void getEndGameAction() throws DieNotAllowedException {
+        DefaultRules.getDefaultRules().dealGlassWindow(2).execute(game);
+        game.getTable().getPlayers().forEach(p->p.addPrivateObjective(new ColorPrivateObjective("testObj", DieColor.CYAN)));
+        Collection<PublicObjective> po = new ArrayList<>();
+        Collection<Integer> n = new ArrayList<>();
+        Collection<DieColor> c = new ArrayList<>();
+        n.add(1);
+        n.add(2);
+        po.add(new SetPublicObjective("testPub", 2, n, c));
+        game.getTable().setPublicObjective(po);
+        for(Player player: game.getTable().getPlayers())
+            player.setTokens(player.getGlassWindow().getDifficulty());
+        for(Player player: game.getTable().getPlayers())
+            for(int i=0; i<15;i++)
+                if(i%2==0)
+                    player.getGlassWindow().getCellList().get(i).placeDie(new Die(DieColor.CYAN,1,10),true);
+                else
+                    player.getGlassWindow().getCellList().get(i).placeDie(new Die(DieColor.RED,2,10),true);
+        for(int j=15;j<20;j++)
+            if(j%2==0)
+                game.getTable().getPlayer("player1").getGlassWindow().getCellList().get(j).placeDie(new Die(DieColor.CYAN,1,10),true);
+            else
+                game.getTable().getPlayer("player1").getGlassWindow().getCellList().get(j).placeDie(new Die(DieColor.RED,2,10),true);
+        int tokenP1=game.getTable().getPlayer("player1").getTokens();
+        int tokenP2=game.getTable().getPlayer("player2").getTokens();
+        DefaultRules.getDefaultRules().getEndGameAction().execute(game);
+        List<Pair<Player,Integer>> ranking = game.getRanking();
+        Assertions.assertEquals(2,ranking.size());
+        for(Pair pair:ranking) {
+            Player player = (Player) pair.getKey();
+            switch ((player.getNickname())) {
+                case "player1" : Assertions.assertEquals(30+tokenP1,pair.getValue());
+                break;
+                case "player2" : Assertions.assertEquals(17+tokenP2,pair.getValue());
+                    break;
+            }
+        }
+    }
 }

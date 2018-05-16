@@ -7,7 +7,6 @@ import it.polimi.ingsw.server.model.table.Table;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import javafx.util.Pair;
 
-import java.util.HashMap;
 import java.util.List;
 
 public interface CommunicationChannel{
@@ -23,6 +22,11 @@ public interface CommunicationChannel{
      * @return true if is connected, false otherwise.
      */
     boolean isConnected();
+
+    /**
+     * Sends a message to visualize
+     */
+    void sendMessage(String message);
 
     /**
      * Updates any change in the pool.
@@ -61,8 +65,6 @@ public interface CommunicationChannel{
      */
     GlassWindow chooseWindow(List<GlassWindow> glassWindows);
 
-
-    //TODO
     /**
      * Returns the chosen option among the given.
      * @param options List of options given.
@@ -71,13 +73,13 @@ public interface CommunicationChannel{
      * @param undoEnabled tells if the button undo is available for that player in that move
      * @return The option chosen.
      */
-    String selectOption(List<String> options, Object container, boolean canSkip, boolean undoEnabled);
+    Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled);
 
 
     /**
      * Returns the chosen option among the given.
      * @param options List of options given.
-     * @return String option, the one chosen.
+     * @return The option chosen.
      */
-    String chooseFrom(List<String> options, String message, boolean canSkip, boolean undoEnabled);
+    Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled);
 }

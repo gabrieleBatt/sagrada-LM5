@@ -1,17 +1,15 @@
-package it.polimi.ingsw.client;
+package it.polimi.ingsw.server.controller.commChannel;
 
 import it.polimi.ingsw.server.controller.commChannel.rmi.rmiInterface.RemoteGameScreen;
 import javafx.util.Pair;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 import java.util.List;
 
-public class FakeGameScreen extends UnicastRemoteObject implements RemoteGameScreen {
-    protected FakeGameScreen() throws RemoteException {
-    }
-
+/**
+ * used for lobby testing
+ */
+public class TestGameScreen implements RemoteGameScreen {
     @Override
     public void setPlayers(List<Pair<String, Boolean>> nicknames) {
 
@@ -31,7 +29,6 @@ public class FakeGameScreen extends UnicastRemoteObject implements RemoteGameScr
     public void setTools(List<Pair<String, Boolean>> publicObjectives) {
 
     }
-
 
     @Override
     public void setToolUsed(String tool, boolean used) {

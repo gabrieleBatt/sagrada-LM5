@@ -8,7 +8,6 @@ import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -43,6 +42,11 @@ public class MockCommunicationChannel implements CommunicationChannel {
     @Override
     public boolean isConnected() {
         return true;
+    }
+
+    @Override
+    public void sendMessage(String message) {
+
     }
 
     @Override
@@ -83,13 +87,12 @@ public class MockCommunicationChannel implements CommunicationChannel {
     }
 
     @Override
-    public String selectOption(List<String> ids, Object container, boolean canSkip, boolean undoEnabled) {
-        String message = "selectObject ";
-        List<String> idList = new ArrayList<>(ids);
+    public Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled) {
+        List<Identifiable> idList = new ArrayList<>(options);
         if (undoEnabled)
-            idList.add("undo");
+            idList.add(() -> "undo");
         if (canSkip)
-            idList.add("skip");
+            idList.add(() -> "skip");
         return idList.get(ThreadLocalRandom.current().nextInt(0, idList.size()));
     }
 
@@ -99,10 +102,10 @@ public class MockCommunicationChannel implements CommunicationChannel {
      * @return String option, the one randomly chosen.
      */
     @Override
-    public String chooseFrom(List<String> options, String message, boolean canSkip, boolean undoEnabled) {
-        List<String> op = new ArrayList<>(options);
+    public Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled) {
+        List<Identifiable> op = new ArrayList<>(options);
         if (canSkip)
-            op.add("skip");
+            op.add(StdId.SKIP);
         return op.get(ThreadLocalRandom.current().nextInt(0, op.size()));
     }
 }

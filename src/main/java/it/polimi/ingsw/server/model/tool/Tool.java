@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.tool;
 
 import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.server.controller.commChannel.Identifiable;
 import it.polimi.ingsw.server.model.rules.ActionCommand;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Tool {
+public class Tool implements Identifiable {
 
     private static final Logger logger = LogMaker.getLogger(Tool.class.getName(), Level.ALL);
     private List<ActionCommand> actionCommandList;
@@ -57,5 +58,10 @@ public class Tool {
      */
     public boolean isUsed() {
         return used;
+    }
+
+    @Override
+    public String getId() {
+        return getName();
     }
 }

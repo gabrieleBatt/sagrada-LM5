@@ -10,6 +10,7 @@ import it.polimi.ingsw.server.model.rules.TurnActionCommand;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Table;
 import it.polimi.ingsw.server.model.table.dice.Die;
+import javafx.util.Pair;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -24,6 +25,7 @@ public class Game implements Runnable {
     private HashMap<String, Die> dice;
     private List<ActionCommand> actionCommandList;
     private final Rules rules;
+    private List<Pair<Player,Integer>> ranking;
 
     //TODO--missing effects
 
@@ -53,7 +55,7 @@ public class Game implements Runnable {
             }
             actionCommandList.add(rules.getEndRoundAction());
         }
-        actionCommandList.addAll(rules.getEndGameActions());
+        actionCommandList.add(rules.getEndGameAction());
     }
 
     public Rules getRules() {
@@ -84,6 +86,22 @@ public class Game implements Runnable {
         }
     }
 
+    /**
+     * Ends game giving to every player the ranking's game.
+     * @param ranking Pair of Player and Integer, the points scored.
+     */
+    public void endGame(List<Pair<Player,Integer>> ranking){
+        this.ranking = ranking;
+        commChannels.forEach(c -> c.endGame(ranking));
+    }
+
+    /**
+     * Gets a ranking copy.
+     * @return a List of players and respective score.
+     */
+    public List<Pair<Player,Integer>> getRanking(){
+        return new ArrayList<>(this.ranking);
+    }
     /**
      * Gets the HashMap of chosen die.
      * @return HashMap of chosen die.

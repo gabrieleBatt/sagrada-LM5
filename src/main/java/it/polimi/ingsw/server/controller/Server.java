@@ -2,14 +2,15 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
-import it.polimi.ingsw.server.controller.commChannel.RmiCommunicationChannel;
-import it.polimi.ingsw.server.controller.commChannel.SocketCommunicationChannel;
-import it.polimi.ingsw.server.rmiInterface.RemoteGameScreen;
-import it.polimi.ingsw.server.rmiInterface.RemoteServer;
+import it.polimi.ingsw.server.controller.commChannel.rmi.RmiCommunicationChannel;
+import it.polimi.ingsw.server.controller.commChannel.socket.SocketCommunicationChannel;
+import it.polimi.ingsw.server.controller.commChannel.rmi.rmiInterface.RemoteGameScreen;
+import it.polimi.ingsw.server.controller.commChannel.rmi.rmiInterface.RemoteServer;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.*;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -23,19 +24,31 @@ import java.util.stream.Stream;
 public class Server extends UnicastRemoteObject implements RemoteServer {
 
     private static Logger logger = LogMaker.getLogger(Server.class.getName(), Level.ALL);
-    private static final int rmiPortNumber = 1100;
-    private static final int socketPortNumber = 50000;
+    private static int rmiPortNumber;
+    private static int socketPortNumber;
     private static final Lobby lobby = new Lobby();
     private static Set<Game> games = new HashSet<>();
-    private static final long  loginTime = 10;
+    private static int loginTime;
     private static Server server;
 
     static {
+        JSONObject config = null;
+        try {
+            JSONParser parser = new JSONParser();
+            config = (JSONObject)parser.parse(new FileReader(new File("resources/ServerResources/config.json")));
+            loginTime = Math.toIntExact((long)config.get("loginTime"));
+            rmiPortNumber  = Math.toIntExact((long)config.get("rmiPortNumber"));
+            socketPortNumber = Math.toIntExact((long)config.get("socketPortNumber"));
+        } catch (ParseException | IOException e) {
+            loginTime = 60;
+            rmiPortNumber  = 50001;
+            socketPortNumber = 50000;
+        }
+
         try {
             server = new Server();
-        } catch (RemoteException e) {
+        } catch (IOException e) {
             logger.log(Level.SEVERE, "Server didn't started");
-            System.out.println(-1);
         }
     }
 
@@ -56,14 +69,11 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
         try {
             LocateRegistry.createRegistry(rmiPortNumber)
                     .rebind("Server", server);
-
-
             logger.log(Level.CONFIG, "Rmi server ready");
         } catch (RemoteException e) {
             logger.log(Level.WARNING, "Rmi server failed", e);
             System.exit(-1);
         }
-
         try{
             ServerSocket serverSocket = new ServerSocket(socketPortNumber);
             logger.log(Level.CONFIG, "Socket server ready");
@@ -79,37 +89,34 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
     @Override
     public void rmiLogin(RemoteGameScreen gameScreen, String nickname) throws RemoteException {
         logger.log(Level.FINE, nickname + " logged!");
-
         addToGame(new RmiCommunicationChannel(gameScreen, nickname), nickname);
     }
 
-    private static void socketLogin(Socket socket){
+    public static void socketLogin(Socket socket){
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String loginMessage;
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            JSONObject loginMessage;
 
             new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
-
+                    //end
                 }
             }, loginTime * 1000);
 
-            if((loginMessage = in.readLine()) != null) {
-                List<String> streamList =
-                        Stream.of(loginMessage.split(" ")).map(String::new)
-                                .filter(x -> !x.equals("")).collect(Collectors.toList());
-                if (streamList.get(0).equals("login")) {
-                    String nickname = streamList.get(1);
+            if((loginMessage = (JSONObject)(new JSONParser()).parse((String)in.readObject())) != null) {
+                if (loginMessage.get("header").equals("login")) {
+                    String nickname = (String)loginMessage.get("mainParam");
                     logger.log(Level.FINE, nickname + " logged!");
 
-                    addToGame(new SocketCommunicationChannel(socket, nickname), nickname);
+                    addToGame(new SocketCommunicationChannel(socket, in, out, nickname), nickname);
 
                 } else {
                     throw new IOException();
                 }
             }
-        } catch (IOException e) {
+        } catch (ClassNotFoundException | ParseException | IOException e) {
             logger.log(Level.WARNING, "Socket login failed", e);
         }
     }

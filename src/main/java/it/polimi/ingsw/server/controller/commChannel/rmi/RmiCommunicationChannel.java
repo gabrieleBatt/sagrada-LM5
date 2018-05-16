@@ -1,14 +1,15 @@
-package it.polimi.ingsw.server.controller.commChannel;
+package it.polimi.ingsw.server.controller.commChannel.rmi;
 
+import it.polimi.ingsw.server.controller.commChannel.Identifiable;
+import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Pool;
 import it.polimi.ingsw.server.model.table.RoundTrack;
 import it.polimi.ingsw.server.model.table.Table;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
-import it.polimi.ingsw.server.rmiInterface.RemoteGameScreen;
+import it.polimi.ingsw.server.controller.commChannel.rmi.rmiInterface.RemoteGameScreen;
 import javafx.util.Pair;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class RmiCommunicationChannel implements CommunicationChannel {
@@ -27,6 +28,11 @@ public class RmiCommunicationChannel implements CommunicationChannel {
     @Override
     public boolean isConnected() {
         return false;
+    }
+
+    @Override
+    public void sendMessage(String message) {
+
     }
 
     @Override
@@ -60,12 +66,12 @@ public class RmiCommunicationChannel implements CommunicationChannel {
     }
 
     @Override
-    public String selectOption(List<String> ids, Object container, boolean canSkip, boolean undoEnabled) {
+    public Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled) {
         return null;
     }
 
     @Override
-    public String chooseFrom(List<String> options, String message, boolean canSkip, boolean undoEnabled) {
+    public Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled) {
         return null;
     }
 }

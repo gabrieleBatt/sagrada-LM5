@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 /**
  * Class representing the scoring rules for the players
  */
-abstract class Objective {
+public abstract class Objective {
 
     private String name;
     private char points;

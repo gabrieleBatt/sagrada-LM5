@@ -2,6 +2,8 @@ package it.polimi.ingsw.server.model.rules;
 
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
+import it.polimi.ingsw.server.controller.commChannel.Identifiable;
+import it.polimi.ingsw.server.controller.commChannel.StdId;
 import it.polimi.ingsw.server.model.objective.*;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.dice.Die;
@@ -9,6 +11,7 @@ import it.polimi.ingsw.server.model.table.dice.DieColor;
 import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindowDeck;
+import javafx.util.Pair;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -69,7 +72,7 @@ public class DefaultRules implements Rules {
             List<Player> players = actionReceiver.getTable().getPlayers();
             for(Player player:players) {
                     player.setTokens(player.getGlassWindow().getDifficulty());
-            }
+                    }
             actionReceiver.getCommChannels().forEach(cc -> cc.updateView(actionReceiver.getTable()));
             Game.getLogger().log(Level.FINE, "Tokens given", actionReceiver);
         };
@@ -163,19 +166,32 @@ public class DefaultRules implements Rules {
     }
 
     /**
-     * Gets the list of end game actions.
-     * @return list of end game actions.
+     * Gets the end game action.
+     * @return end game action.
      */
     @Override
-    public List<ActionCommand> getEndGameActions() {
-        List<ActionCommand> ret = new ArrayList<>();
-        ret.add(scorePublicObjectivePoints());
-        return ret;
-    }
-
-    private ActionCommand scorePublicObjectivePoints() {
+    public ActionCommand getEndGameAction() {
         return actionReceiver -> {
+            List<Pair<Player,Integer>> ranking = new ArrayList<>();
+            for(Player player : actionReceiver.getTable().getPlayers()) {
+                Integer points = player.getPrivateObjective()
+                        .stream()
+                        .mapToInt(p -> p.scorePoints(player.getGlassWindow()))
+                        .sum();
+                points += actionReceiver.getTable().getPublicObjectives()
+                        .stream()
+                        .mapToInt(p -> p.scorePoints(player.getGlassWindow()))
+                        .sum();
+                points += player.getTokens();
+                points -= Math.toIntExact(player.getGlassWindow().getCellList()
+                        .stream()
+                        .filter(c -> !c.isOccupied())
+                        .count());
+                ranking.add(new Pair<>(player,points));
+            }
+            actionReceiver.endGame(ranking);
         };
+
     }
 
     /**
@@ -189,26 +205,29 @@ public class DefaultRules implements Rules {
     @Override
     public ActionCommand getDraftAction(String marker, Optional<DieColor> dieColor, Optional<Integer> dieNumber, Player player) {
         return actionReceiver -> {
+            //finds channel to communicate with
             CommunicationChannel cc = actionReceiver.getCommChannels()
-                    .stream().filter(c -> c.getNickname().equals(player.getNickname()))
+                    .stream()
+                    .filter(c -> c.getNickname().equals(player.getNickname()))
                     .findFirst().get();
+            //make options
             List<Die> dieOptions = new ArrayList<>(actionReceiver.getTable().getPool().getDice());
             if(dieColor.isPresent())
                 dieOptions = dieOptions.stream().filter(d -> Optional.of(d.getColor()).equals(dieColor)).collect(Collectors.toList());
             if(dieNumber.isPresent())
                 dieOptions = dieOptions.stream().filter(d->Optional.of(d.getNumber()) == dieNumber).collect(Collectors.toList());
-            List<String> options = dieOptions.stream()
-                    .map(Die::getId)
-                    .collect(Collectors.toList());
-            String dieChosen = cc.selectOption(options, actionReceiver.getTable().getPool(), false, true);
-            if (dieChosen.equals("undo")) {
+
+            //act on answer
+            Identifiable dieChosen = cc.selectObject(new ArrayList<>(dieOptions), StdId.TABLE, false, true);
+            if (dieChosen.getId().equals(StdId.UNDO.getId())) {
                 actionReceiver.resetTurn();
             }else {
-                Die die = dieOptions.stream().filter(d -> d.getId().equals(dieChosen)).findFirst().get();
+                Die die = dieOptions.stream().filter(d -> d.getId().equals(dieChosen.getId())).findFirst().get();
                 actionReceiver.getTable().getPool().takeDie(die);
                 actionReceiver.getMap().put(marker, die);
             }
 
+            //update view
             actionReceiver.getCommChannels().forEach(c -> c.updateView(player));
             actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
 
@@ -228,18 +247,28 @@ public class DefaultRules implements Rules {
     @Override
     public ActionCommand getPlaceAction(String marker, boolean adjacencyRestriction, boolean coloRestriction, boolean numberRestriction, Player player) {
         return actionReceiver -> {
-            CommunicationChannel cc = actionReceiver.getCommChannels().stream().filter(c -> c.getNickname().equals(player.getNickname())).findFirst().get();
+            //finds channel to communicate with
+            CommunicationChannel cc = actionReceiver.getCommChannels()
+                    .stream()
+                    .filter(c -> c.getNickname().equals(player.getNickname()))
+                    .findFirst().get();
+
+            //get die
             Die die = actionReceiver.getMap().get(marker);
-            List<String> cells = new ArrayList<>(player.getGlassWindow().availableCells(die, !adjacencyRestriction))
+
+            //filter options
+            List<Cell> cells = new ArrayList<>(player.getGlassWindow().availableCells(die, !adjacencyRestriction))
                     .stream().filter(c -> c.isAllowed(die.getColor()) || !coloRestriction)
                     .filter(c -> c.isAllowed(die.getNumber()) || !numberRestriction)
-                    .map(Cell::getId).collect(Collectors.toList());
-            String positionChosen = cc.selectOption(cells, player.getGlassWindow(), false,true);
-            if (positionChosen.equals("undo")) {
+                    .collect(Collectors.toList());
+
+            //act on answer
+            Identifiable positionChosen = cc.selectObject(new ArrayList<>(cells), StdId.GLASS_WINDOW, false,true);
+            if (positionChosen.getId().equals(StdId.UNDO.getId())) {
                 actionReceiver.resetTurn();
             }else {
                 player.getGlassWindow().getCellList().stream()
-                        .filter(c -> c.getId().equals(positionChosen)).findFirst().get()
+                        .filter(c -> c.getId().equals(positionChosen.getId())).findFirst().get()
                         .placeDie(die, (coloRestriction||numberRestriction));
             }
             actionReceiver.getCommChannels().forEach(c -> c.updateView(player));
@@ -248,6 +277,4 @@ public class DefaultRules implements Rules {
 
         };
     }
-
-
 }
