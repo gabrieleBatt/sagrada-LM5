@@ -1,6 +1,0 @@
-{"header":"login","mainParam":"success"}
-{"-p":[],"header":"update"}
-{"-t":"0","header":"update","mainParam":"test"}
-{"-t":"0","header":"update","mainParam":"test1"}
-{"header":"update","-rt":[]}
-{"header":"update","-pl":["test","test1"]}
