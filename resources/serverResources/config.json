@@ -1,5 +1,6 @@
 {
-  "loginTime": 3,
+  "loginTime": 10,
   "rmiPortNumber" : 50001,
-  "socketPortNumber": 50000
+  "socketPortNumber": 50000,
+  "timerSeconds": 1
 }

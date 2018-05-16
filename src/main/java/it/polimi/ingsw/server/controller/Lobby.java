@@ -2,7 +2,13 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Level;
@@ -15,9 +21,20 @@ import java.util.stream.Collectors;
 public class Lobby {
 
     private static final Logger logger = LogMaker.getLogger(Lobby.class.getName(), Level.ALL);
-    private static final int timerSeconds = 10;
+    private static int timerSeconds;
     private Set<CommunicationChannel> commChannelSet;
     private Timer timer;
+
+    static{
+        JSONObject config = null;
+        try {
+            JSONParser parser = new JSONParser();
+            config = (JSONObject)parser.parse(new FileReader(new File("resources/ServerResources/config.json")));
+            timerSeconds = Math.toIntExact((long)config.get("timerSeconds"));
+        } catch (ParseException | IOException e) {
+            timerSeconds = 60;
+        }
+    }
 
     public Lobby(){
         commChannelSet = new HashSet<>();
