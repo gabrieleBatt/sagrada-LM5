@@ -16,10 +16,10 @@ import java.util.stream.Stream;
 public class FakeSocketClient {
 
     private static final Logger logger = LogMaker.getLogger(FakeSocketClient.class.getName(), Level.ALL);
-    private static final String nickname = "Anna";
+    private static final String nickname = "Bernardo";
     public static void main(String args[]) {
         String hostName = "localhost";
-        int portNumber = 1101;
+        int portNumber = 50000;
         BufferedReader in = null;
         PrintWriter out= null;
         Scanner scanner = new Scanner(System.in);

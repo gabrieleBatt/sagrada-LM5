@@ -9,6 +9,7 @@ import it.polimi.ingsw.server.model.table.dice.DieColor;
 import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindowDeck;
+import javafx.util.Pair;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -69,7 +70,7 @@ public class DefaultRules implements Rules {
             List<Player> players = actionReceiver.getTable().getPlayers();
             for(Player player:players) {
                     player.setTokens(player.getGlassWindow().getDifficulty());
-            }
+                    }
             actionReceiver.getCommChannels().forEach(cc -> cc.updateView(actionReceiver.getTable()));
             Game.getLogger().log(Level.FINE, "Tokens given", actionReceiver);
         };
@@ -163,19 +164,32 @@ public class DefaultRules implements Rules {
     }
 
     /**
-     * Gets the list of end game actions.
-     * @return list of end game actions.
+     * Gets the end game action.
+     * @return end game action.
      */
     @Override
-    public List<ActionCommand> getEndGameActions() {
-        List<ActionCommand> ret = new ArrayList<>();
-        ret.add(scorePublicObjectivePoints());
-        return ret;
-    }
-
-    private ActionCommand scorePublicObjectivePoints() {
+    public ActionCommand getEndGameAction() {
         return actionReceiver -> {
+            List<Pair<Player,Integer>> ranking = new ArrayList<>();
+            for(Player player : actionReceiver.getTable().getPlayers()) {
+                Integer points = player.getPrivateObjective()
+                        .stream()
+                        .mapToInt(p -> p.scorePoints(player.getGlassWindow()))
+                        .sum();
+                points += actionReceiver.getTable().getPublicObjectives()
+                        .stream()
+                        .mapToInt(p -> p.scorePoints(player.getGlassWindow()))
+                        .sum();
+                points += player.getTokens();
+                points -= Math.toIntExact(player.getGlassWindow().getCellList()
+                        .stream()
+                        .filter(c -> !c.isOccupied())
+                        .count());
+                ranking.add(new Pair<>(player,points));
+            }
+            actionReceiver.endGame(ranking);
         };
+
     }
 
     /**

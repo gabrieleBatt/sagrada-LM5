@@ -11,7 +11,7 @@ public class FakeRmiClient {
     public static void main(String[] args){
         try {
             RemoteServer remoteServer = (RemoteServer) LocateRegistry
-                    .getRegistry(1100).lookup("Server");
+                    .getRegistry(50000).lookup("Server");
             remoteServer.rmiLogin(new FakeGameScreen() {}, "testR");
 
         } catch (Exception e) {

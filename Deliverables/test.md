@@ -24,6 +24,7 @@
                 - Give private objective :heavy_check_mark:
                 - Give public objectives :heavy_check_mark:
                 - Testing round actions :heavy_check_mark:
+                - Testing end game action :heavy_check_mark:
         -TurnActionCommandTest
                 - Testing Turn
     - table
