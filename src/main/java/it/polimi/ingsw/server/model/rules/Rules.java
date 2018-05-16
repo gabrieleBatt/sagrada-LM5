@@ -38,7 +38,7 @@ public interface Rules {
      * Gets the list of end game actions.
      * @return list of end game actions.
      */
-    List<ActionCommand> getEndGameActions();
+    ActionCommand getEndGameAction();
 
     /**
      * Gets the list of draft actions.
