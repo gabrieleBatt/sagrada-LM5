@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class FakeSocketClient {
 
     private static final Logger logger = LogMaker.getLogger(FakeSocketClient.class.getName(), Level.ALL);
-    private static final String nickname = "BerNRDO";
+    private static final String nickname = "Berna";
 
     public static void main(String args[]) {
         String hostName = "localhost";

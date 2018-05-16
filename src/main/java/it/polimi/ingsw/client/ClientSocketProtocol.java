@@ -1,9 +1,6 @@
 package it.polimi.ingsw.client;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
-import java.util.List;
 
 public enum ClientSocketProtocol{
     LOGIN("login"), SELECT_OBJECT("objectSelected"),

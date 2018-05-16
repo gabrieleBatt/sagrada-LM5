@@ -32,19 +32,23 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
     private static Server server;
 
     static {
-        loginTime = 60;
-        rmiPortNumber  = 50001;
-        socketPortNumber = 50000;
+        JSONObject config = null;
         try {
             JSONParser parser = new JSONParser();
-            JSONObject config = (JSONObject)parser.parse(new FileReader(new File("resources/ServerResources/config.json")));
+            config = (JSONObject)parser.parse(new FileReader(new File("resources/ServerResources/config.json")));
             loginTime = Math.toIntExact((long)config.get("loginTime"));
             rmiPortNumber  = Math.toIntExact((long)config.get("rmiPortNumber"));
             socketPortNumber = Math.toIntExact((long)config.get("socketPortNumber"));
+        } catch (ParseException | IOException e) {
+            loginTime = 60;
+            rmiPortNumber  = 50001;
+            socketPortNumber = 50000;
+        }
+
+        try {
             server = new Server();
-        } catch (IOException | ParseException e) {
+        } catch (IOException e) {
             logger.log(Level.SEVERE, "Server didn't started");
-            System.out.println(-1);
         }
     }
 

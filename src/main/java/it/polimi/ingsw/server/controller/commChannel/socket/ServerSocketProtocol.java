@@ -37,8 +37,12 @@ class JSONBuilder{
     }
 
     public JSONBuilder build(ServerSocketProtocol message, String param) {
-        this.jsonObject.put("header", message.getId());
-        this.jsonObject.put("mainParam", param);
+        if(jsonObject.get("header") == null) {
+            this.jsonObject.put("header", message.getId());
+            this.jsonObject.put("mainParam", param);
+        }else{
+            this.jsonObject.put(message.getId(), param);
+        }
         return this;
     }
 
