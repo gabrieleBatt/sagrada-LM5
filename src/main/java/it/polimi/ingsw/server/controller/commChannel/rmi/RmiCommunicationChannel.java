@@ -1,12 +1,13 @@
-package it.polimi.ingsw.server.controller.commChannel;
+package it.polimi.ingsw.server.controller.commChannel.rmi;
 
 import it.polimi.ingsw.server.controller.Identifiable;
+import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Pool;
 import it.polimi.ingsw.server.model.table.RoundTrack;
 import it.polimi.ingsw.server.model.table.Table;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
-import it.polimi.ingsw.server.rmiInterface.RemoteGameScreen;
+import it.polimi.ingsw.server.controller.commChannel.rmi.rmiInterface.RemoteGameScreen;
 import javafx.util.Pair;
 
 import java.util.List;

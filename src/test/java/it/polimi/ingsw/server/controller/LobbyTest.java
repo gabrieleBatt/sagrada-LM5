@@ -1,22 +1,13 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.client.FakeGameScreen;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
-import it.polimi.ingsw.server.controller.commChannel.RmiCommunicationChannel;
-import it.polimi.ingsw.server.controller.commChannel.SocketCommunicationChannel;
-import it.polimi.ingsw.server.rmiInterface.RemoteGameScreen;
-import it.polimi.ingsw.server.rmiInterface.TestGameScreen;
+import it.polimi.ingsw.server.controller.commChannel.rmi.RmiCommunicationChannel;
+import it.polimi.ingsw.server.controller.commChannel.rmi.rmiInterface.TestGameScreen;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.net.Socket;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.logging.Level;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class LobbyTest {
 

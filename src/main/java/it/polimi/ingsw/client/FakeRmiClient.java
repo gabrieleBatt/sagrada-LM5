@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.server.rmiInterface.RemoteServer;
+import it.polimi.ingsw.server.controller.commChannel.rmi.rmiInterface.RemoteServer;
 
 import java.rmi.registry.LocateRegistry;
 

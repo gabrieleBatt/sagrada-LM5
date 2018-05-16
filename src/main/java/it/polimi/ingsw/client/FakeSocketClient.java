@@ -1,59 +1,54 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.LogMaker;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class FakeSocketClient {
 
     private static final Logger logger = LogMaker.getLogger(FakeSocketClient.class.getName(), Level.ALL);
-    private static final String nickname = "Gabriele";
+    private static final String nickname = "BerNRDO";
+
     public static void main(String args[]) {
         String hostName = "localhost";
         int portNumber = 50000;
-        BufferedReader in = null;
-        PrintWriter out= null;
+        ObjectInputStream in = null;
+        ObjectOutputStream out= null;
         Scanner scanner = new Scanner(System.in);
-        String received;
-
-        try (Socket socket = new Socket(hostName, portNumber)) {
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-            out.println("login "+nickname);
+        JSONObject received;
+        try {
+            Socket socket = new Socket(hostName, portNumber);
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
+            out.writeObject(ClientSocketProtocol.LOGIN.build(nickname).toString());
             out.flush();
-            while((received = in.readLine()) != null) {
+            while((received = (JSONObject) (new JSONParser()).parse((String) in.readObject())) != null) {
                 System.out.println(received);
-                List<String> streamList = Stream.of(received.split(" ")).map(String::new).filter(x -> !x.equals("")).collect(Collectors.toList());
-                if (received.equals(nickname+ " logged!")){
+                if (received.get("header").equals("login success")){
                     logger.log(Level.FINE, "Login success");
-                }else if (streamList.get(0).equals("chooseWindow")) {
-                    System.out.println("Choose among these windows: " + streamList.subList(1, streamList.size()));
-                    System.out.println("Type the displayed name of your choice only ");
-                    out.println("windowChosen " + scanner.nextLine());
+                }else if (received.get("header").equals("chooseWindow")) {
+                    System.out.println("Choose among these windows: " + received.get("-w"));
+                    out.writeObject(ClientSocketProtocol.CHOOSE_WINDOW.build(scanner.nextLine()).toString());
                     out.flush();
-                } else if (streamList.get(0).equals("selectObject")) {
-                    System.out.println("Choose among these : " + streamList.subList(2, streamList.size()));
-                    System.out.println("Type the displayed name of your choice only ");
-                    out.println("objectSelected " + scanner.nextLine());
+                } else if (received.get("header").equals("selectObject")) {
+                    System.out.println("Choose among these : " + received.get("-o"));
+                    out.writeObject(ClientSocketProtocol.SELECT_OBJECT.build(scanner.nextLine()).toString());
                     out.flush();
-                } else if (streamList.get(0).equals("selectFrom")) {
-                    System.out.println("Choose among these : " + streamList.subList(2, streamList.size()));
-                    System.out.println("Type the displayed name of your choice only ");
-                    out.println("selected " + scanner.nextLine());
+                } else if (received.get("header").equals("selectFrom")) {
+                    System.out.println("Choose among these : " + received.get("-o"));
+                    out.writeObject(ClientSocketProtocol.SELECT_FROM.build(scanner.nextLine()).toString());
                     out.flush();
                 }
             }
 
-        } catch (IOException e){
+        } catch (ClassNotFoundException | ParseException | IOException e){
             logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
