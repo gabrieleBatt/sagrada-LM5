@@ -1,12 +1,15 @@
-package it.polimi.ingsw.server.controller.commChannel.rmi.rmiInterface;
+package it.polimi.ingsw.server.controller.commChannel;
 
+import it.polimi.ingsw.server.controller.commChannel.rmi.rmiInterface.RemoteGameScreen;
 import javafx.util.Pair;
 
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * used for lobby testing
+ */
 public class TestGameScreen implements RemoteGameScreen {
-
     @Override
     public void setPlayers(List<Pair<String, Boolean>> nicknames) {
 

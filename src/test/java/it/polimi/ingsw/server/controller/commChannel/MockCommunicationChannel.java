@@ -1,7 +1,5 @@
 package it.polimi.ingsw.server.controller.commChannel;
 
-import it.polimi.ingsw.server.controller.Identifiable;
-import it.polimi.ingsw.server.controller.StdId;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Pool;
 import it.polimi.ingsw.server.model.table.RoundTrack;
@@ -44,6 +42,11 @@ public class MockCommunicationChannel implements CommunicationChannel {
     @Override
     public boolean isConnected() {
         return true;
+    }
+
+    @Override
+    public void sendMessage(String message) {
+
     }
 
     @Override

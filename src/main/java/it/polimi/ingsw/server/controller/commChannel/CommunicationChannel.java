@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.controller.commChannel;
 
-import it.polimi.ingsw.server.controller.Identifiable;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Pool;
 import it.polimi.ingsw.server.model.table.RoundTrack;
@@ -23,6 +22,11 @@ public interface CommunicationChannel{
      * @return true if is connected, false otherwise.
      */
     boolean isConnected();
+
+    /**
+     * Sends a message to visualize
+     */
+    void sendMessage(String message);
 
     /**
      * Updates any change in the pool.

@@ -11,12 +11,16 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class FakeSocketClient {
+public class FakeSocketClient{
 
     private static final Logger logger = LogMaker.getLogger(FakeSocketClient.class.getName(), Level.ALL);
-    private static final String nickname = "Berna";
 
     public static void main(String args[]) {
+        run("player1");
+        run("player2");
+    }
+
+    public static void run(String nickname){
         String hostName = "localhost";
         int portNumber = 50000;
         ObjectInputStream in = null;

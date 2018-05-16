@@ -8,7 +8,7 @@ import java.util.List;
 public enum ServerSocketProtocol{
     LOGIN("login"), SELECT_OBJECT("selectObject"), UPDATE("update"),
     END_GAME("endGame"), CHOOSE_WINDOW("chooseWindow"), SELECT_FROM("selectFrom"),
-    OPTION("-o"), LEADER_BOARD("-l"),
+    SEND("send"), OPTION("-o"), LEADER_BOARD("-l"),
     POOL("-p"), ROUND_TRACK("-rt"), TOOL("-t"), PUBLIC_OBJ("-pub"),
     PRIVATE_OBJ("-prv"), TOKEN("-t"), GLASS_WINDOW("-w"), PLAYER("-pl");
 

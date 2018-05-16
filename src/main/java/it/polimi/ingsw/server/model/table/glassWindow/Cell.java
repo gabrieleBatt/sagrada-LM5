@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.model.table.glassWindow;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.controller.Identifiable;
+import it.polimi.ingsw.server.controller.commChannel.Identifiable;
 import it.polimi.ingsw.server.exception.EmptyCellException;
 import it.polimi.ingsw.server.exception.DieNotAllowedException;
 import it.polimi.ingsw.server.model.table.dice.Die;

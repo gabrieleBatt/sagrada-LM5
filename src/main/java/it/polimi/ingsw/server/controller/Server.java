@@ -89,11 +89,10 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
     @Override
     public void rmiLogin(RemoteGameScreen gameScreen, String nickname) throws RemoteException {
         logger.log(Level.FINE, nickname + " logged!");
-
         addToGame(new RmiCommunicationChannel(gameScreen, nickname), nickname);
     }
 
-    private static void socketLogin(Socket socket){
+    public static void socketLogin(Socket socket){
         try {
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());

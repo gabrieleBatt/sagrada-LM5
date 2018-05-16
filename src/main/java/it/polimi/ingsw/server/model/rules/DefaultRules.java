@@ -2,8 +2,8 @@ package it.polimi.ingsw.server.model.rules;
 
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
-import it.polimi.ingsw.server.controller.Identifiable;
-import it.polimi.ingsw.server.controller.StdId;
+import it.polimi.ingsw.server.controller.commChannel.Identifiable;
+import it.polimi.ingsw.server.controller.commChannel.StdId;
 import it.polimi.ingsw.server.model.objective.*;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.dice.Die;

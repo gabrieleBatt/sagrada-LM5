@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
+import it.polimi.ingsw.server.controller.commChannel.TestGameScreen;
 import it.polimi.ingsw.server.controller.commChannel.rmi.RmiCommunicationChannel;
-import it.polimi.ingsw.server.controller.commChannel.rmi.rmiInterface.TestGameScreen;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

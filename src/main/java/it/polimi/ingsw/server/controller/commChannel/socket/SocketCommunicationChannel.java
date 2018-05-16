@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.controller.commChannel.socket;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.controller.Identifiable;
-import it.polimi.ingsw.server.controller.StdId;
+import it.polimi.ingsw.server.controller.commChannel.Identifiable;
+import it.polimi.ingsw.server.controller.commChannel.StdId;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Pool;
@@ -12,7 +12,6 @@ import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 import javafx.util.Pair;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -26,7 +25,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class SocketCommunicationChannel implements CommunicationChannel {
 
@@ -58,11 +56,15 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         return connected;
     }
 
+    @Override
+    public void sendMessage(String message) {
+        sendJSON(new JSONBuilder().build(ServerSocketProtocol.SEND, message));
+    }
+
     private void sendJSON(JSONBuilder jsonBuilder){
         try {
             out.writeObject(jsonBuilder.get().toString());
             out.flush();
-            System.out.println(jsonBuilder.get().toString());
         } catch (IOException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
             disconnect();
