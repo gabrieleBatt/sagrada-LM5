@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.table.glassWindow;
 
 import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.server.controller.Identifiable;
 import it.polimi.ingsw.server.exception.EmptyCellException;
 import it.polimi.ingsw.server.exception.DieNotAllowedException;
 import it.polimi.ingsw.server.model.table.dice.Die;
@@ -14,7 +15,7 @@ import java.util.logging.Logger;
  * Cell is a concrete class representing a single cell of a glassWindow. It has information about restrictions and the
  * eventual presence of a die on.
  */
-public class Cell {
+public class Cell implements Identifiable {
 
     private static final Logger logger = LogMaker.getLogger(Cell.class.getName(), Level.ALL);
     private Optional<DieColor> colorRestriction;
@@ -111,6 +112,7 @@ public class Cell {
      * gets the cell id
      * @return  the string id
      */
+    @Override
     public String getId() {
         return id;
     }

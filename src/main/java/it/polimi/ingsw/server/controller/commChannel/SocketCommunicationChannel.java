@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.controller.commChannel;
 
-import com.sun.jndi.ldap.Connection;
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.model.objective.PublicObjective;
+import it.polimi.ingsw.server.controller.Identifiable;
+import it.polimi.ingsw.server.controller.StdId;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Pool;
 import it.polimi.ingsw.server.model.table.RoundTrack;
@@ -10,22 +10,15 @@ import it.polimi.ingsw.server.model.table.Table;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
-import it.polimi.ingsw.server.model.tool.Tool;
 import javafx.util.Pair;
-import sun.net.ConnectionResetException;
 
 import java.io.*;
-import java.net.ConnectException;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -189,34 +182,36 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     }
 
     @Override
-    public String selectOption(List<String> ids, Object container, boolean canSkip, boolean undoEnabled) {
-        if(!isConnected()) return fakeResponse(canSkip, undoEnabled, ids);
-        StringBuilder message = new StringBuilder("selectObject " + container.getClass().getName() + " ");
+    public Identifiable selectObject(List<Identifiable> options, Object container, boolean canSkip, boolean undoEnabled) {
+        if(!isConnected()) return fakeResponse(canSkip, undoEnabled, options);
 
-        for ( String s : ids) {
+        //Send message
+        StringBuilder message = new StringBuilder("selectObject " + container.getClass().getName() + " ");
+        List<String> ids = options.stream().map(Identifiable::getId).collect(Collectors.toList());
+        for (String s : ids) {
             message.append(s).append(" ");
         }
         if (canSkip)
             message.append(" -s ");
         if(undoEnabled)
             message.append(" -u ");
-
         out.println(message);
         out.flush();
-
         logger.log(Level.FINE, "Sent "+ message, this);
+
+        //Receive response
         String response;
         try {
             if((response  = in.readLine()) != null) {
                 List<String> streamList = Stream.of(response.split(" ")).map(String::new).filter(x -> !x.equals("")).collect(Collectors.toList());
                 if (streamList.get(0).equals("optionSelected")) {
                     if (streamList.get(1).equals("-u")) {
-                        return "undo";
+                        return StdId.UNDO;
                     }
                     if (streamList.get(1).equals("-s")) {
-                        return "skip";
+                        return StdId.SKIP;
                     }
-                    Optional<String> selection = ids.stream().filter(i -> i.equals(streamList.get(1))).findFirst();
+                    Optional<Identifiable> selection = options.stream().filter(op -> op.getId().equals(streamList.get(1))).findFirst();
                     if (selection.isPresent()) {
                         return selection.get();
                     } else {
@@ -230,16 +225,17 @@ public class SocketCommunicationChannel implements CommunicationChannel {
             logger.log(Level.WARNING, e.getMessage(), e);
             disconnect();
         }
-        return fakeResponse(canSkip, undoEnabled, ids);
+        return fakeResponse(canSkip, undoEnabled, options);
     }
 
     @Override
-    public String chooseFrom(List<String> options, String message, boolean canSkip, boolean undoEnabled) {
+    public Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled) {
         if(!isConnected()) return fakeResponse(canSkip, undoEnabled, options);
 
+        //send message
         StringBuilder toSend = new StringBuilder("selectFrom " + message + " ");
-
-        for ( String s : options) {
+        List<String> opt = options.stream().map(Identifiable::getId).collect(Collectors.toList());
+        for (String s : opt) {
             toSend.append(s).append(" ");
         }
         if (canSkip)
@@ -250,18 +246,20 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         out.println(toSend);
         out.flush();
         logger.log(Level.FINE, "Sent "+ toSend, this);
+
+        //Receive response
         String response;
         try {
             response = in.readLine();
             List<String> streamList = Stream.of(response.split(" ")).map(String::new).filter(x -> !x.equals("")).collect(Collectors.toList());
             if(streamList.get(0).equals("selected")){
                 if (streamList.get(1).equals("-u")) {
-                    return "undo";
+                    return StdId.UNDO;
                 }
                 if (streamList.get(1).equals("-s")) {
-                    return "skip";
+                    return StdId.SKIP;
                 }
-                Optional<String> selection = options.stream().filter(g -> g.equals(streamList.get(1))).findFirst();
+                Optional<Identifiable> selection = options.stream().filter(op -> op.getId().equals(streamList.get(1))).findFirst();
                 if (selection.isPresent()){
                     return selection.get();
                 }else{
@@ -272,17 +270,17 @@ public class SocketCommunicationChannel implements CommunicationChannel {
             }
 
         }catch(IOException e){
-            //logger.log(Level.WARNING, e.getMessage(), e);
+            logger.log(Level.WARNING, e.getMessage(), e);
             disconnect();
         }
         return fakeResponse(canSkip, undoEnabled, options);
     }
 
-    private String fakeResponse(boolean canSkip, boolean undoEnabled, List<String> op){
+    private Identifiable fakeResponse(boolean canSkip, boolean undoEnabled, List<Identifiable> op){
         if(canSkip)
-            return "skip";
+            return StdId.SKIP;
         else if(undoEnabled)
-            return "undo";
+            return StdId.UNDO;
         else
             return op.get(ThreadLocalRandom.current().nextInt(0, op.size()));
     }

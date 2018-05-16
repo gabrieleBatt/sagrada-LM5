@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.table.dice;
 import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.server.controller.Identifiable;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
@@ -10,7 +11,7 @@ import java.util.logging.Logger;
  * extracted whether it's not specified) and an Id which can uniquely represent a die. It contains also all the methods
  * regarding the die and the tools which can have an effect on it.
  */
-public class Die {
+public class Die implements Identifiable {
 
     private static final Logger logger = LogMaker.getLogger(Die.class.getName(), Level.ALL);
     private final DieColor color;
@@ -45,6 +46,7 @@ public class Die {
      * Gets the die ID
      * @return: int, die ID code
      */
+    @Override
     public String getId (){
         return number + color.toString() + id;
     }

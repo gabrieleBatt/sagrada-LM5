@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
 import it.polimi.ingsw.server.controller.commChannel.RmiCommunicationChannel;
 import it.polimi.ingsw.server.controller.commChannel.SocketCommunicationChannel;
 import it.polimi.ingsw.server.rmiInterface.RemoteGameScreen;
+import it.polimi.ingsw.server.rmiInterface.TestGameScreen;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,13 +24,13 @@ class LobbyTest {
     @Test
     void addChannel() throws IOException {
         Lobby lobby = new Lobby();
-        lobby.addChannel(new RmiCommunicationChannel(new RemoteGameScreen() {}, "testR1"));
-        lobby.addChannel(new RmiCommunicationChannel(new RemoteGameScreen() {}, "testR2"));
-        lobby.addChannel(new RmiCommunicationChannel(new RemoteGameScreen() {}, "testR3"));
-        lobby.addChannel(new RmiCommunicationChannel(new RemoteGameScreen() {}, "testR4"));
+        lobby.addChannel(new RmiCommunicationChannel(new TestGameScreen(), "testR1"));
+        lobby.addChannel(new RmiCommunicationChannel(new TestGameScreen(), "testR2"));
+        lobby.addChannel(new RmiCommunicationChannel(new TestGameScreen(), "testR3"));
+        lobby.addChannel(new RmiCommunicationChannel(new TestGameScreen(), "testR4"));
         Assertions.assertTrue(lobby.getCommChannelSet().isEmpty());
 
-        CommunicationChannel cc = new RmiCommunicationChannel(new RemoteGameScreen() {}, "testR");
+        CommunicationChannel cc = new RmiCommunicationChannel(new TestGameScreen(), "testR");
         lobby.addChannel(cc);
         Assertions.assertTrue(lobby.getCommChannelSet().contains(cc));
     }

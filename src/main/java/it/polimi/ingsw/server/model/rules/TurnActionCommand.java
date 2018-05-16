@@ -2,17 +2,18 @@ package it.polimi.ingsw.server.model.rules;
 
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
+import it.polimi.ingsw.server.controller.Identifiable;
 import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.table.Player;
+import it.polimi.ingsw.server.model.table.Table;
 import it.polimi.ingsw.server.model.tool.Tool;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static it.polimi.ingsw.server.controller.StdId.*;
 
 public class TurnActionCommand implements ActionCommand{
 
-    private static final String useTool = "UsaUnTool";
-    private static final String drawDie = "PescaUnDado";
     private static final String message1 = "SelezionaLaTuaProssimaMossa";
     private static final String message2 = "CosaVuoiFareOra?";
     private static boolean reset;
@@ -34,11 +35,15 @@ public class TurnActionCommand implements ActionCommand{
             reset = false;
             skip = false;
             cc = actionReceiver.getCommChannels().stream().filter(c -> c.getNickname().equals(player.getNickname())).findFirst().get();
-            List<String> options = new ArrayList<>();
-            options.add(useTool);
-            options.add(drawDie);
-            String actionChosen = cc.chooseFrom(options, message1, true, false);
+            List<Identifiable> options = new ArrayList<>();
+            options.add(DRAFT);
+            options.add(USE_TOOL);
+
+            //choose first action
+            Identifiable actionChosen = cc.chooseFrom(options, message1, true, false);
             doActionChosen(actionChosen,actionReceiver);
+
+            //choose second action
             if(!reset && !skip) {
                 options.remove(actionChosen);
                 actionChosen = cc.chooseFrom(options, message2, true, true);
@@ -47,36 +52,33 @@ public class TurnActionCommand implements ActionCommand{
         }while(reset);
     }
 
-    private void doActionChosen(final String actionChosen, Game actionReceiver) throws DieNotAllowedException {
-        switch (actionChosen) {
-            case useTool:
-                String toolChosen = cc.selectOption(actionReceiver.getTable().getTools().stream().map(Tool::getName).collect(Collectors.toList()), "table", false, true);
-                if(toolChosen.equals("undo"))
-                    this.reset(actionReceiver);
-                if(!reset){
-                    Tool tool = actionReceiver.getTable().getTools().stream().filter(t -> t.getName().equals(toolChosen)).findFirst().get();
-                    tool.setUsed(true);
-                    for (ActionCommand actionCommand : tool.getActionCommandList()) {
-                        if(!reset)
-                            actionCommand.execute(actionReceiver);
-                    }
+    private void doActionChosen(final Identifiable actionChosen, Game actionReceiver) throws DieNotAllowedException {
+        if(actionChosen.getId().equals(USE_TOOL.getId())) {
+            Identifiable toolChosen = cc.selectObject(new ArrayList<>(actionReceiver.getTable().getTools()), Table.class, false, true);
+            if (toolChosen.getId().equals(UNDO.getId()))
+                this.reset(actionReceiver);
+            if (!reset) {
+                Tool tool = actionReceiver.getTable().getTools().stream().filter(t -> t.getId().equals(toolChosen.getId())).findFirst().get();
+                tool.setUsed(true);
+                for (ActionCommand actionCommand : tool.getActionCommandList()) {
+                    if (!reset)
+                        actionCommand.execute(actionReceiver);
                 }
-                break;
+            }
 
-            case drawDie:
-                actionReceiver.getRules().getDraftAction("dieChosen", Optional.empty(), Optional.empty(), player).execute(actionReceiver);
-                if(!reset)
-                    actionReceiver.getRules().getPlaceAction("dieChosen", true, true, true, player).execute(actionReceiver);
-                break;
-            case "skip":
-                skip = true;
-                break;
-            case "undo":
-                reset(actionReceiver);
-                actionReceiver.getCommChannels().forEach(c -> c.updateView(player));
-                actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
-                actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getRoundTrack()));
-                break;
+        }else if(actionChosen.getId().equals(DRAFT.getId())) {
+            actionReceiver.getRules().getDraftAction("dieChosen", Optional.empty(), Optional.empty(), player).execute(actionReceiver);
+            if (!reset)
+                actionReceiver.getRules().getPlaceAction("dieChosen", true, true, true, player).execute(actionReceiver);
+
+        }else if(actionChosen.getId().equals(SKIP.getId())) {
+            skip = true;
+
+        }else if(actionChosen.getId().equals(UNDO.getId())) {
+            reset(actionReceiver);
+            actionReceiver.getCommChannels().forEach(c -> c.updateView(player));
+            actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
+            actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getRoundTrack()));
         }
     }
 
