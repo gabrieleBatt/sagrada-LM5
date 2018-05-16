@@ -31,17 +31,17 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     private static final Logger logger = LogMaker.getLogger(SocketCommunicationChannel.class.getName(), Level.ALL);
     private final Socket socket;
     private final String nickname;
-    private final ObjectInputStream in;
-    private final ObjectOutputStream out;
+    private final BufferedReader in;
+    private final PrintWriter out;
     private boolean connected;
 
-    public SocketCommunicationChannel(Socket socket, ObjectInputStream in, ObjectOutputStream out, String nickname) throws IOException {
+    public SocketCommunicationChannel(Socket socket, BufferedReader in, PrintWriter out, String nickname) throws IOException {
         this.connected = true;
         this.socket = socket;
         this.nickname = nickname;
         this.in = in;
         this.out = out;
-        out.writeObject((new JSONBuilder()).build(ServerSocketProtocol.LOGIN, "success").get().toString());
+        out.println((new JSONBuilder()).build(ServerSocketProtocol.LOGIN, "success").get().toString());
         logger.log(Level.FINE, nickname + " logged!");
         out.flush();
     }
@@ -62,13 +62,8 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     }
 
     private void sendJSON(JSONBuilder jsonBuilder){
-        try {
-            out.writeObject(jsonBuilder.get().toString());
-            out.flush();
-        } catch (IOException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
-            disconnect();
-        }
+        out.println(jsonBuilder.get().toString());
+        out.flush();
     }
 
     @Override
@@ -179,7 +174,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
         JSONObject response;
         try {
-            if((response = (JSONObject) (new JSONParser()).parse((String) in.readObject())) != null) {
+            if((response = (JSONObject) (new JSONParser()).parse(in.readLine())) != null) {
                 if (response.get("header").equals("windowChosen")) {
                     Optional<GlassWindow> glassWindow = glassWindows.stream().filter(g -> g.getName().equals(response.get("mainParam"))).findFirst();
                     if (glassWindow.isPresent()) {
@@ -191,7 +186,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
                     disconnect();
                 }
             }
-        }catch(ClassNotFoundException | ParseException | IOException e){
+        }catch(ParseException | IOException e){
             logger.log(Level.WARNING, e.getMessage(), e);
             disconnect();
         }
@@ -224,7 +219,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         //Receive response
         JSONObject response;
         try {
-            if((response = (JSONObject) (new JSONParser()).parse((String) in.readObject())) != null) {
+            if((response = (JSONObject) (new JSONParser()).parse(in.readLine())) != null) {
                 if (response.get("header").equals("objectSelected")) {
                     if (response.get("mainParam").equals(StdId.UNDO.getId())) {
                         return StdId.UNDO;
@@ -242,7 +237,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
                     disconnect();
                 }
             }
-        }catch(ClassNotFoundException | ParseException  | IOException e){
+        }catch(ParseException  | IOException e){
             logger.log(Level.WARNING, e.getMessage(), e);
             disconnect();
         }
@@ -267,7 +262,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         //Receive response
         JSONObject response;
         try {
-            if((response = (JSONObject) (new JSONParser()).parse((String) in.readObject())) != null) {
+            if((response = (JSONObject) (new JSONParser()).parse(in.readLine())) != null) {
                 if (response.get("header").equals("selected")) {
                     if (response.get("mainParam").equals(StdId.UNDO.getId())) {
                         return StdId.UNDO;
@@ -285,7 +280,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
                     disconnect();
                 }
             }
-        }catch(ClassNotFoundException | ParseException | IOException e){
+        }catch(ParseException | IOException e){
             logger.log(Level.WARNING, e.getMessage(), e);
             disconnect();
         }

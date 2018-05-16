@@ -16,43 +16,42 @@ public class FakeSocketClient{
     private static final Logger logger = LogMaker.getLogger(FakeSocketClient.class.getName(), Level.ALL);
 
     public static void main(String args[]) {
-        run("player1");
         run("player2");
     }
 
     public static void run(String nickname){
         String hostName = "localhost";
         int portNumber = 50000;
-        ObjectInputStream in = null;
-        ObjectOutputStream out= null;
+        BufferedReader in = null;
+        PrintWriter out= null;
         Scanner scanner = new Scanner(System.in);
         JSONObject received;
         try {
             Socket socket = new Socket(hostName, portNumber);
-            out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
-            out.writeObject(ClientSocketProtocol.LOGIN.build(nickname).toString());
+            out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out.println(ClientSocketProtocol.LOGIN.build(nickname).toString());
             out.flush();
-            while((received = (JSONObject) (new JSONParser()).parse((String) in.readObject())) != null) {
+            while((received = (JSONObject) (new JSONParser()).parse(in.readLine())) != null) {
                 System.out.println(received);
                 if (received.get("header").equals("login success")){
                     logger.log(Level.FINE, "Login success");
                 }else if (received.get("header").equals("chooseWindow")) {
                     System.out.println("Choose among these windows: " + received.get("-w"));
-                    out.writeObject(ClientSocketProtocol.CHOOSE_WINDOW.build(scanner.nextLine()).toString());
+                    out.println(ClientSocketProtocol.CHOOSE_WINDOW.build(scanner.nextLine()).toString());
                     out.flush();
                 } else if (received.get("header").equals("selectObject")) {
                     System.out.println("Choose among these : " + received.get("-o"));
-                    out.writeObject(ClientSocketProtocol.SELECT_OBJECT.build(scanner.nextLine()).toString());
+                    out.println(ClientSocketProtocol.SELECT_OBJECT.build(scanner.nextLine()).toString());
                     out.flush();
                 } else if (received.get("header").equals("selectFrom")) {
                     System.out.println("Choose among these : " + received.get("-o"));
-                    out.writeObject(ClientSocketProtocol.SELECT_FROM.build(scanner.nextLine()).toString());
+                    out.println(ClientSocketProtocol.SELECT_FROM.build(scanner.nextLine()).toString());
                     out.flush();
                 }
             }
 
-        } catch (ClassNotFoundException | ParseException | IOException e){
+        } catch (ParseException | IOException e){
             logger.log(Level.WARNING, e.getMessage(), e);
         }
     }

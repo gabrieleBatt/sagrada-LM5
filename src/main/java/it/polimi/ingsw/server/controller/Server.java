@@ -94,8 +94,8 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
 
     public static void socketLogin(Socket socket){
         try {
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             JSONObject loginMessage;
 
             new Timer().schedule(new TimerTask() {
@@ -105,7 +105,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
                 }
             }, loginTime * 1000);
 
-            if((loginMessage = (JSONObject)(new JSONParser()).parse((String)in.readObject())) != null) {
+            if((loginMessage = (JSONObject)(new JSONParser()).parse(in.readLine())) != null) {
                 if (loginMessage.get("header").equals("login")) {
                     String nickname = (String)loginMessage.get("mainParam");
                     logger.log(Level.FINE, nickname + " logged!");
@@ -116,7 +116,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
                     throw new IOException();
                 }
             }
-        } catch (ClassNotFoundException | ParseException | IOException e) {
+        } catch (ParseException | IOException e) {
             logger.log(Level.WARNING, "Socket login failed", e);
         }
     }

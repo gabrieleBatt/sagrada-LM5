@@ -83,3 +83,7 @@
 - controller
     - LobbyTest
         - Add commChannel to lobby and make game start :heavy_check_mark:
+    - commChannel
+        - socket
+            - SocketCommunicationChannelTest
+                - Update test :heavy_check_mark:
