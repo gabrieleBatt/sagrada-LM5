@@ -9,7 +9,7 @@ s: chooseWindow \<windowId> [\<additionalWindowId>]\
 c: windowChosen \<windowId>
 
 s: selectObject \<container> \<idObject> [\<additionalIdObject>] [-s] [-u]\
-c: optionSelected \<optionChosen>
+c: objectSelected \<optionChosen>
 
 s: selectFrom \<message> \<option> [\<additionalOption>] [-s] [-u]\
 c: selected \<option>

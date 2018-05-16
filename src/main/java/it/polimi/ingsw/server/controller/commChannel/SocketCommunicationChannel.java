@@ -204,7 +204,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         try {
             if((response  = in.readLine()) != null) {
                 List<String> streamList = Stream.of(response.split(" ")).map(String::new).filter(x -> !x.equals("")).collect(Collectors.toList());
-                if (streamList.get(0).equals("optionSelected")) {
+                if (streamList.get(0).equals("objectSelected")) {
                     if (streamList.get(1).equals("-u")) {
                         return StdId.UNDO;
                     }

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.server.controller;
 
+/**
+ * enum of standard identifiable
+ */
 public enum StdId implements Identifiable {
     SKIP("skip"), UNDO("undo"), USE_TOOL("UsaUnAttrezzo"), DRAFT("PescaUnDado"),
     TABLE("table"), ROUND_TRACK("roundTrack"), GLASS_WINDOW("glassWindow");

@@ -43,7 +43,7 @@ public class FakeSocketClient {
                 } else if (streamList.get(0).equals("selectObject")) {
                     System.out.println("Choose among these : " + streamList.subList(2, streamList.size()));
                     System.out.println("Type the displayed name of your choice only ");
-                    out.println("optionSelected " + scanner.nextLine());
+                    out.println("objectSelected " + scanner.nextLine());
                     out.flush();
                 } else if (streamList.get(0).equals("selectFrom")) {
                     System.out.println("Choose among these : " + streamList.subList(2, streamList.size()));
