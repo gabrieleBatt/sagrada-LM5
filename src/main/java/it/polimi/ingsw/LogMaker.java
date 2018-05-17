@@ -5,17 +5,25 @@ import java.util.logging.*;
 
 public class LogMaker {
 
-    private static final Level level = Level.OFF;
+    private static final Level level = Level.ALL;
     private static FileHandler fh;
     private static ConsoleHandler ch;
+    private static Formatter formatter;
 
     static {
         try {
+            formatter = new Formatter() {
+                @Override
+                public String format(LogRecord record) {
+                    return record.getMessage() + "\n";
+                }
+            };
             fh = new FileHandler("logs/serverLog.log");
             fh.setLevel(level);
-            fh.setFormatter(new SimpleFormatter());
+            fh.setFormatter(formatter);
             ch = new ConsoleHandler();
             ch.setLevel(level);
+            ch.setFormatter(formatter);
         } catch (IOException e) {
             System.exit(-1);
         }
@@ -30,10 +38,10 @@ public class LogMaker {
         try {
             FileHandler fileHandler = new FileHandler("logs/"+name+".log");
             fileHandler.setLevel(level);
+            fileHandler.setFormatter(formatter);
             logger.addHandler(fileHandler);
             logger.addHandler(fh);
             logger.addHandler(ch);
-            fileHandler.setFormatter(new SimpleFormatter());
         } catch (SecurityException | IOException e) {
             System.exit(-1);
         }

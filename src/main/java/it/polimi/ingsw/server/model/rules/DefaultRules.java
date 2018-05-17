@@ -73,7 +73,9 @@ public class DefaultRules implements Rules {
             for(Player player:players) {
                     player.setTokens(player.getGlassWindow().getDifficulty());
                     }
-            actionReceiver.getCommChannels().forEach(cc -> cc.updateView(actionReceiver.getTable()));
+            for (Player player : actionReceiver.getTable().getPlayers()) {
+                actionReceiver.getCommChannels().forEach(cc -> cc.updateView(player));
+            }
             Game.getLogger().log(Level.FINE, "Tokens given", actionReceiver);
         };
     }
