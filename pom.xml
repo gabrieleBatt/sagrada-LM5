@@ -54,15 +54,12 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <argLine>0.7.9</argLine>
-          <!-- Specific to generate mapping between tests and covered code -->
           <properties>
             <property>
               <name>listener</name>
               <value>org.sonar.java.jacoco.JUnitListener</value>
             </property>
           </properties>
-          <!-- test failure ignore -->
           <testFailureIgnore>true</testFailureIgnore>
         </configuration>
         <version>2.19.1</version>
