@@ -41,8 +41,8 @@ public class JSONBuilder{
      * @return this
      */
     public JSONBuilder build(SocketProtocol message) {
-        if(jsonObject.get("header") == null) {
-            this.jsonObject.put("header", message.get());
+        if(jsonObject.get(SocketProtocol.HEADER.get()) == null) {
+            this.jsonObject.put(SocketProtocol.HEADER.get(), message.get());
         }
         return this;
     }

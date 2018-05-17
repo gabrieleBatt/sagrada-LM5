@@ -1,10 +1,10 @@
 package it.polimi.ingsw.server.model.rules;
 
 import it.polimi.ingsw.server.controller.Game;
-import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
-import it.polimi.ingsw.server.controller.commChannel.MockCommunicationChannel;
+import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
+import it.polimi.ingsw.server.controller.channels.MockCommunicationChannel;
 import it.polimi.ingsw.server.exception.*;
-import it.polimi.ingsw.server.model.table.glassWindow.Cell;
+import it.polimi.ingsw.server.model.table.glasswindow.Cell;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

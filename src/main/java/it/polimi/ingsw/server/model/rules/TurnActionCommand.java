@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server.model.rules;
 
 import it.polimi.ingsw.server.controller.Game;
-import it.polimi.ingsw.server.controller.commChannel.StdId;
-import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
-import it.polimi.ingsw.server.controller.commChannel.Identifiable;
+import it.polimi.ingsw.server.controller.channels.StdId;
+import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
+import it.polimi.ingsw.server.controller.channels.Identifiable;
 import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.tool.Tool;
@@ -17,22 +17,21 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 
-import static it.polimi.ingsw.server.controller.commChannel.StdId.*;
+import static it.polimi.ingsw.server.controller.channels.StdId.*;
 
 public class TurnActionCommand implements ActionCommand{
 
-    private static final String message1 = "SelezionaLaTuaProssimaMossa";
-    private static final String message2 = "CosaVuoiFareOra?";
-    private static boolean reset;
-    private static boolean skip;
-    private static CommunicationChannel cc;
-    private static int turnTime;
+    private static final String NEXT_MOVE = "SelezionaLaTuaProssimaMossa";
+    private boolean reset;
+    private boolean skip;
+    private CommunicationChannel cc;
+    private static long turnTime;
 
     static {
-        JSONObject config = null;
+        JSONObject config;
         try {
             config = (JSONObject)new JSONParser().parse(new FileReader(new File("resources/ServerResources/config.json")));
-            turnTime = Math.toIntExact((long)config.get("turnTime"));
+            turnTime = (long)config.get("turnTime");
         } catch (ParseException | IOException e) {
             turnTime = 60;
         }
@@ -42,8 +41,6 @@ public class TurnActionCommand implements ActionCommand{
 
     public TurnActionCommand(Player player){
         this.player = player;
-        reset = false;
-        skip = false;
     }
 
     @Override
@@ -54,19 +51,23 @@ public class TurnActionCommand implements ActionCommand{
         do {
             reset = false;
             skip = false;
-            cc = actionReceiver.getCommChannels().stream().filter(c -> c.getNickname().equals(player.getNickname())).findFirst().get();
+            actionReceiver.getCommChannels()
+                    .stream()
+                    .filter(c -> c.getNickname().equals(player.getNickname()))
+                    .findFirst()
+                    .ifPresent(communicationChannel -> cc = communicationChannel);
             List<Identifiable> options = new ArrayList<>();
             options.add(DRAFT);
             options.add(USE_TOOL);
 
             //choose first action
-            Identifiable actionChosen = cc.chooseFrom(options, message1, true, false);
+            Identifiable actionChosen = cc.chooseFrom(options, NEXT_MOVE, true, false);
             doActionChosen(actionChosen,actionReceiver);
 
             //choose second action
             if(!reset && !skip) {
                 options.remove(actionChosen);
-                actionChosen = cc.chooseFrom(options, message2, true, true);
+                actionChosen = cc.chooseFrom(options, NEXT_MOVE, true, true);
                 doActionChosen(actionChosen, actionReceiver);
             }
         }while(reset);
@@ -87,17 +88,7 @@ public class TurnActionCommand implements ActionCommand{
 
     private void doActionChosen(final Identifiable actionChosen, Game actionReceiver) throws DieNotAllowedException {
         if(actionChosen.getId().equals(USE_TOOL.getId())) {
-            Identifiable toolChosen = cc.selectObject(new ArrayList<>(actionReceiver.getTable().getTools()), StdId.TABLE, false, true);
-            if (toolChosen.getId().equals(UNDO.getId()))
-                this.reset(actionReceiver);
-            if (!reset) {
-                Tool tool = actionReceiver.getTable().getTools().stream().filter(t -> t.getId().equals(toolChosen.getId())).findFirst().get();
-                tool.setUsed(true);
-                for (ActionCommand actionCommand : tool.getActionCommandList()) {
-                    if (!reset)
-                        actionCommand.execute(actionReceiver);
-                }
-            }
+            doToolAction(actionReceiver);
 
         }else if(actionChosen.getId().equals(DRAFT.getId())) {
             actionReceiver.getRules().getDraftAction("dieChosen", Optional.empty(), Optional.empty(), player).execute(actionReceiver);
@@ -109,11 +100,29 @@ public class TurnActionCommand implements ActionCommand{
 
         }else if(actionChosen.getId().equals(UNDO.getId())) {
             reset(actionReceiver);
-            actionReceiver.getCommChannels().forEach(c -> c.updateView(player));
-            actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
-            actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getRoundTrack()));
         }
     }
+
+    private void doToolAction(Game actionReceiver) throws DieNotAllowedException {
+        Identifiable toolChosen = cc.selectObject(new ArrayList<>(actionReceiver.getTable().getTools()), StdId.TABLE, false, true);
+        if (toolChosen.getId().equals(UNDO.getId()))
+            this.reset(actionReceiver);
+        if (!reset) {
+            Optional<Tool> optTool = actionReceiver.getTable().getTools()
+                    .stream()
+                    .filter(t -> t.getId().equals(toolChosen.getId()))
+                    .findFirst();
+            if(optTool.isPresent()) {
+                Tool tool = optTool.get();
+                tool.setUsed(true);
+                for (ActionCommand actionCommand : tool.getActionCommandList()) {
+                    if (!reset)
+                        actionCommand.execute(actionReceiver);
+                }
+            }
+        }
+    }
+
 
     /**
      * Resets the turn to the start or to the last checkpoint action (es. reRolling)
@@ -121,6 +130,10 @@ public class TurnActionCommand implements ActionCommand{
      */
     public void reset(Game actionReceiver) {
         reset = true;
+        actionReceiver.getCommChannels().forEach(c -> c.updateView(player));
+        actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
+        actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getRoundTrack()));
+
         actionReceiver.getTable().getRoundTrack().getMemento();
         actionReceiver.getTable().getDiceBag().getMemento();
         actionReceiver.getTable().getPool().getMemento();

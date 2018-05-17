@@ -1,12 +1,12 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
-import it.polimi.ingsw.server.controller.commChannel.RmiCommunicationChannel;
+import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
+import it.polimi.ingsw.server.controller.channels.RmiCommunicationChannel;
 import it.polimi.ingsw.net.socket.SocketProtocol;
-import it.polimi.ingsw.server.controller.commChannel.SocketCommunicationChannel;
-import it.polimi.ingsw.net.rmiInterface.RemoteGameScreen;
-import it.polimi.ingsw.net.rmiInterface.RemoteServer;
+import it.polimi.ingsw.server.controller.channels.SocketCommunicationChannel;
+import it.polimi.ingsw.net.interfaces.RemoteGameScreen;
+import it.polimi.ingsw.net.interfaces.RemoteServer;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -27,7 +27,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
     private static int socketPortNumber;
     private static final Lobby lobby = new Lobby();
     private static Set<Game> games = new HashSet<>();
-    private static int loginTime;
+    private static long loginTime;
     private static Server server;
 
     static {
@@ -35,7 +35,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
         try {
             JSONParser parser = new JSONParser();
             config = (JSONObject)parser.parse(new FileReader(new File("resources/ServerResources/config.json")));
-            loginTime = Math.toIntExact((long)config.get("loginTime"));
+            loginTime = (long)config.get("loginTime");
             rmiPortNumber  = Math.toIntExact((long)config.get("rmiPortNumber"));
             socketPortNumber = Math.toIntExact((long)config.get("socketPortNumber"));
         } catch (ParseException | IOException e) {
@@ -68,7 +68,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
         new Thread(game).start();
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             LocateRegistry.createRegistry(rmiPortNumber)
                     .rebind("Server", server);
@@ -77,21 +77,20 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
             logger.log(Level.WARNING, "Rmi server failed", e);
             System.exit(-1);
         }
-        try{
-            ServerSocket serverSocket = new ServerSocket(socketPortNumber);
-            logger.log(Level.CONFIG, "Socket server ready");
-            while (true) {
+        while (!Thread.interrupted()) {
+            try (ServerSocket serverSocket = new ServerSocket(socketPortNumber)) {
+                logger.log(Level.CONFIG, "Socket server ready");
                 Socket clientSocket = serverSocket.accept();
                 new Thread(() -> socketLogin(clientSocket)).start();
+            } catch (IOException e) {
+                logger.log(Level.WARNING, "Socket server failed", e);
             }
-        } catch (IOException e) {
-            logger.log(Level.WARNING, "Socket server failed", e);
         }
     }
 
     @Override
     public void rmiLogin(RemoteGameScreen gameScreen, String nickname) throws RemoteException {
-        logger.log(Level.FINE, nickname + " logged!");
+        logger.log(Level.FINE,  "logged!", nickname);
         addToGame(new RmiCommunicationChannel(gameScreen, nickname), nickname);
     }
 
@@ -117,7 +116,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
                 timer.cancel();
                 if (loginMessage.get("header").equals(SocketProtocol.LOGIN.get())) {
                     String nickname = (String)loginMessage.get(SocketProtocol.NICKNAME.get());
-                    logger.log(Level.FINE, nickname + " logged!");
+                    logger.log(Level.FINE, "logged!", nickname );
 
                     addToGame(new SocketCommunicationChannel(socket, in, out, nickname), nickname);
 

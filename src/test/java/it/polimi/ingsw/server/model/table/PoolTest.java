@@ -2,13 +2,11 @@ package it.polimi.ingsw.server.model.table;
 
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
-import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 class PoolTest {

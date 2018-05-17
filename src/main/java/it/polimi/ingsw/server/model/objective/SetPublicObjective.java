@@ -1,17 +1,14 @@
 package it.polimi.ingsw.server.model.objective;
 
-import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
-import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
+import it.polimi.ingsw.server.model.table.glasswindow.Cell;
+import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class SetPublicObjective extends PublicObjective {
 
-    private static final Logger logger = LogMaker.getLogger(SetPublicObjective.class.getName(), Level.ALL);
     private int points;
     private Collection<Integer> numbers;
     private Collection<DieColor> colors;
@@ -28,34 +25,27 @@ public class SetPublicObjective extends PublicObjective {
         int ret = 20;
         for(Integer n: numbers){
             int newRet = 0;
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 5; j++) {
-                    if (glassWindow.getCell(i, j).isOccupied()){
-                        if(glassWindow.getCell(i, j).getDie().getNumber() == n){
-                            newRet++;
-                        }
-                    }
-                }
+            for (Cell cell : glassWindow.getCellList()) {
+                if (cell.isOccupied() && cell.getDie().getNumber() == n)
+                    newRet++;
             }
-            if(ret > newRet){
-                ret = newRet;
-            }
+            ret = min(ret, newRet);
         }
         for(DieColor dc: colors){
             int newRet = 0;
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 5; j++) {
-                    if (glassWindow.getCell(i, j).isOccupied()){
-                        if(glassWindow.getCell(i, j).getDie().getColor().equals(dc)){
-                            newRet++;
-                        }
-                    }
-                }
+            for (Cell cell : glassWindow.getCellList()) {
+                if (cell.isOccupied() && cell.getDie().getColor() == dc)
+                    newRet++;
             }
-            if(ret > newRet){
-                ret = newRet;
-            }
+            ret = min(ret, newRet);
         }
         return ret*points;
+    }
+
+    private int min(int x, int y){
+        if(x<y){
+            return x;
+        }else
+            return y;
     }
 }

@@ -13,11 +13,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 public class PublicObjectiveDeck implements Deck {
 
@@ -27,13 +29,12 @@ public class PublicObjectiveDeck implements Deck {
 
     private PublicObjectiveDeck(){
         publicObjectives = new ArrayList<>();
-        try {
-            Files.list(Paths.get("resources/ServerResources/objectives/public"))
-                    .forEach((f) -> addCard(f.toFile()));
+        Path path = Paths.get("resources/ServerResources/objectives/public");
+        try (Stream<Path> files = Files.list(path)){
+            files.forEach(f -> addCard(f.toFile()));
         } catch (IOException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
-
     }
 
     private void addCard(File file) {

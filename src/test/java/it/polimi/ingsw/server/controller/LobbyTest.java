@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
-import it.polimi.ingsw.server.controller.commChannel.TestGameScreen;
-import it.polimi.ingsw.server.controller.commChannel.RmiCommunicationChannel;
+import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
+import it.polimi.ingsw.server.controller.channels.TestGameScreen;
+import it.polimi.ingsw.server.controller.channels.RmiCommunicationChannel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import java.io.IOException;
 
 class LobbyTest {
 
-    @DisplayName("Add commChannel to lobby and make game start")
+    @DisplayName("Add channels to lobby and make game start")
     @Test
     void addChannel() throws IOException {
         Lobby lobby = new Lobby();

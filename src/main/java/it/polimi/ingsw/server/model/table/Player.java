@@ -3,15 +3,15 @@ package it.polimi.ingsw.server.model.table;
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.model.objective.PrivateObjective;
 import it.polimi.ingsw.server.model.table.dice.Die;
-import it.polimi.ingsw.server.model.table.glassWindow.Cell;
-import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
+import it.polimi.ingsw.server.model.table.glasswindow.Cell;
+import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Player is a concrete class representing a game's player. Its' main attributes are nickname, tokens, glassWindow,
+ * Player is a concrete class representing a game's player. Its' main attributes are nickname, tokens, glasswindow,
  * privateObjective. It has also a boolean indicating whether it's connected or not.
  */
 public class Player implements Memento {
@@ -22,8 +22,8 @@ public class Player implements Memento {
     private Optional<GlassWindow> glassWindow;
     private HashSet<PrivateObjective> privateObjective;
     private boolean connected;
-    private Stack<List<Optional<Die>>> glassWindowMemento;
-    private Stack<Integer> tokensMemento;
+    private Deque<List<Optional<Die>>> glassWindowMemento;
+    private Deque<Integer> tokensMemento;
 
     /**
      * Creates a player, setting the nickname
@@ -34,8 +34,8 @@ public class Player implements Memento {
         this.privateObjective = new HashSet<>();
         glassWindow = Optional.empty();
         this.nickname = nickname;
-        tokensMemento = new Stack<>();
-        glassWindowMemento = new Stack<>();
+        tokensMemento = new ArrayDeque<>();
+        glassWindowMemento = new ArrayDeque<>();
     }
 
     /**
@@ -47,14 +47,14 @@ public class Player implements Memento {
     }
 
     /**
-     * Gets the glassWindow
-     * @return: glassWindow
-     * @throws NoSuchElementException exception thrown if there's no glassWindow
+     * Gets the glasswindow
+     * @return: glasswindow
+     * @throws NoSuchElementException exception thrown if there's no glasswindow
      */
     public GlassWindow getGlassWindow(){
         if(glassWindow.isPresent())
             return glassWindow.get();
-        else throw new NoSuchElementException("The player"+ this.nickname +"hasn't a glassWindow");
+        else throw new NoSuchElementException("The player"+ this.nickname +"hasn't a glasswindow");
     }
 
     /**
@@ -66,7 +66,7 @@ public class Player implements Memento {
     }
 
     /**
-     * Sets the glassWindow
+     * Sets the glasswindow
      * @param glassWindow
      */
     public void setGlassWindow(GlassWindow glassWindow){
@@ -158,7 +158,7 @@ public class Player implements Memento {
      * Prints the override toString of an object Player
      */
     public void dump(){
-        System.out.println(this);
+        System.console().writer().println(this);
     }
 
     /**
@@ -184,7 +184,7 @@ public class Player implements Memento {
      */
     @Override
     public void getMemento() {
-        this.tokens = new Integer(tokensMemento.peek());
+        this.tokens = tokensMemento.peek();
         List<Optional<Die>> dieList = new ArrayList<>(glassWindowMemento.peek());
         for(int i = 0; i<20; i++) {
             this.getGlassWindow().getCellList().get(i).placeOptionalDie(dieList.get(i));

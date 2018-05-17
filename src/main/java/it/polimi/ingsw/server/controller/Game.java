@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
+import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
 import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.rules.ActionCommand;
 import it.polimi.ingsw.server.model.rules.DefaultRules;
@@ -106,7 +106,7 @@ public class Game implements Runnable {
      * Gets the HashMap of chosen die.
      * @return HashMap of chosen die.
      */
-    public HashMap<String,Die> getMap(){
+    public Map<String,Die> getMap(){
         return this.dice;
     }
 

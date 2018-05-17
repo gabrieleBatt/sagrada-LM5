@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public class Pool implements Memento {
 
     private static final Logger logger = LogMaker.getLogger(Pool.class.getName(), Level.ALL);
-    private Stack<List<Die>> poolMemento = new Stack<>();
+    private Deque<List<Die>> poolMemento = new ArrayDeque<>();
     private Set<Die> diceOnTable = new HashSet<>();
 
     /**
@@ -54,18 +54,18 @@ public class Pool implements Memento {
      */
     @Override
     public String toString(){
-        String ret = "On the table there are:\n";
+        StringBuilder ret = new StringBuilder("On the table there are:\n");
         for (Die die: diceOnTable){
-            ret = ret + die.toString();
+            ret.append(die.toString());
         }
-        return ret;
+        return ret.toString();
     }
 
     /**
      * Prints the override toString of an object Pool
      */
     public void dump(){
-        System.out.println(this);
+        System.console().writer().println(this);
     }
 
     /**

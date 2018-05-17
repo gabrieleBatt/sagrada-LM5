@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model.objective;
 
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.exception.EmptyCellException;
-import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
+import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class AreaPublicObjective extends PublicObjective {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
                 for(Area a: areaList) {
-                    if (checkMultiplicityInArea(glassWindow, i, j, a.area, a.multiplicity)) {
+                    if (checkMultiplicityInArea(glassWindow, i, j, a.cells, a.multiplicity)) {
                         ret += points;
                         break;
                     }
@@ -58,7 +58,7 @@ public class AreaPublicObjective extends PublicObjective {
     private static boolean checkMultiplicityInArea(GlassWindow glassWindow, int row, int column, List<Coordinate> area, List<List<Integer>> multiplicity){
         Integer[] actualMultiplicity = new Integer[11];
         for (int i = 0; i < 11; i++) {
-            actualMultiplicity[i] = new Integer(0);
+            actualMultiplicity[i] = 0;
         }
         try {
             for (Coordinate c : area) {
@@ -71,6 +71,7 @@ public class AreaPublicObjective extends PublicObjective {
                     case MAGENTA: actualMultiplicity[8]++; break;
                     case RED: actualMultiplicity[9]++; break;
                     case YELLOW: actualMultiplicity[10]++; break;
+                    default: break;
                 }
             }
         }catch (EmptyCellException e) {
@@ -84,7 +85,7 @@ public class AreaPublicObjective extends PublicObjective {
     }
 
     class Area{
-        List<Coordinate> area;
+        List<Coordinate> cells;
         List<List<Integer>> multiplicity;
 
         public Area(List<Coordinate> area, List<List<Integer>> multiplicity) {
@@ -96,7 +97,7 @@ public class AreaPublicObjective extends PublicObjective {
                 this.multiplicity.add(new ArrayList<>(il));
             }
 
-            this.area = new ArrayList<>(area);
+            this.cells = new ArrayList<>(area);
         }
     }
 }

@@ -4,10 +4,7 @@ import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.exception.EndGameException;
 import it.polimi.ingsw.server.model.table.dice.Die;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,14 +15,14 @@ public class RoundTrack implements Memento {
 
     private static final Logger logger = LogMaker.getLogger(RoundTrack.class.getName(), Level.ALL);
     private List<ArrayList<Die>> dice;
-    private Stack<List<ArrayList<Die>>> roundTrackMemento;
+    private Deque<List<ArrayList<Die>>> roundTrackMemento;
 
     /**
      * Creates a roundTrack
      */
     public RoundTrack() {
         dice = new ArrayList<>();
-        roundTrackMemento = new Stack<>();
+        roundTrackMemento = new ArrayDeque<>();
     }
 
     /**
@@ -80,17 +77,17 @@ public class RoundTrack implements Memento {
      */
     @Override
     public String toString(){
-        String ret = "The round track contains:";
+        StringBuilder ret = new StringBuilder("The round track contains:");
         for (int i=1; i<10; i++)
-            ret = ret + "Round " + i + ": " + this.getDice(i).toString();
-        return ret;
+            ret.append("Round ").append(i).append(": ").append(this.getDice(i).toString());
+        return ret.toString();
     }
 
     /**
      * Prints the override toString of an object RoundTrack
      */
     public void dump(){
-        System.out.println(this);
+        System.console().writer().println(this);
     }
 
     /**

@@ -1,11 +1,10 @@
 package it.polimi.ingsw.server.model.table;
 
-import it.polimi.ingsw.server.exception.DeckTooSmallException;
 import it.polimi.ingsw.server.exception.DieNotAllowedException;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
-import it.polimi.ingsw.server.model.table.glassWindow.Cell;
-import it.polimi.ingsw.server.model.table.glassWindow.GlassWindowDeck;
+import it.polimi.ingsw.server.model.table.glasswindow.Cell;
+import it.polimi.ingsw.server.model.table.glasswindow.GlassWindowDeck;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

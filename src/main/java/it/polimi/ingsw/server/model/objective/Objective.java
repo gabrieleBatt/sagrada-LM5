@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.objective;
 
-import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
+import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 
 /**
  * Class representing the scoring rules for the players
@@ -8,7 +8,6 @@ import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
 public abstract class Objective {
 
     private String name;
-    private char points;
 
     /**
      * @param name name of the objective to create
@@ -29,7 +28,7 @@ public abstract class Objective {
     /**
      * scores the points of the objective only
      * @param glassWindow on witch score the point of the objective
-     * @return points scored on the glassWindow
+     * @return points scored on the glasswindow
      */
     public abstract int scorePoints(GlassWindow glassWindow);
 

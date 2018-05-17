@@ -1,11 +1,12 @@
 package it.polimi.ingsw;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.*;
 
 public class LogMaker {
 
-    private static final Level level = Level.ALL;
+    private static final Level level = Level.FINE;
     private static FileHandler fh;
     private static ConsoleHandler ch;
     private static Formatter formatter;
@@ -15,7 +16,7 @@ public class LogMaker {
             formatter = new Formatter() {
                 @Override
                 public String format(LogRecord record) {
-                    return record.getMessage() + "\n";
+                    return record.getMessage() + Arrays.toString(record.getParameters()) + "\n";
                 }
             };
             fh = new FileHandler("logs/serverLog.log");

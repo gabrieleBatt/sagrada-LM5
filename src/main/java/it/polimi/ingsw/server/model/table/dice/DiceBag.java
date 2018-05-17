@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class DiceBag implements Memento{
     private List<Die> bag;
     private static final Logger logger = LogMaker.getLogger(DiceBag.class.getName(), Level.ALL);
-    private Stack<List<Die>> diceBagMemento;
+    private Deque<List<Die>> diceBagMemento;
 
 
     /**
@@ -24,7 +24,7 @@ public class DiceBag implements Memento{
      */
     public DiceBag(){
        bag = new ArrayList<>();
-       diceBagMemento = new Stack<>();
+       diceBagMemento = new ArrayDeque<>();
        for(int i=0; i<18; i++){
            bag.add(new Die(DieColor.RED, i));
            bag.add(new Die(DieColor.GREEN, 18 + i));
@@ -55,7 +55,7 @@ public class DiceBag implements Memento{
      * @return the die drown
      */
     private Die drawDie() {
-        if (bag.size() == 0){
+        if (bag.isEmpty()){
             throw new BagEmptyException("Dice in bag: " + bag.size()+"\nDice requested 0");
         }
         int randomNum = ThreadLocalRandom.current().nextInt(0, bag.size() );
@@ -95,18 +95,18 @@ public class DiceBag implements Memento{
      */
     @Override
     public String toString(){
-        String ret = "The dice bag contains:";
+        StringBuilder ret = new StringBuilder("The dice bag contains:");
         for(Die die: this.bag){
-            ret = ret + die.toString();
+            ret.append(die.toString());
         }
-        return ret;
+        return ret.toString();
     }
 
     /**
      * Prints the override toString of an object DiceBag
      */
     public void dump(){
-        System.out.println(this);
+        System.console().writer().println(this);
     }
 
 

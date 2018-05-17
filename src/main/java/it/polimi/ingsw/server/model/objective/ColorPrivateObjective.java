@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model.objective;
 
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.exception.EmptyCellException;
-import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
+import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 
 import java.util.logging.Level;
@@ -30,11 +30,9 @@ public class ColorPrivateObjective extends PrivateObjective {
         for (int i = 0; i < 4; i++) {
             for (int j= 0; j < 5; j++) {
                 try {
-                    if (glassWindow.getCell(i, j).isOccupied()) {
-                        if (glassWindow.getCell(i, j).getDie().getColor().equals(color)) {
-                            ret += glassWindow.getCell(i, j).getDie().getNumber();
-                        }
-                    }
+                    if (glassWindow.getCell(i, j).isOccupied()
+                            && glassWindow.getCell(i, j).getDie().getColor().equals(color))
+                        ret += glassWindow.getCell(i, j).getDie().getNumber();
                 } catch (EmptyCellException e) {
                     logger.log(Level.WARNING, e.getMessage(), e);
                 }

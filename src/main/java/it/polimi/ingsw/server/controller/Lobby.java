@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
+import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -9,7 +9,6 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
 public class Lobby {
 
     private static final Logger logger = LogMaker.getLogger(Lobby.class.getName(), Level.ALL);
-    private static int timerSeconds;
+    private static long timerSeconds;
     private Set<CommunicationChannel> commChannelSet;
     private Timer timer;
 
@@ -30,7 +29,7 @@ public class Lobby {
         try {
             JSONParser parser = new JSONParser();
             config = (JSONObject)parser.parse(new FileReader(new File("resources/ServerResources/config.json")));
-            timerSeconds = Math.toIntExact((long)config.get("timerSeconds"));
+            timerSeconds = (long)config.get("timerSeconds");
         } catch (ParseException | IOException e) {
             timerSeconds = 60;
             logger.log(Level.WARNING, e.getMessage(), e);

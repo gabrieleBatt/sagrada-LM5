@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.model.rules;
 
 import it.polimi.ingsw.server.controller.Game;
-import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
-import it.polimi.ingsw.server.controller.commChannel.MockCommunicationChannel;
+import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
+import it.polimi.ingsw.server.controller.channels.MockCommunicationChannel;
 import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.objective.ColorPrivateObjective;
 import it.polimi.ingsw.server.model.objective.PublicObjective;
@@ -10,14 +10,12 @@ import it.polimi.ingsw.server.model.objective.SetPublicObjective;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
-import it.polimi.ingsw.server.model.table.glassWindow.Cell;
 import javafx.util.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 

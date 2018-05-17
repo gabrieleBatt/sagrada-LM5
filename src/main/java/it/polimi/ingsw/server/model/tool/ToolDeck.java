@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 public class ToolDeck implements Deck {
 
@@ -28,9 +30,9 @@ public class ToolDeck implements Deck {
 
     private ToolDeck(){
         tools = new ArrayList<>();
-        try {
-            Files.list(Paths.get("resources/ServerResources/tools"))
-                    .forEach((f) -> addCard(f.toFile()));
+        Path path = Paths.get("resources/ServerResources/tools");
+        try (Stream<Path> files = Files.list(path)){
+            files.forEach((f) -> addCard(f.toFile()));
         } catch (IOException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }

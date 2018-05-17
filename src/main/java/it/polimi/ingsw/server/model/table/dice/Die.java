@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.table.dice;
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.controller.commChannel.Identifiable;
+import it.polimi.ingsw.server.controller.channels.Identifiable;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
@@ -103,6 +103,11 @@ public class Die implements Identifiable {
             return false;
     }
 
+    @Override
+    public int hashCode(){
+        return this.getId().hashCode();
+    }
+
     /**
      * Method used for testing
      * @return String representing a die
@@ -116,6 +121,6 @@ public class Die implements Identifiable {
      * Prints the override toString of an object Die
      */
     public void dump(){
-        System.out.println(this);
+        System.console().writer().println(this);
     }
 }

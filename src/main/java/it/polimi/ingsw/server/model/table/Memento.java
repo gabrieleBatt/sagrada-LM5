@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server.model.table;
 
 
-import java.util.List;
-
 /**
  * Memento is an interface whose aim is to keep a stack of the objects' state
  * during the game, and offers to the player the possibility to restore a particular

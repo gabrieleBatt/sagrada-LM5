@@ -1,16 +1,16 @@
 package it.polimi.ingsw.server.model.rules;
 
 import it.polimi.ingsw.server.controller.Game;
-import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
-import it.polimi.ingsw.server.controller.commChannel.Identifiable;
-import it.polimi.ingsw.server.controller.commChannel.StdId;
+import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
+import it.polimi.ingsw.server.controller.channels.Identifiable;
+import it.polimi.ingsw.server.controller.channels.StdId;
 import it.polimi.ingsw.server.model.objective.*;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
-import it.polimi.ingsw.server.model.table.glassWindow.Cell;
-import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
-import it.polimi.ingsw.server.model.table.glassWindow.GlassWindowDeck;
+import it.polimi.ingsw.server.model.table.glasswindow.Cell;
+import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
+import it.polimi.ingsw.server.model.table.glasswindow.GlassWindowDeck;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -260,7 +260,8 @@ public class DefaultRules implements Rules {
 
             //filter options
             List<Cell> cells = new ArrayList<>(player.getGlassWindow().availableCells(die, !adjacencyRestriction))
-                    .stream().filter(c -> c.isAllowed(die.getColor()) || !coloRestriction)
+                    .stream()
+                    .filter(c -> c.isAllowed(die.getColor()) || !coloRestriction)
                     .filter(c -> c.isAllowed(die.getNumber()) || !numberRestriction)
                     .collect(Collectors.toList());
 

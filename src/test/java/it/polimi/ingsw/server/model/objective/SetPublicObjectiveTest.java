@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.model.objective;
 
 import it.polimi.ingsw.server.exception.DieNotAllowedException;
-import it.polimi.ingsw.server.model.table.glassWindow.Cell;
-import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
+import it.polimi.ingsw.server.model.table.glasswindow.Cell;
+import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import org.junit.jupiter.api.Assertions;

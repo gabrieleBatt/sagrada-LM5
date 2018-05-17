@@ -75,12 +75,15 @@ public class Table {
      *      having -nickName- as nickname
      */
     public Player getPlayer(String nickName){
-        if(getPlayers().stream().anyMatch(p -> p.getNickname().equals(nickName)))
-            return getPlayers().stream().
+        if(getPlayers().stream().anyMatch(p -> p.getNickname().equals(nickName))) {
+            Optional<Player> optionalPlayer = getPlayers().stream().
                     filter(p -> p.getNickname().equals(nickName))
-                    .findAny()
-                    .get();
-        else throw new NoSuchElementException("Player "+nickName +" can't be found");
+                    .findAny();
+            if (optionalPlayer.isPresent()){
+                return optionalPlayer.get();
+            }
+        }
+        throw new NoSuchElementException("Player "+nickName +" can't be found");
     }
 
     /**
@@ -94,7 +97,7 @@ public class Table {
         return new Iterator<Player>() {
 
             int i = 0;
-            int next = players.indexOf(first);
+            Player next = first;
 
             @Override
             public boolean hasNext() {
@@ -104,7 +107,6 @@ public class Table {
             @Override
             public Player next() {
                 if(!hasNext()) throw new NoSuchElementException();
-                Player next;
                 if (!reverse)
                     next = players.get((players.indexOf(first) + i)%players.size());
                 else
