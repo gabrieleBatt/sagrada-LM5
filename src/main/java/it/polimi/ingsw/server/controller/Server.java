@@ -2,10 +2,11 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
-import it.polimi.ingsw.server.controller.commChannel.rmi.RmiCommunicationChannel;
-import it.polimi.ingsw.server.controller.commChannel.socket.SocketCommunicationChannel;
-import it.polimi.ingsw.server.controller.commChannel.rmi.rmiInterface.RemoteGameScreen;
-import it.polimi.ingsw.server.controller.commChannel.rmi.rmiInterface.RemoteServer;
+import it.polimi.ingsw.server.controller.commChannel.RmiCommunicationChannel;
+import it.polimi.ingsw.net.socket.SocketProtocol;
+import it.polimi.ingsw.server.controller.commChannel.SocketCommunicationChannel;
+import it.polimi.ingsw.net.rmiInterface.RemoteGameScreen;
+import it.polimi.ingsw.net.rmiInterface.RemoteServer;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -18,8 +19,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Server extends UnicastRemoteObject implements RemoteServer {
 
@@ -56,6 +55,10 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
         super();
     }
 
+    /**
+     * gets the instance of the server
+     * @return
+     */
     public static Server getServer() {
         return server;
     }
@@ -98,16 +101,22 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             JSONObject loginMessage;
 
-            new Timer().schedule(new TimerTask() {
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    //end
+                    try {
+                        socket.close();
+                    } catch (IOException e) {
+                        logger.log(Level.WARNING, "Socket closing failed", e);
+                    }
                 }
             }, loginTime * 1000);
 
             if((loginMessage = (JSONObject)(new JSONParser()).parse(in.readLine())) != null) {
-                if (loginMessage.get("header").equals("login")) {
-                    String nickname = (String)loginMessage.get("mainParam");
+                timer.cancel();
+                if (loginMessage.get("header").equals(SocketProtocol.LOGIN.get())) {
+                    String nickname = (String)loginMessage.get(SocketProtocol.NICKNAME.get());
                     logger.log(Level.FINE, nickname + " logged!");
 
                     addToGame(new SocketCommunicationChannel(socket, in, out, nickname), nickname);

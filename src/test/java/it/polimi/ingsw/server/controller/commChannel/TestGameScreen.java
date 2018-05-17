@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.controller.commChannel;
 
-import it.polimi.ingsw.server.controller.commChannel.rmi.rmiInterface.RemoteGameScreen;
+import it.polimi.ingsw.net.rmiInterface.RemoteGameScreen;
 import javafx.util.Pair;
 
 import java.util.Collection;

@@ -1,24 +1,82 @@
 Socket Protocol
 --
-c: login \<nickname> \[-sp] \
-s: login \<result>
+Italics lines are either optional or used 
+for possible additional features
 
-s: send \<message>
+- Login messages:                           \
+    - client:{       
+        "header":"login",                   \
+        "nickname":"\<nickname>",           \
+        "password":"\<password>",           \
+        <i>"gameMode":"\<gameMode>"</i> 
+        }
+    - server:{                              \
+        "header":"login",                   \
+        "result":"\<result>"
+        }
 
-s: chooseWindow \[-w] \<windowId> \[\<additionalWindowId>]\
-c: windowChosen \<windowId>
+- Window choice messages:                   \
+    - server:{                              \
+        "header":"chooseWindow",            \
+        "glassWindow":\[\<windowIdList>] 
+        }
 
-s: selectObject \<container> \[-o] \<idObject> \[\<additionalIdObject>] \[skip] \[undo]\
-c: objectSelected \<optionChosen>
+    - client:{                              \
+        "header":"chooseWindow",            \
+        "glassWindow": \<windowId>
+        }
 
-s: selectFrom \<message> \[o] \<option> \[\<additionalOption>] \[skip] \[undo]\
-c: selected \<option>
+- Select object messages:
+    - server:{ \
+        "header":"selectObject",            \
+        "container": \<container>,          \
+        "option": \[\<objectIdList>]
+        }
 
-s: update \[-p \<diceList>] \[-rt \<diceList> (round1:1R1, round2:3C4 ,...)] 
-    \[-t \<toolList> (toolName-used)]
-    \[-pub \<pubObjList>] \[-pl \<nicknameList>]
- 
-s: update <player> \[-prv \<prvObjList>] \[-tk \[\<nickname>] \<token>] 
- 	\[-w \[\<nickname>] \<diceList> \<window>]
+    - client:{
+        "header": "selectObject",           \ 
+        "option": \<objectChosen>
+        }
 
-s: endGame \[-l] \<nickname-score> \<nickname-score> \[\<nickname-score>] (nickname1-57, nickname2-48) 
+- Select from messages:
+    - server:{                              \
+        "header": "selectFrom",             \
+        "message": "\<message>",            \
+        "option": \[\<optionsList>]           \
+    }
+
+    - client:{                              \
+        "header": "selectFrom",
+        "option": "\<optionChosen>"         \
+    }
+
+- Update table messages:
+    - server:{                              \
+        "header":"update",                  \
+        <i>"pool": \[\<diceIdList>],            \
+        "roundTrack": \[\<round:diceId List>],    (r1:1R1, r2:3C4 ,...)       \
+        "tool": \[\<tool-used List>],    \
+        "pubObj": \[\<pubObj List>],    \
+        "player": \[\<nickname-connected List>]</i>
+    }
+    
+    - server:{                                
+        "header": "endGame",                    \
+        "leaderBoard: \[\<nickname-score List>] 
+        }
+
+
+- Update player messages:
+    - server:{                              \
+        "header":"updatePlayer",                  \
+        "player": \"\<player>",            \
+        <i>"prvObj": \[\<prvObjList>],    \
+        "token": \<token>,                   \
+        "glassWindow": \[\<glassWindow, diceList>]</i>
+        }
+
+- Message to user:
+    - server:{                  \
+        "header": "send",           \
+        "message": "\<message>"
+        }

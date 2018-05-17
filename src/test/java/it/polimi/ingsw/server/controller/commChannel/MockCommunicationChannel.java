@@ -40,8 +40,8 @@ public class MockCommunicationChannel implements CommunicationChannel {
      * @return always true; the mock player is always connected.
      */
     @Override
-    public boolean isConnected() {
-        return true;
+    public boolean isOffline() {
+        return false;
     }
 
     @Override
@@ -107,5 +107,10 @@ public class MockCommunicationChannel implements CommunicationChannel {
         if (canSkip)
             op.add(StdId.SKIP);
         return op.get(ThreadLocalRandom.current().nextInt(0, op.size()));
+    }
+
+    @Override
+    public void setOffline() {
+
     }
 }

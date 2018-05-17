@@ -7,8 +7,15 @@ import it.polimi.ingsw.server.controller.commChannel.Identifiable;
 import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.tool.Tool;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
 
 import static it.polimi.ingsw.server.controller.commChannel.StdId.*;
 
@@ -19,6 +26,17 @@ public class TurnActionCommand implements ActionCommand{
     private static boolean reset;
     private static boolean skip;
     private static CommunicationChannel cc;
+    private static int turnTime;
+
+    static {
+        JSONObject config = null;
+        try {
+            config = (JSONObject)new JSONParser().parse(new FileReader(new File("resources/ServerResources/config.json")));
+            turnTime = Math.toIntExact((long)config.get("turnTime"));
+        } catch (ParseException | IOException e) {
+            turnTime = 60;
+        }
+    }
 
     private Player player;
 
@@ -30,6 +48,8 @@ public class TurnActionCommand implements ActionCommand{
 
     @Override
     public void execute(Game actionReceiver) throws DieNotAllowedException {
+        Timer timer = new Timer();
+        startTimer(timer);
         backUp(actionReceiver);
         do {
             reset = false;
@@ -50,6 +70,19 @@ public class TurnActionCommand implements ActionCommand{
                 doActionChosen(actionChosen, actionReceiver);
             }
         }while(reset);
+        timer.cancel();
+    }
+
+    private void startTimer(Timer timer) {
+        Game.getLogger().log(Level.FINER, "Starting turn timer");
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Game.getLogger().log(Level.FINER, "Time's up, turn ends" );
+                cc.setOffline();
+                timer.cancel();
+            }
+        }, turnTime * 1000);
     }
 
     private void doActionChosen(final Identifiable actionChosen, Game actionReceiver) throws DieNotAllowedException {

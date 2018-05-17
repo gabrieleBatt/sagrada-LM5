@@ -33,6 +33,7 @@ public class Lobby {
             timerSeconds = Math.toIntExact((long)config.get("timerSeconds"));
         } catch (ParseException | IOException e) {
             timerSeconds = 60;
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
@@ -84,10 +85,18 @@ public class Lobby {
         commChannelSet = new HashSet<>();
     }
 
+    /**
+     * Gets the commChannels currently in the lobby
+     * @return the commChannels currently in the lobby
+     */
     public Collection<CommunicationChannel> getCommChannels() {
         return new HashSet<>(commChannelSet);
     }
 
+    /**
+     * Add a new communicationChannel removing, if present, one with the same nickname
+     * @param newCc communicationChannel to add
+     */
     public void changeChannel(CommunicationChannel newCc){
         commChannelSet = getCommChannels().stream()
                 .filter(cc -> !cc.getNickname().equals(newCc.getNickname()))

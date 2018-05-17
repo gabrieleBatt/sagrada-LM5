@@ -9,6 +9,9 @@ import javafx.util.Pair;
 
 import java.util.List;
 
+/**
+ * Class used by the game to communicate with a single client
+ */
 public interface CommunicationChannel{
 
     /**
@@ -21,7 +24,7 @@ public interface CommunicationChannel{
      * Returns true if player is connected.
      * @return true if is connected, false otherwise.
      */
-    boolean isConnected();
+    boolean isOffline();
 
     /**
      * Sends a message to visualize
@@ -82,4 +85,9 @@ public interface CommunicationChannel{
      * @return The option chosen.
      */
     Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled);
+
+    /**
+     * Used to set a channel as it went offline
+     */
+    void setOffline();
 }

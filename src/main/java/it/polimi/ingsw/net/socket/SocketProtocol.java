@@ -1,8 +1,9 @@
-package it.polimi.ingsw.client;
+package it.polimi.ingsw.net.socket;
 
-import org.json.simple.JSONObject;
-
-public enum ClientSocketProtocol{
+/**
+ * Enum of messages and flags used in socket communication
+ */
+public enum SocketProtocol {
     LOGIN("login"), RESULT("result"), SELECT_OBJECT("selectObject"), UPDATE("update"),
     UPDATE_PLAYER("updatePlayer"), END_GAME("endGame"), CHOOSE_WINDOW("chooseWindow"), NICKNAME("nickname"),
     PASSWORD("password"), MESSAGE("message"), SELECT_FROM("selectFrom"),
@@ -14,7 +15,7 @@ public enum ClientSocketProtocol{
 
     private final String id;
 
-    ClientSocketProtocol(String id){
+    SocketProtocol(String id){
         this.id = id;
     }
 

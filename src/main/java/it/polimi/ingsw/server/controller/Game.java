@@ -90,7 +90,7 @@ public class Game implements Runnable {
      * Ends game giving to every player the ranking's game.
      * @param ranking Pair of Player and Integer, the points scored.
      */
-    public void endGame(List<Pair<Player,Integer>> ranking){
+    public synchronized void endGame(List<Pair<Player,Integer>> ranking){
         this.ranking = ranking;
         commChannels.forEach(c -> c.endGame(ranking));
     }
@@ -135,6 +135,10 @@ public class Game implements Runnable {
     }
 
 
+    /**
+     * Add a new communicationChannel removing, if present, one with the same nickname
+     * @param newCc communicationChannel to add
+     */
     public synchronized void changeChannel(CommunicationChannel newCc){
         commChannels = getCommChannels().stream()
                 .filter(cc -> !cc.getNickname().equals(newCc.getNickname()))

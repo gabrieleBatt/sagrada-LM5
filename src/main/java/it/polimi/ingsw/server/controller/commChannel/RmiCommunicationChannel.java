@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.controller.commChannel.rmi;
+package it.polimi.ingsw.server.controller.commChannel;
 
 import it.polimi.ingsw.server.controller.commChannel.Identifiable;
 import it.polimi.ingsw.server.controller.commChannel.CommunicationChannel;
@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.model.table.Pool;
 import it.polimi.ingsw.server.model.table.RoundTrack;
 import it.polimi.ingsw.server.model.table.Table;
 import it.polimi.ingsw.server.model.table.glassWindow.GlassWindow;
-import it.polimi.ingsw.server.controller.commChannel.rmi.rmiInterface.RemoteGameScreen;
+import it.polimi.ingsw.net.rmiInterface.RemoteGameScreen;
 import javafx.util.Pair;
 
 import java.util.List;
@@ -26,8 +26,8 @@ public class RmiCommunicationChannel implements CommunicationChannel {
     }
 
     @Override
-    public boolean isConnected() {
-        return false;
+    public boolean isOffline() {
+        return true;
     }
 
     @Override
@@ -73,5 +73,9 @@ public class RmiCommunicationChannel implements CommunicationChannel {
     @Override
     public Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled) {
         return null;
+    }
+
+    @Override
+    public void setOffline() {
     }
 }

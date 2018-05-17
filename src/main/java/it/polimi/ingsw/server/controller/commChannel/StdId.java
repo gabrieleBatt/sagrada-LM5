@@ -1,7 +1,5 @@
 package it.polimi.ingsw.server.controller.commChannel;
 
-import it.polimi.ingsw.server.controller.commChannel.Identifiable;
-
 /**
  * enum of standard identifiable
  */
