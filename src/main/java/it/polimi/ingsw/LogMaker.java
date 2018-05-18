@@ -16,7 +16,11 @@ public class LogMaker {
             formatter = new Formatter() {
                 @Override
                 public String format(LogRecord record) {
-                    return record.getMessage() + Arrays.toString(record.getParameters()) + "\n";
+                    String s = record.getMessage();
+                    if(record.getParameters() != null){
+                        s += " " + Arrays.toString(record.getParameters());
+                    }
+                    return s + "\n";
                 }
             };
             fh = new FileHandler("logs/serverLog.log");
