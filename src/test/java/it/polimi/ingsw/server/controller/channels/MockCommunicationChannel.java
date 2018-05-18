@@ -65,7 +65,7 @@ public class MockCommunicationChannel implements CommunicationChannel {
     }
 
     @Override
-    public void updateView(Player player) {
+    public void updateView(Player player, boolean connected) {
 
     }
 

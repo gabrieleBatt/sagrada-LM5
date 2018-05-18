@@ -18,7 +18,7 @@ public class FakeSocketClient{
     private static final Logger logger = LogMaker.getLogger(FakeSocketClient.class.getName(), Level.ALL);
 
     public static void main(String[] args) {
-        run("player2", false);
+        run("player1", false);
     }
 
     public static void run(String nickname, boolean real){
@@ -31,13 +31,17 @@ public class FakeSocketClient{
         try (Socket socket = new Socket(hostName, portNumber)){
             out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            logger.log(Level.FINE, "{\"header\":\"login\", \"nickname\":\""+nickname+"\"}");
+            logger.log(Level.FINE, "{\"header\":\"login\", \"nickname\":\""+nickname+"\", \"password\":\"password\"}");
             out.println("{\"header\":\"login\", \"nickname\":\""+nickname+"\", \"password\":\"password\"}");
             out.flush();
             while((received = (JSONObject) (new JSONParser()).parse(in.readLine())) != null) {
                 logger.log(Level.FINE, received.toString());
-                if (received.get("header").equals(SocketProtocol.LOGIN.get()) && received.get(SocketProtocol.RESULT.get()).equals("success")){
-                    logger.log(Level.FINE, "Login success");
+                if (received.get("header").equals(SocketProtocol.LOGIN.get())){
+                    if (received.get(SocketProtocol.RESULT.get()).equals("success")) {
+                        logger.log(Level.FINE, "Login success");
+                    }else{
+                        logger.log(Level.FINE, received.get(SocketProtocol.RESULT.get()).toString());
+                    }
                 }else if (received.get("header").equals(SocketProtocol.CHOOSE_WINDOW.get())) {
                     System.out.println("Choose among these windows: " + received.get(SocketProtocol.GLASS_WINDOW.get()));
                     logger.log(Level.FINE, "{\"header\":\"chooseWindow\"," +

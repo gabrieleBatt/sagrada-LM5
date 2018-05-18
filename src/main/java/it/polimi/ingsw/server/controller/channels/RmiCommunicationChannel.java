@@ -52,7 +52,7 @@ public class RmiCommunicationChannel implements CommunicationChannel {
     }
 
     @Override
-    public void updateView(Player player) {
+    public void updateView(Player player, boolean connected) {
         throw new UnsupportedOperationException();
     }
 

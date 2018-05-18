@@ -10,7 +10,9 @@ import javafx.util.Pair;
 import java.util.List;
 
 /**
- * Class used by the game to communicate with a single client
+ * Class used by the game to communicate with a single client,
+ * in case the clients goes offline it keeps being used by the Game as nothing append
+ * but it produces a fake response
  */
 public interface CommunicationChannel{
 
@@ -51,9 +53,10 @@ public interface CommunicationChannel{
 
     /**
      * Updates any change in the player and their glasswindow.
-     * @param player
+     * @param connected true if player is still connected
+     * @param player player to update
      */
-    void updateView(Player player);
+    void updateView(Player player, boolean connected);
 
     /**
      * tells the client the game has ended and the results

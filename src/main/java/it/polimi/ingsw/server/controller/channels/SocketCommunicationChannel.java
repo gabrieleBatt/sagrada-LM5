@@ -24,7 +24,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-
+/**
+ * Communication channel implemented with socket communication.
+ */
 public class SocketCommunicationChannel implements CommunicationChannel {
 
     private static final Logger logger = LogMaker.getLogger(SocketCommunicationChannel.class.getName(), Level.ALL);
@@ -45,16 +47,19 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         }
     }
 
+    /**
+     * Creates a new SocketCommChannel communicating with a single client
+     * @param socket client socket
+     * @param in input stream
+     * @param out output stream
+     * @param nickname client's nickname
+     */
     public SocketCommunicationChannel(Socket socket, BufferedReader in, PrintWriter out, String nickname){
         this.connected = true;
         this.socket = socket;
         this.nickname = nickname;
         this.in = in;
         this.out = out;
-        sendJSON((new JSONBuilder()).build(SocketProtocol.LOGIN)
-                .build(SocketProtocol.RESULT, "success"));
-        logger.log(Level.FINE, "logged!", nickname);
-        out.flush();
     }
 
     private void startTimer(Timer timer) {
@@ -149,10 +154,11 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     }
 
     @Override
-    public void updateView(Player player) {
+    public void updateView(Player player, boolean connected) {
         JSONBuilder jsonBuilder = new JSONBuilder()
                 .build(SocketProtocol.UPDATE_PLAYER)
-                .build(SocketProtocol.PLAYER, player.getNickname());
+                .build(SocketProtocol.PLAYER, player.getNickname())
+                .build(SocketProtocol.CONNECTION, Boolean.toString(connected));
 
 
         if(this.getNickname().equals(player.getNickname()) && !player.getPrivateObjective().isEmpty()) {
@@ -310,6 +316,15 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         disconnect();
     }
 
+    /**
+     * To prevent any exploit the communication channel first tries to skip any action
+     * the client should do, if it can't tries to undo the turn and then skip, else
+     * it chooses randomly.
+     * @param canSkip if the action choice can be skipped
+     * @param undoEnabled if its still possible to undo the turn
+     * @param op list of options
+     * @return the identifiable ch osen
+     */
     private Identifiable fakeResponse(boolean canSkip, boolean undoEnabled, List<Identifiable> op){
         if(canSkip)
             return StdId.SKIP;

@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 /**
  * Player is a concrete class representing a game's player. Its' main attributes are nickname, tokens, glasswindow,
- * privateObjective. It has also a boolean indicating whether it's connected or not.
+ * privateObjective.
  */
 public class Player implements Memento {
 
@@ -122,23 +122,6 @@ public class Player implements Memento {
     }
 
     /**
-     * Sets connection status
-     * @param connected boolean parameter, true for connection up
-     */
-    public void setConnected(boolean connected) {
-        this.connected = connected;
-        logger.log(Level.FINEST, "This player:" + nickname + " has been set", this);
-
-    }
-
-    /**
-     * Gets connection status
-     * @return boolean parameter, true if is connected
-     */
-    public boolean isConnected() {
-        return connected;
-    }
-    /**
      * Method used for testing
      * @return String representing a player
      */
@@ -147,10 +130,6 @@ public class Player implements Memento {
         String ret = "Player ";
         ret = ret + this.nickname + "has:\n" + this.tokens + "number of tokens\n"+ this.glassWindow.toString() + "\n" +
         "private objective:" + this.privateObjective.toString() + "\n";
-        if(this.isConnected())
-            ret = ret + "is connected\n";
-        else
-            ret = ret + "is not connected\n";
         return ret;
     }
 

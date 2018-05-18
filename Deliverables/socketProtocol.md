@@ -189,6 +189,7 @@ or glass window.
     - server:{                              \
         "header":"updatePlayer",           \
         "player": \"\<player>",            \
+        "connection": \"\<connectionStatus>", \
         <i>"prvObj": \[\<prvObjList>],    \
         "token": \<token>,                \
         "glassWindow": \[\<glassWindow, diceList>]</i>

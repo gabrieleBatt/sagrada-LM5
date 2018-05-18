@@ -29,16 +29,6 @@ class PlayerTest {
 
     }
 
-    @DisplayName("Player connection")
-    @Test
-    void setConnected() {
-        Player player = new Player("player");
-        player.setConnected(true);
-        Assertions.assertTrue(player.isConnected());
-        player.setConnected(false);
-        Assertions.assertFalse(player.isConnected());
-    }
-
     @DisplayName("Testing memento")
     @Test
     void memento() throws DieNotAllowedException {

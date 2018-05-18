@@ -30,7 +30,6 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
     private static Set<Game> games = new HashSet<>();
     private static long loginTime;
     private static Server server;
-    private static UsersDatabase usersDatabase = new UsersDatabase();
 
     static {
         JSONObject config;
@@ -119,14 +118,18 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
                 if (loginMessage.get(SocketProtocol.HEADER.get()).equals(SocketProtocol.LOGIN.get())) {
                     String nickname = (String)loginMessage.get(SocketProtocol.NICKNAME.get());
                     String password =  (String)loginMessage.get(SocketProtocol.PASSWORD.get());
-                    if(!usersDatabase.userExists(nickname)){
-                        usersDatabase.newUser(nickname, password);
-                    }else if(usersDatabase.authentication(nickname, password)){
+                    if(!UsersDatabase.userExists(nickname)){
+                        UsersDatabase.newUser(nickname, password);
+                    }
+                    if(UsersDatabase.authentication(nickname, password)){
                         logger.log(Level.FINE, "logged!", nickname);
                         addToGame(new SocketCommunicationChannel(socket, in, out, nickname), nickname);
+                        out.println((new JSONBuilder()).build(SocketProtocol.LOGIN)
+                                .build(SocketProtocol.RESULT, "success").get());
+                        out.flush();
                     }else{
                         out.println((new JSONBuilder()).build(SocketProtocol.LOGIN)
-                                .build(SocketProtocol.RESULT, "authentication failed"));
+                                .build(SocketProtocol.RESULT, "authentication failed").get());
                         out.flush();
                     }
                 } else {
@@ -159,5 +162,9 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
                 lobby.addChannel(ccToAdd);
             }
         }
+    }
+
+    public synchronized static void endGame(Game game){
+        games.remove(game);
     }
 }

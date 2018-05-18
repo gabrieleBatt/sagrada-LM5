@@ -93,6 +93,7 @@ public class Game implements Runnable {
     public synchronized void endGame(List<Pair<Player,Integer>> ranking){
         this.ranking = ranking;
         commChannels.forEach(c -> c.endGame(ranking));
+        Server.endGame(this);
     }
 
     /**
@@ -145,5 +146,22 @@ public class Game implements Runnable {
                 .collect(Collectors.toList());
         commChannels.add(newCc);
     }
+
+    /**
+     * returns the channel with the nickname specified
+     * @param nickname of the channel to get
+     * @return the channel with the nickname specified
+     */
+    public CommunicationChannel getChannel(String nickname){
+        Optional<CommunicationChannel> ret = getCommChannels()
+                .stream()
+                .filter(cc -> cc.getNickname().equals(nickname))
+                .findFirst();
+        if(ret.isPresent()){
+            return ret.get();
+        }
+        throw new NoSuchElementException();
+    }
+
 
 }

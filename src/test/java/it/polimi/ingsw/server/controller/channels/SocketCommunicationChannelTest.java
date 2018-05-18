@@ -27,10 +27,10 @@ class SocketCommunicationChannelTest{
         List<Player> players = new ArrayList<>();
         players.add(new Player("test"));
         players.add(new Player("test1"));
-        socketCommunicationChannel.updateView(players.get(0));
-        Assertions.assertEquals("{\"header\":\"updatePlayer\",\"player\":\"test\",\"token\":\"0\"}", reader.readLine());
-        socketCommunicationChannel.updateView(players.get(1));
-        Assertions.assertEquals("{\"header\":\"updatePlayer\",\"player\":\"test1\",\"token\":\"0\"}", reader.readLine());
+        socketCommunicationChannel.updateView(players.get(0), true);
+        Assertions.assertEquals("{\"header\":\"updatePlayer\",\"connection\":\"true\",\"player\":\"test\",\"token\":\"0\"}", reader.readLine());
+        socketCommunicationChannel.updateView(players.get(1), true);
+        Assertions.assertEquals("{\"header\":\"updatePlayer\",\"connection\":\"true\",\"player\":\"test1\",\"token\":\"0\"}", reader.readLine());
         socketCommunicationChannel.updateView(new RoundTrack());
         Assertions.assertEquals("{\"header\":\"update\",\"roundTrack\":[]}", reader.readLine());
         socketCommunicationChannel.updateView(new Table(players));

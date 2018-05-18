@@ -74,7 +74,11 @@ public class DefaultRules implements Rules {
                     player.setTokens(player.getGlassWindow().getDifficulty());
                     }
             for (Player player : actionReceiver.getTable().getPlayers()) {
-                actionReceiver.getCommChannels().forEach(cc -> cc.updateView(player));
+                actionReceiver
+                        .getCommChannels()
+                        .forEach(cc -> cc.updateView(player, !actionReceiver
+                                                                .getChannel(player.getNickname())
+                                                                .isOffline()));
             }
             Game.getLogger().log(Level.FINE, "Tokens given", actionReceiver);
         };
@@ -101,7 +105,11 @@ public class DefaultRules implements Rules {
                 actionReceiver.getTable().getPlayer(communicationChannel.getNickname()).setGlassWindow(communicationChannel.chooseWindow(glassWindowsOptions));
             }
             for (Player player : actionReceiver.getTable().getPlayers()) {
-                actionReceiver.getCommChannels().forEach(cc -> cc.updateView(player));
+                actionReceiver
+                        .getCommChannels()
+                        .forEach(cc -> cc.updateView(player, !actionReceiver
+                                                                    .getChannel(player.getNickname())
+                                                                    .isOffline()));
             }
             Game.getLogger().log(Level.FINE, "Glass windows dealt", actionReceiver);
         };
@@ -119,7 +127,14 @@ public class DefaultRules implements Rules {
             for(int i=0;i<actionReceiver.getTable().getPlayers().size();i++)
                 for(int j=0;j<objPerPlayer;j++)
                      actionReceiver.getTable().getPlayers().get(i).addPrivateObjective(privateObjectives.get(i*objPerPlayer + j));
-            actionReceiver.getCommChannels().forEach(cc -> cc.updateView(actionReceiver.getTable().getPlayer(cc.getNickname())));
+            actionReceiver
+                    .getCommChannels()
+                    .forEach(cc -> cc
+                            .updateView(actionReceiver
+                                    .getTable()
+                                    .getPlayer(cc.getNickname()), !actionReceiver
+                                            .getChannel(cc.getNickname())
+                                            .isOffline()));
             Game.getLogger().log(Level.FINE, "Private objectives dealt\n" + privateObjectives.toString(), actionReceiver);
         };
     }
@@ -235,8 +250,15 @@ public class DefaultRules implements Rules {
             }
 
             //update view
-            actionReceiver.getCommChannels().forEach(c -> c.updateView(player));
-            actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
+            actionReceiver
+                    .getCommChannels()
+                    .forEach(c -> c
+                            .updateView(player, !actionReceiver
+                                    .getChannel(player.getNickname())
+                                    .isOffline()));
+            actionReceiver
+                    .getCommChannels()
+                    .forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
 
             Game.getLogger().log(Level.FINE,
                     "Drafted die "+ player.getGlassWindow()
@@ -282,7 +304,12 @@ public class DefaultRules implements Rules {
                         .filter(c -> c.getId().equals(positionChosen.getId())).findFirst().get()
                         .placeDie(die, (coloRestriction||numberRestriction));
             }
-            actionReceiver.getCommChannels().forEach(c -> c.updateView(player));
+            actionReceiver
+                    .getCommChannels()
+                    .forEach(c -> c
+                            .updateView(player, !actionReceiver
+                                    .getChannel(player.getNickname())
+                                    .isOffline()));
             actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
             Game.getLogger().log(Level.FINE,"Placed die "+ die.toString() + " from "+ positionChosen, this);
 

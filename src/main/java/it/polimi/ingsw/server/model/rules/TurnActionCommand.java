@@ -130,7 +130,7 @@ public class TurnActionCommand implements ActionCommand{
      */
     public void reset(Game actionReceiver) {
         reset = true;
-        actionReceiver.getCommChannels().forEach(c -> c.updateView(player));
+        actionReceiver.getCommChannels().forEach(c -> c.updateView(player, !actionReceiver.getChannel(player.getNickname()).isOffline()));
         actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
         actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getRoundTrack()));
 
