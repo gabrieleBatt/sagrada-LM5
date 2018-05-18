@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.net.socket.JSONBuilder;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
 import it.polimi.ingsw.server.controller.channels.RmiCommunicationChannel;
 import it.polimi.ingsw.net.socket.SocketProtocol;
@@ -29,9 +30,10 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
     private static Set<Game> games = new HashSet<>();
     private static long loginTime;
     private static Server server;
+    private static UsersDatabase usersDatabase = new UsersDatabase();
 
     static {
-        JSONObject config = null;
+        JSONObject config;
         try {
             JSONParser parser = new JSONParser();
             config = (JSONObject)parser.parse(new FileReader(new File("resources/ServerResources/config.json")));
@@ -114,12 +116,19 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
 
             if((loginMessage = (JSONObject)(new JSONParser()).parse(in.readLine())) != null) {
                 timer.cancel();
-                if (loginMessage.get("header").equals(SocketProtocol.LOGIN.get())) {
+                if (loginMessage.get(SocketProtocol.HEADER.get()).equals(SocketProtocol.LOGIN.get())) {
                     String nickname = (String)loginMessage.get(SocketProtocol.NICKNAME.get());
-                    logger.log(Level.FINE, "logged!", nickname );
-
-                    addToGame(new SocketCommunicationChannel(socket, in, out, nickname), nickname);
-
+                    String password =  (String)loginMessage.get(SocketProtocol.PASSWORD.get());
+                    if(!usersDatabase.userExists(nickname)){
+                        usersDatabase.newUser(nickname, password);
+                    }else if(usersDatabase.authentication(nickname, password)){
+                        logger.log(Level.FINE, "logged!", nickname);
+                        addToGame(new SocketCommunicationChannel(socket, in, out, nickname), nickname);
+                    }else{
+                        out.println((new JSONBuilder()).build(SocketProtocol.LOGIN)
+                                .build(SocketProtocol.RESULT, "authentication failed"));
+                        out.flush();
+                    }
                 } else {
                     throw new IOException();
                 }

@@ -32,7 +32,7 @@ public class FakeSocketClient{
             out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             logger.log(Level.FINE, "{\"header\":\"login\", \"nickname\":\""+nickname+"\"}");
-            out.println("{\"header\":\"login\", \"nickname\":\""+nickname+"\"}");
+            out.println("{\"header\":\"login\", \"nickname\":\""+nickname+"\", \"password\":\"password\"}");
             out.flush();
             while((received = (JSONObject) (new JSONParser()).parse(in.readLine())) != null) {
                 logger.log(Level.FINE, received.toString());
