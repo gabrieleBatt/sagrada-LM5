@@ -171,7 +171,7 @@ public class CliGameScreen implements GameScreen {
         showOthersWindows(player);
         showRoundTrack();
     }
-     void showAllWithSelectable()
+     
 
 
     private void showRoundTrack() {
