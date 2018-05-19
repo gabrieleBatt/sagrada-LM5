@@ -34,7 +34,6 @@ public class CliGameScreen implements GameScreen {
         roundTrack = new ArrayList<>();
     }
 
-
     private class ToolClass {
         String toolName;
         boolean used;

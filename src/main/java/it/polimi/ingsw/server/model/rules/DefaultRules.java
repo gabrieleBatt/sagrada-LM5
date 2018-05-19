@@ -229,6 +229,7 @@ public class DefaultRules implements Rules {
                     .stream()
                     .filter(c -> c.getNickname().equals(player.getNickname()))
                     .findFirst().get();
+
             //make options
             List<Die> dieOptions = new ArrayList<>(actionReceiver.getTable().getPool().getDice());
             if(dieColor.isPresent())
@@ -237,16 +238,16 @@ public class DefaultRules implements Rules {
                 dieOptions = dieOptions.stream().filter(d->Optional.of(d.getNumber()) == dieNumber).collect(Collectors.toList());
 
             //act on answer
-            List<Cell> cellList = new ArrayList<>();
-            dieOptions.forEach(die -> cellList.add(player.getGlassWindow().getCellByDie(die.getId())));
-            Identifiable cellChosen = cc.selectObject(new ArrayList<>(cellList), StdId.TABLE, false, true);
-            if (cellChosen.getId().equals(StdId.UNDO.getId())) {
+            Optional<Die> optionalDie = Optional.empty();
+            Identifiable dieChosen = cc.selectObject(new ArrayList<>(dieOptions), StdId.POOL, false, true);
+            if (dieChosen.getId().equals(StdId.UNDO.getId())) {
                 actionReceiver.resetTurn();
             }else {
-                Die die = player.getGlassWindow()
-                        .getCell(Character.getNumericValue(cellChosen.getId().charAt(0)),Character.getNumericValue(cellChosen.getId().charAt(1))).getDie();
-                actionReceiver.getTable().getPool().takeDie(die);
-                actionReceiver.getMap().put(marker, die);
+                optionalDie = dieOptions.stream().filter(d -> d.getId().equals(dieChosen.getId())).findAny();
+                if(optionalDie.isPresent()) {
+                    actionReceiver.getTable().getPool().takeDie(optionalDie.get());
+                    actionReceiver.getMap().put(marker, optionalDie.get());
+                }
             }
 
             //update view
@@ -261,8 +262,7 @@ public class DefaultRules implements Rules {
                     .forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
 
             Game.getLogger().log(Level.FINE,
-                    "Drafted die "+ player.getGlassWindow()
-                            .getCell(Character.getNumericValue(cellChosen.getId().charAt(0)),Character.getNumericValue(cellChosen.getId().charAt(1))).getDie()
+                    "Drafted die "+ optionalDie.get()
                     , this);
         };
     }

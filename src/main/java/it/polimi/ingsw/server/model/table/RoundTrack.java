@@ -53,7 +53,7 @@ public class RoundTrack implements Memento {
      * @return a clone of the corresponding dice list
      */
     public Collection<Die> getDice(int round){
-        return (Collection<Die>)dice.get(round-1).clone();
+        return new ArrayList<>(dice.get(round-1));
     }
 
     /**
@@ -90,7 +90,7 @@ public class RoundTrack implements Memento {
     @Override
     public String toString(){
         StringBuilder ret = new StringBuilder("The round track contains:");
-        for (int i=1; i<10; i++)
+        for (int i=1; i<getRound(); i++)
             ret.append("Round ").append(i).append(": ").append(this.getDice(i).toString());
         return ret.toString();
     }

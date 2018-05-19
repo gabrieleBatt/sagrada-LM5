@@ -60,13 +60,13 @@ public class SocketManager implements Runnable{
             }
             JSONObject received;
             while ((received = (JSONObject) (new JSONParser()).parse(in.readLine())) != null) {
-                if (received.get(SocketProtocol.HEADER).equals(SocketProtocol.CHOOSE_WINDOW.get())) {
+                if (received.get(SocketProtocol.HEADER.get()).equals(SocketProtocol.CHOOSE_WINDOW.get())) {
                     String gw = gameScreen.getWindow(jsonArrayToCollection((JSONArray)received.get(SocketProtocol.GLASS_WINDOW.get())));
                     new JSONBuilder()
                             .build(SocketProtocol.CHOOSE_WINDOW)
                             .build(SocketProtocol.GLASS_WINDOW, gw)
                             .send(out);
-                } else if (received.get(SocketProtocol.HEADER).equals(SocketProtocol.SELECT_OBJECT.get())) {
+                } else if (received.get(SocketProtocol.HEADER.get()).equals(SocketProtocol.SELECT_OBJECT.get())) {
                     String so = gameScreen
                             .getInput(jsonArrayToCollection((JSONArray)received.get(SocketProtocol.OPTION.get())),
                                     received.get(SocketProtocol.CONTAINER.get()).toString());
@@ -74,7 +74,7 @@ public class SocketManager implements Runnable{
                             .build(SocketProtocol.SELECT_OBJECT)
                             .build(SocketProtocol.OPTION, so)
                             .send(out);
-                } else if (received.get(SocketProtocol.HEADER).equals(SocketProtocol.SELECT_FROM.get())) {
+                } else if (received.get(SocketProtocol.HEADER.get()).equals(SocketProtocol.SELECT_FROM.get())) {
                     String sf = gameScreen
                             .getInputFrom(jsonArrayToCollection((JSONArray)received.get(SocketProtocol.OPTION.get())),
                                     received.get(SocketProtocol.MESSAGE.get()).toString());
@@ -96,7 +96,7 @@ public class SocketManager implements Runnable{
                 .send(out);
         JSONObject received;
         if ((received = (JSONObject) (new JSONParser()).parse(in.readLine())) != null) {
-            if (received.get(SocketProtocol.HEADER).equals(SocketProtocol.LOGIN.get())) {
+            if (received.get(SocketProtocol.HEADER.get()).equals(SocketProtocol.LOGIN.get())) {
                 if (received.get(SocketProtocol.RESULT.get()).equals("success")) {
                     logger.log(Level.FINE, "Login success");
                     return true;
