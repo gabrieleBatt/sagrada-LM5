@@ -3,18 +3,27 @@ package it.polimi.ingsw.client.view.cli;
 import it.polimi.ingsw.client.view.factory.GameScreen;
 import javafx.util.Pair;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.io.InputStream;
+import java.util.*;
 
 public class CliGameScreen implements GameScreen {
+
+    private Scanner scanner;
+
+    public CliGameScreen(InputStream inputStream){
+        scanner = new Scanner(inputStream);
+    }
+
+
+
     List<Pair<String, Boolean>> nicknames;
     List<String> privateObjectives;
     List<String> publicObjectives;
     List<ToolClass > toolsList;
     List<PlayerClass> playersList;
-    Collection<Pair<String, Boolean>> dice;
+    Collection<String> poolDice;
+
+    List<List<String>> roundtrack;
 
 
     class ToolClass {
@@ -53,6 +62,7 @@ public class CliGameScreen implements GameScreen {
         }
 
     }
+
     public void setPrivateObjectives(List<String> privateObjectives){
         this.privateObjectives = privateObjectives;
     }
@@ -84,6 +94,7 @@ public class CliGameScreen implements GameScreen {
                 p.tokens = tokens;
 
         }
+        showAll(nickname);
     }
 
     public void setPlayerWindow(String nickname, String windowName){
@@ -108,25 +119,143 @@ public class CliGameScreen implements GameScreen {
         }
     }
 
-    public void setPool(Collection<Pair<String, Boolean>> dice){
-        this.dice = new HashSet<>(dice);
-        this.dice = dice;
-    }
-
-
-    public void setRoundTrack(List<Pair<String, Boolean>> dice){
-        throw new UnsupportedOperationException();
+    public void setPool(Collection<String> dice){
+        poolDice = new HashSet<>(dice);
+        poolDice = dice;
     }
 
 
 
+    public void setRoundTrack(List<String> dice){
+        //throw new UnsupportedOperationException();
+        roundtrack.add(dice);
 
-    void showAll(){
-        showNicknameAndTokensAndRound();
     }
 
-    private void showNicknameAndTokensAndRound() {
-        throw new UnsupportedOperationException();
+    @Override
+    public String getWindow(Collection<String> o) {
+        return null;
+    }
+
+    @Override
+    public String getInput(Collection<String> options, String container) {
+        if (container.equals("tool")){
+
+        }
+
+        return null;
+    }
+
+    @Override
+    public String getInputFrom(Collection<String> strings, String message) {
+        String choice;
+        System.out.println(message + " " + strings);
+        choice = scanner.nextLine();
+        while(!strings.contains(choice)) {
+            System.out.println("Scelta non valida ");
+            choice = scanner.nextLine();
+        }
+        return choice;
+    }
+
+
+    void showAll(String nickname){
+        String player = nickname;
+        showNicknameAndTokensAndRound(player);
+        showPrivateObjective(player);
+        showWindow(player);
+        showPublicObjectives();
+        showPool();
+        showTools();
+        showOthersNameAndTokens();
+        showOthersWindows(player);
+        showRoundTrack();
+    }
+     void showAllWithSelectable()
+
+
+    private void showRoundTrack() {
+        System.out.print("Round Track: " + "\t");
+        for(int i= 0; i<roundtrack.size();i++){
+            System.out.print("[" + roundtrack.get(i) +"]" + "\t");
+        }
+        System.out.print("\n");
+
+    }
+
+    private void showOthersWindows(String player) {
+        for (PlayerClass p: playersList){
+            if (!p.equals(player)){
+                for (int y = 0; y <4 ; y++){
+                    for (int x = 0; x < 5 ; x++){
+                        System.out.print("[" + p.glassWindow.cells[x*5+y].content + "]");;
+                    }
+                    System.out.print("\n");
+                }
+            }
+        }
+        System.out.print("\n");
+    }
+
+    private void showOthersNameAndTokens() {
+        for (PlayerClass p: playersList){
+            System.out.print(p.nickname + "\t" + p.tokens +"\t");
+        }
+        System.out.print("\n");
+    }
+
+    private void showTools() {
+        for(int i= 0; i< toolsList.size(); i++) {
+            if (toolsList.get(i).used)
+                System.out.print(toolsList.get(i) + "[2]" + "\t");
+            else
+                System.out.print(toolsList.get(i) + "[1]" + "\t");
+        }
+        System.out.print("\n");
+    }
+
+    private void showPool() {
+        do {
+            System.out.print(poolDice.iterator().next() + "\t");
+        }
+        while(poolDice.iterator().hasNext());
+        System.out.print("\n");
+    }
+
+    private void showPublicObjectives() {
+        for (int i = 0; i < publicObjectives.size(); i++){
+            System.out.print(privateObjectives.get(i)+ "\t");
+        }
+        System.out.print("\n");
+    }
+
+
+    private void showWindow(String player) {
+        for (PlayerClass p: playersList)
+            if(p.nickname.equals(player)){
+                for (int y = 0; y <4 ; y++){
+                    for (int x = 0; x < 5 ; x++){
+                        System.out.print("[" + p.glassWindow.cells[x*5+y].content + "]");;
+                    }
+                    System.out.print("\n");
+                }
+            }
+        System.out.print("\n");
+
+    }
+
+
+    private void showPrivateObjective(String player) {
+        System.out.println(privateObjectives);
+
+    }
+
+    private void showNicknameAndTokensAndRound(String nickname) {
+        for (PlayerClass p: playersList)
+            if (p.nickname.equals(nickname)){
+                System.out.println(nickname + "\t" + "\t" + p.tokens + "\t" + (roundtrack.size()+1));
+            }
+
     }
 
 

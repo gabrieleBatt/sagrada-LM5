@@ -24,9 +24,18 @@ public interface GameScreen {
 
     void setCellActive(String nickname, int x, int y);
 
-    void setPool(Collection<Pair<String, Boolean>> dice);
+    void setPool(Collection<String> dice);
 
-    void setRoundTrack(List<Pair<String, Boolean>> dice);
+    void setRoundTrack(List<String> dice);
+
+    String getWindow(Collection<String> o);
+
+    String getInput(Collection<String> options, String container);
+
+    String getInputFrom(Collection<String> strings, String message);
+
+
+
 
 
 }
