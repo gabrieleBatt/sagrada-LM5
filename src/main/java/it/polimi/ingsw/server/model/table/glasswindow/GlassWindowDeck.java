@@ -90,7 +90,7 @@ public class GlassWindowDeck implements Deck {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
                 if (iterator.hasNext()) {
-                    String id = name+":"+i+""+j;
+                    String id = i+""+j+":"+name;
                     Cell cell;
                     switch (iterator.next()){
                         case "R": cell = new Cell(id, DieColor.RED); break;

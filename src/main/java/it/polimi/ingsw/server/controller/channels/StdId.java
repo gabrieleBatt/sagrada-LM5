@@ -5,9 +5,9 @@ package it.polimi.ingsw.server.controller.channels;
  */
 public enum  StdId implements Identifiable {
     SKIP("skip"), UNDO("undo"), USE_TOOL("UsaUnAttrezzo"), DRAFT("PescaUnDado"),
-    TABLE("table"), ROUND_TRACK("roundTrack"), POOL("pool"), GLASS_WINDOW("glasswindow"),ONE("1"),
+    TABLE("table"), ROUND_TRACK("roundTrack"), POOL("pool"), GLASS_WINDOW("glassWindow"),
+    ONE("1"),
     TWO("2"),THREE("3"),FOUR("4"), FIVE("5"), SIX("6");
-
 
     final String id;
 
