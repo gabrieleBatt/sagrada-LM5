@@ -8,7 +8,7 @@ public class CliViewFactory implements ViewAbstractFactory {
 
     @Override
     public CliGameScreen makeGameScreen() {
-        return new CliGameScreen();
+        return new CliGameScreen(System.in, System.out);
     }
 
     @Override

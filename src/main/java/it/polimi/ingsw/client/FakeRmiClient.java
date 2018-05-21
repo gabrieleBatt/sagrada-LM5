@@ -30,12 +30,13 @@ public class FakeRmiClient {
 }
 
 class FakeGameScreen extends UnicastRemoteObject implements RemoteGameScreen {
+
     protected FakeGameScreen() throws RemoteException {
     }
 
     @Override
     public void setPlayers(List<Pair<String, Boolean>> nicknames) {
-        throw new UnsupportedOperationException();
+        throw  new UnsupportedOperationException();
     }
 
     @Override
@@ -49,10 +50,9 @@ class FakeGameScreen extends UnicastRemoteObject implements RemoteGameScreen {
     }
 
     @Override
-    public void setTools(List<Pair<String, Boolean>> publicObjectives) {
+    public void setTools(List<Pair<String, Boolean>> tools) {
         throw new UnsupportedOperationException();
     }
-
 
     @Override
     public void setToolUsed(String tool, boolean used) {
@@ -75,22 +75,27 @@ class FakeGameScreen extends UnicastRemoteObject implements RemoteGameScreen {
     }
 
     @Override
-    public void setCellActive(String nickname, int x, int y) {
+    public void setPool(Collection<String> dice) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setPool(Collection<Pair<String, Boolean>> dice) {
+    public void setRoundTrack(List<List<String>> dice) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setRoundTrack(List<Pair<String, Boolean>> dice) {
-        throw new UnsupportedOperationException();
+    public String getWindow(Collection<String> o) {
+        return null;
     }
 
     @Override
-    public String getInput() {
-        throw new UnsupportedOperationException();
+    public String getInput(Collection<String> options, String container) {
+        return null;
+    }
+
+    @Override
+    public String getInputFrom(Collection<String> strings, String message) {
+        return null;
     }
 }

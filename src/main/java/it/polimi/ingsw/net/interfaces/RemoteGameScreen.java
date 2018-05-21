@@ -7,14 +7,13 @@ import java.util.Collection;
 import java.util.List;
 
 public interface RemoteGameScreen extends Remote {
-
     void setPlayers(List<Pair<String, Boolean>> nicknames);
 
     void setPrivateObjectives(List<String> privateObjectives);
 
     void setPublicObjective(List<String> publicObjectives);
 
-    void setTools(List<Pair<String, Boolean>> publicObjectives);
+    void setTools(List<Pair <String, Boolean>> tools);
 
     void setToolUsed(String tool, boolean used);
 
@@ -24,12 +23,13 @@ public interface RemoteGameScreen extends Remote {
 
     void setCellContent(String nickname, int x, int y, String die);
 
-    void setCellActive(String nickname, int x, int y);
+    void setPool(Collection<String> dice);
 
-    void setPool(Collection<Pair<String, Boolean>> dice);
+    void setRoundTrack(List<List<String>> dice);
 
-    void setRoundTrack(List<Pair<String, Boolean>> dice);
+    String getWindow(Collection<String> o);
 
-    String getInput();
+    String getInput(Collection<String> options, String container);
 
+    String getInputFrom(Collection<String> strings, String message);
 }
