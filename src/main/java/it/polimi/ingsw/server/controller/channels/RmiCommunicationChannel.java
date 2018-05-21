@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.channels;
 
+import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Pool;
 import it.polimi.ingsw.server.model.table.RoundTrack;
@@ -8,7 +9,6 @@ import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import it.polimi.ingsw.net.interfaces.RemoteGameScreen;
 import javafx.util.Pair;
 
-import java.rmi.Remote;
 import java.util.List;
 
 public class RmiCommunicationChannel implements CommunicationChannel {

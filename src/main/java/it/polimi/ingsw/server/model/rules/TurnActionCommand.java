@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server.model.rules;
 
 import it.polimi.ingsw.server.controller.Game;
-import it.polimi.ingsw.server.controller.channels.StdId;
+import it.polimi.ingsw.net.identifiables.StdId;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
-import it.polimi.ingsw.server.controller.channels.Identifiable;
+import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.tool.Tool;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 
-import static it.polimi.ingsw.server.controller.channels.StdId.*;
+import static it.polimi.ingsw.net.identifiables.StdId.*;
 
 public class TurnActionCommand implements ActionCommand{
 

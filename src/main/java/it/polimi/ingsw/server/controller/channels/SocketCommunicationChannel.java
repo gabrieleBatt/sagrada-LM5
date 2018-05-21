@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.controller.channels;
 
 import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.net.identifiables.Identifiable;
+import it.polimi.ingsw.net.identifiables.StdId;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.net.socket.JSONBuilder;
 import it.polimi.ingsw.net.socket.SocketProtocol;

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.model.tool;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.server.controller.channels.Identifiable;
+import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.server.model.rules.ActionCommand;
 
 import java.util.ArrayList;
