@@ -25,6 +25,15 @@ public class Pool implements Memento {
     }
 
     /**
+     * Swap pair of dice from the pool.
+     * @param dieToPlace Object Die, die to place on the pool.
+     * @param dieToTake Object Die, die to take from the pool.
+     */
+    public void swapDice(Die dieToPlace, Die dieToTake){
+        this.diceOnTable.remove(dieToTake);
+        this.diceOnTable.add(dieToPlace);
+    }
+    /**
      * Sets dice in the pool
      * @param diceOnTable parameter to be set
      */

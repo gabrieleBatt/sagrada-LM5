@@ -26,7 +26,13 @@
                 - Testing round actions :heavy_check_mark:
                 - Testing end game action :heavy_check_mark:
         -TurnActionCommandTest
-                - Testing Turn
+                - Testing Turn :heavy_check_mark:
+        -ToolRules
+                -Testing set 
+                -Testing random 
+                -Testing select 
+                -Testing swap
+                -Testing move 
     - table
         - dice
             - DiceBagTest 

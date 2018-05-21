@@ -71,6 +71,18 @@ public class RoundTrack implements Memento {
             }
         }
     }
+
+    /**
+     * Gets the list of the list (one per turn) of dice.
+     * @return list of the list (one per turn) of dice.
+     */
+    public List<List<Die>> getCollections (){
+        List<List<Die>> dieList = new ArrayList<>();
+        for(int i = 1; i<10; i++)
+            dieList.get(i).addAll(dice.get(i));
+        return dieList;
+    }
+
     /**
      * Method used for testing
      * @return String representing a round track

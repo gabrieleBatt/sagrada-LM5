@@ -91,6 +91,13 @@ public class Cell implements Identifiable {
     }
 
     /**
+     * Removes a die from a cell.
+     */
+    public void removeDie(){
+        die = Optional.empty();
+    }
+
+    /**
      * Checks if a die cen be placed in the cell despite eventual restrictions
      * @param number numeric value of die to place
      * @return: true if the value can be placed in the cell

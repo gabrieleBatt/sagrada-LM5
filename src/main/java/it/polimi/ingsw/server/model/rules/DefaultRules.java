@@ -161,8 +161,10 @@ public class DefaultRules implements Rules {
               actionReceiver.getTable().getPool().takeDie(die);
           }
           actionReceiver.getTable().getRoundTrack().endRound(diceLeft);
-          actionReceiver.getCommChannels().forEach(cc -> cc.updateView(actionReceiver.getTable().getPool()));
-          actionReceiver.getCommChannels().forEach(cc -> cc.updateView(actionReceiver.getTable().getRoundTrack()));
+          actionReceiver.getCommChannels()
+                  .forEach(cc -> cc.updateView(actionReceiver.getTable().getPool()));
+          actionReceiver.getCommChannels()
+                  .forEach(cc -> cc.updateView(actionReceiver.getTable().getRoundTrack()));
           Game.getLogger().log(Level.FINE, "dice left set in the round rack\n"+diceLeft.toString(), actionReceiver);
         };
     }
@@ -220,11 +222,14 @@ public class DefaultRules implements Rules {
                 dieOptions = dieOptions.stream().filter(d->Optional.of(d.getNumber()) == dieNumber).collect(Collectors.toList());
 
             //act on answer
-            Identifiable dieChosen = cc.selectObject(new ArrayList<>(dieOptions), StdId.TABLE, false, true);
-            if (dieChosen.getId().equals(StdId.UNDO.getId())) {
+            List<Cell> cellList = new ArrayList<>();
+            dieOptions.forEach(die -> cellList.add(player.getGlassWindow().getCellByDie(die.getId())));
+            Identifiable cellChosen = cc.selectObject(new ArrayList<>(cellList), StdId.TABLE, false, true);
+            if (cellChosen.getId().equals(StdId.UNDO.getId())) {
                 actionReceiver.resetTurn();
             }else {
-                Die die = dieOptions.stream().filter(d -> d.getId().equals(dieChosen.getId())).findFirst().get();
+                Die die = player.getGlassWindow()
+                        .getCell(Character.getNumericValue(cellChosen.getId().charAt(0)),Character.getNumericValue(cellChosen.getId().charAt(1))).getDie();
                 actionReceiver.getTable().getPool().takeDie(die);
                 actionReceiver.getMap().put(marker, die);
             }
@@ -233,7 +238,10 @@ public class DefaultRules implements Rules {
             actionReceiver.getCommChannels().forEach(c -> c.updateView(player));
             actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
 
-            Game.getLogger().log(Level.FINE,"Drafted die "+ dieChosen, this);
+            Game.getLogger().log(Level.FINE,
+                    "Drafted die "+ player.getGlassWindow()
+                            .getCell(Character.getNumericValue(cellChosen.getId().charAt(0)),Character.getNumericValue(cellChosen.getId().charAt(1))).getDie()
+                    , this);
         };
     }
 
