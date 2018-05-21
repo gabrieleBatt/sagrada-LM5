@@ -243,6 +243,7 @@ public class CliGameScreen implements GameScreen {
             return ret.get();
         else
             throw new NoSuchElementException();
+
     }
 
     private String poolGetInput (Collection<String> options){
@@ -417,6 +418,8 @@ public class CliGameScreen implements GameScreen {
 
 
     private void clear(){
+        skip = false;
+        undo = false;
         for (int i = 0; i < 10; i++) {
             printStream.println();
         }
