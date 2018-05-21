@@ -12,14 +12,24 @@ import java.util.stream.Collectors;
 public class CliConnectionScreen implements ConnectionScreen {
 
     private Scanner scanner;
-
+    boolean flag;
     public CliConnectionScreen(InputStream inputStream){
         scanner = new Scanner(inputStream);
     }
 
     @Override
     public LoginInfo getConnectionInfo () {
-        return new LoginInfo(getConnectionChoiceFromUser(),
+
+        if (getConnectionChoiceFromUser().equalsIgnoreCase("rmi")){
+            getNicknameChoiceFromUser();
+            getPasswordFromUser();
+            return new LoginInfo("rmi",
+                    getNicknameChoiceFromUser(),
+                    0,
+                    null,
+                    getPasswordFromUser());
+        }
+        return new LoginInfo("socket",
                 getNicknameChoiceFromUser(),
                 getPortNumberChoiceFromUser(),
                 getIpFromUser(),
@@ -42,6 +52,7 @@ public class CliConnectionScreen implements ConnectionScreen {
             choice = scanner.nextLine();
         }
         if (choice.toUpperCase().contains("R")) {
+            flag = true;
             return "rmi";
         } else
             return "socket";
