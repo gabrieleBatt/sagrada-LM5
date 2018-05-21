@@ -1,0 +1,6 @@
+{"result":"success","header":"login"}
+{"pool":[],"header":"update"}
+{"header":"updatePlayer","player":"test","token":"0"}
+{"header":"updatePlayer","player":"test1","token":"0"}
+{"header":"update","roundTrack":[]}
+{"header":"update","player":["test","test1"]}
