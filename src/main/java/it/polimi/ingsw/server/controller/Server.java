@@ -124,13 +124,15 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
                     if(UsersDatabase.authentication(nickname, password)){
                         logger.log(Level.FINE, "logged!", nickname);
                         addToGame(new SocketCommunicationChannel(socket, in, out, nickname), nickname);
-                        out.println((new JSONBuilder()).build(SocketProtocol.LOGIN)
-                                .build(SocketProtocol.RESULT, "success").get());
-                        out.flush();
+                        new JSONBuilder()
+                                .build(SocketProtocol.LOGIN)
+                                .build(SocketProtocol.RESULT, "success")
+                                .send(out);
                     }else{
-                        out.println((new JSONBuilder()).build(SocketProtocol.LOGIN)
-                                .build(SocketProtocol.RESULT, "authentication failed").get());
-                        out.flush();
+                        new JSONBuilder()
+                                .build(SocketProtocol.LOGIN)
+                                .build(SocketProtocol.RESULT, "authentication failed")
+                                .send(out);
                     }
                 } else {
                     throw new IOException();

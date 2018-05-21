@@ -90,13 +90,9 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
     @Override
     public void sendMessage(String message) {
-        sendJSON(new JSONBuilder().build(SocketProtocol.SEND, message));
-    }
-
-    private void sendJSON(JSONBuilder jsonBuilder){
-        out.println(jsonBuilder.get().toString());
-        logger.log(Level.FINE, "SentJson", jsonBuilder.get());
-        out.flush();
+        new JSONBuilder()
+                .build(SocketProtocol.SEND, message)
+                .send(out);
     }
 
     @Override
@@ -105,9 +101,10 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         for (Die die : pool.getDice()) {
             param.add(die.getId());
         }
-        sendJSON(new JSONBuilder()
+        new JSONBuilder()
                 .build(SocketProtocol.UPDATE)
-                .build(SocketProtocol.POOL, param));
+                .build(SocketProtocol.POOL, param)
+                .send(out);
     }
 
     @Override
@@ -119,9 +116,10 @@ public class SocketCommunicationChannel implements CommunicationChannel {
             }
         }
 
-        sendJSON(new JSONBuilder()
+        new JSONBuilder()
                 .build(SocketProtocol.UPDATE)
-                .build(SocketProtocol.ROUND_TRACK, param));
+                .build(SocketProtocol.ROUND_TRACK, param)
+                .send(out);
     }
 
     @Override
@@ -150,7 +148,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
                     .forEach(p -> param.add(p.getNickname()));
             jsonBuilder.build(SocketProtocol.PLAYER, param);
         }
-        sendJSON(jsonBuilder);
+        jsonBuilder.send(out);
     }
 
     @Override
@@ -184,7 +182,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
         jsonBuilder.build(SocketProtocol.TOKEN, Integer.toString(player.getTokens()));
 
-        sendJSON(jsonBuilder);
+        jsonBuilder.send(out);
 
     }
 
@@ -194,9 +192,10 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
         scores.forEach(p -> param.add(p.getKey().getNickname()+":"+p.getValue()));
 
-        sendJSON(new JSONBuilder()
-                    .build(SocketProtocol.END_GAME)
-                    .build(SocketProtocol.LEADER_BOARD, param));
+        new JSONBuilder()
+                .build(SocketProtocol.END_GAME)
+                .build(SocketProtocol.LEADER_BOARD, param)
+                .send(out);
     }
 
     @Override
@@ -211,7 +210,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
                 .map(GlassWindow::getName)
                 .collect(Collectors.toList());
         jsonBuilder.build(SocketProtocol.GLASS_WINDOW, param);
-        sendJSON(jsonBuilder);
+        jsonBuilder.send(out);
 
         JSONObject response;
         try {
@@ -265,7 +264,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         if(undoEnabled)
             opt.add(StdId.UNDO.getId());
         jsonBuilder.build(SocketProtocol.OPTION, opt);
-        sendJSON(jsonBuilder);
+        jsonBuilder.send(out);
     }
 
     private Identifiable receiveResponse(List<Identifiable> options, SocketProtocol type, boolean canSkip, boolean undoEnabled){

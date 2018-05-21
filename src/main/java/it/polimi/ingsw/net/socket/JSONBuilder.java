@@ -1,15 +1,20 @@
 package it.polimi.ingsw.net.socket;
 
+import it.polimi.ingsw.LogMaker;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Builder of json objects used for socket communication
  */
 public class JSONBuilder{
 
+    private static Logger logger = LogMaker.getLogger(JSONBuilder.class.getName(), Level.ALL);
     private JSONObject jsonObject;
 
     public JSONBuilder(){
@@ -60,5 +65,11 @@ public class JSONBuilder{
         }
         this.jsonObject.put(message.get(), jsonArray);
         return this;
+    }
+
+    public void send(PrintWriter out){
+        out.println(this.get().toString());
+        logger.log(Level.FINE, "SentJson", this.get());
+        out.flush();
     }
 }

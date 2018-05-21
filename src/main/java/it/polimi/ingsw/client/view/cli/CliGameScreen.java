@@ -73,7 +73,6 @@ public class CliGameScreen implements GameScreen {
         }
     }
 
-    @Override
     public void setPlayers(List<Pair<String, Boolean>> nicknames){
         playersList = new ArrayList<>();
         for(Pair<String, Boolean> n: nicknames){
@@ -253,7 +252,6 @@ public class CliGameScreen implements GameScreen {
         return ret;
     }
 
-
     private String poolGetInput (Collection<String> options){
         for (Die die : poolDice) {
             if(options.contains(die.id)){
@@ -268,6 +266,7 @@ public class CliGameScreen implements GameScreen {
         }
         return ret;
     }
+
     private String roundTrackGetInput (Collection<String> options){
         for(List<Die> dieList: roundTrack){
             for(Die d: dieList){
@@ -299,7 +298,6 @@ public class CliGameScreen implements GameScreen {
         showAll();
         return choice;
     }
-
 
     private void showAll(){
         clear();

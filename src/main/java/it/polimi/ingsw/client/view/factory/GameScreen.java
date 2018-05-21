@@ -32,5 +32,4 @@ public interface GameScreen extends RemoteGameScreen {
     String getInput(Collection<String> options, String container);
 
     String getInputFrom(Collection<String> strings, String message);
-
 }
