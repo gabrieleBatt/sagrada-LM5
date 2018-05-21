@@ -1,4 +1,6 @@
-package it.polimi.ingsw.server.controller.channels;
+package it.polimi.ingsw.net.identifiables;
+
+import it.polimi.ingsw.net.identifiables.Identifiable;
 
 /**
  * enum of standard identifiable

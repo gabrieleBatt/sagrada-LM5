@@ -16,20 +16,19 @@ public class TestGameScreen implements RemoteGameScreen {
     }
 
     @Override
-    public void setPrivateObjectives(List<String> privateObjectives) {
-        throw new UnsupportedOperationException();
+    public void setPrivateObjectives(Collection<String> privateObjectives) {
+
     }
 
     @Override
-    public void setPublicObjective(List<String> publicObjectives) {
-        throw new UnsupportedOperationException();
+    public void setPublicObjective(Collection<String> publicObjectives) {
+
     }
 
     @Override
-    public void setTools(List<Pair<String, Boolean>> publicObjectives) {
-        throw new UnsupportedOperationException();
-    }
+    public void setTools(Collection<Pair<String, Boolean>> tools) {
 
+    }
     @Override
     public void setToolUsed(String tool, boolean used) {
         throw new UnsupportedOperationException();
@@ -73,5 +72,10 @@ public class TestGameScreen implements RemoteGameScreen {
     @Override
     public String getInputFrom(Collection<String> strings, String message) {
         return strings.iterator().next();
+    }
+
+    @Override
+    public void showAll() {
+        throw new UnsupportedOperationException();
     }
 }

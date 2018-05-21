@@ -1,8 +1,7 @@
 package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.client.view.factory.GameScreen;
-import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
-import it.polimi.ingsw.server.model.tool.Tool;
+import it.polimi.ingsw.net.identifiables.StdId;
 import javafx.util.Pair;
 
 import java.io.InputStream;
@@ -14,9 +13,9 @@ public class CliGameScreen implements GameScreen {
 
     private Scanner scanner;
     private final PrintStream printStream;
-    private List<String> privateObjectives;
-    private List<String> publicObjectives;
-    private List<ToolClass> toolsList;
+    private Collection<String> privateObjectives;
+    private Collection<String> publicObjectives;
+    private Collection<ToolClass> toolsList;
     private List<PlayerClass> playersList;
     private Collection<Die> poolDice;
     private List<List<Die>> roundTrack;
@@ -26,6 +25,7 @@ public class CliGameScreen implements GameScreen {
     public CliGameScreen(InputStream inputStream, PrintStream printStream){
         scanner = new Scanner(inputStream);
         this.printStream = printStream;
+        printStream.println((char)27+ "[37m");
         privateObjectives = new ArrayList<>();
         publicObjectives = new ArrayList<>();
         toolsList = new ArrayList<>();
@@ -81,23 +81,20 @@ public class CliGameScreen implements GameScreen {
             newPlayer.glassWindow = new WindowClass();
             playersList.add(newPlayer);
         }
-        showAll();
     }
 
     @Override
-    public void setPrivateObjectives(List<String> privateObjectives){
+    public void setPrivateObjectives(Collection<String> privateObjectives){
         this.privateObjectives = privateObjectives;
-        showAll();
     }
 
     @Override
-    public void setPublicObjective(List<String> publicObjectives){
+    public void setPublicObjective(Collection<String> publicObjectives){
         this.publicObjectives = publicObjectives;
-        showAll();
     }
 
     @Override
-    public void setTools(List<Pair <String, Boolean>> tools){
+    public void setTools(Collection<Pair <String, Boolean>> tools){
         toolsList = new ArrayList<>();
         for(Pair<String, Boolean> t: tools){
             ToolClass newTool = new ToolClass();
@@ -105,7 +102,6 @@ public class CliGameScreen implements GameScreen {
             newTool.used = t.getValue();
             toolsList.add(newTool);
         }
-        showAll();
     }
 
     @Override
@@ -114,7 +110,6 @@ public class CliGameScreen implements GameScreen {
             if (t.toolName.equals(tool)) {
                 t.used = used;
             }
-        showAll();
     }
 
     @Override
@@ -124,7 +119,6 @@ public class CliGameScreen implements GameScreen {
                 p.tokens = tokens;
 
         }
-        showAll();
     }
 
     @Override
@@ -134,7 +128,6 @@ public class CliGameScreen implements GameScreen {
                 p.glassWindow.windowName = windowName;
 
         }
-        showAll();
     }
 
     @Override
@@ -143,7 +136,6 @@ public class CliGameScreen implements GameScreen {
             if (p.nickname.equals(nickname)){
                 p.glassWindow.cells[x*5 + y].content = die;
             }
-        showAll();
     }
 
     public void setPool(Collection<String> dice){
@@ -151,7 +143,6 @@ public class CliGameScreen implements GameScreen {
         for (String die : dice) {
             poolDice.add(new Die(die));
         }
-        showAll();
     }
 
     @Override
@@ -164,7 +155,6 @@ public class CliGameScreen implements GameScreen {
             }
             roundTrack.add(ld);
         }
-        showAll();
     }
 
     @Override
@@ -180,31 +170,26 @@ public class CliGameScreen implements GameScreen {
 
     @Override
     public String getInput(Collection<String> options, String container) {
-        if(options.contains("skip")){
+        if(options.contains(StdId.SKIP.getId())){
             skip = true;
-            options.remove("skip");
+            options.remove(StdId.SKIP.getId());
         }
-        if(options.contains("undo")){
+        if(options.contains(StdId.UNDO.getId())){
             undo = true;
-            options.remove("undo");
+            options.remove(StdId.UNDO.getId());
         }
         String ret;
-        switch (container){
-            case "pool":
-                ret = poolGetInput(options);
-                break;
-            case "roundTrack":
-                ret = roundTrackGetInput(options);
-                break;
-            case "glassWindow":
-                ret = windowGetInput(options);
-                break;
-            case "table":           //tool
-                ret = tableGetInput(options);
-                break;
-            default: throw new IllegalArgumentException();
+        if(container.equalsIgnoreCase(StdId.POOL.getId())) {
+            ret = poolGetInput(options);
+        }else if (container.equalsIgnoreCase(StdId.ROUND_TRACK.getId())) {
+            ret = roundTrackGetInput(options);
+        }else if (container.equalsIgnoreCase(StdId.GLASS_WINDOW.getId())) {
+            ret = windowGetInput(options);
+        }else if (container.equalsIgnoreCase(StdId.TABLE.getId())) {
+            ret = tableGetInput(options);
+        }else{
+            throw new IllegalArgumentException();
         }
-        showAll();
         skip = false;
         undo = false;
         return ret;
@@ -212,9 +197,8 @@ public class CliGameScreen implements GameScreen {
 
     private String getChoice (Collection<String> options){
         showAll();
-        List<String> lowerCaseOptions = options.stream().map(String::toLowerCase).collect(Collectors.toList());
-        String choice = scanner.nextLine().toLowerCase();
-        while (!(lowerCaseOptions.contains(choice) || (choice.equalsIgnoreCase("skip"))&&skip) || (choice.equalsIgnoreCase("undo"))&&undo) {
+        String choice = scanner.nextLine();
+        while (!(options.contains(choice) || (choice.equalsIgnoreCase("skip"))&&skip) || (choice.equalsIgnoreCase("undo"))&&undo) {
             printStream.println("Scelta non valida ");
             choice = scanner.nextLine();
         }
@@ -239,16 +223,26 @@ public class CliGameScreen implements GameScreen {
 
     private String windowGetInput(Collection<String> options) {
         for (String option : options) {
-            playersList.get(0).glassWindow.cells[(Character.getNumericValue(option.charAt(0)))*5 + Character.getNumericValue(option.charAt(1))].active = true;
+            playersList.get(0).glassWindow
+                    .cells[(Character.getNumericValue(option.charAt(0)))*5 + Character.getNumericValue(option.charAt(1))]
+                    .active = true;
         }
-        List<String> op = options.stream().map(s -> s.substring(0, 2)).collect(Collectors.toList());
-
-        String ret = getChoice(op);
+        String choice = getChoice(options
+                .stream()
+                .map(s -> s.substring(0, 2))
+                .collect(Collectors.toList()));
 
         for (Cell cell : playersList.get(0).glassWindow.cells) {
             cell.active = false;
         }
-        return ret;
+        Optional<String> ret = options
+                .stream()
+                .filter(s -> s.substring(0, 2)
+                        .equals(choice)).findAny();
+        if(ret.isPresent())
+            return ret.get();
+        else
+            throw new NoSuchElementException();
     }
 
     private String poolGetInput (Collection<String> options){
@@ -257,13 +251,18 @@ public class CliGameScreen implements GameScreen {
                 die.active = true;
             }
         }
-
-        String ret = getChoice(options);
+        String choice = getChoice(options.stream()
+                .map(s -> s.substring(0,2))
+                .collect(Collectors.toList()));
 
         for (Die die : poolDice) {
             die.active = false;
         }
-        return ret;
+        Optional<String> ret = options.stream().filter(s -> s.substring(0, 2).equals(choice)).findAny();
+        if(ret.isPresent())
+            return ret.get();
+        else
+            throw new NoSuchElementException();
     }
 
     private String roundTrackGetInput (Collection<String> options){
@@ -273,9 +272,7 @@ public class CliGameScreen implements GameScreen {
                     d.active = true;
             }
         }
-
         String ret = getChoice(options);
-
         for(List<Die> dieList: roundTrack){
             for(Die d: dieList){
                 d.active = false;
@@ -294,11 +291,11 @@ public class CliGameScreen implements GameScreen {
             printStream.println("Scelta non valida ");
             choice = scanner.nextLine();
         }
-        showAll();
         return choice;
     }
 
-    private void showAll(){
+    @Override
+    public void showAll(){
         clear();
         showNicknameAndTokensAndRound();
         showPrivateObjective();
@@ -310,9 +307,9 @@ public class CliGameScreen implements GameScreen {
         showOthersWindows();
         showRoundTrack();
         if(skip)
-            printStream.println("Skip");
+            printStream.println(StdId.SKIP.getId());
         if(undo)
-            printStream.println("undo");
+            printStream.println(StdId.UNDO.getId());
     }
 
     private void showNicknameAndTokensAndRound() {
@@ -342,20 +339,20 @@ public class CliGameScreen implements GameScreen {
 
     private void printActive(boolean active, String s){
         if(active)
-            printStream.print("{");
+            printStream.print((char)27 + "[31m"+"{");
         else
             printStream.print(" ");
         printStream.print(s);
         if(active)
-            printStream.print("} ");
+            printStream.print((char)27 + "[31m"+"} " + (char)27+ "[37m");
         else
             printStream.print("  ");
     }
 
     private void showPublicObjectives() {
         printStream.print("Obbiettivi pubblici: ");
-        for (int i = 0; i < publicObjectives.size(); i++){
-            printStream.print(privateObjectives.get(i)+ "\t");
+        for (String publicObjective : publicObjectives) {
+            printStream.print(publicObjective+ "\t");
         }
         printStream.print("\n");
     }
@@ -363,7 +360,7 @@ public class CliGameScreen implements GameScreen {
     private void showPool() {
         printStream.print("Riserva: ");
         for (Die die : poolDice) {
-            printActive(die.active,die.id.substring(0, 1));
+            printActive(die.active,die.id.substring(0, 2));
         }
         printStream.print("\n");
     }
@@ -409,9 +406,9 @@ public class CliGameScreen implements GameScreen {
     private void showRoundTrack() {
         printStream.print("Round track: " + "\t");
         for (List<Die> dieList : roundTrack) {
-            printStream.print("round" + roundTrack.indexOf(dieList)+1+": ");
+            printStream.print("round" + (roundTrack.indexOf(dieList)+1)+": ");
             for (Die die: dieList) {
-                printActive(die.active, die.id.substring(0, 1));
+                printActive(die.active, die.id);
             }
 
         }

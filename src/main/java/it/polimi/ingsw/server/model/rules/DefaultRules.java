@@ -1,10 +1,13 @@
 package it.polimi.ingsw.server.model.rules;
 
-import it.polimi.ingsw.server.controller.Game;
-import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
 import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.net.identifiables.StdId;
-import it.polimi.ingsw.server.model.objective.*;
+import it.polimi.ingsw.server.controller.Game;
+import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
+import it.polimi.ingsw.server.model.objective.PrivateObjective;
+import it.polimi.ingsw.server.model.objective.PrivateObjectiveDeck;
+import it.polimi.ingsw.server.model.objective.PublicObjective;
+import it.polimi.ingsw.server.model.objective.PublicObjectiveDeck;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;

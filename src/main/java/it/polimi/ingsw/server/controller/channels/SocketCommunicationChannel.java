@@ -176,7 +176,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
                 if (cell.isOccupied())
                     param.add(cell.getDie().getId());
                 else
-                    param.add("empty ");
+                    param.add("   ");
             }
             jsonBuilder.build(SocketProtocol.GLASS_WINDOW, param);
 
@@ -231,7 +231,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
                     disconnect();
                 }
             }
-        }catch(ParseException | IOException e){
+        }catch(ParseException | IOException | NullPointerException e){
             logger.log(Level.WARNING, e.getMessage(), e);
             disconnect();
         }
@@ -294,7 +294,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
                     }
                 }
             }
-        }catch(ParseException  | IOException e){
+        }catch(ParseException  | IOException |NullPointerException e){
             logger.log(Level.WARNING, e.getMessage(), e);
             disconnect();
         }

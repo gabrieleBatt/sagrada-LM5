@@ -9,11 +9,11 @@ public interface GameScreen extends RemoteGameScreen {
 
     void setPlayers(List<Pair<String, Boolean>> nicknames);
 
-    void setPrivateObjectives(List<String> privateObjectives);
+    void setPrivateObjectives(Collection<String> privateObjectives);
 
-    void setPublicObjective(List<String> publicObjectives);
+    void setPublicObjective(Collection<String> publicObjectives);
 
-    void setTools(List<Pair <String, Boolean>> tools);
+    void setTools(Collection<Pair <String, Boolean>> tools);
 
     void setToolUsed(String tool, boolean used);
 
@@ -32,4 +32,6 @@ public interface GameScreen extends RemoteGameScreen {
     String getInput(Collection<String> options, String container);
 
     String getInputFrom(Collection<String> strings, String message);
+
+    void showAll();
 }

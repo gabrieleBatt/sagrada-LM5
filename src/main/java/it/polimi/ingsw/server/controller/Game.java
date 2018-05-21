@@ -67,6 +67,9 @@ public class Game implements Runnable {
      */
     @Override
     public void run() {
+        for (CommunicationChannel commChannel : commChannels) {
+            commChannel.updateView(table);
+        }
         while(!actionCommandList.isEmpty()){
             try {
                 actionCommandList.get(0).execute(this);
