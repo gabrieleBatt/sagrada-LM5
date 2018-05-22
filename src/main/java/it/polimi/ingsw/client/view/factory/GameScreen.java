@@ -13,7 +13,7 @@ public interface GameScreen extends RemoteGameScreen {
 
     void setPublicObjective(Collection<String> publicObjectives);
 
-    void setTools(Collection<Pair <String, Boolean>> tools);
+    void setTools(Collection<String> tools);
 
     void setToolUsed(String tool, boolean used);
 

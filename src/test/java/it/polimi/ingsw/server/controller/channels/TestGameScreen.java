@@ -26,7 +26,7 @@ public class TestGameScreen implements RemoteGameScreen {
     }
 
     @Override
-    public void setTools(Collection<Pair<String, Boolean>> tools) {
+    public void setTools(Collection<String> tools) {
 
     }
     @Override

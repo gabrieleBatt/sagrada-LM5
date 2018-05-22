@@ -39,12 +39,13 @@ class CliGameScreenTest {
         objective.add("test_obj2");
         gameScreen.setPrivateObjectives(objective);
         gameScreen.setPublicObjective(objective);
-        List<Pair<String, Boolean>> tools = new ArrayList<>();
+        List<String> tools = new ArrayList<>();
 
-        tools.add(new Pair<>("Tool1", true));
-        tools.add(new Pair<>("Tool2", false));
-        tools.add(new Pair<>("Tool3", true));
+        tools.add("Tool1");
+        tools.add("Tool2");
+        tools.add("Tool3");
         gameScreen.setTools(tools);
+        gameScreen.setToolUsed("Tool2", true);
 
         gameScreen.setCellContent("test3",3,2,"3R9");
 

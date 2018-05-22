@@ -92,12 +92,11 @@ public class CliGameScreen implements GameScreen {
     }
 
     @Override
-    public void setTools(Collection<Pair <String, Boolean>> tools){
+    public void setTools(Collection<String> tools){
         toolsList = new ArrayList<>();
-        for(Pair<String, Boolean> t: tools){
+        for(String t: tools){
             ToolClass newTool = new ToolClass();
-            newTool.toolName = t.getKey();
-            newTool.used = t.getValue();
+            newTool.toolName = t;
             toolsList.add(newTool);
         }
     }

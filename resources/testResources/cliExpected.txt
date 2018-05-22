@@ -20,7 +20,7 @@ Obbiettivo privato: test_obj1	test_obj2
 
 Obbiettivi pubblici: test_obj1	test_obj2
 Riserva:
-Strumenti: 	 Tool1  [2]   Tool2  [1]   Tool3  [2]
+Strumenti: 	 Tool1  [1]   Tool2  [2]   Tool3  [1]
 
 
 test2 Favori:0 disconnesso                                   test3 Favori:0 disconnesso
@@ -51,7 +51,7 @@ Obbiettivo privato: test_obj1	test_obj2
 
 Obbiettivi pubblici: test_obj1	test_obj2
 Riserva:
-Strumenti: 	 Tool1  [2]   Tool2  [1]   Tool3  [2]
+Strumenti: 	 Tool1  [1]   Tool2  [2]   Tool3  [1]
 
 
 test2 Favori:0 disconnesso                                   test3 Favori:0 disconnesso

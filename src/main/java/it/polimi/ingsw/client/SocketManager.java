@@ -134,7 +134,10 @@ public class SocketManager implements Runnable{
                     .stream()
                     .map(s -> new Pair<>(s.substring(0, s.indexOf('-')), s.contains("true")))
                     .collect(Collectors.toList());
-            gameScreen.setTools(pairs);
+            gameScreen.setTools(pairs.stream().map(Pair::getKey).collect(Collectors.toList()));
+            for (Pair<String, Boolean> pair : pairs) {
+                gameScreen.setToolUsed(pair.getKey(), pair.getValue());
+            }
         }
         if (received.containsKey(SocketProtocol.PLAYER.get())){
             List<String> strings = getJsonList(received, SocketProtocol.PLAYER);
