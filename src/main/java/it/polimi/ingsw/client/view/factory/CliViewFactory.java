@@ -14,7 +14,7 @@ public class CliViewFactory implements ViewAbstractFactory {
     @Override
     public CliConnectionScreen makeConnectionScreen() {
 
-        return new CliConnectionScreen(System.in);
+        return new CliConnectionScreen(System.in, System.out);
     }
 
     @Override
