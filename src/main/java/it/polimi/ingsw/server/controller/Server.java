@@ -76,7 +76,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
             logger.log(Level.CONFIG, "Rmi server ready");
         } catch (RemoteException e) {
             logger.log(Level.WARNING, "Rmi server failed", e);
-            System.exit(-1);
+            return;
         }
         while (!Thread.interrupted()) {
             try (ServerSocket serverSocket = new ServerSocket(socketPortNumber)) {

@@ -309,10 +309,13 @@ public class CliGameScreen implements GameScreen {
         showOthersWindows();
         showRoundTrack();
         printStream.println();
-        if (skip)
-            printActive(true, "skip  ");
-        if (undo)
-            printActive(true, "undo\n\n");
+        if (skip) {
+            printActive(true, "skip");
+            printStream.println("  ");
+        }if (undo) {
+            printActive(true, "undo");
+            printStream.println("\n\n");
+        }
     }
 
     private void showNicknameAndTokensAndRound() {
