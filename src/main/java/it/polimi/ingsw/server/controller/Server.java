@@ -169,7 +169,6 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
         }
     }
 
-    public synchronized static void endGame(Game game){
-        games.remove(game);
+    public synchronized static void endGame(Game game){games.remove(game);
     }
 }

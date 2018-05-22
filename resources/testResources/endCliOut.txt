@@ -1,0 +1,58 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+La classifica finale è:
+
+
+player1: 42
+
+player3: 39
+
+player2: 32
+
+player4: 30
+
+
+player1 vince!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Vuoi giocare ancora?
+
+   **si**  **no**   
+

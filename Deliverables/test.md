@@ -3,6 +3,7 @@
     - view
         - cli
             - CliGameScreenTest
+                - Testing end game cli view :heavy_check_mark:
                 - Set and show test :heavy_check_mark: 
 - server
     - model

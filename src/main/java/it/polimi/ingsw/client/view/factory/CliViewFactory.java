@@ -19,7 +19,7 @@ public class CliViewFactory implements ViewAbstractFactory {
 
     @Override
     public CliEndScreen makeEndScreen() {
-        return new CliEndScreen();
+        return new CliEndScreen(System.in, System.out);
     }
 }
 
