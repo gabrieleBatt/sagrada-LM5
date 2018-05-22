@@ -265,7 +265,7 @@ public class DefaultRules implements Rules {
                     .forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
 
             Game.getLogger().log(Level.FINE,
-                    "Drafted die "+ optionalDie.get()
+                    "Drafted die "+ optionalDie
                     , this);
         };
     }

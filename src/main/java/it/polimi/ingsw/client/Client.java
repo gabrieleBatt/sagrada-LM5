@@ -36,5 +36,6 @@ public class Client {
     }
 
     public static void lostConnection() {
+        //reLogin, reConnect
     }
 }

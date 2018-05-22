@@ -10,20 +10,55 @@ Scegli la finestra: [w1, w2, w3, w4]
 
 
 
-test1		0 	 	 	 	 	 	Round: 1
+test1	Favori:0 	 	 	 	 	 	Round: 1
 Obbiettivo privato: test_obj1	test_obj2	
 [31m{[  ][31m} [37m [  ]  [31m{[  ][31m} [37m [  ]   [  ]  
  [  ]   [  ]   [  ]   [  ]   [  ]  
  [  ]   [  ]  [31m{[  ][31m} [37m [  ]   [  ]  
  [  ]  [31m{[  ][31m} [37m [  ]   [  ]   [  ]  
 
+
 Obbiettivi pubblici: test_obj1	test_obj2	
 Riserva: 
 Strumenti: 	 Tool1  [2]   Tool2  [1]   Tool3  [2]  
-test2 0                                   test3 0                                   
+
+
+test2 Favori:0 disconnesso                                   test3 Favori:0 disconnesso                                   
  [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [  ]   [  ]   [  ]  		 
  [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [  ]   [  ]   [  ]  		 
  [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [  ]   [  ]   [  ]  		 
  [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [3R]   [  ]   [  ]  		 
 
 Round track: 	
+
+
+
+
+
+
+
+
+
+
+
+test1	Favori:0 	 	 	 	 	 	Round: 1
+Obbiettivo privato: test_obj1	test_obj2	
+ [  ]   [  ]   [  ]   [  ]   [  ]  
+ [  ]   [  ]   [  ]   [  ]   [  ]  
+ [  ]   [  ]   [  ]   [  ]   [  ]  
+ [  ]   [  ]   [  ]   [  ]   [  ]  
+
+
+Obbiettivi pubblici: test_obj1	test_obj2	
+Riserva: 
+Strumenti: 	 Tool1  [2]   Tool2  [1]   Tool3  [2]  
+
+
+test2 Favori:0 disconnesso                                   test3 Favori:0 disconnesso                                   
+ [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [  ]   [  ]   [  ]  		 
+ [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [  ]   [  ]   [  ]  		 
+ [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [  ]   [  ]   [  ]  		 
+ [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [3R]   [  ]   [  ]  		 
+
+Round track: 	
+

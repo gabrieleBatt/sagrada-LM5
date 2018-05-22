@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 class SocketCommunicationChannelTest{
 
@@ -36,9 +37,12 @@ class SocketCommunicationChannelTest{
         socketCommunicationChannel.updateView(players.get(1), true);
         socketCommunicationChannel.updateView(new RoundTrack());
         socketCommunicationChannel.updateView(new Table(players));
-        byte[] f1 = Files.readAllBytes(Paths.get(fileOut));
-        byte[] f2 = Files.readAllBytes(Paths.get(fileExpected));
-        Assertions.assertTrue(Arrays.equals(f1, f2));
+
+        Scanner scanner1 = new Scanner(new FileInputStream(fileOut));
+        Scanner scanner2 = new Scanner(new FileInputStream(fileExpected));
+        while(scanner1.hasNext()){
+            Assertions.assertEquals(scanner1.next(), scanner2.next());
+        }
     }
 
     @AfterEach

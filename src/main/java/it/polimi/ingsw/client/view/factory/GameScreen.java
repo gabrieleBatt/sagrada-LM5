@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface GameScreen extends RemoteGameScreen {
 
-    void setPlayers(List<Pair<String, Boolean>> nicknames);
+    void setPlayers(List<String> nicknames);
 
     void setPrivateObjectives(Collection<String> privateObjectives);
 
@@ -20,6 +20,8 @@ public interface GameScreen extends RemoteGameScreen {
     void setPlayerToken(String nickname, int tokens);
 
     void setPlayerWindow(String nickname, String windowName);
+
+    void setPlayerConnection(String nickname, boolean isConnected);
 
     void setCellContent(String nickname, int x, int y, String die);
 

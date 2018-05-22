@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class TestGameScreen implements RemoteGameScreen {
     @Override
-    public void setPlayers(List<Pair<String, Boolean>> nicknames) {
+    public void setPlayers(List<String> nicknames) {
         throw new UnsupportedOperationException();
     }
 
@@ -38,6 +38,12 @@ public class TestGameScreen implements RemoteGameScreen {
     public void setPlayerToken(String nickname, int tokens) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public void setPlayerConnection(String nickname, boolean isConnected) {
+        throw new UnsupportedOperationException();
+    }
+
 
     @Override
     public void setPlayerWindow(String nickname, String windowName) {

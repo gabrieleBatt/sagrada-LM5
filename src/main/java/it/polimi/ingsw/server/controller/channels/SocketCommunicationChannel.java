@@ -239,6 +239,8 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     }
 
     private void disconnect(){
+        logger.log(Level.WARNING, getNickname() + " diconnected");
+        connected = false;
         try {
             out.close();
             in.close();
@@ -246,7 +248,6 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         } catch (IOException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
-        connected = false;
     }
 
     @Override

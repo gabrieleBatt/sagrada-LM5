@@ -1,95 +1,103 @@
 ### Test
-- model
-    - objective
-        - AreaPublicObjectiveTest
-            - Scoring column color objective :heavy_check_mark:
-            - Scoring diagonal color objective :heavy_check_mark:
-            - Illegal creation of objective :heavy_check_mark:   
-        - ColorPrivateObjectiveTest
-            - Scoring cyan private objective :heavy_check_mark:
-        - PrivateObjectiveDeckTest 
-            - Draw 4 PrivateObjective :heavy_check_mark:
-            - Draw too many PrivateObjective :heavy_check_mark:
-        - PublicObjectiveDeckTest 
-            - Draw 4 PublicObjective :heavy_check_mark:
-            - Draw too many PublicObjective :heavy_check_mark:
-            - Area parsing control :heavy_check_mark:
-            - Set parsing control :heavy_check_mark:
-        - SetPublicObjectiveTest
-            - Scoring set of 3 and 5 :heavy_check_mark:
-            - Scoring color set objective :heavy_check_mark:
-    - rules
-        - DefaultRulesTest 
-                - Give window and token test :heavy_check_mark:
-                - Give private objective :heavy_check_mark:
-                - Give public objectives :heavy_check_mark:
-                - Testing round actions :heavy_check_mark:
-                - Testing end game action :heavy_check_mark:
-        -TurnActionCommandTest
-                - Testing Turn :heavy_check_mark:
-        -ToolRules
-                -Test set :heavy_check_mark:
-                -Test random :heavy_check_mark:
-                -Test select :heavy_check_mark:
-                -Test swap :heavy_check_mark:
-                -Test move :heavy_check_mark:
-    - table
-        - dice
-            - DiceBagTest 
-                - Create and empty the bag :heavy_check_mark:
-                - Draw multiple times multiple dice :heavy_check_mark:
-                - Place one extra die in the bag :heavy_check_mark:
+- client
+    - view
+        - cli
+            - CliGameScreenTest
+                - Set and show test :heavy_check_mark: 
+- server
+    - model
+        - objective
+            - AreaPublicObjectiveTest
+                - Scoring column color objective :heavy_check_mark:
+                - Scoring diagonal color objective :heavy_check_mark:
+                - Illegal creation of objective :heavy_check_mark:   
+            - ColorPrivateObjectiveTest
+                - Scoring cyan private objective :heavy_check_mark:
+            - PrivateObjectiveDeckTest 
+                - Draw 4 PrivateObjective :heavy_check_mark:
+                - Draw too many PrivateObjective :heavy_check_mark:
+            - PublicObjectiveDeckTest 
+                - Draw 4 PublicObjective :heavy_check_mark:
+                - Draw too many PublicObjective :heavy_check_mark:
+                - Area parsing control :heavy_check_mark:
+                - Set parsing control :heavy_check_mark:
+            - SetPublicObjectiveTest
+                - Scoring set of 3 and 5 :heavy_check_mark:
+                - Scoring color set objective :heavy_check_mark:
+        - rules
+            - DefaultRulesTest 
+                    - Give window and token test :heavy_check_mark:
+                    - Give private objective :heavy_check_mark:
+                    - Give public objectives :heavy_check_mark:
+                    - Testing round actions :heavy_check_mark:
+                    - Testing end game action :heavy_check_mark:
+            -TurnActionCommandTest
+                    - Testing Turn :heavy_check_mark:
+            -ToolRules
+                    -Test set :heavy_check_mark:
+                    -Test random :heavy_check_mark:
+                    -Test select :heavy_check_mark:
+                    -Test swap :heavy_check_mark:
+                    -Test move :heavy_check_mark:
+        - table
+            - dice
+                - DiceBagTest 
+                    - Create and empty the bag :heavy_check_mark:
+                    - Draw multiple times multiple dice :heavy_check_mark:
+                    - Place one extra die in the bag :heavy_check_mark:
+                    - Testing memento :heavy_check_mark:
+                - DieTest
+                    - Set die numeric value :heavy_check_mark:
+                    - Get die id :heavy_check_mark:
+                    - Confront dice :heavy_check_mark:
+            -glassWindow
+                - CellTest 
+                    - Place die in cell, various restrictions :heavy_check_mark:
+                    - Check empty and full cell :heavy_check_mark:
+                    - Place and get die :heavy_check_mark:
+                    - Check allowed dice considering several restrictions :heavy_check_mark:
+                - GlassWindowDeckTest
+                    - Draw 4 glassWindows :heavy_check_mark:
+                    - Draw too many glassWindows :heavy_check_mark:
+                    - Parsing control :heavy_check_mark:
+                - GlassWindowTest
+                    - Find cell by die inside :heavy_check_mark:
+                    - Get row in which a die is :heavy_check_mark:
+                    - Get column in which a die is :heavy_check_mark:
+                    - Check for surrounding dice :heavy_check_mark:
+                    - Check if a cell has dice adjacent and similar to a die :heavy_check_mark:
+                    - Available cells for a die in glassWindow :heavy_check_mark:
+            - PlayerTest
+                - Player nickname :heavy_check_mark:
+                - Player tokens :heavy_check_mark:
                 - Testing memento :heavy_check_mark:
-            - DieTest
-                - Set die numeric value :heavy_check_mark:
-                - Get die id :heavy_check_mark:
-                - Confront dice :heavy_check_mark:
-        -glassWindow
-            - CellTest 
-                - Place die in cell, various restrictions :heavy_check_mark:
-                - Check empty and full cell :heavy_check_mark:
-                - Place and get die :heavy_check_mark:
-                - Check allowed dice considering several restrictions :heavy_check_mark:
-            - GlassWindowDeckTest
-                - Draw 4 glassWindows :heavy_check_mark:
-                - Draw too many glassWindows :heavy_check_mark:
-                - Parsing control :heavy_check_mark:
-            - GlassWindowTest
-                - Find cell by die inside :heavy_check_mark:
-                - Get row in which a die is :heavy_check_mark:
-                - Get column in which a die is :heavy_check_mark:
-                - Check for surrounding dice :heavy_check_mark:
-                - Check if a cell has dice adjacent and similar to a die :heavy_check_mark:
-                - Available cells for a die in glassWindow :heavy_check_mark:
-        - PlayerTest
-            - Player nickname :heavy_check_mark:
-            - Player tokens :heavy_check_mark:
-            - Testing memento :heavy_check_mark:
-            - Player connection :heavy_check_mark:
-        - PoolTest 
-            - Add dice to pool :heavy_check_mark:
-            - Remove die from pool :heavy_check_mark:
-            - Roll all dice in pool :heavy_check_mark:
-            - Testing memento :heavy_check_mark:
-        - RoundTrackTest 
-            - End round adding dice :heavy_check_mark:
-            - Remove a die from roundTrack placing another in its place :heavy_check_mark:
-            - Testing memento :heavy_check_mark:       
-        - TableTest
-            - Get players in table :heavy_check_mark:
-            - Iterate players :heavy_check_mark:
-            - Get current effects :heavy_check_mark:
-            - Get players by name :heavy_check_mark:
-    - tool
-        - ToolTest
-            - Get tool name :heavy_check_mark:
-            - Get tool action :heavy_check_mark:
-            - Use tool :heavy_check_mark:
-
-- controller
-    - LobbyTest
-        - Add commChannel to lobby and make game start :heavy_check_mark:
-    - commChannel
-        - socket
-            - SocketCommunicationChannelTest
-                - Update test :heavy_check_mark:
+                - Player connection :heavy_check_mark:
+            - PoolTest 
+                - Add dice to pool :heavy_check_mark:
+                - Remove die from pool :heavy_check_mark:
+                - Roll all dice in pool :heavy_check_mark:
+                - Testing memento :heavy_check_mark:
+            - RoundTrackTest 
+                - End round adding dice :heavy_check_mark:
+                - Remove a die from roundTrack placing another in its place :heavy_check_mark:
+                - Testing memento :heavy_check_mark:       
+            - TableTest
+                - Get players in table :heavy_check_mark:
+                - Iterate players :heavy_check_mark:
+                - Get current effects :heavy_check_mark:
+                - Get players by name :heavy_check_mark:
+        - tool
+            - ToolTest
+                - Get tool name :heavy_check_mark:
+                - Get tool action :heavy_check_mark:
+                - Use tool :heavy_check_mark:
+    
+    - controller
+        - UserDatabaseTest
+            - New user and authentication :heavy_check_mark:
+        - LobbyTest
+            - Add commChannel to lobby and make game start :heavy_check_mark:
+        - commChannel
+            - socket
+                - SocketCommunicationChannelTest
+                    - Update test :heavy_check_mark:

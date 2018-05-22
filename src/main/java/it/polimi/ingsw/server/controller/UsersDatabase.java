@@ -1,12 +1,17 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.LogMaker;
+
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Map of users password and nickname
  */
 public class UsersDatabase extends HashMap<String, String> {
 
+    private static Logger logger = LogMaker.getLogger(UsersDatabase.class.getName(), Level.ALL);
     private static UsersDatabase usersDatabase = new UsersDatabase();
 
     private UsersDatabase(){
@@ -14,14 +19,17 @@ public class UsersDatabase extends HashMap<String, String> {
     }
 
     public static void newUser(String nickname, String password){
-        if(!usersDatabase.containsKey(nickname))
+        if(!usersDatabase.containsKey(nickname)) {
             usersDatabase.put(nickname, password);
-        else
+            logger.log(Level.FINE, "New User:" + nickname + ", " + password);
+        }else
             throw new IllegalArgumentException("User " + nickname + " already registered");
     }
 
     public static boolean authentication(String nickname, String password){
-        return usersDatabase.containsKey(nickname) && usersDatabase.get(nickname).equals(password);
+        boolean ret = usersDatabase.containsKey(nickname) && usersDatabase.get(nickname).equals(password);
+        logger.log(Level.FINE, "Authentication", ret);
+        return ret;
     }
 
     public static boolean userExists(String nickname){

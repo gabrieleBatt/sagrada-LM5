@@ -90,7 +90,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
     }
 
     @Override
-    public void rmiLogin(RemoteGameScreen gameScreen, String nickname) throws RemoteException {
+    public void rmiLogin(RemoteGameScreen gameScreen, String nickname, String password) throws RemoteException {
         logger.log(Level.FINE,  "logged!", nickname);
         addToGame(new RmiCommunicationChannel(gameScreen, nickname), nickname);
     }
@@ -149,6 +149,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
             if (communicationChannel.getNickname().equals(nickname)) {
                 alreadyInGame = true;
                 lobby.changeChannel(ccToAdd);
+                logger.log(Level.FINE, nickname + " reconnected to lobby");
             }
         }
         for (Game game : games) {
@@ -156,12 +157,14 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
                 if (communicationChannel.getNickname().equals(nickname)) {
                     alreadyInGame = true;
                     game.changeChannel(ccToAdd);
+                    logger.log(Level.FINE, nickname + " reconnected to game");
                 }
             }
         }
         if (!alreadyInGame) {
             synchronized (lobby) {
                 lobby.addChannel(ccToAdd);
+                logger.log(Level.FINE, nickname + " added to lobby");
             }
         }
     }

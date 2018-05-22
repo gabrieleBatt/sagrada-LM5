@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface RemoteGameScreen extends Remote {
-    void setPlayers(List<Pair<String, Boolean>> nicknames);
+    void setPlayers(List<String> nicknames);
 
     void setPrivateObjectives(Collection<String> privateObjectives);
 
@@ -18,6 +18,8 @@ public interface RemoteGameScreen extends Remote {
     void setToolUsed(String tool, boolean used);
 
     void setPlayerToken(String nickname, int tokens);
+
+    void setPlayerConnection(String nickname, boolean isConnected);
 
     void setPlayerWindow(String nickname, String windowName);
 

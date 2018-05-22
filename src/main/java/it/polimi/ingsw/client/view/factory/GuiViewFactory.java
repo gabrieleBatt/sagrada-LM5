@@ -5,16 +5,16 @@ public class GuiViewFactory implements ViewAbstractFactory {
 
     @Override
     public GameScreen makeGameScreen() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public ConnectionScreen makeConnectionScreen() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public EndScreen makeEndScreen() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }

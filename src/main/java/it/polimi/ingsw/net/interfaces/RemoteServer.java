@@ -5,6 +5,6 @@ import java.rmi.RemoteException;
 
 public interface RemoteServer extends Remote {
 
-    public void rmiLogin(RemoteGameScreen gameScreen, String nickname) throws RemoteException;
+    public void rmiLogin(RemoteGameScreen gameScreen, String nickname, String password) throws RemoteException;
 
 }

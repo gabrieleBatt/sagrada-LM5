@@ -71,12 +71,11 @@ public class CliGameScreen implements GameScreen {
         }
     }
 
-    public void setPlayers(List<Pair<String, Boolean>> nicknames){
+    public void setPlayers(List<String> nicknames){
         playersList = new ArrayList<>();
-        for(Pair<String, Boolean> n: nicknames){
+        for(String s: nicknames){
             PlayerClass newPlayer = new PlayerClass();
-            newPlayer.nickname = n.getKey();
-            newPlayer.connected = n.getValue();
+            newPlayer.nickname = s;
             newPlayer.glassWindow = new WindowClass();
             playersList.add(newPlayer);
         }
@@ -112,11 +111,18 @@ public class CliGameScreen implements GameScreen {
     }
 
     @Override
+    public void setPlayerConnection(String nickname, boolean isConnected){
+        for(PlayerClass p: playersList ){
+            if(p.nickname.equals(nickname))
+                p.connected = isConnected;
+        }
+    }
+
+    @Override
     public void setPlayerToken(String nickname, int tokens){
         for(PlayerClass p: playersList ){
             if(p.nickname.equals(nickname))
                 p.tokens = tokens;
-
         }
     }
 
@@ -199,7 +205,7 @@ public class CliGameScreen implements GameScreen {
     private String getChoice (Collection<String> options){
         showAll();
         String choice = scanner.nextLine();
-        while (!(options.contains(choice) || (choice.equalsIgnoreCase("skip"))&&skip) || (choice.equalsIgnoreCase("undo"))&&undo) {
+        while (!(options.contains(choice) || (choice.equalsIgnoreCase("skip")&&skip) || (choice.equalsIgnoreCase("undo")&&undo))) {
             printStream.println("Scelta non valida ");
             choice = scanner.nextLine();
         }
@@ -240,10 +246,7 @@ public class CliGameScreen implements GameScreen {
                 .stream()
                 .filter(s -> s.substring(0, 2)
                         .equals(choice)).findAny();
-        if(ret.isPresent())
-            return ret.get();
-        else
-            throw new NoSuchElementException();
+        return ret.orElse(choice);
 
     }
 
@@ -261,10 +264,7 @@ public class CliGameScreen implements GameScreen {
             die.active = false;
         }
         Optional<String> ret = options.stream().filter(s -> s.substring(0, 2).equals(choice)).findAny();
-        if(ret.isPresent())
-            return ret.get();
-        else
-            throw new NoSuchElementException();
+        return ret.orElse(choice);
     }
 
     private String roundTrackGetInput (Collection<String> options){
@@ -309,14 +309,14 @@ public class CliGameScreen implements GameScreen {
         showOthersWindows();
         showRoundTrack();
         printStream.println();
-        if(skip)
-            printStream.print("skip");
-        if(undo)
-            printStream.println("undo");
+        if (skip)
+            printActive(true, "skip  ");
+        if (undo)
+            printActive(true, "undo\n\n");
     }
 
     private void showNicknameAndTokensAndRound() {
-        printStream.println(playersList.get(0).nickname + "\t" + "\t" + playersList.get(0).tokens + " \t"+ " \t"+" \t"+ " \t"+ " \t"+" \t" + "Round: " + (roundTrack.size()+1));
+        printStream.println(playersList.get(0).nickname + "\tFavori:" + playersList.get(0).tokens + " \t"+ " \t"+" \t"+ " \t"+ " \t"+" \t" + "Round: " + (roundTrack.size()+1));
     }
 
     private void showPrivateObjective() {
@@ -336,7 +336,7 @@ public class CliGameScreen implements GameScreen {
             }
             printStream.print("\n");
         }
-        printStream.print("\n");
+        printStream.print("\n\n");
 
     }
 
@@ -381,12 +381,18 @@ public class CliGameScreen implements GameScreen {
     }
 
     private void showOthersNameAndTokens() {
+        printStream.println("\n");
         for (PlayerClass p: playersList.subList(1,playersList.size())){
             StringBuilder s = new StringBuilder();
             for (int i = 0; i < 35; i++) {
                 s.append(" ");
             }
-            s.insert(0, p.nickname + " " + p.tokens);
+            String ins = p.nickname + " Favori:" + p.tokens;
+            if(p.connected)
+                ins = ins + " connesso";
+            else
+                ins = ins + " disconnesso";
+            s.insert(0, ins);
             printStream.print(s);
         }
         printStream.print("\n");

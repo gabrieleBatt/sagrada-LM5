@@ -67,15 +67,24 @@ public class Game implements Runnable {
      */
     @Override
     public void run() {
-        for (CommunicationChannel commChannel : commChannels) {
-            commChannel.updateView(table);
-        }
         while(!actionCommandList.isEmpty()){
+            this.updateAll();
             try {
                 actionCommandList.get(0).execute(this);
                 actionCommandList.remove(0);
             } catch (DieNotAllowedException e) {
                 logger.log(Level.WARNING, e.getMessage(), e);
+            }
+        }
+    }
+
+    public void updateAll(){
+        for (CommunicationChannel commChannel : commChannels) {
+            commChannel.updateView(getTable());
+            commChannel.updateView(getTable().getPool());
+            commChannel.updateView(getTable().getRoundTrack());
+            for (Player player : getTable().getPlayers()) {
+                commChannel.updateView(player, !getChannel(player.getNickname()).isOffline());
             }
         }
     }
@@ -94,6 +103,7 @@ public class Game implements Runnable {
      * @param ranking Pair of Player and Integer, the points scored.
      */
     public synchronized void endGame(List<Pair<Player,Integer>> ranking){
+        logger.log(Level.FINE, "Game over");
         this.ranking = ranking;
         commChannels.forEach(c -> c.endGame(ranking));
         Server.endGame(this);

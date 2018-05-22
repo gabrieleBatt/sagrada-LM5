@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  */
 public class JSONBuilder{
 
-    private static Logger logger = LogMaker.getLogger(JSONBuilder.class.getName(), Level.ALL);
+    private static Logger logger = LogMaker.getLogger(JSONBuilder.class.getName(), Level.OFF);
     private JSONObject jsonObject;
 
     public JSONBuilder(){

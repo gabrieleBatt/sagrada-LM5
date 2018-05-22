@@ -32,7 +32,6 @@ public class SocketManager implements Runnable{
     private final int port;
     private BufferedReader in;
     private PrintWriter out;
-    private final Scanner scanner;
     private final GameScreen gameScreen;
 
     public SocketManager(LoginInfo loginInfo, GameScreen gameScreen) {
@@ -40,7 +39,6 @@ public class SocketManager implements Runnable{
         port = loginInfo.portNumber;
         nickname = loginInfo.nickname;
         password = loginInfo.password;
-        scanner = new Scanner(System.in);
         this.gameScreen = gameScreen;
     }
 
@@ -95,7 +93,7 @@ public class SocketManager implements Runnable{
                 }
                 gameScreen.showAll();
             }
-        }catch(ParseException | IOException e){
+        }catch(ParseException | IOException | NullPointerException e){
             logger.log(Level.WARNING, "Connection failed");
         }
     }
@@ -118,6 +116,7 @@ public class SocketManager implements Runnable{
                 }
             }
         }
+        gameScreen.setPlayerConnection(player, received.get(SocketProtocol.CONNECTION.get()).equals("true"));
     }
 
 
@@ -141,11 +140,7 @@ public class SocketManager implements Runnable{
             List<String> strings = getJsonList(received, SocketProtocol.PLAYER);
             strings.remove(nickname);
             strings.add(0, nickname);
-            List<Pair<String, Boolean>> pairs = strings
-                    .stream()
-                    .map(s -> new Pair<>(s, true))
-                    .collect(Collectors.toList());
-            gameScreen.setPlayers(pairs);
+            gameScreen.setPlayers(strings);
         }
         if (received.containsKey(SocketProtocol.PRIVATE_OBJ.get())){
             Collection<String> strings = getJsonList(received, SocketProtocol.PRIVATE_OBJ);
