@@ -28,11 +28,11 @@
         -TurnActionCommandTest
                 - Testing Turn :heavy_check_mark:
         -ToolRules
-                -Testing set 
-                -Testing random 
-                -Testing select 
-                -Testing swap
-                -Testing move 
+                -Test set :heavy_check_mark:
+                -Test random :heavy_check_mark:
+                -Test select :heavy_check_mark:
+                -Test swap :heavy_check_mark:
+                -Test move :heavy_check_mark:
     - table
         - dice
             - DiceBagTest 

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.client.view.factory.GameScreen;
-import it.polimi.ingsw.net.identifiables.StdId;
 import javafx.util.Pair;
 
 import java.io.InputStream;
@@ -170,22 +169,22 @@ public class CliGameScreen implements GameScreen {
 
     @Override
     public String getInput(Collection<String> options, String container) {
-        if(options.contains(StdId.SKIP.getId())){
+        if(options.contains("skip")){
             skip = true;
-            options.remove(StdId.SKIP.getId());
+            options.remove("skip");
         }
-        if(options.contains(StdId.UNDO.getId())){
+        if(options.contains("undo")){
             undo = true;
-            options.remove(StdId.UNDO.getId());
+            options.remove("undo");
         }
         String ret;
-        if(container.equalsIgnoreCase(StdId.POOL.getId())) {
+        if(container.equalsIgnoreCase("pool")) {
             ret = poolGetInput(options);
-        }else if (container.equalsIgnoreCase(StdId.ROUND_TRACK.getId())) {
+        }else if (container.equalsIgnoreCase("roundTrack")) {
             ret = roundTrackGetInput(options);
-        }else if (container.equalsIgnoreCase(StdId.GLASS_WINDOW.getId())) {
+        }else if (container.equalsIgnoreCase("glassWindow")) {
             ret = windowGetInput(options);
-        }else if (container.equalsIgnoreCase(StdId.TABLE.getId())) {
+        }else if (container.equalsIgnoreCase("table")) {
             ret = tableGetInput(options);
         }else{
             throw new IllegalArgumentException();
@@ -286,7 +285,7 @@ public class CliGameScreen implements GameScreen {
     @Override
     public String getInputFrom(Collection<String> strings, String message) {
         String choice;
-        printStream.println(message + " " + strings);
+        printStream.println(message + (char)27 + "[31m"+" " + strings +(char)27 + "[37m");
         choice = scanner.nextLine();
         while(!strings.contains(choice)) {
             printStream.println("Scelta non valida ");
@@ -307,10 +306,11 @@ public class CliGameScreen implements GameScreen {
         showOthersNameAndTokens();
         showOthersWindows();
         showRoundTrack();
+        printStream.println();
         if(skip)
-            printStream.println(StdId.SKIP.getId());
+            printStream.print("skip");
         if(undo)
-            printStream.println(StdId.UNDO.getId());
+            printStream.println("undo");
     }
 
     private void showNicknameAndTokensAndRound() {

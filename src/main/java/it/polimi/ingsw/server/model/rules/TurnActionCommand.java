@@ -104,6 +104,9 @@ public class TurnActionCommand implements ActionCommand{
     }
 
     private void doToolAction(Game actionReceiver) throws DieNotAllowedException {
+        if(actionReceiver.getTable().getTools().isEmpty()){
+            return;
+        }
         Identifiable toolChosen = cc.selectObject(new ArrayList<>(actionReceiver.getTable().getTools()), StdId.TABLE, false, true);
         if (toolChosen.getId().equals(UNDO.getId()))
             this.reset(actionReceiver);
@@ -130,14 +133,13 @@ public class TurnActionCommand implements ActionCommand{
      */
     public void reset(Game actionReceiver) {
         reset = true;
-        actionReceiver.getCommChannels().forEach(c -> c.updateView(player, !actionReceiver.getChannel(player.getNickname()).isOffline()));
-        actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
-        actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getRoundTrack()));
-
         actionReceiver.getTable().getRoundTrack().getMemento();
         actionReceiver.getTable().getDiceBag().getMemento();
         actionReceiver.getTable().getPool().getMemento();
         player.getMemento();
+        actionReceiver.getCommChannels().forEach(c -> c.updateView(player, !actionReceiver.getChannel(player.getNickname()).isOffline()));
+        actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
+        actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getRoundTrack()));
     }
 
     private void backUp(Game actionReceiver)  {

@@ -74,7 +74,7 @@ public class Pool implements Memento {
      * Prints the override toString of an object Pool
      */
     public void dump(){
-        System.console().writer().println(this);
+        System.out.println(this);
     }
 
     /**
