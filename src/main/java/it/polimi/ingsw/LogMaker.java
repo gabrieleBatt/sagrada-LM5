@@ -48,7 +48,6 @@ public class LogMaker {
             logger.addHandler(fh);
             logger.addHandler(ch);
         } catch (SecurityException | IOException e) {
-            System.exit(-1);
         }
         return logger;
     }

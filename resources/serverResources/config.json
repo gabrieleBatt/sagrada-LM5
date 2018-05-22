@@ -1,6 +1,6 @@
 {
   "loginTime": 10,
-  "rmiPortNumber" : 50001,
+  "rmiPortNumber" : 50011,
   "socketPortNumber": 50000,
   "timerSeconds": 1,
   "turnTime": 180,
