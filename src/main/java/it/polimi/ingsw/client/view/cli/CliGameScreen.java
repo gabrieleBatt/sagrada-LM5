@@ -169,6 +169,8 @@ public class CliGameScreen implements GameScreen {
 
     @Override
     public String getInput(Collection<String> options, String container) {
+        skip = false;
+        undo = false;
         if(options.contains("skip")){
             skip = true;
             options.remove("skip");
@@ -418,8 +420,6 @@ public class CliGameScreen implements GameScreen {
 
 
     private void clear(){
-        skip = false;
-        undo = false;
         for (int i = 0; i < 10; i++) {
             printStream.println();
         }
