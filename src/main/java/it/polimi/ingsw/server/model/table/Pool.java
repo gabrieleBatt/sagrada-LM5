@@ -92,4 +92,12 @@ public class Pool implements Memento {
     public void getMemento() {
         this.setDice(new ArrayList<>(poolMemento.peek()));
     }
+
+    /**
+     * Adds a die in Pool.
+     * @param die object Die, die to add.
+     */
+    public void addDie(Die die) {
+        this.diceOnTable.add(die);
+    }
 }

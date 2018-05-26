@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * randomly extracted from it.
  */
 public class DiceBag implements Memento{
-    private List<Die> bag;
+    private Set<Die> bag;
     private static final Logger logger = LogMaker.getLogger(DiceBag.class.getName(), Level.ALL);
     private Deque<List<Die>> diceBagMemento;
 
@@ -23,7 +23,7 @@ public class DiceBag implements Memento{
      * Creates the dice bag and all the dice in it, 18 per each color
      */
     public DiceBag(){
-       bag = new ArrayList<>();
+       bag = new HashSet<>();
        diceBagMemento = new ArrayDeque<>();
        for(int i=0; i<18; i++){
            bag.add(new Die(DieColor.RED, i));
@@ -52,15 +52,16 @@ public class DiceBag implements Memento{
 
     /**
      * Draws a die from the dice bag; removing die from the dice bag
-     * @return the die drown
+     * @return the die drown once rolled.
      */
     private Die drawDie() {
         if (bag.isEmpty()){
             throw new BagEmptyException("Dice in bag: " + bag.size()+"\nDice requested 0");
         }
         int randomNum = ThreadLocalRandom.current().nextInt(0, bag.size() );
-        Die ret = bag.get(randomNum);
-        bag.remove(randomNum);
+        Die ret = new ArrayList<>(bag).get(randomNum);
+        bag.remove(ret);
+        ret.roll();
         logger.log(Level.FINEST, "drawn "+ ret.getId(), this);
         return ret;
     }
@@ -123,6 +124,6 @@ public class DiceBag implements Memento{
      */
     @Override
     public void getMemento() {
-        this.bag = new ArrayList<>(diceBagMemento.peek());
+        this.bag = new HashSet<>(diceBagMemento.peek());
     }
 }

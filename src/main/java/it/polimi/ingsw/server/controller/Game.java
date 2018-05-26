@@ -62,6 +62,18 @@ public class Game implements Runnable {
         return rules;
     }
 
+    public Player getTurnPlayer(){
+        ActionCommand actionCommand = actionCommandList.get(0);
+        if(actionCommand instanceof TurnActionCommand){
+            return ((TurnActionCommand) actionCommand).getPlayer();
+        }
+        else throw new NoSuchElementException();
+    }
+
+    public void addAction(ActionCommand actionCommand){
+        actionCommandList.add(0, actionCommand);
+    }
+
     /**
      * Executes all action in list until empty
      */
@@ -177,4 +189,19 @@ public class Game implements Runnable {
     }
 
 
+    /**
+     * Cancels next turn of current player.
+     */
+    public void skipNextTurn() {
+        Optional<TurnActionCommand> optionalTurnActionCommand= actionCommandList
+                .stream()
+                .filter(a-> a instanceof TurnActionCommand)
+                .map(a -> (TurnActionCommand)a)
+                .filter(tac->tac
+                        .getPlayer()
+                        .equals(getTurnPlayer()))
+                .findFirst();
+        optionalTurnActionCommand
+                .ifPresent(turnActionCommand -> actionCommandList.remove(turnActionCommand));
+    }
 }

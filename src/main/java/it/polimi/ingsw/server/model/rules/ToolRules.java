@@ -19,41 +19,19 @@ public class ToolRules {
         private static final String DIE_ACTION = "IncrementareODecrementareIlDado?";
 
     /**
-     * Creates the communication channel having player to communicate with and the game state.
-     * @param actionReceiver object Game, game state.
-     * @param player object Player, player to communicate with
-     * @return object CommunicationChannel, communication channel between player and server.
-     */
-        private static CommunicationChannel getCc(Game actionReceiver, Player player) {
-            Optional<CommunicationChannel> OptionalCommunicationChannel = actionReceiver.getCommChannels()
-                    .stream()
-                    .filter(c -> c.getNickname().equals(player.getNickname()))
-                    .findFirst();
-            if(OptionalCommunicationChannel.isPresent())
-                return OptionalCommunicationChannel.get();
-            else
-                throw new NoSuchElementException();
-
-        }
-
-    /**
      * Generates the action command used to let the player choose how to modify a die.
      * @param marker String representing object Die, die to modify.
-     * @param player object Player
      * @param options List of List of Identifiable to chose from.
      * @return ActionCommand used to et the player choose how to modify a die.
      */
-        public static ActionCommand setActionCommand(String marker, Player player, List<List<Identifiable>> options){
+        public static ActionCommand setActionCommand(String marker, List<List<Identifiable>> options){
             return actionReceiver -> {
-                CommunicationChannel cc = getCc(actionReceiver,player);
+                Player player = actionReceiver.getTurnPlayer();
+                CommunicationChannel cc = actionReceiver.getChannel(player.getNickname());
                 Die die = actionReceiver.getMap().get(marker);
                 List<Identifiable> optionList = options.get(die.getNumber()-1);
                 Identifiable actionChosen = cc.chooseFrom(optionList,DIE_ACTION,false,false);
-                try {
-                    die.setNumber(Integer.parseInt(actionChosen.getId()));
-                } catch (NumberFormatException e) {
-                    throw new NumberFormatException();
-                }
+                die.setNumber(Integer.parseInt(actionChosen.getId()));
                 Game.getLogger().log(Level.FINE,"New die value: "+ die.getNumber(),die);
             };
         }
@@ -64,15 +42,11 @@ public class ToolRules {
      * @param optionList  List of possible value of die after rolling.
      * @return ActionCommand used to let the player roll a die.
      */
-        public static ActionCommand randomActionCommand(String marker, List<Identifiable> optionList){
+        public static ActionCommand randomActionCommand(String marker, List<List<Identifiable>> optionList){
             return actionReceiver -> {
-                int index = ThreadLocalRandom.current().nextInt(0, optionList.size());
                 Die die = actionReceiver.getMap().get(marker);
-                try {
-                    die.setNumber(Integer.parseInt(optionList.get(index).getId()));
-                } catch (NumberFormatException e) {
-                    throw new NumberFormatException();
-                }
+                int index = ThreadLocalRandom.current().nextInt(0, optionList.get(die.getNumber()-1).size());
+                die.setNumber(Integer.parseInt(optionList.get(die.getNumber()-1).get(index).getId()));
                 Game.getLogger().log(Level.FINE,"Dice rolled: " + die.toString(),die);
             };
         }
@@ -82,18 +56,17 @@ public class ToolRules {
      * dice container (Pool, RoundTrack, Window). It calls a method to do the actual selection
      * depending on the StdId received.
      * @param marker String, die marker.
-     * @param player Object Player, player doing selection.
      * @param stdId container identifier.
      * @return action command used to select a die.
      */
-        public static ActionCommand selectActionCommand(String marker, Player player, StdId stdId){
+        public static ActionCommand selectActionCommand(String marker, StdId stdId){
             switch (stdId){
                 case POOL:
-                    return selectFromPool(marker, player);
+                    return selectFromPool(marker);
                 case ROUND_TRACK:
-                    return  selectFromRoundTrack(marker, player);
+                    return  selectFromRoundTrack(marker);
                 case GLASS_WINDOW:
-                    return selectFromWindow(marker, player);
+                    return selectFromWindow(marker);
                 default: throw new IllegalArgumentException();
             }
         }
@@ -101,12 +74,12 @@ public class ToolRules {
     /**
      * Generates the action command used to select a die from Window.
      * @param marker String, die marker.
-     * @param player Object Player, player doing selection.
      * @return action command used to select a die from Window.
      */
-        private static ActionCommand selectFromWindow(String marker, Player player){
+        private static ActionCommand selectFromWindow(String marker){
             return actionReceiver -> {
-                CommunicationChannel cc = getCc(actionReceiver, player);
+                Player player = actionReceiver.getTurnPlayer();
+                CommunicationChannel cc = actionReceiver.getChannel(player.getNickname());
                 Identifiable cellChosen = getCellAmongProposed(player,cc);
                 if (cellChosen.getId().equals(StdId.UNDO.getId())) {
                     actionReceiver.resetTurn();
@@ -127,9 +100,10 @@ public class ToolRules {
      * @param marker String, die marker.
      * @return action command used to select a die from Pool.
      */
-    private static ActionCommand selectFromPool(String marker, Player player){
+    private static ActionCommand selectFromPool(String marker){
             return actionReceiver -> {
-                CommunicationChannel cc = getCc(actionReceiver, player);
+                Player player = actionReceiver.getTurnPlayer();
+                CommunicationChannel cc = actionReceiver.getChannel(player.getNickname());
                 Collection<Die> dieOptions = actionReceiver.getTable().getPool().getDice();
                 Identifiable dieChosen = cc.selectObject(new ArrayList<>(dieOptions), StdId.POOL, false, true);
                 if (dieChosen.getId().equals(StdId.UNDO.getId())) {
@@ -149,9 +123,10 @@ public class ToolRules {
      * @param marker String, die marker.
      * @return action command used to select a die from RoundTrack.
      */
-    private static ActionCommand selectFromRoundTrack(String marker, Player player){
+    private static ActionCommand selectFromRoundTrack(String marker){
             return actionReceiver -> {
-                CommunicationChannel cc = getCc(actionReceiver, player);
+                Player player = actionReceiver.getTurnPlayer();
+                CommunicationChannel cc = actionReceiver.getChannel(player.getNickname());
                 List<Die> dieOptions = getDiceOnRoundTrack(actionReceiver);
                 Identifiable dieChosen = cc.selectObject(new ArrayList<>(dieOptions), StdId.ROUND_TRACK, false, true);
                 if (dieChosen.getId().equals(StdId.UNDO.getId())) {
@@ -168,7 +143,6 @@ public class ToolRules {
      * Generates the action command used to swap a die. It receives a StdId identifying the
      * dice container (Pool, RoundTrack, Window). It calls a method to do the actual swapping
      * depending on the StdId received.
-     * @param player Object Player, player doing selection.
      * @param stdId container identifier.
      * @param markerDieToTake String, marker of die to take from HashMap.
      * @param dieColor DieColor, color of the die to draft.
@@ -176,41 +150,61 @@ public class ToolRules {
      * @param markerDieToSet String, marker of die to set.
      * @return action command used to swap a die.
      */
-        public static ActionCommand swapActionCommand(Optional<DieColor> dieColor, Optional<Integer> dieNumber, StdId stdId, Player player, String markerDieToTake, String markerDieToSet){
+        public static ActionCommand swapActionCommand(String dieColor, String dieNumber, StdId stdId, String markerDieToTake, String markerDieToSet){
             switch (stdId){
                 case POOL:
-                    return swapFromPool(dieColor,dieNumber,markerDieToTake,markerDieToSet, player);
+                    return swapFromPool(dieColor,dieNumber,markerDieToTake,markerDieToSet);
                 case ROUND_TRACK:
-                    return  swapFromRoundTrack(dieColor,dieNumber,markerDieToTake,markerDieToSet, player);
-                default: throw new IllegalArgumentException();
+                    return  swapFromRoundTrack(dieColor,dieNumber,markerDieToTake,markerDieToSet);
+                case DICE_BAG:
+                    return swapFromDiceBag(markerDieToSet,markerDieToTake);
+                    default: throw new IllegalArgumentException();
             }
         }
+
+    /**
+     * Generates the action command used to swap a die with another one
+     * in dice bag.
+     * @param markerDieToTake String, marker of die to take from HashMap.
+     * @param markerDieToSet String, marker of die to set.
+     * @return action command used to swap a die with another one
+     * in dice bag.
+     */
+    private static ActionCommand swapFromDiceBag(String markerDieToSet, String markerDieToTake) {
+            return actionReceiver -> {
+                Die dieToSet = actionReceiver.getMap().get(markerDieToSet);
+                actionReceiver.getTable().getDiceBag().placeDie(dieToSet);
+                Die dieToTake = actionReceiver.getTable().getDiceBag().drawDice(1).iterator().next();
+                actionReceiver.getMap().put(markerDieToTake,dieToTake);
+            };
+    }
 
     /**
      * Generates the action command used to swap a die with another one
      * on the pool.
      * @param markerDieToTake String, marker of die to take from HashMap.
      * @param markerDieToSet String, marker of die to set.
-     * @param dieColor DieColor, color of the die to draft.
-     * @param dieNumber Integer, numeric value of the die to draft.
+     * @param dieColor marker of die deciding the color.
+     * @param dieNumber marker of die deciding the number.
      * @return action command used to swap a die with another one
      * on the pool.
      */
-    private static ActionCommand swapFromPool( Optional<DieColor> dieColor, Optional<Integer> dieNumber,String markerDieToTake, String markerDieToSet, Player player) {
+    private static ActionCommand swapFromPool( String dieColor, String dieNumber,String markerDieToTake, String markerDieToSet){
         return actionReceiver -> {
-            CommunicationChannel cc = getCc(actionReceiver, player);
+            Player player = actionReceiver.getTurnPlayer();
+            CommunicationChannel cc = actionReceiver.getChannel(player.getNickname());
             List<Die> dieOptions = new ArrayList<>(actionReceiver.getTable().getPool().getDice());
-            dieOptions=filter(dieColor,dieNumber,dieOptions);
-            Identifiable dieChosen = cc.selectObject(new ArrayList<>(dieOptions), StdId.POOL, false, true);
-            if (dieChosen.getId().equals(StdId.UNDO.getId())) {
+            dieOptions = filter(actionReceiver, dieColor,dieNumber,dieOptions);
+            Identifiable idDieChosen = cc.selectObject(new ArrayList<>(dieOptions), StdId.POOL, false, true);
+            if (idDieChosen.getId().equals(StdId.UNDO.getId())) {
                 actionReceiver.resetTurn();
             }else {
-                Die die = getDieChosen(dieOptions,dieChosen);
-                Die dieToSwap = actionReceiver.getMap().get(markerDieToTake);
-                actionReceiver.getTable().getPool().swapDice(dieToSwap, die);
-                actionReceiver.getMap().put(markerDieToSet, die);
+                Die dieChosen = getDieChosen(dieOptions, idDieChosen);
+                Die dieFromMap = actionReceiver.getMap().get(markerDieToTake);
+                actionReceiver.getTable().getPool().swapDice(dieFromMap, dieChosen);
+                actionReceiver.getMap().put(markerDieToSet, dieChosen);
                 Game.getLogger().log(Level.FINE,
-                        "Switched die "+ dieToSwap +" with die "+die+" from Pool");
+                        "Switched die "+ dieFromMap +" with die "+dieChosen+" from Pool");
             }
         };
     }
@@ -220,16 +214,17 @@ public class ToolRules {
      * on the roundtrack.
      * @param markerDieToTake String, marker of die to take from HashMap.
      * @param markerDieToSet String, marker of die to set.
-     * @param dieColor DieColor, color of the die to draft.
-     * @param dieNumber Integer, numeric value of the die to draft.
+     * @param dieColor marker of die deciding the color.
+     * @param dieNumber marker of die deciding the number.
      * @return action command used to swap a die with another one
      * on the roundtrack.
      */
-    private static ActionCommand swapFromRoundTrack( Optional<DieColor> dieColor, Optional<Integer> dieNumber,String markerDieToTake, String markerDieToSet, Player player) {
+    private static ActionCommand swapFromRoundTrack( String dieColor, String dieNumber,String markerDieToTake, String markerDieToSet){
         return actionReceiver -> {
-            CommunicationChannel cc = getCc(actionReceiver, player);
+            Player player = actionReceiver.getTurnPlayer();
+            CommunicationChannel cc = actionReceiver.getChannel(player.getNickname());
             List<Die> dieOptions = getDiceOnRoundTrack(actionReceiver);
-            dieOptions=filter(dieColor,dieNumber,dieOptions);
+            dieOptions = filter(actionReceiver, dieColor,dieNumber,dieOptions);
             Identifiable dieChosen = cc.selectObject(new ArrayList<>(dieOptions), StdId.ROUND_TRACK, false, true);
             if (dieChosen.getId().equals(StdId.UNDO.getId())) {
                 actionReceiver.resetTurn();
@@ -272,27 +267,27 @@ public class ToolRules {
 
     /**
      *enerates the action command used to move a die on the window.
-     * @param dieColor DieColor, color of the die to draft.
-     * @param dieNumber Integer, numeric value of the die to draft.
+     * @param dieColor marker of die deciding the color.
+     * @param dieNumber marker of die deciding the number.
      * @param ignoreColorRestriction Boolean, true if color restriction has to be ignored.
      * @param ignoreNumberRestriction Boolean, true if number restriction has to be ignored.
      * @param ignoreSurroundingRestriction Boolean, true if surrounding restriction has to be ignored.
-     * @param player Object Player, player.
      * @return action command used to move a die on the window.
      */
-    public static ActionCommand moveActionCommand( Optional<DieColor> dieColor, Optional<Integer> dieNumber, Boolean ignoreColorRestriction, Boolean ignoreNumberRestriction, Boolean ignoreSurroundingRestriction, Player player){
+    public static ActionCommand moveActionCommand( String dieColor, String dieNumber, Boolean ignoreColorRestriction, Boolean ignoreNumberRestriction, Boolean ignoreSurroundingRestriction, Boolean canSkip){
         return actionReceiver -> {
-            CommunicationChannel cc = getCc(actionReceiver,player);
+            Player player = actionReceiver.getTurnPlayer();
+            CommunicationChannel cc = actionReceiver.getChannel(player.getNickname());
             List<Die> dieOptions = player.getGlassWindow().getCellList()
                     .stream()
                     .filter(Cell::isOccupied)
                     .map(Cell::getDie)
                     .collect(Collectors.toList());
-            dieOptions=filter(dieColor,dieNumber,dieOptions);
-            Identifiable dieChosen = cc.selectObject(new ArrayList<>(dieOptions), StdId.GLASS_WINDOW, false, true);
+            dieOptions = filter(actionReceiver, dieColor,dieNumber,dieOptions);
+            Identifiable dieChosen = cc.selectObject(new ArrayList<>(dieOptions), StdId.GLASS_WINDOW, canSkip, true);
             if (dieChosen.getId().equals(StdId.UNDO.getId())) {
                 actionReceiver.resetTurn();
-            }else {
+            }else if(!dieChosen.getId().equals(StdId.SKIP.getId())){
                 Die die = getDieChosen(dieOptions,dieChosen);
                 List<Cell> cellList = (List<Cell>)player.getGlassWindow().availableCells(die,ignoreSurroundingRestriction);
                 cellList.remove(player.getGlassWindow().getCellByDie(die.getId()));
@@ -321,18 +316,25 @@ public class ToolRules {
         };
     }
 
-    /**
-     *  Filters a die list having color and number restriction.
-     * @param dieColor DieColor, color of the die to draft.
-     * @param dieNumber Integer, numeric value of the die to draft.
-     * @param dieOptions List of Die.
-     * @return List of Die filtered.
-     */
-    private static List<Die> filter(Optional<DieColor> dieColor, Optional<Integer> dieNumber, List<Die> dieOptions){
-        if(dieColor.isPresent())
-            dieOptions = dieOptions.stream().filter(d -> Optional.of(d.getColor()).equals(dieColor)).collect(Collectors.toList());
-        if(dieNumber.isPresent())
-            dieOptions = dieOptions.stream().filter(d->Optional.of(d.getNumber()) == dieNumber).collect(Collectors.toList());
+    private static List<Die> filter(Game actionReceiver, String dieColor, String dieNumber, List<Die> dieOptions){
+        if(actionReceiver.getMap().containsKey(dieColor))
+            dieOptions = dieOptions
+                    .stream()
+                    .filter(d -> d.getColor()
+                            .equals(actionReceiver
+                                    .getMap()
+                                    .get(dieColor)
+                                    .getColor()))
+                    .collect(Collectors.toList());
+        if(actionReceiver.getMap().containsKey(dieNumber))
+            dieOptions = dieOptions
+                    .stream()
+                    .filter(d -> d.getNumber() ==
+                            (actionReceiver
+                                    .getMap()
+                                    .get(dieNumber)
+                                    .getNumber()))
+                    .collect(Collectors.toList());
         return dieOptions;
     }
 

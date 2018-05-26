@@ -78,8 +78,10 @@ public class RoundTrack implements Memento {
      */
     public List<List<Die>> getCollections (){
         List<List<Die>> dieList = new ArrayList<>();
-        for(int i = 1; i<10; i++)
-            dieList.get(i).addAll(dice.get(i));
+        for(int i = 1; i<getRound(); i++) {
+            dieList.add(new ArrayList<>());
+            dieList.get(i - 1).addAll(getDice(i));
+        }
         return dieList;
     }
 

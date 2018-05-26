@@ -48,6 +48,8 @@ public class TurnActionCommand implements ActionCommand{
         Timer timer = new Timer();
         startTimer(timer);
         backUp(actionReceiver);
+        List<Identifiable> options;
+        Identifiable actionChosen;
         do {
             reset = false;
             skip = false;
@@ -56,16 +58,19 @@ public class TurnActionCommand implements ActionCommand{
                     .filter(c -> c.getNickname().equals(player.getNickname()))
                     .findFirst()
                     .ifPresent(communicationChannel -> cc = communicationChannel);
-            List<Identifiable> options = new ArrayList<>();
+            options = new ArrayList<>();
             options.add(DRAFT);
             options.add(USE_TOOL);
 
             //choose first action
-            Identifiable actionChosen = cc.chooseFrom(options, NEXT_MOVE, true, false);
-            doActionChosen(actionChosen,actionReceiver);
-
+            actionChosen = cc.chooseFrom(options, NEXT_MOVE, true, false);
+            doActionChosen(actionChosen, actionReceiver);
+        }while(reset);
+        backUp(actionReceiver);
+        do{
+            reset = false;
             //choose second action
-            if(!reset && !skip) {
+            if(!skip) {
                 options.remove(actionChosen);
                 actionChosen = cc.chooseFrom(options, NEXT_MOVE, true, true);
                 doActionChosen(actionChosen, actionReceiver);
@@ -91,9 +96,9 @@ public class TurnActionCommand implements ActionCommand{
             doToolAction(actionReceiver);
 
         }else if(actionChosen.getId().equals(DRAFT.getId())) {
-            actionReceiver.getRules().getDraftAction("dieChosen", Optional.empty(), Optional.empty(), player).execute(actionReceiver);
+            actionReceiver.getRules().getDraftAction("dieChosen", null, null).execute(actionReceiver);
             if (!reset)
-                actionReceiver.getRules().getPlaceAction("dieChosen", true, true, true, player).execute(actionReceiver);
+                actionReceiver.getRules().getPlaceAction("dieChosen", true, true, true,false).execute(actionReceiver);
 
         }else if(actionChosen.getId().equals(SKIP.getId())) {
             skip = true;
@@ -126,6 +131,9 @@ public class TurnActionCommand implements ActionCommand{
         }
     }
 
+    public Player getPlayer() {
+        return player;
+    }
 
     /**
      * Resets the turn to the start or to the last checkpoint action (es. reRolling)

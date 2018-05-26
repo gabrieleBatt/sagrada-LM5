@@ -219,14 +219,14 @@ public class DefaultRules implements Rules {
     /**
      * Gets the list of draft actions.
      * @param marker String, marker of the die drafted.
-     * @param dieColor DieColor, color of the die to draft.
-     * @param dieNumber Integer, numeric value of the die to draft.
-     * @param player Player, the one who drafts a die.
+     * @param dieColor marker of die deciding the color.
+     * @param dieNumber marker of die deciding the number.
      * @return list of draft actions.
      */
     @Override
-    public ActionCommand getDraftAction(String marker, Optional<DieColor> dieColor, Optional<Integer> dieNumber, Player player) {
+    public ActionCommand getDraftAction(String marker, String dieColor, String dieNumber) {
         return actionReceiver -> {
+            Player player = actionReceiver.getTurnPlayer();
             //finds channel to communicate with
             CommunicationChannel cc = actionReceiver.getCommChannels()
                     .stream()
@@ -235,11 +235,24 @@ public class DefaultRules implements Rules {
 
             //make options
             List<Die> dieOptions = new ArrayList<>(actionReceiver.getTable().getPool().getDice());
-            if(dieColor.isPresent())
-                dieOptions = dieOptions.stream().filter(d -> Optional.of(d.getColor()).equals(dieColor)).collect(Collectors.toList());
-            if(dieNumber.isPresent())
-                dieOptions = dieOptions.stream().filter(d->Optional.of(d.getNumber()) == dieNumber).collect(Collectors.toList());
-
+            if(actionReceiver.getMap().containsKey(dieColor))
+                dieOptions = dieOptions
+                        .stream()
+                        .filter(d -> d.getColor()
+                                .equals(actionReceiver
+                                        .getMap()
+                                        .get(dieColor)
+                                        .getColor()))
+                        .collect(Collectors.toList());
+            if(actionReceiver.getMap().containsKey(dieNumber))
+                dieOptions = dieOptions
+                        .stream()
+                        .filter(d -> d.getNumber() ==
+                                (actionReceiver
+                                        .getMap()
+                                        .get(dieNumber)
+                                        .getNumber()))
+                        .collect(Collectors.toList());
             //act on answer
             Optional<Die> optionalDie = Optional.empty();
             Identifiable dieChosen = cc.selectObject(new ArrayList<>(dieOptions), StdId.POOL, false, true);
@@ -275,13 +288,13 @@ public class DefaultRules implements Rules {
      * @param marker String, marker of the die placed.
      * @param adjacencyRestriction boolean, true if there are adjacency restrictions.
      * @param coloRestriction boolean, true if there are color restrictions.
-     * @param numberRestriction boolean, true if there are numeric restrictions.
-     * @param player Player, the one who places a die.
+     * @param numberRestriction boolean, true if there are numeric restrictions
      * @return list of place actions.
      */
     @Override
-    public ActionCommand getPlaceAction(String marker, boolean adjacencyRestriction, boolean coloRestriction, boolean numberRestriction, Player player) {
+    public ActionCommand getPlaceAction(String marker, boolean adjacencyRestriction, boolean coloRestriction, boolean numberRestriction, boolean forced) {
         return actionReceiver -> {
+            Player player = actionReceiver.getTurnPlayer();
             //finds channel to communicate with
             CommunicationChannel cc = actionReceiver.getCommChannels()
                     .stream()
@@ -298,24 +311,27 @@ public class DefaultRules implements Rules {
                     .filter(c -> c.isAllowed(die.getNumber()) || !numberRestriction)
                     .collect(Collectors.toList());
 
-            //act on answer
-            Identifiable positionChosen = cc.selectObject(new ArrayList<>(cells), StdId.GLASS_WINDOW, false,true);
-            if (positionChosen.getId().equals(StdId.UNDO.getId())) {
-                actionReceiver.resetTurn();
-            }else {
-                player.getGlassWindow().getCellList().stream()
-                        .filter(c -> c.getId().equals(positionChosen.getId())).findFirst().get()
-                        .placeDie(die, (coloRestriction||numberRestriction));
+            if(forced && cells.isEmpty())
+                actionReceiver.getTable().getPool().addDie(die);
+            else {
+                //act on answer
+                Identifiable positionChosen = cc.selectObject(new ArrayList<>(cells), StdId.GLASS_WINDOW, false, !forced);
+                if (positionChosen.getId().equals(StdId.UNDO.getId())) {
+                    actionReceiver.resetTurn();
+                } else {
+                    player.getGlassWindow().getCellList().stream()
+                            .filter(c -> c.getId().equals(positionChosen.getId())).findFirst().get()
+                            .placeDie(die, (coloRestriction || numberRestriction));
+                }
+                actionReceiver
+                        .getCommChannels()
+                        .forEach(c -> c
+                                .updateView(player, !actionReceiver
+                                        .getChannel(player.getNickname())
+                                        .isOffline()));
+                actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
+                Game.getLogger().log(Level.FINE, "Placed die " + die.toString() + " from " + positionChosen, this);
             }
-            actionReceiver
-                    .getCommChannels()
-                    .forEach(c -> c
-                            .updateView(player, !actionReceiver
-                                    .getChannel(player.getNickname())
-                                    .isOffline()));
-            actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getPool()));
-            Game.getLogger().log(Level.FINE,"Placed die "+ die.toString() + " from "+ positionChosen, this);
-
         };
     }
 }

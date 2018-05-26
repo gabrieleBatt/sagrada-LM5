@@ -54,7 +54,7 @@ public class Player implements Memento {
     public GlassWindow getGlassWindow(){
         if(glassWindow.isPresent())
             return glassWindow.get();
-        else throw new NoSuchElementException("The player"+ this.nickname +"hasn't a glasswindow");
+        else throw new NoSuchElementException("The player"+ this.nickname +" doesn't have a glasswindow");
     }
 
     /**
