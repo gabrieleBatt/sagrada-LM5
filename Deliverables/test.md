@@ -32,14 +32,16 @@
                     - Give public objectives :heavy_check_mark:
                     - Testing round actions :heavy_check_mark:
                     - Testing end game action :heavy_check_mark:
-            -TurnActionCommandTest
+            - TurnActionCommandTest
                     - Testing Turn :heavy_check_mark:
-            -ToolRules
-                    -Test set :heavy_check_mark:
-                    -Test random :heavy_check_mark:
-                    -Test select :heavy_check_mark:
-                    -Test swap :heavy_check_mark:
-                    -Test move :heavy_check_mark:
+            - ToolRules
+                    - Test set :heavy_check_mark:
+                    - Test random :heavy_check_mark:
+                    - Test select :heavy_check_mark:
+                    - Test move :heavy_check_mark:
+                    - Testing swap from DiceBag :heavy_check_mark:
+                    - Testing swap from Pool :heavy_check_mark:
+                    - Testing swap from RoundTrack :heavy_check_mark:
         - table
             - dice
                 - DiceBagTest 
@@ -92,6 +94,8 @@
                 - Get tool name :heavy_check_mark:
                 - Get tool action :heavy_check_mark:
                 - Use tool :heavy_check_mark:
+            - ToolDeckTest
+                - Draw tool card :heavy_check_mark:
     
     - controller
         - UserDatabaseTest
