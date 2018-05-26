@@ -1,28 +1,23 @@
 {
   "name": "TapWheel",
   "conditions":["withDrafting"],
-  "actions":2,
+  "toolColor": "R",
+  "actions":3,
   "action1": {
     "type": "select",
-    "from": "RoundTrack",
-    "marker": "d1",
-    "color": "ANY",
-    "number": "ANY"
+    "from": "roundTrack",
+    "marker": "d1"
   },
   "action2": {
     "type": "move",
-    "move": 2,
-    "move1": {
-      "marker": "d2",
-      "color": "d1",
-      "number": "ANY",
-      "restriction": ["CLOSE", "NUMBER", "COLOR"]
-    },
-    "move2": {
-      "marker": "d3",
-      "color": "d1",
-      "number": "ANY",
-      "restriction": ["CLOSE", "NUMBER", "COLOR"]
-    }
+    "marker": "d2",
+    "color": "d1",
+    "restriction": ["CLOSE", "NUMBER", "COLOR"]
+  },
+  "action3": {
+    "type": "move",
+    "marker": "d3",
+    "color": "d1",
+    "restriction": ["CLOSE", "NUMBER", "COLOR"]
   }
 }

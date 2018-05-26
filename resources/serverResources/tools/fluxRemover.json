@@ -1,17 +1,17 @@
 {
   "name": "FluxRemover",
-  "conditions":["beforeDrafting"],
+  "conditions":["cancelDrafting"],
   "actions":4,
+  "toolColor": "M",
   "action1": {
     "type": "draft",
-    "marker": "d1",
-    "color": "ANY",
-    "number": "ANY"
+    "marker": "d1"
   },
   "action2": {
     "type": "swap",
-    "with": "DiceBag",
-    "marker": "d1"
+    "with": "diceBag",
+    "markerInContainer": "d1",
+    "markerInMap": "d1"
   },
   "action3": {
     "type": "set",
@@ -23,7 +23,7 @@
     "set5": [1, 2, 3, 4, 5, 6],
     "set6": [1, 2, 3, 4, 5, 6]
   },
-  "action3": {
+  "action4": {
     "type": "place",
     "marker": "d1",
     "restriction":["CLOSE", "COLOR", "NUMBER"]

@@ -1,12 +1,11 @@
 {
   "name": "GrozingPliers",
-  "conditions":["beforeDrafting"],
+  "conditions":["cancelDrafting"],
+  "toolColor": "M",
   "actions":3,
   "action1": {
     "type": "draft",
-    "marker": "d1",
-    "color": "ANY",
-    "number": "ANY"
+    "marker": "d1"
   },
   "action2": {
     "type": "set",

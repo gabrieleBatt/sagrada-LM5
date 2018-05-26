@@ -1,17 +1,16 @@
 {
   "name": "Lathekin",
   "conditions":["withDrafting"],
-  "actions":1,
+  "toolColor": "Y",
+  "actions":2,
   "action1": {
     "type": "move",
-    "move": 2,
-    "move1": {
-      "marker": "d1",
-      "restriction":["CLOSE", "NUMBER", "COLOR"]
-    },
-    "move2": {
-      "marker": "d2",
-      "restriction":["CLOSE", "NUMBER", "COLOR"]
-    }
+    "marker": "d1",
+    "restriction":["CLOSE", "NUMBER", "COLOR"]
+  },
+  "action2": {
+    "type": "move",
+    "marker": "d2",
+    "restriction":["CLOSE", "NUMBER", "COLOR"]
   }
 }

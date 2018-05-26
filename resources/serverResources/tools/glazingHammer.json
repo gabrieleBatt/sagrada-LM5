@@ -1,8 +1,9 @@
 {
   "name": "GlazingHammer",
   "conditions":["beforeDrafting" , "secondTurn"],
+  "toolColor": "C",
   "actions":1,
   "action1": {
-    "type": "rollPoll"
+    "type": "rollPool"
   }
 }

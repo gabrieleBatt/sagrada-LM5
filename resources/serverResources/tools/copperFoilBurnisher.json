@@ -1,6 +1,7 @@
 {
   "name": "CopperFoilBurnisher",
   "conditions": ["withDrafting"],
+  "toolColor": "R",
   "actions":1,
   "action1": {
     "type": "move",

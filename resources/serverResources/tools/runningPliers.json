@@ -1,16 +1,19 @@
 {
   "name": "RunningPliers",
-  "conditions":["firstTurn" , "skipNextTurn" , "withDrafting"],
-  "actions":2,
+  "conditions":["firstTurn" , "withDrafting"],
+  "skipTurn" : true,
+  "toolColor": "R",
+  "actions":3,
   "action1": {
     "type": "draft",
-    "marker": "d1",
-    "color": "ANY",
-    "number": "ANY"
+    "marker": "d1"
   },
   "action2": {
     "type": "place",
     "marker": "d1",
     "restriction":["CLOSE", "COLOR", "NUMBER"]
+  },
+  "action3": {
+    "type": "skipNextTurn"
   }
 }
