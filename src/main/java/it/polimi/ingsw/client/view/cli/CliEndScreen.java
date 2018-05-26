@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.cli;
 
+import it.polimi.ingsw.client.view.EndGameInfo;
 import it.polimi.ingsw.client.view.factory.EndScreen;
 import javafx.util.Pair;
 
@@ -21,10 +22,11 @@ public class CliEndScreen implements EndScreen {
     }
 
     /**
-     * Shows final LeaderBoard receiving as parameter a list of pairs <String,Integer>.
-     * @param ranking List of pairs <String,Integer>, respectively Nickname and score of a player.
+     * Shows final LeaderBoard
+     * @param endGameInfo info to show at end of game
      */
-    public void showRanking(List<Pair<String,Integer>> ranking){
+    public void showRanking(EndGameInfo endGameInfo){
+        List<Pair<String,Integer>> ranking = endGameInfo.getRanking();
         clearScreen();
         printStream.println("La classifica finale è:\n\n");
         ranking.forEach(p->printStream.println(p.getKey()+": "+p.getValue()+"\n"));

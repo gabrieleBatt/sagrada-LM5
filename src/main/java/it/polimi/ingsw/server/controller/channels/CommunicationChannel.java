@@ -105,13 +105,13 @@ public abstract class CommunicationChannel{
     public abstract void updateView(RoundTrack roundTrack);
 
     /**
-     * Updates any change in the cards.
+     * Updates any change in the public cards(objectives and tools) and the name of the players.
      * @param table
      */
     public abstract void updateView(Table table);
 
     /**
-     * Updates any change in the player and their glasswindow.
+     * Updates any change in the player and their glassWindow.
      * @param connected true if player is still connected
      * @param player player to update
      */

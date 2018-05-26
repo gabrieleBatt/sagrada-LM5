@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.cli;
 
+import it.polimi.ingsw.client.view.EndGameInfo;
 import it.polimi.ingsw.client.view.factory.GameScreen;
 import javafx.util.Pair;
 import org.junit.jupiter.api.Assertions;
@@ -35,7 +36,8 @@ class CliEndScreenTest {
         ranking.add(new Pair<>("player3",39));
         ranking.add(new Pair<>("player2",32));
         ranking.add(new Pair<>("player4",30));
-        cliEndScreen.showRanking(ranking);
+        EndGameInfo endGameInfo = new EndGameInfo(ranking);
+        cliEndScreen.showRanking(endGameInfo);
         cliEndScreen.playAgain();
 
         Scanner scanner1 = new Scanner(new FileInputStream(fileOut));

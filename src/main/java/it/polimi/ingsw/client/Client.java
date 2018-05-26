@@ -1,11 +1,15 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.client.view.EndGameInfo;
 import it.polimi.ingsw.client.view.LoginInfo;
-import it.polimi.ingsw.client.view.factory.CliViewFactory;
-import it.polimi.ingsw.client.view.factory.GuiViewFactory;
-import it.polimi.ingsw.client.view.factory.ViewAbstractFactory;
+import it.polimi.ingsw.client.view.factory.*;
+import org.json.simple.parser.ParseException;
 
+import javax.security.auth.login.LoginException;
+import java.io.IOException;
+import java.sql.Connection;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,13 +30,29 @@ public class Client {
             factory = new CliViewFactory();
         }
 
-        LoginInfo loginInfo = factory.makeConnectionScreen().getConnectionInfo();
+        ConnectionScreen connectionScreen = factory.makeConnectionScreen();
+        GameScreen gameScreen = factory.makeGameScreen();
+        EndScreen endScreen = factory.makeEndScreen();
 
-        if(loginInfo.connectionType.equalsIgnoreCase("Socket")){
-            new SocketManager(loginInfo, factory.makeGameScreen()).run();
-        }else{
-            new RmiManager(loginInfo);
+        LoginInfo loginInfo = connectionScreen.getConnectionInfo();
+
+        Optional<EndGameInfo> endGameInfo = Optional.empty();
+        while (!endGameInfo.isPresent()) {
+            if (loginInfo.connectionType.equalsIgnoreCase("Socket")) {
+                try {
+                    SocketManager socketManager = new SocketManager(loginInfo, gameScreen);
+                    if (socketManager.login()) {
+                        endGameInfo = Optional.of(socketManager.run());
+                    }
+                } catch (IOException | ParseException e) {
+                    //TODO
+                    //reconnection
+                }
+            }else {
+                new RmiManager(loginInfo);
+            }
         }
+        endScreen.showRanking(endGameInfo.get());
     }
 
     public static void lostConnection() {

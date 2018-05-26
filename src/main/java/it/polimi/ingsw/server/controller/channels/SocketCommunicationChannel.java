@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 public class SocketCommunicationChannel extends CommunicationChannel {
 
     private static final Logger logger = LogMaker.getLogger(SocketCommunicationChannel.class.getName(), Level.ALL);
+    private static long pingTimeout;
     private final Socket socket;
     private final String nickname;
     private final BufferedReader in;
@@ -39,6 +40,15 @@ public class SocketCommunicationChannel extends CommunicationChannel {
     private boolean connected;
 
 
+    static {
+        JSONObject config;
+        try {
+            config = (JSONObject)new JSONParser().parse(new FileReader(new File("resources/ServerResources/config.json")));
+            pingTimeout = (long)config.get("pingTimeout");
+        } catch (ParseException | IOException e) {
+            pingTimeout = 5;
+        }
+    }
 
     /**
      * Creates a new SocketCommChannel communicating with a single client
@@ -53,6 +63,21 @@ public class SocketCommunicationChannel extends CommunicationChannel {
         this.nickname = nickname;
         this.in = in;
         this.out = out;
+        pingUntilConnected(pingTimeout);
+    }
+
+    private void pingUntilConnected(long timeout){
+        new Thread(() -> {
+            while (connected) {
+                try {
+                    if (!socket.getInetAddress().isReachable(Math.toIntExact(timeout))) {
+                        disconnect();
+                    }
+                } catch (Exception e) {
+                    disconnect();
+                }
+            }
+        });
     }
 
 
