@@ -20,7 +20,8 @@ class ToolTest {
         List<ActionCommand> acl = new ArrayList<>();
         actionCommand = actionReceiver -> {};
         acl.add(actionCommand);
-        tool = new Tool(acl, "test");
+        List<ToolConditions> toolConditions = new ArrayList<>();
+        tool = new Tool(acl, "test", toolConditions);
     }
 
     @DisplayName("Get tool name")

@@ -4,7 +4,9 @@ import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
 import it.polimi.ingsw.server.controller.channels.MockCommunicationChannel;
 import it.polimi.ingsw.server.exception.*;
+import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.glasswindow.Cell;
+import it.polimi.ingsw.server.model.table.glasswindow.GlassWindowDeck;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +27,9 @@ class TurnActionCommandTest {
         ccl.add(new MockCommunicationChannel("p1"));
         ccl.add(new MockCommunicationChannel("p2"));
         game = new Game(ccl);
+        Player player = new Player("p1");
+        player.setGlassWindow(GlassWindowDeck.getGlassWindowDeck().draw(1).get(0));
+        game.addAction(new TurnActionCommand(player));
     }
 
     @DisplayName("Testing turn")
