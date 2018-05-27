@@ -27,7 +27,6 @@ public class Game implements Runnable {
     private final Rules rules;
     private List<Pair<Player,Integer>> ranking;
 
-    //TODO--missing effects
 
     public Game(Collection<CommunicationChannel> commChannels){
         this.rules = DefaultRules.getDefaultRules();

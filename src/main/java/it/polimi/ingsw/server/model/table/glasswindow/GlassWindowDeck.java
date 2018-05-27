@@ -32,7 +32,7 @@ public class GlassWindowDeck implements Deck {
 
     private GlassWindowDeck(){
         glassWindowCards = new ArrayList<>();
-        Path path = Paths.get("resources/ServerResources/glasswindow");
+        Path path = Paths.get("resources/serverResources/glassWindows");
         try (Stream<Path> files = Files.list(path)){
             files.forEach(f -> addCard(f.toFile()));
         } catch (IOException e) {

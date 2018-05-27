@@ -80,7 +80,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
         }
         while (!Thread.interrupted()) {
             try (ServerSocket serverSocket = new ServerSocket(socketPortNumber)) {
-                logger.log(Level.CONFIG, "Socket server ready");
+                logger.log(Level.CONFIG, "Socket server ready on port: " + socketPortNumber);
                 Socket clientSocket = serverSocket.accept();
                 new Thread(() -> socketLogin(clientSocket)).start();
             } catch (IOException e) {

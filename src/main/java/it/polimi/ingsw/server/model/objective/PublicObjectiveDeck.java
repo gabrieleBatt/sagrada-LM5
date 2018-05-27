@@ -29,7 +29,7 @@ public class PublicObjectiveDeck implements Deck {
 
     private PublicObjectiveDeck(){
         publicObjectives = new ArrayList<>();
-        Path path = Paths.get("resources/ServerResources/objectives/public");
+        Path path = Paths.get("resources/serverResources/objectives/public");
         try (Stream<Path> files = Files.list(path)){
             files.forEach(f -> addCard(f.toFile()));
         } catch (IOException e) {

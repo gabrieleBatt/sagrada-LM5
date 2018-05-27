@@ -3,7 +3,13 @@ package it.polimi.ingsw.client.view.cli;
 import it.polimi.ingsw.client.view.factory.GameScreen;
 import it.polimi.ingsw.server.model.table.Player;
 import javafx.util.Pair;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.*;
@@ -11,6 +17,9 @@ import java.util.stream.Collectors;
 
 public class CliGameScreen implements GameScreen {
 
+    private static final String TOOL_PATH = "resources/clientResources/tools/";
+    private static final String GLASS_WINDOW_PATH = "resources/clientResources/glassWindows/";
+    private static final String OBJECTIVE_PATH = "resources/clientResources/objectives/";
     private Scanner scanner;
     private final PrintStream printStream;
     private Collection<String> privateObjectives;
@@ -58,12 +67,14 @@ public class CliGameScreen implements GameScreen {
             cells = new Cell[20];
             for (int i = 0; i < 20; i++) {
                 cells[i] = new Cell();
-                cells[i].content = "  ";
+                cells[i].content = " ";
+                cells[i].restriction = " ";
             }
         }
     }
     private class Cell{
         String content;
+        String restriction;
         boolean active;
     }
 
@@ -143,7 +154,16 @@ public class CliGameScreen implements GameScreen {
         for(PlayerClass p: playersList ){
             if(p.nickname.equals(nickname))
                 p.glassWindow.windowName = windowName;
-
+            try {
+                JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(GLASS_WINDOW_PATH+windowName+".json"));
+                List<String> restrictions = new ArrayList<>((JSONArray)jsonObject.get("cells"));
+                System.out.println(restrictions);
+                for (int i = 0; i < 20; i++) {
+                    p.glassWindow.cells[i].restriction = restrictions.get(i);
+                }
+            } catch (IOException | ParseException e) {
+                printStream.println("Window not found");
+            }
         }
     }
 
@@ -341,8 +361,9 @@ public class CliGameScreen implements GameScreen {
 
     private void showPrivateObjective() {
         printStream.print("Obbiettivo privato: ");
+        printStream.print("\n");
         for (String privateObjective : privateObjectives) {
-            printStream.print(privateObjective+"\t");
+            showObjective(privateObjective);
         }
         printStream.println();
 
@@ -352,7 +373,11 @@ public class CliGameScreen implements GameScreen {
         for (int x = 0; x <4 ; x++){
             for (int y = 0; y < 5 ; y++){
                 Cell c = playersList.get(0).glassWindow.cells[x*5+y];
-                printActive(c.active, "[" + c.content.substring(0,2) + "]");
+                if(c.content.equals(" ")) {
+                    printActive(c.active, "[" + c.restriction + "]");
+                }else{
+                    printActive(c.active, c.content.charAt(0) + " " + c.content.charAt(1));
+                }
             }
             printStream.print("\n");
         }
@@ -374,10 +399,21 @@ public class CliGameScreen implements GameScreen {
 
     private void showPublicObjectives() {
         printStream.print("Obbiettivi pubblici: ");
+        printStream.print("\n");
         for (String publicObjective : publicObjectives) {
-            printStream.print(publicObjective+ "\t");
+            showObjective(publicObjective);
         }
         printStream.print("\n");
+    }
+
+    private void showObjective(String name){
+        try {
+            JSONObject jsonObject = ((JSONObject) new JSONParser().parse(new FileReader(OBJECTIVE_PATH+name+".json")));
+            printStream.print(jsonObject.get("name").toString() + ",\tpunti:" + jsonObject.get("points"));
+            printStream.println(",\t" + jsonObject.get("description"));
+        } catch (IOException | ParseException e) {
+            printStream.println("Objective not found");
+        }
     }
 
     private void showPool() {
@@ -389,13 +425,20 @@ public class CliGameScreen implements GameScreen {
     }
 
     private void showTools() {
-        printStream.print("Strumenti: " + "\t");
+        printStream.print("Strumenti: " + "\n");
          for(ToolClass tool: toolsList) {
-             printActive(tool.active, tool.toolName);
-             if (tool.used) {
-                printStream.print("[2]  ");
-             }else
-                 printStream.print("[1]  ");
+             try {
+                 if (tool.used) {
+                     printStream.print("[2]  ");
+                 }else
+                     printStream.print("[1]  ");
+                 JSONObject jsonObject = ((JSONObject) new JSONParser().parse(new FileReader(TOOL_PATH+tool.toolName+".json")));
+                 printActive(tool.active, jsonObject.get("name").toString());
+                 printStream.print("\t" + jsonObject.get("description"));
+             } catch (IOException | ParseException e) {
+                 printStream.print("Tool not found");
+             }
+             printStream.println();
          }
         printStream.println();
     }
@@ -404,7 +447,7 @@ public class CliGameScreen implements GameScreen {
         printStream.println("\n");
         for (PlayerClass p: playersList.subList(1,playersList.size())){
             StringBuilder s = new StringBuilder();
-            for (int i = 0; i < 35; i++) {
+            for (int i = 0; i < 38; i++) {
                 s.append(" ");
             }
             String ins = p.nickname + " Favori:" + p.tokens;
@@ -412,7 +455,7 @@ public class CliGameScreen implements GameScreen {
                 ins = ins + " connesso";
             else
                 ins = ins + " disconnesso";
-            s.insert(0, ins);
+            s.replace(0, ins.length(), ins);
             printStream.print(s);
         }
         printStream.print("\n");
@@ -423,8 +466,11 @@ public class CliGameScreen implements GameScreen {
             for (PlayerClass p : playersList.subList(1, playersList.size())) {
                 for (int y = 0; y < 5; y++) {
                     Cell c = p.glassWindow.cells[x * 5 + y];
-                    printActive(c.active, "[" + c.content.substring(0, 2) + "]");
-                }
+                    if(c.content.equals(" ")) {
+                        printActive(c.active, "[" + c.restriction + "]");
+                    }else{
+                        printActive(c.active, c.content.charAt(0) + " " + c.content.charAt(1));
+                    }}
                 printStream.print("\t" + "\t" + " ");
             }
             printStream.println();
@@ -450,23 +496,6 @@ public class CliGameScreen implements GameScreen {
             printStream.println();
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 

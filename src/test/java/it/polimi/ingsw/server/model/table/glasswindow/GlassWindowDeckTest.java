@@ -27,7 +27,7 @@ class GlassWindowDeckTest {
     void drawRealTest(){
         List<GlassWindow> cards = GlassWindowDeck.getGlassWindowDeck().draw(12);
 
-        GlassWindow glassWindow = cards.stream().filter(d -> d.getName().equals("Industria")).findFirst().get();
+        GlassWindow glassWindow = cards.stream().filter(d -> d.getName().equalsIgnoreCase("Industria")).findFirst().get();
         Assertions.assertEquals(glassWindow.getDifficulty(), 5);
         Assertions.assertEquals(glassWindow.getCell(0,0).toString(), "This cell:has a number restriction:1,is empty");
         Assertions.assertEquals(glassWindow.getCell(0,1).toString(), "This cell:has a color restriction:R,is empty");

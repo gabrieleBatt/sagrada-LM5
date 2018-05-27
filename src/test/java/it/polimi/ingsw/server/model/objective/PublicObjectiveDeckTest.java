@@ -31,7 +31,7 @@ class PublicObjectiveDeckTest {
     void parseTest1() throws DieNotAllowedException {
         List<PublicObjective> cards = PublicObjectiveDeck.getPublicObjectiveDeck().draw(10);
 
-        PublicObjective publicObjective = cards.stream().filter(d -> d.getName().equals("ColumnColorVariety")).findFirst().get();
+        PublicObjective publicObjective = cards.stream().filter(d -> d.getName().equalsIgnoreCase("ColumnColorVariety")).findFirst().get();
 
         List<Cell> cells = new ArrayList<>();
 
@@ -61,7 +61,7 @@ class PublicObjectiveDeckTest {
     void parseTest2() throws DieNotAllowedException{
         List<PublicObjective> cards = PublicObjectiveDeck.getPublicObjectiveDeck().draw(10);
 
-        PublicObjective publicObjective = cards.stream().filter(d -> d.getName().equals("MediumShades")).findFirst().get();
+        PublicObjective publicObjective = cards.stream().filter(d -> d.getName().equalsIgnoreCase("MediumShades")).findFirst().get();
 
 
         List<Cell> cells = new ArrayList<>();

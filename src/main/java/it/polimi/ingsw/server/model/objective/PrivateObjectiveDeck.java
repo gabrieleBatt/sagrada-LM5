@@ -28,7 +28,7 @@ public class PrivateObjectiveDeck implements Deck {
 
     private PrivateObjectiveDeck(){
         privateObjectives = new ArrayList<>();
-        Path path = Paths.get("resources/ServerResources/objectives/private");
+        Path path = Paths.get("resources/serverResources/objectives/private");
         try (Stream<Path> files = Files.list(path)){
             files.forEach(f -> addCard(f.toFile()));
         } catch (IOException e) {

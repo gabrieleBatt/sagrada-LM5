@@ -34,12 +34,15 @@ public class SocketManager{
     private PrintWriter out;
     private final GameScreen gameScreen;
 
-    SocketManager(LoginInfo loginInfo, GameScreen gameScreen) {
+    SocketManager(LoginInfo loginInfo, GameScreen gameScreen) throws IOException {
         ip = loginInfo.ip;
         port = loginInfo.portNumber;
         nickname = loginInfo.nickname;
         password = loginInfo.password;
         this.gameScreen = gameScreen;
+        Socket socket = new Socket(ip, port);
+        out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
     private Collection<String> jsonArrayToCollection(JSONArray jsonArray){
@@ -54,9 +57,6 @@ public class SocketManager{
      * Handles the channel until its on or the game ends
      */
     EndGameInfo run() throws IOException, ParseException {
-        Socket socket = new Socket(ip, port);
-        out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         JSONObject received;
         while ((received = (JSONObject) (new JSONParser()).parse(in.readLine())) != null) {
             Object header = received.get(SocketProtocol.HEADER.get());
@@ -142,9 +142,9 @@ public class SocketManager{
             strings.add(0, nickname);
             gameScreen.setPlayers(strings);
         }
-        if (received.containsKey(SocketProtocol.PRIVATE_OBJ.get())){
-            Collection<String> strings = getJsonList(received, SocketProtocol.PRIVATE_OBJ);
-            gameScreen.setPrivateObjectives(strings);
+        if (received.containsKey(SocketProtocol.PUBLIC_OBJ.get())){
+            Collection<String> strings = getJsonList(received, SocketProtocol.PUBLIC_OBJ);
+            gameScreen.setPublicObjective(strings);
         }
     }
 

@@ -1,8 +1,8 @@
 {	
 	"difficulty1":5,
 	"cells1":["3","4","1","5","W","W","5","2","W","Y","W","W","W","Y","R","5","W","Y","R","6"],
-	"name1":"Firelight",
+	"name1":"firelight",
 	"difficulty2":6,
 	"cells2":["1","M","Y","W","4","M","Y","W","W","6","Y","W","W","5","3","W","5","4","2","1"],
-	"name2":"Sun'sGlory"
+	"name2":"sun'sGlory"
 }

@@ -43,7 +43,7 @@ public class ToolDeck implements Deck {
      */
     private ToolDeck(){
         tools = new ArrayList<>();
-        Path path = Paths.get("resources/ServerResources/tools");
+        Path path = Paths.get("resources/serverResources/tools");
         try (Stream<Path> files = Files.list(path)){
             files.forEach((f) -> addCard(f.toFile()));
         } catch (IOException e) {

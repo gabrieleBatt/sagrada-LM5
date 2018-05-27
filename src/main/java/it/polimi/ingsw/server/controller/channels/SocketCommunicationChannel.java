@@ -178,7 +178,7 @@ public class SocketCommunicationChannel extends CommunicationChannel {
                 if (cell.isOccupied())
                     param.add(cell.getDie().getId());
                 else
-                    param.add("   ");
+                    param.add(" ");
             }
             jsonBuilder.build(SocketProtocol.GLASS_WINDOW, param);
 

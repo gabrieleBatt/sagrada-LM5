@@ -11,23 +11,33 @@ Scegli la finestra: [w1, w2, w3, w4]
 
 
 test1	Favori:0 	 	 	 	 	 	Round: 1
-Obbiettivo privato: test_obj1	test_obj2	
-[31m{[  ][31m} [37m [  ]  [31m{[  ][31m} [37m [  ]   [  ]  
- [  ]   [  ]   [  ]   [  ]   [  ]  
- [  ]   [  ]  [31m{[  ][31m} [37m [  ]   [  ]  
- [  ]  [31m{[  ][31m} [37m [  ]   [  ]   [  ]  
+Obbiettivo privato: 
+Objective not found
+Objective not found
+
+[31m{[ ][31m} [37m [ ]  [31m{[ ][31m} [37m [ ]   [ ]  
+ [ ]   [ ]   [ ]   [ ]   [ ]  
+ [ ]   [ ]  [31m{[ ][31m} [37m [ ]   [ ]  
+ [ ]  [31m{[ ][31m} [37m [ ]   [ ]   [ ]  
 
 
-Obbiettivi pubblici: test_obj1	test_obj2	
+Obbiettivi pubblici: 
+Objective not found
+Objective not found
+
 Riserva: 
-Strumenti: 	 Tool1  [1]   Tool2  [2]   Tool3  [1]  
+Strumenti: 
+[1]  Tool not found
+[2]  Tool not found
+[1]  Tool not found
 
 
-test2 Favori:0 disconnesso                                   test3 Favori:0 disconnesso                                   
- [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [  ]   [  ]   [  ]  		 
- [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [  ]   [  ]   [  ]  		 
- [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [  ]   [  ]   [  ]  		 
- [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [3R]   [  ]   [  ]  		 
+
+test2 Favori:0 disconnesso            test3 Favori:0 disconnesso            
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   3 R   [ ]   [ ]  		 
 
 Round track: 	
 
@@ -42,23 +52,33 @@ Round track:
 
 
 test1	Favori:0 	 	 	 	 	 	Round: 1
-Obbiettivo privato: test_obj1	test_obj2	
- [  ]   [  ]   [  ]   [  ]   [  ]  
- [  ]   [  ]   [  ]   [  ]   [  ]  
- [  ]   [  ]   [  ]   [  ]   [  ]  
- [  ]   [  ]   [  ]   [  ]   [  ]  
+Obbiettivo privato: 
+Objective not found
+Objective not found
+
+ [ ]   [ ]   [ ]   [ ]   [ ]  
+ [ ]   [ ]   [ ]   [ ]   [ ]  
+ [ ]   [ ]   [ ]   [ ]   [ ]  
+ [ ]   [ ]   [ ]   [ ]   [ ]  
 
 
-Obbiettivi pubblici: test_obj1	test_obj2	
+Obbiettivi pubblici: 
+Objective not found
+Objective not found
+
 Riserva: 
-Strumenti: 	 Tool1  [1]   Tool2  [2]   Tool3  [1]  
+Strumenti: 
+[1]  Tool not found
+[2]  Tool not found
+[1]  Tool not found
 
 
-test2 Favori:0 disconnesso                                   test3 Favori:0 disconnesso                                   
- [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [  ]   [  ]   [  ]  		 
- [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [  ]   [  ]   [  ]  		 
- [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [  ]   [  ]   [  ]  		 
- [  ]   [  ]   [  ]   [  ]   [  ]  		  [  ]   [  ]   [3R]   [  ]   [  ]  		 
+
+test2 Favori:0 disconnesso            test3 Favori:0 disconnesso            
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   3 R   [ ]   [ ]  		 
 
 Round track: 	
 

@@ -1,6 +1,6 @@
 {
   "type":"set",
-  "name": "LightShade",
+  "name": "lightShade",
   "points": 2,
   "set": ["1","2"]
 }
