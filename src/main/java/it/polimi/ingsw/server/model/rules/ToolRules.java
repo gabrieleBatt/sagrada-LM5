@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class ToolRules {
 
-        private static final String DIE_ACTION = "IncrementareODecrementareIlDado?";
+        private static final String INCREASE_DECREASE = "IncreaseDecrease";
 
     /**
      * Generates the action command used to let the player choose how to modify a die.
@@ -30,7 +30,7 @@ public class ToolRules {
                 CommunicationChannel cc = actionReceiver.getChannel(player.getNickname());
                 Die die = actionReceiver.getMap().get(marker);
                 List<Identifiable> optionList = options.get(die.getNumber()-1);
-                Identifiable actionChosen = cc.chooseFrom(optionList,DIE_ACTION,false,false);
+                Identifiable actionChosen = cc.chooseFrom(optionList,INCREASE_DECREASE,false,false);
                 die.setNumber(Integer.parseInt(actionChosen.getId()));
                 Game.getLogger().log(Level.FINE,"New die value: "+ die.getNumber(),die);
             };

@@ -10,8 +10,8 @@ import java.util.Optional;
  * enum of standard identifiable
  */
 public enum  StdId implements Identifiable {
-    SKIP("skip"), UNDO("undo"), USE_TOOL("UsaUnAttrezzo"),
-    DRAFT("PescaUnDado"),
+    SKIP("skip"), UNDO("undo"), USE_TOOL("useTool"),
+    DRAFT("draftDice"),
     TABLE("table"), ROUND_TRACK("roundTrack"), POOL("pool"),
     GLASS_WINDOW("glassWindow"), DICE_BAG("diceBag"),
     ONE("1"),TWO("2"),THREE("3"),FOUR("4"), FIVE("5"), SIX("6");

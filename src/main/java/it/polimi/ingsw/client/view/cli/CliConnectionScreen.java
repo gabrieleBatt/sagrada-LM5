@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.client.view.LoginInfo;
+import it.polimi.ingsw.client.view.Message;
 import it.polimi.ingsw.client.view.factory.ConnectionScreen;
 
 import java.io.InputStream;
@@ -41,7 +42,7 @@ public class CliConnectionScreen implements ConnectionScreen {
 
     private String getConnectionChoiceFromUser(){
         clearScreen();
-        printStream.println("Scegli il tuo tipo di connessione: \n" +
+        printStream.println(Message.CHOOSE_CONNECTION+": \n" +
                 "**RMI**  **Socket** : \n");
 
         String choice = scanner.nextLine();
@@ -49,7 +50,7 @@ public class CliConnectionScreen implements ConnectionScreen {
         while (!(choice.equalsIgnoreCase("RMI") || choice.equalsIgnoreCase("R") ||
                 choice.equalsIgnoreCase("Socket") || choice.equalsIgnoreCase("S") )){
             clearScreen();
-            printStream.println("\nLa tua scelta non è valida!\n" +
+            printStream.println(Message.INVALID_CHOICE+"\n" +
                     "**RMI**  **Socket** :  \n");
 
             choice = scanner.nextLine();
@@ -64,14 +65,14 @@ public class CliConnectionScreen implements ConnectionScreen {
 
     private String getNicknameChoiceFromUser (){
         clearScreen();
-        printStream.println("Ora scegli il tuo nickname! \n" +
-                "Il nickname non deve contenere alcuno spazio \n");
+        printStream.println(Message.CHOOSE_NICKNAME+ "\n" +
+                        Message.CREDENTIAL_POLICY +"\n");
 
         String choice = scanner.nextLine();
         while (isValid(choice)) {
             clearScreen();
-            printStream.println("\nIl tuo nickname non è valido! Ricorda che non può contenere spazi\n" +
-                    "Inserisci nuovamente il tuo nickname  \n");
+            printStream.println(Message.INVALID_CHOICE+"\n" +
+                            Message.CREDENTIAL_POLICY+ "\n");
 
             choice = scanner.nextLine();
         }
@@ -85,14 +86,14 @@ public class CliConnectionScreen implements ConnectionScreen {
 
     private String getPasswordFromUser(){
         clearScreen();
-        printStream.println("\nOra inserisci la tua password! \n" +
-                "La tua password non deve contenere alcuno spazio \n");
+        printStream.println(Message.INSERT_PASSWORD+ "\n" +
+                Message.CREDENTIAL_POLICY +"\n");
 
         String choice = scanner.nextLine();
         while (isValid(choice)) {
             clearScreen();
-            printStream.println("\nLa tua password non è valida! Ricorda che non può contenere spazi  \n" +
-                    "Inserisci nuovamente la tua password  \n");
+            printStream.println(Message.INVALID_CHOICE+"\n" +
+                    Message.CREDENTIAL_POLICY+ "\n");
 
             choice = scanner.nextLine();
         }
@@ -103,7 +104,7 @@ public class CliConnectionScreen implements ConnectionScreen {
 
     private int getPortNumberChoiceFromUser() {
         clearScreen();
-        printStream.println("Inserisci il numero di porta \n");
+        printStream.println(Message.PORT_NUMBER+"\n");
 
         String choice;
         boolean valid = false;
@@ -115,7 +116,7 @@ public class CliConnectionScreen implements ConnectionScreen {
                 valid = true;
             } catch (NumberFormatException e) {
                 clearScreen();
-                printStream.println("Inserisci un numero di porta valido! \n");
+                printStream.println(Message.INVALID_CHOICE+"\n");
             }
         }
         clearScreen();
@@ -125,7 +126,7 @@ public class CliConnectionScreen implements ConnectionScreen {
 
     private String getIpFromUser() {
         clearScreen();
-        printStream.println("Inserisci un indirizzo IP:  \n");
+        printStream.println(Message.IP_NUMBER+"\n");
 
         boolean valid = false;
         String ip;
@@ -138,7 +139,7 @@ public class CliConnectionScreen implements ConnectionScreen {
                 valid = true;
             }else{
                 clearScreen();
-                printStream.println("Ricorda di inserire un IP valido! \n");
+                printStream.println(Message.INVALID_CHOICE+"\n");
             }
 
         }while (!valid);

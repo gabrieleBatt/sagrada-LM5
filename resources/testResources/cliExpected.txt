@@ -1,5 +1,5 @@
 [37m
-Scegli la finestra: [w1, w2, w3, w4]
+Scegli la vetrata: [w1, w2, w3, w4]
 
 
 
@@ -10,8 +10,8 @@ Scegli la finestra: [w1, w2, w3, w4]
 
 
 
-test1	Favori:0 	 	 	 	 	 	Round: 1
-Obbiettivo privato:
+test1	Favori: 0 	 	 	 	 	 	Round: 1
+PrivateObjective:
 Objective not found
 Objective not found
 
@@ -21,25 +21,25 @@ Objective not found
  [ ]  [31m{[ ][31m} [37m [ ]   [ ]   [ ]
 
 
-Obbiettivi pubblici:
+PublicObjective:
 Objective not found
 Objective not found
 
 Riserva:
-Strumenti:
+Utensili:
 [1]  Tool not found
 [2]  Tool not found
 [1]  Tool not found
 
 
 
-test2 Favori:0 disconnesso            test3 Favori:0 disconnesso
+test2 Favori:0 offline                test3 Favori:0 offline
  [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]
  [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]
  [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]
  [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   3 R   [ ]   [ ]
 
-Round track:
+Tracciato dei Round:
 
 
 
@@ -51,8 +51,8 @@ Round track:
 
 
 
-test1	Favori:0 	 	 	 	 	 	Round: 1
-Obbiettivo privato:
+test1	Favori: 0 	 	 	 	 	 	Round: 1
+PrivateObjective:
 Objective not found
 Objective not found
 
@@ -62,23 +62,23 @@ Objective not found
  [ ]   [ ]   [ ]   [ ]   [ ]
 
 
-Obbiettivi pubblici:
+PublicObjective:
 Objective not found
 Objective not found
 
 Riserva:
-Strumenti:
+Utensili:
 [1]  Tool not found
 [2]  Tool not found
 [1]  Tool not found
 
 
 
-test2 Favori:0 disconnesso            test3 Favori:0 disconnesso
+test2 Favori:0 offline                test3 Favori:0 offline
  [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]
  [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]
  [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]
  [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   3 R   [ ]   [ ]
 
-Round track:
+Tracciato dei Round:
 

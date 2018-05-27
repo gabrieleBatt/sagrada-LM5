@@ -61,12 +61,14 @@ public class SocketManager{
         while ((received = (JSONObject) (new JSONParser()).parse(in.readLine())) != null) {
             Object header = received.get(SocketProtocol.HEADER.get());
             if (header.equals(SocketProtocol.CHOOSE_WINDOW.get())) {
+                gameScreen.showAll();
                 String gw = gameScreen.getWindow(jsonArrayToCollection((JSONArray)received.get(SocketProtocol.GLASS_WINDOW.get())));
                 new JSONBuilder()
                         .build(SocketProtocol.CHOOSE_WINDOW)
                         .build(SocketProtocol.GLASS_WINDOW, gw)
                         .send(out);
             } else if (header.equals(SocketProtocol.SELECT_OBJECT.get())) {
+                gameScreen.showAll();
                 String so = gameScreen
                         .getInput(jsonArrayToCollection((JSONArray)received.get(SocketProtocol.OPTION.get())),
                                 received.get(SocketProtocol.CONTAINER.get()).toString());
@@ -75,6 +77,7 @@ public class SocketManager{
                         .build(SocketProtocol.OPTION, so)
                         .send(out);
             } else if (header.equals(SocketProtocol.SELECT_FROM.get())) {
+                gameScreen.showAll();
                 String sf = gameScreen
                         .getInputFrom(jsonArrayToCollection((JSONArray)received.get(SocketProtocol.OPTION.get())),
                                 received.get(SocketProtocol.MESSAGE.get()).toString());

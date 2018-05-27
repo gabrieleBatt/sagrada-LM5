@@ -21,7 +21,7 @@ import static it.polimi.ingsw.net.identifiables.StdId.*;
 
 public class TurnActionCommand implements ActionCommand{
 
-    private static final String NEXT_MOVE = "SelezionaLaTuaProssimaMossa";
+    private static final String NEXT_MOVE = "chooseNextMove";
     private boolean reset;
     private boolean skip;
     private CommunicationChannel cc;

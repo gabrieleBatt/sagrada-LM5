@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.cli;
 
+import it.polimi.ingsw.client.view.Message;
 import it.polimi.ingsw.client.view.factory.GameScreen;
 import it.polimi.ingsw.server.model.table.Player;
 import javafx.util.Pair;
@@ -12,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -63,7 +65,7 @@ public class CliGameScreen implements GameScreen {
         Cell[] cells;
 
         public WindowClass() {
-            windowName = "Not yet choosen";
+            windowName = "NotYetChoosen";
             cells = new Cell[20];
             for (int i = 0; i < 20; i++) {
                 cells[i] = new Cell();
@@ -196,10 +198,10 @@ public class CliGameScreen implements GameScreen {
 
     @Override
     public String getWindow(Collection<String> o) {
-        printStream.println("Scegli la finestra: " + o);
+        printStream.println(Message.CHOOSE_WINDOW+": " + o);
         String choice = scanner.nextLine();
         while(!o.contains(choice)){
-            printStream.println("Scelta non valida ");
+            printStream.println(Message.INVALID_CHOICE);
             choice = scanner.nextLine();
         }
         return choice;
@@ -238,7 +240,7 @@ public class CliGameScreen implements GameScreen {
         showAll();
         String choice = scanner.nextLine();
         while (!(options.contains(choice) || (choice.equalsIgnoreCase("skip")&&skip) || (choice.equalsIgnoreCase("undo")&&undo))) {
-            printStream.println("Scelta non valida ");
+            printStream.println(Message.INVALID_CHOICE);
             choice = scanner.nextLine();
         }
         return choice;
@@ -319,13 +321,18 @@ public class CliGameScreen implements GameScreen {
     @Override
     public String getInputFrom(Collection<String> strings, String message) {
         String choice;
-        printStream.println(message + (char)27 + "[31m"+" " + strings +(char)27 + "[37m");
+        String convertMessage = Message.convertMessage(message);
+        List<String> convertStrings = strings
+                .stream()
+                .map(Message::convertMessage)
+                .collect(Collectors.toList());
+        printStream.println(convertMessage + (char)27 + "[31m"+" " + convertStrings +(char)27 + "[37m");
         choice = scanner.nextLine();
-        while(!strings.contains(choice)) {
-            printStream.println("Scelta non valida ");
+        while(!convertStrings.contains(choice)) {
+            printStream.println(Message.INVALID_CHOICE);
             choice = scanner.nextLine();
         }
-        return choice;
+        return Message.decodeMessage(choice);
     }
 
     @Override
@@ -347,21 +354,20 @@ public class CliGameScreen implements GameScreen {
         showRoundTrack();
         printStream.println();
         if (skip) {
-            printActive(true, "skip");
+            printActive(true, Message.SKIP.toString());
             printStream.println("  ");
         }if (undo) {
-            printActive(true, "undo");
+            printActive(true, Message.UNDO.toString());
             printStream.println("\n\n");
         }
     }
 
     private void showNicknameAndTokensAndRound() {
-        printStream.println(playersList.get(0).nickname + "\tFavori:" + playersList.get(0).tokens + " \t"+ " \t"+" \t"+ " \t"+ " \t"+" \t" + "Round: " + (roundTrack.size()+1));
+        printStream.println(playersList.get(0).nickname + "\t"+ Message.TOKENS+": " + playersList.get(0).tokens + " \t \t \t \t \t \t"+Message.ROUND +": "+ (roundTrack.size()+1));
     }
 
     private void showPrivateObjective() {
-        printStream.print("Obbiettivo privato: ");
-        printStream.print("\n");
+        printStream.println(Message.PRIVATE_OBJ + ": ");
         for (String privateObjective : privateObjectives) {
             showObjective(privateObjective);
         }
@@ -398,7 +404,7 @@ public class CliGameScreen implements GameScreen {
     }
 
     private void showPublicObjectives() {
-        printStream.print("Obbiettivi pubblici: ");
+        printStream.print(Message.PUBLIC_OBJ+": ");
         printStream.print("\n");
         for (String publicObjective : publicObjectives) {
             showObjective(publicObjective);
@@ -409,7 +415,7 @@ public class CliGameScreen implements GameScreen {
     private void showObjective(String name){
         try {
             JSONObject jsonObject = ((JSONObject) new JSONParser().parse(new FileReader(OBJECTIVE_PATH+name+".json")));
-            printStream.print(jsonObject.get("name").toString() + ",\tpunti:" + jsonObject.get("points"));
+            printStream.print(jsonObject.get("name").toString() + ",\t"+Message.POINTS+":" + jsonObject.get("points"));
             printStream.println(",\t" + jsonObject.get("description"));
         } catch (IOException | ParseException e) {
             printStream.println("Objective not found");
@@ -417,7 +423,7 @@ public class CliGameScreen implements GameScreen {
     }
 
     private void showPool() {
-        printStream.print("Riserva: ");
+        printStream.print(Message.DRAFT_POOL+": ");
         for (Die die : poolDice) {
             printActive(die.active,die.id.substring(0, 2));
         }
@@ -425,7 +431,7 @@ public class CliGameScreen implements GameScreen {
     }
 
     private void showTools() {
-        printStream.print("Strumenti: " + "\n");
+        printStream.println(Message.TOOL + ": ");
          for(ToolClass tool: toolsList) {
              try {
                  if (tool.used) {
@@ -450,11 +456,11 @@ public class CliGameScreen implements GameScreen {
             for (int i = 0; i < 38; i++) {
                 s.append(" ");
             }
-            String ins = p.nickname + " Favori:" + p.tokens;
+            String ins = p.nickname + " "+Message.TOKENS+":" + p.tokens;
             if(p.connected)
-                ins = ins + " connesso";
+                ins = ins + " "+Message.ONLINE;
             else
-                ins = ins + " disconnesso";
+                ins = ins + " "+Message.OFFLINE;
             s.replace(0, ins.length(), ins);
             printStream.print(s);
         }
@@ -479,9 +485,9 @@ public class CliGameScreen implements GameScreen {
     }
 
     private void showRoundTrack() {
-        printStream.print("Round track: " + "\t");
+        printStream.print(Message.ROUND_TRACK + ": " + "\t");
         for (List<Die> dieList : roundTrack) {
-            printStream.print("round" + (roundTrack.indexOf(dieList)+1)+": ");
+            printStream.print(Message.ROUND.toString() + (roundTrack.indexOf(dieList)+1)+": ");
             for (Die die: dieList) {
                 printActive(die.active, die.id);
             }
