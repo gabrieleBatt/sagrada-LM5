@@ -29,25 +29,16 @@ import java.util.stream.Collectors;
 /**
  * Communication channel implemented with socket communication.
  */
-public class SocketCommunicationChannel implements CommunicationChannel {
+public class SocketCommunicationChannel extends CommunicationChannel {
 
     private static final Logger logger = LogMaker.getLogger(SocketCommunicationChannel.class.getName(), Level.ALL);
-    private static long responseTime;
     private final Socket socket;
     private final String nickname;
     private final BufferedReader in;
     private final PrintWriter out;
     private boolean connected;
 
-    static {
-        JSONObject config;
-        try {
-            config = (JSONObject)new JSONParser().parse(new FileReader(new File("resources/ServerResources/config.json")));
-            responseTime = (long)config.get("turnTime");
-        } catch (ParseException | IOException e) {
-            responseTime = 60;
-        }
-    }
+
 
     /**
      * Creates a new SocketCommChannel communicating with a single client
@@ -64,21 +55,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         this.out = out;
     }
 
-    private void startTimer(Timer timer) {
-        Game.getLogger().log(Level.FINER, "Starting response timer");
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Game.getLogger().log(Level.FINER, "Time's up, client is not responding" );
-                disconnect();
-                endTimer(timer);
-            }
-        }, responseTime * 1000);
-    }
 
-    private void endTimer(Timer timer){
-        timer.cancel();
-    }
 
     @Override
     public String getNickname() {
@@ -203,7 +180,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     @Override
     public GlassWindow chooseWindow(List<GlassWindow> glassWindows) {
         Timer timer = new Timer();
-        startTimer(timer);
+        startTimer(timer, this);
 
         JSONBuilder jsonBuilder = new JSONBuilder()
                 .build(SocketProtocol.CHOOSE_WINDOW);
@@ -272,7 +249,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
     private Identifiable receiveResponse(List<Identifiable> options, SocketProtocol type, boolean canSkip, boolean undoEnabled){
         Timer timer = new Timer();
-        startTimer(timer);
+        startTimer(timer, this);
         JSONObject response;
         try {
             if((response = (JSONObject) (new JSONParser()).parse(in.readLine())) != null) {

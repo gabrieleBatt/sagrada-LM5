@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Class used for testing; returns plausible object in each method.
  * Simulates a client behaviour.
  */
-public class MockCommunicationChannel implements CommunicationChannel {
+public class MockCommunicationChannel extends CommunicationChannel {
     String nickName;
 
     /**

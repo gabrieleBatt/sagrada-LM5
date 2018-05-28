@@ -20,6 +20,7 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Timer;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -27,7 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class RmiCommunicationChannel implements CommunicationChannel {
+public class RmiCommunicationChannel extends CommunicationChannel {
     private static final Logger logger = LogMaker.getLogger(RmiCommunicationChannel.class.getName(), Level.ALL);
 
     private final String nickname;
@@ -106,9 +107,12 @@ public class RmiCommunicationChannel implements CommunicationChannel {
 
     @Override
     public GlassWindow chooseWindow(List<GlassWindow> glassWindows) {
+        Timer timer = new Timer();
+        startTimer(timer, this);
         String use = gameScreen.getWindow(glassWindows.stream().map(Identifiable::getId).collect(Collectors.toList()));
         Optional<GlassWindow> optionalGlassWindow = glassWindows.stream().filter(g -> g.getId().equals(use)).findAny();
         if(optionalGlassWindow.isPresent()){
+            endTimer(timer);
             return optionalGlassWindow.get();
         }
         else {
@@ -136,7 +140,10 @@ public class RmiCommunicationChannel implements CommunicationChannel {
             use.add(StdId.SKIP.getId());
         if(undoEnabled)
             use.add(StdId.UNDO.getId());
+        Timer timer = new Timer();
+        startTimer(timer, this);
         String ret = function.apply(use, string);
+        endTimer(timer);
         if(canSkip && ret.equals(StdId.SKIP.getId()))
             return StdId.SKIP;
         if(undoEnabled&& ret.equals((StdId.UNDO.getId())))
@@ -155,6 +162,7 @@ public class RmiCommunicationChannel implements CommunicationChannel {
     @Override
     public void setOffline() {
         logger.log(Level.WARNING, getNickname() + " is offline");
+        //TODO -- disconnect properly
         isOffline = true;
     }
 }
