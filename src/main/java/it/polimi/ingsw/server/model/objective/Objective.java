@@ -1,11 +1,12 @@
 package it.polimi.ingsw.server.model.objective;
 
+import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 
 /**
  * Class representing the scoring rules for the players
  */
-public abstract class Objective {
+public abstract class Objective implements Identifiable {
 
     private String name;
 
@@ -31,5 +32,14 @@ public abstract class Objective {
      * @return points scored on the glasswindow
      */
     public abstract int scorePoints(GlassWindow glassWindow);
+
+    /**
+     * The Id of the Objective is its name
+     * @return
+     */
+    @Override
+    public String getId(){
+        return name;
+    }
 
 }

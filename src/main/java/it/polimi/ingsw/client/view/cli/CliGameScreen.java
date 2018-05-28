@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.client.view.factory.GameScreen;
+import it.polimi.ingsw.server.model.table.Player;
 import javafx.util.Pair;
 
 import java.io.InputStream;
@@ -20,10 +21,14 @@ public class CliGameScreen implements GameScreen {
     private List<List<Die>> roundTrack;
     private boolean skip;
     private boolean undo;
+    private List<String> messageRecord;
+    private Optional<String> tempMessage;
 
     public CliGameScreen(InputStream inputStream, PrintStream printStream){
         scanner = new Scanner(inputStream);
         this.printStream = printStream;
+        this.messageRecord = new ArrayList<>();
+        this.tempMessage = Optional.empty();
         printStream.println((char)27+ "[37m");
         privateObjectives = new ArrayList<>();
         publicObjectives = new ArrayList<>();
@@ -69,6 +74,14 @@ public class CliGameScreen implements GameScreen {
         public Die(String die) {
             id = die;
         }
+    }
+
+    @Override
+    public void addMessage(String message, boolean toKeep) {
+        if(toKeep)
+            messageRecord.add(message);
+        else
+            tempMessage = Optional.ofNullable(message);
     }
 
     public void setPlayers(List<String> nicknames){
@@ -293,6 +306,11 @@ public class CliGameScreen implements GameScreen {
             choice = scanner.nextLine();
         }
         return choice;
+    }
+
+    @Override
+    public void endGame(List<Pair<Player, Integer>> scores) {
+        //TODO
     }
 
     @Override

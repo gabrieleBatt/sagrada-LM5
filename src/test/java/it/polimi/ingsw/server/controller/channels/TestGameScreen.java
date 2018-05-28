@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller.channels;
 
 import it.polimi.ingsw.net.interfaces.RemoteGameScreen;
+import it.polimi.ingsw.server.model.table.Player;
 import javafx.util.Pair;
 
 import java.util.Collection;
@@ -10,6 +11,11 @@ import java.util.List;
  * used for lobby testing
  */
 public class TestGameScreen implements RemoteGameScreen {
+    @Override
+    public void addMessage(String message, boolean toKeep) {
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public void setPlayers(List<String> nicknames) {
         throw new UnsupportedOperationException();
@@ -78,6 +84,12 @@ public class TestGameScreen implements RemoteGameScreen {
     @Override
     public String getInputFrom(Collection<String> strings, String message) {
         return strings.iterator().next();
+    }
+
+    @Override
+    public void endGame(List<Pair<Player, Integer>> scores) {
+        throw new UnsupportedOperationException();
+
     }
 
     @Override

@@ -133,14 +133,14 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         if (!table.getPublicObjectives().isEmpty()){
             List<String> param = new ArrayList<>();
             table.getPublicObjectives()
-                    .forEach(po -> param.add(po.getName()));
+                    .forEach(po -> param.add(po.getId()));
             jsonBuilder.build(SocketProtocol.PUBLIC_OBJ, param);
         }
 
         if (!table.getTools().isEmpty()){
             List<String> param = new ArrayList<>();
             table.getTools()
-                    .forEach(t -> param.add(t.getName()+"-"+t.isUsed()));
+                    .forEach(t -> param.add(t.getId()+"-"+t.isUsed()));
             jsonBuilder.build(SocketProtocol.TOOL, param);
         }
 
@@ -170,7 +170,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
         if(player.hasGlassWindow()){
             List<String> param = new ArrayList<>();
-            param.add(player.getGlassWindow().getName());
+            param.add(player.getGlassWindow().getId());
 
             for (Cell cell : player.getGlassWindow().getCellList()) {
                 if (cell.isOccupied())
@@ -252,7 +252,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
     @Override
     public Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled) {
-        if(isOffline()) return fakeResponse(canSkip, undoEnabled, options);
+        if(isOffline()) return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
         JSONBuilder jsonBuilder = new JSONBuilder()
                 .build(SocketProtocol.SELECT_OBJECT)
                 .build(SocketProtocol.CONTAINER, container.getId());
@@ -278,11 +278,11 @@ public class SocketCommunicationChannel implements CommunicationChannel {
             if((response = (JSONObject) (new JSONParser()).parse(in.readLine())) != null) {
                 endTimer(timer);
                 if (response.get(SocketProtocol.HEADER.get()).equals(type.get())) {
-                    if (response.get(SocketProtocol.OPTION.get())
+                    if (undoEnabled && response.get(SocketProtocol.OPTION.get())
                             .equals(StdId.UNDO.getId())) {
                         return StdId.UNDO;
                     }
-                    if (response.get(SocketProtocol.OPTION.get())
+                    if (canSkip && response.get(SocketProtocol.OPTION.get())
                             .equals(StdId.SKIP.getId())) {
                         return StdId.SKIP;
                     }
@@ -300,12 +300,12 @@ public class SocketCommunicationChannel implements CommunicationChannel {
             disconnect();
         }
         disconnect();
-        return fakeResponse(canSkip, undoEnabled, options);
+        return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
     }
 
     @Override
     public Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled) {
-        if(isOffline()) return fakeResponse(canSkip, undoEnabled, options);
+        if(isOffline()) return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
         JSONBuilder jsonBuilder = new JSONBuilder()
                 .build(SocketProtocol.SELECT_FROM)
                 .build(SocketProtocol.MESSAGE, message);
@@ -317,23 +317,6 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     public void setOffline() {
         disconnect();
     }
-
-    /**
-     * To prevent any exploit the communication channel first tries to skip any action
-     * the client should do, if it can't tries to undo the turn and then skip, else
-     * it chooses randomly.
-     * @param canSkip if the action choice can be skipped
-     * @param undoEnabled if its still possible to undo the turn
-     * @param op list of options
-     * @return the identifiable ch osen
-     */
-    private Identifiable fakeResponse(boolean canSkip, boolean undoEnabled, List<Identifiable> op){
-        if(canSkip)
-            return StdId.SKIP;
-        else if(undoEnabled)
-            return StdId.UNDO;
-        else
-            return op.get(ThreadLocalRandom.current().nextInt(0, op.size()));
-    }
 }
+
 

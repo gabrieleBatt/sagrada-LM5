@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller.channels;
 
 import it.polimi.ingsw.net.identifiables.Identifiable;
+import it.polimi.ingsw.net.identifiables.StdId;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Pool;
 import it.polimi.ingsw.server.model.table.RoundTrack;
@@ -9,6 +10,7 @@ import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import javafx.util.Pair;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Class used by the game to communicate with a single client,
@@ -16,6 +18,24 @@ import java.util.List;
  * but it produces a fake response
  */
 public interface CommunicationChannel{
+
+    /**
+     * To prevent any exploit the communication channel first tries to skip any action
+     * the client should do, if it can't tries to undo the turn and then skip, else
+     * it chooses randomly.
+     * @param canSkip if the action choice can be skipped
+     * @param undoEnabled if its still possible to undo the turn
+     * @param op list of options
+     * @return the identifiable ch osen
+     */
+    static Identifiable fakeResponse(boolean canSkip, boolean undoEnabled, List<Identifiable> op){
+        if(canSkip)
+            return StdId.SKIP;
+        else if(undoEnabled)
+            return StdId.UNDO;
+        else
+            return op.get(ThreadLocalRandom.current().nextInt(0, op.size()));
+    }
 
     /**
      * Creates a communication channel setting the player's nickname.

@@ -1,6 +1,7 @@
 
 package it.polimi.ingsw.server.model.table.glasswindow;
 
+import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -9,7 +10,7 @@ import java.util.stream.Collectors;
  * GlassWindow is a concrete class representing a player's glasswindow. It's implemented as a collection of cells.
  */
 
-public class GlassWindow {
+public class GlassWindow implements Identifiable {
 
     private String name;
     private int difficulty;
@@ -220,6 +221,11 @@ public class GlassWindow {
      */
     public List<Cell> getCellList() {
         return new ArrayList<>(cellList);
+    }
+
+    @Override
+    public String getId() {
+        return name;
     }
 }
 

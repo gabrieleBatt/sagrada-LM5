@@ -1,5 +1,6 @@
 package it.polimi.ingsw.net.interfaces;
 
+import it.polimi.ingsw.server.model.table.Player;
 import javafx.util.Pair;
 
 import java.rmi.Remote;
@@ -7,6 +8,9 @@ import java.util.Collection;
 import java.util.List;
 
 public interface RemoteGameScreen extends Remote {
+
+    void addMessage(String message, boolean toKeep);
+
     void setPlayers(List<String> nicknames);
 
     void setPrivateObjectives(Collection<String> privateObjectives);
@@ -34,6 +38,8 @@ public interface RemoteGameScreen extends Remote {
     String getInput(Collection<String> options, String container);
 
     String getInputFrom(Collection<String> strings, String message);
+
+    void endGame(List<Pair<Player, Integer>> scores);
 
     void showAll();
 }
