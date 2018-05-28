@@ -52,7 +52,7 @@ public class CliEndScreen extends EndScreen {
     public boolean playAgain(){
         String answer;
         clearScreen();
-        printStream.println(Message.REPLAY+"\n   **si**  **no**   \n");
+        printStream.println(Message.REPLAY+"?\n   **si**  **no**   \n");
         answer = scanner.nextLine();
         while (answer.equalsIgnoreCase("si") || answer.equalsIgnoreCase("no")){
             printStream.println(Message.INVALID_CHOICE);

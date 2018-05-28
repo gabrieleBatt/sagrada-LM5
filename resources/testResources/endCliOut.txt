@@ -52,6 +52,6 @@ player1 vince
 
 
 
-Vuoi rigiocare
+Vuoi rigiocare?
    **si**  **no**   
 
