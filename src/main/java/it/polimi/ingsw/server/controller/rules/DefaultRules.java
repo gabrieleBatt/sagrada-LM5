@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.rules;
+package it.polimi.ingsw.server.controller.rules;
 
 import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.net.identifiables.StdId;
@@ -10,7 +10,6 @@ import it.polimi.ingsw.server.model.objective.PublicObjective;
 import it.polimi.ingsw.server.model.objective.PublicObjectiveDeck;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.dice.Die;
-import it.polimi.ingsw.server.model.table.dice.DieColor;
 import it.polimi.ingsw.server.model.table.glasswindow.Cell;
 import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import it.polimi.ingsw.server.model.table.glasswindow.GlassWindowDeck;

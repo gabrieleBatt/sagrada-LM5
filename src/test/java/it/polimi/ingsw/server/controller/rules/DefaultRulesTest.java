@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.rules;
+package it.polimi.ingsw.server.controller.rules;
 
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;

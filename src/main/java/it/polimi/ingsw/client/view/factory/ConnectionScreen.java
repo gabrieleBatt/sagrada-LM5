@@ -3,7 +3,7 @@ package it.polimi.ingsw.client.view.factory;
 
 import it.polimi.ingsw.client.view.LoginInfo;
 
-public interface ConnectionScreen {
+public abstract class ConnectionScreen {
 
-    LoginInfo getConnectionInfo();
+    public abstract LoginInfo getConnectionInfo();
 }

@@ -1,5 +1,5 @@
 [37m
-Scegli la vetrata: [w1, w2, w3, w4]
+Scegli la vetrata: [W1, W2, W3, W4]
 
 
 
@@ -24,13 +24,12 @@ Objective not found
 PublicObjective: 
 Objective not found
 Objective not found
-
-Riserva: 
 Utensili: 
 [1]  Tool not found
 [2]  Tool not found
 [1]  Tool not found
 
+Riserva: 
 
 
 test2 Favori:0 offline                test3 Favori:0 offline                
@@ -65,13 +64,12 @@ Objective not found
 PublicObjective: 
 Objective not found
 Objective not found
-
-Riserva: 
 Utensili: 
 [1]  Tool not found
 [2]  Tool not found
 [1]  Tool not found
 
+Riserva: 
 
 
 test2 Favori:0 offline                test3 Favori:0 offline                

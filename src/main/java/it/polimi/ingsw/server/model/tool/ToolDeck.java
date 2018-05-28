@@ -5,12 +5,10 @@ import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.net.identifiables.StdId;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.exception.DeckTooSmallException;
-import it.polimi.ingsw.server.exception.DieNotAllowedException;
-import it.polimi.ingsw.server.model.rules.ActionCommand;
-import it.polimi.ingsw.server.model.rules.DefaultRules;
-import it.polimi.ingsw.server.model.rules.ToolRules;
+import it.polimi.ingsw.server.controller.rules.ActionCommand;
+import it.polimi.ingsw.server.controller.rules.DefaultRules;
+import it.polimi.ingsw.server.controller.rules.ToolActions;
 import it.polimi.ingsw.server.model.table.Deck;
-import it.polimi.ingsw.server.model.table.dice.DieColor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -160,7 +158,7 @@ public class ToolDeck implements Deck {
      * @return ActionCommand performing swap.
      */
     private ActionCommand getSwap(JSONObject jsonObject) {
-        return ToolRules.swapActionCommand(
+        return ToolActions.swapActionCommand(
                 getColor(jsonObject),
                 getNumber(jsonObject),
                 StdId.getStdId((String)jsonObject.get("with")),
@@ -175,7 +173,7 @@ public class ToolDeck implements Deck {
      * @return ActionCommand performing Random.
      */
     private ActionCommand getRandom(JSONObject jsonObject) {
-        return ToolRules.randomActionCommand(
+        return ToolActions.randomActionCommand(
                 getMarker(jsonObject),
                 getFunction(jsonObject)
 
@@ -206,7 +204,7 @@ public class ToolDeck implements Deck {
      * @return ActionCommand performing set.
      */
     private ActionCommand getSet(JSONObject jsonObject) {
-        return ToolRules
+        return ToolActions
                 .setActionCommand(
                         getMarker(jsonObject),
                         getFunction(jsonObject));
@@ -237,7 +235,7 @@ public class ToolDeck implements Deck {
      */
     private ActionCommand getMove(JSONObject jsonObject){
         List<String> restrictions = new ArrayList<>((JSONArray)jsonObject.get("restriction"));
-        return ToolRules
+        return ToolActions
                 .moveActionCommand(
                         getColor(jsonObject),
                         getNumber(jsonObject),
@@ -255,7 +253,7 @@ public class ToolDeck implements Deck {
      * @return ActionCommand performing select.
      */
     private ActionCommand getSelect(JSONObject jsonObject){
-        return ToolRules.selectActionCommand(
+        return ToolActions.selectActionCommand(
                 getMarker(jsonObject),
                 StdId.getStdId((String)jsonObject.get("from"))
         );

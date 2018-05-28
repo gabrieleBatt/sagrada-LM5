@@ -1,20 +1,15 @@
 package it.polimi.ingsw.server.controller.channels;
 
 import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.client.view.cli.CliGameScreen;
-import it.polimi.ingsw.client.view.factory.GameScreen;
 import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.net.identifiables.StdId;
-import it.polimi.ingsw.server.model.objective.Objective;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Pool;
 import it.polimi.ingsw.server.model.table.RoundTrack;
 import it.polimi.ingsw.server.model.table.Table;
-import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.glasswindow.Cell;
 import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import it.polimi.ingsw.net.interfaces.RemoteGameScreen;
-import it.polimi.ingsw.server.model.tool.Tool;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -23,7 +18,6 @@ import java.util.Optional;
 import java.util.Timer;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;

@@ -1,10 +1,8 @@
 package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.client.view.EndGameInfo;
-import it.polimi.ingsw.client.view.factory.GameScreen;
 import javafx.util.Pair;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,8 +13,6 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CliEndScreenTest {
 

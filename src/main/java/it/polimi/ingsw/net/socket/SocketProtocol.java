@@ -10,7 +10,7 @@ public enum SocketProtocol {
     PASSWORD("password"), MESSAGE("message"), SELECT_FROM("selectFrom"),
     SEND("send"), OPTION("option"), LEADER_BOARD("leaderBoard"), CONTAINER("container"),
     POOL("pool"), ROUND_TRACK("roundTrack"), TOOL("tool"), PUBLIC_OBJ("pubObj"),
-    PRIVATE_OBJ("prvObj"), TOKEN("token"), GLASS_WINDOW("glasswindow"),
+    PRIVATE_OBJ("prvObj"), TOKEN("token"), GLASS_WINDOW("glassWindow"),
     PLAYER("player");
 
 

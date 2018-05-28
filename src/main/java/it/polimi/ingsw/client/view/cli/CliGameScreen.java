@@ -13,15 +13,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class CliGameScreen implements GameScreen {
+public class CliGameScreen extends GameScreen {
 
-    private static final String TOOL_PATH = "resources/clientResources/tools/";
-    private static final String GLASS_WINDOW_PATH = "resources/clientResources/glassWindows/";
-    private static final String OBJECTIVE_PATH = "resources/clientResources/objectives/";
     private Scanner scanner;
     private final PrintStream printStream;
     private Collection<String> privateObjectives;
@@ -47,46 +43,6 @@ public class CliGameScreen implements GameScreen {
         playersList = new ArrayList<>();
         poolDice = new ArrayList<>();
         roundTrack = new ArrayList<>();
-    }
-
-    private class ToolClass {
-        String toolName;
-        boolean used;
-        boolean active;
-    }
-    private class PlayerClass{
-        String nickname;
-        int tokens;
-        boolean connected;
-        WindowClass glassWindow;
-    }
-    private class WindowClass{
-        String windowName;
-        Cell[] cells;
-
-        public WindowClass() {
-            windowName = "NotYetChoosen";
-            cells = new Cell[20];
-            for (int i = 0; i < 20; i++) {
-                cells[i] = new Cell();
-                cells[i].content = " ";
-                cells[i].restriction = " ";
-            }
-        }
-    }
-    private class Cell{
-        String content;
-        String restriction;
-        boolean active;
-    }
-
-    private class Die{
-        final String id;
-        boolean active;
-
-        public Die(String die) {
-            id = die;
-        }
     }
 
     @Override
@@ -198,13 +154,14 @@ public class CliGameScreen implements GameScreen {
 
     @Override
     public String getWindow(Collection<String> o) {
-        printStream.println(Message.CHOOSE_WINDOW+": " + o);
+        List<String> convertedNames = o.stream().map(Message::convertWindowName).collect(Collectors.toList());
+        printStream.println(Message.CHOOSE_WINDOW+": " + convertedNames);
         String choice = scanner.nextLine();
-        while(!o.contains(choice)){
+        while(!convertedNames.contains(choice)){
             printStream.println(Message.INVALID_CHOICE);
             choice = scanner.nextLine();
         }
-        return choice;
+        return Message.decodeWindowName(choice);
     }
 
     @Override
@@ -347,15 +304,15 @@ public class CliGameScreen implements GameScreen {
         showPrivateObjective();
         showWindow();
         showPublicObjectives();
-        showPool();
         showTools();
+        showPool();
         showOthersNameAndTokens();
         showOthersWindows();
         showRoundTrack();
         printStream.println();
         if (skip) {
             printActive(true, Message.SKIP.toString());
-            printStream.println("  ");
+            printStream.println("\t");
         }if (undo) {
             printActive(true, Message.UNDO.toString());
             printStream.println("\n\n");
@@ -409,7 +366,6 @@ public class CliGameScreen implements GameScreen {
         for (String publicObjective : publicObjectives) {
             showObjective(publicObjective);
         }
-        printStream.print("\n");
     }
 
     private void showObjective(String name){
@@ -500,6 +456,46 @@ public class CliGameScreen implements GameScreen {
     private void clear(){
         for (int i = 0; i < 10; i++) {
             printStream.println();
+        }
+    }
+
+    private class ToolClass {
+        String toolName;
+        boolean used;
+        boolean active;
+    }
+    private class PlayerClass{
+        String nickname;
+        int tokens;
+        boolean connected;
+        WindowClass glassWindow;
+    }
+    private class WindowClass{
+        String windowName;
+        Cell[] cells;
+
+        public WindowClass() {
+            windowName = "NotYetChosen";
+            cells = new Cell[20];
+            for (int i = 0; i < 20; i++) {
+                cells[i] = new Cell();
+                cells[i].content = " ";
+                cells[i].restriction = " ";
+            }
+        }
+    }
+    private class Cell{
+        String content;
+        String restriction;
+        boolean active;
+    }
+
+    private class Die{
+        final String id;
+        boolean active;
+
+        public Die(String die) {
+            id = die;
         }
     }
 }

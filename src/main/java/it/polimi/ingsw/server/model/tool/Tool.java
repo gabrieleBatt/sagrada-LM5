@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model.tool;
 
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.net.identifiables.Identifiable;
-import it.polimi.ingsw.server.model.rules.ActionCommand;
+import it.polimi.ingsw.server.controller.rules.ActionCommand;
 
 import java.util.ArrayList;
 import java.util.Collection;

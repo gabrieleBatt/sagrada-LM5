@@ -2,9 +2,9 @@ package it.polimi.ingsw.client.view.factory;
 
 import it.polimi.ingsw.client.view.EndGameInfo;
 
-public interface EndScreen {
+public abstract class EndScreen {
 
-    public void showRanking(EndGameInfo endGameInfo);
+    public abstract void showRanking(EndGameInfo endGameInfo);
 
-    public boolean playAgain();
+    public abstract boolean playAgain();
 }

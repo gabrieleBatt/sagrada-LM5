@@ -45,13 +45,13 @@ public class FakeSocketClient{
                 }else if (received.get("header").equals(SocketProtocol.CHOOSE_WINDOW.get())) {
                     System.out.println("Choose among these windows: " + received.get(SocketProtocol.GLASS_WINDOW.get()));
                     logger.log(Level.FINE, "{\"header\":\"chooseWindow\"," +
-                            "\"glasswindow\":\""+ ((JSONArray)received.get(SocketProtocol.GLASS_WINDOW.get())).get(0)+"\"}");
+                            "\"glassWindow\":\""+ ((JSONArray)received.get(SocketProtocol.GLASS_WINDOW.get())).get(0)+"\"}");
                     if(!real)
                         out.println("{\"header\":\"chooseWindow\"," +
-                            "\"glasswindow\":\""+ ((JSONArray)received.get(SocketProtocol.GLASS_WINDOW.get())).get(0)+"\"}");
+                            "\"glassWindow\":\""+ ((JSONArray)received.get(SocketProtocol.GLASS_WINDOW.get())).get(0)+"\"}");
                     else
                         out.println("{\"header\":\"chooseWindow\"," +
-                            "\"glasswindow\":\""+scanner.nextLine()+"\"}");
+                            "\"glassWindow\":\""+scanner.nextLine()+"\"}");
                     out.flush();
                 } else if (received.get("header").equals(SocketProtocol.SELECT_OBJECT.get())) {
                     System.out.println("Choose among these : " + received.get(SocketProtocol.OPTION.get()));

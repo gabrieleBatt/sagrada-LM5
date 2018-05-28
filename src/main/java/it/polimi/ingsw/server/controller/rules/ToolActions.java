@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.rules;
+package it.polimi.ingsw.server.controller.rules;
 
 import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.net.identifiables.StdId;
@@ -6,7 +6,6 @@ import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.dice.Die;
-import it.polimi.ingsw.server.model.table.dice.DieColor;
 import it.polimi.ingsw.server.model.table.glasswindow.Cell;
 
 import java.util.*;
@@ -14,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class ToolRules {
+public class ToolActions {
 
         private static final String INCREASE_DECREASE = "IncreaseDecrease";
 

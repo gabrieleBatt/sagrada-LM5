@@ -21,6 +21,10 @@ public class Client {
 
     private Client(){}
 
+    public static Logger getLogger() {
+        return logger;
+    }
+
     public static void main(String[] args) {
         if(args.length == 1 &&
                 (args[0].equalsIgnoreCase("-gui") ||

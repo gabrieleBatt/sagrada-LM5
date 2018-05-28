@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class CliConnectionScreen implements ConnectionScreen {
+public class CliConnectionScreen extends ConnectionScreen {
 
     private final Scanner scanner;
     private final PrintStream printStream;
@@ -69,7 +69,7 @@ public class CliConnectionScreen implements ConnectionScreen {
                         Message.CREDENTIAL_POLICY +"\n");
 
         String choice = scanner.nextLine();
-        while (isValid(choice)) {
+        while (!isValid(choice)) {
             clearScreen();
             printStream.println(Message.INVALID_CHOICE+"\n" +
                             Message.CREDENTIAL_POLICY+ "\n");
@@ -81,7 +81,8 @@ public class CliConnectionScreen implements ConnectionScreen {
     }
 
     private boolean isValid(String s){
-        return s.contains(" ") || s.isEmpty();
+
+        return !s.contains(" ") && !s.isEmpty() && s.length() <= 12;
     }
 
     private String getPasswordFromUser(){
@@ -90,7 +91,7 @@ public class CliConnectionScreen implements ConnectionScreen {
                 Message.CREDENTIAL_POLICY +"\n");
 
         String choice = scanner.nextLine();
-        while (isValid(choice)) {
+        while (!isValid(choice)) {
             clearScreen();
             printStream.println(Message.INVALID_CHOICE+"\n" +
                     Message.CREDENTIAL_POLICY+ "\n");

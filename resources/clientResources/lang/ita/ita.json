@@ -21,5 +21,9 @@
   "InsertPassword": "Inserisci la tua password",
   "NoCredentialPolicy": "Niente spazi, massimo 12 caratteri",
   "InsertPortNumber": "Inserisci il numero di porta",
-  "InsertIp": "Inserisci l'indirizzo ip"
+  "InsertIp": "Inserisci l'indirizzo ip",
+  "InvalidChoice": "Scelta non valida",
+  "Replay":"Vuoi rigiocare",
+  "wins":"vince",
+  "LeaderBoard":"Classifica"
 }

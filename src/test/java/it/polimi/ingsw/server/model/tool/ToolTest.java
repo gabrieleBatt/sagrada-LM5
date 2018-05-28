@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.tool;
 
-import it.polimi.ingsw.server.model.rules.ActionCommand;
+import it.polimi.ingsw.server.controller.rules.ActionCommand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

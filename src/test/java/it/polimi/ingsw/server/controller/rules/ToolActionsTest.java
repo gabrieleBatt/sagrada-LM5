@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.rules;
+package it.polimi.ingsw.server.controller.rules;
 
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
@@ -20,11 +20,10 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
-class ToolRulesTest {
+class ToolActionsTest {
 
     Game game;
     Player player;
@@ -52,7 +51,7 @@ class ToolRulesTest {
         identifiableList.get(1).add(StdId.THREE);
         Die die = new Die(DieColor.CYAN,2,1);
         game.getMap().put(die.getId(),die);
-        ToolRules.setActionCommand(die.getId(), identifiableList).execute(game);
+        ToolActions.setActionCommand(die.getId(), identifiableList).execute(game);
         Assertions.assertNotEquals(die.getNumber(),2);
         Assertions.assertTrue(die.getNumber() == 3||die.getNumber() == 1);
     }
@@ -71,7 +70,7 @@ class ToolRulesTest {
         identifiableList.get(0).add(StdId.THREE);
         Die die = new Die(DieColor.CYAN,1,1);
         game.getMap().put(die.getId(),die);
-        ToolRules.randomActionCommand(die.getId(),identifiableList).execute(game);
+        ToolActions.randomActionCommand(die.getId(),identifiableList).execute(game);
         Assertions.assertNotEquals(die.getNumber(),5);
         Assertions.assertTrue(die.getNumber() == 3||die.getNumber() == 1);
     }
@@ -83,7 +82,7 @@ class ToolRulesTest {
         List<Die> dieList = new ArrayList<>();
         dieList.add(die);
         game.getTable().getPool().setDice(dieList);
-        ToolRules.selectActionCommand(die.getId(), StdId.POOL).execute(game);
+        ToolActions.selectActionCommand(die.getId(), StdId.POOL).execute(game);
         Assertions.assertEquals(game.getMap().size(),1);
         Assertions.assertEquals(game.getMap().get(die.getId()),die);
     }
@@ -98,7 +97,7 @@ class ToolRulesTest {
         dieList.add(die2);
         game.getTable().getPool().setDice(dieList);
 
-        ToolRules.swapActionCommand(null, null, StdId.POOL, "d1", "d2").execute(game);
+        ToolActions.swapActionCommand(null, null, StdId.POOL, "d1", "d2").execute(game);
 
         Assertions.assertTrue(game.getTable().getPool().getDice().contains(die1));
         Assertions.assertEquals(1, game.getTable().getPool().getDice().size());
@@ -113,7 +112,7 @@ class ToolRulesTest {
         Die die2 = new Die(DieColor.CYAN, 5, 10);
         dieCollection.add(die2);
         game.getTable().getRoundTrack().endRound(dieCollection);
-        ToolRules.swapActionCommand(null, null, StdId.ROUND_TRACK, "d1", "d2").execute(game);
+        ToolActions.swapActionCommand(null, null, StdId.ROUND_TRACK, "d1", "d2").execute(game);
         Assertions.assertEquals(die2,game.getMap().get("d2"));
         Assertions.assertEquals(2,game.getMap().size());
         Assertions.assertTrue(game.getTable().getRoundTrack().getDice(1).contains(die1));
@@ -127,7 +126,7 @@ class ToolRulesTest {
         Die die1 = new Die (die.getColor(), die.getNumber(), Integer.parseInt(die.getId().substring(2)));
         game.getTable().getDiceBag().placeDie(die1);
         game.getMap().put("d1", die1);
-        ToolRules.swapActionCommand(null, null, StdId.DICE_BAG, "d2", "d1").execute(game);
+        ToolActions.swapActionCommand(null, null, StdId.DICE_BAG, "d2", "d1").execute(game);
         Assertions.assertEquals(2,game.getMap().size());
         game.getTable().getDiceBag().drawDice(89);
         Assertions.assertThrows(BagEmptyException.class,()-> game.getTable().getDiceBag().drawDice(1));
@@ -141,7 +140,7 @@ class ToolRulesTest {
         }
         Die die1 = new Die(DieColor.CYAN, 5, 1);
         player.getGlassWindow().getCellList().get(0).placeDie(die1,true);
-        ToolRules.moveActionCommand(null, null,true,true,true,false).execute(game);
+        ToolActions.moveActionCommand(null, null,true,true,true,false).execute(game);
         Assertions.assertFalse(player.getGlassWindow().getCellList().get(0).isOccupied());
         Assertions.assertEquals(1,player.getGlassWindow().getCellList().stream().filter(Cell::isOccupied).collect(Collectors.toList()).size());
 

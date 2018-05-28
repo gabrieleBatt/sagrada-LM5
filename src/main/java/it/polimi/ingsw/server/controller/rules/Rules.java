@@ -1,12 +1,9 @@
-package it.polimi.ingsw.server.model.rules;
+package it.polimi.ingsw.server.controller.rules;
 
 
-import it.polimi.ingsw.server.model.rules.ActionCommand;
 import it.polimi.ingsw.server.model.table.Player;
-import it.polimi.ingsw.server.model.table.dice.DieColor;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface Rules {
     /**
