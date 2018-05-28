@@ -20,7 +20,6 @@
 
 Classifica:
 
-
 player1: 42
 
 player3: 39
@@ -30,8 +29,9 @@ player2: 32
 player4: 30
 
 
-player1 vince
+player1 vince!
 
+Premi invio per continuare
 
 
 
@@ -53,5 +53,7 @@ player1 vince
 
 
 Vuoi rigiocare?
-   **si**  **no**   
+   **Si**  **No**   
 
+Scelta non valida
+Scelta non valida

@@ -13,6 +13,11 @@ import java.util.regex.Pattern;
 
 public enum Message {
 
+    YES("yes"),
+    NO("no"),
+    END_GAME_MESSAGE("PressEnterToContinue"),
+    RE_CONNECT("Reconnect"),
+    MESSAGES("Messages"),
     REPLAY("Replay"),
     WINS("wins"),
     LEADER_BOARD("LeaderBoard"),

@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -15,29 +16,42 @@ public class CliConnectionScreen extends ConnectionScreen {
 
     private final Scanner scanner;
     private final PrintStream printStream;
+    private Optional<LoginInfo> loginInfo;
     boolean flag;
+
     public CliConnectionScreen(InputStream inputStream, PrintStream printStream){
         scanner = new Scanner(inputStream);
         this.printStream = printStream;
+        loginInfo = Optional.empty();
     }
 
     @Override
     public LoginInfo getConnectionInfo () {
 
-        if (getConnectionChoiceFromUser().equalsIgnoreCase("rmi")){
+        if(loginInfo.isPresent()){
+            return loginInfo.get();
+        }else if (getConnectionChoiceFromUser().equalsIgnoreCase("rmi")){
             getNicknameChoiceFromUser();
             getPasswordFromUser();
-            return new LoginInfo("rmi",
+            loginInfo = Optional.of(new LoginInfo("rmi",
                     getNicknameChoiceFromUser(),
                     0,
                     null,
-                    getPasswordFromUser());
+                    getPasswordFromUser()));
+        }else {
+            loginInfo = Optional.of(new LoginInfo("socket",
+                    getNicknameChoiceFromUser(),
+                    getPortNumberChoiceFromUser(),
+                    getIpFromUser(),
+                    getPasswordFromUser()));
         }
-        return new LoginInfo("socket",
-                getNicknameChoiceFromUser(),
-                getPortNumberChoiceFromUser(),
-                getIpFromUser(),
-                getPasswordFromUser());
+        return loginInfo.get();
+    }
+
+    @Override
+    public boolean reConnect() {
+        printStream.println(Message.RE_CONNECT+"? y/n");
+        return scanner.nextLine().equalsIgnoreCase("y");
     }
 
     private String getConnectionChoiceFromUser(){

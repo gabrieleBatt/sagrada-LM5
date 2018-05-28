@@ -6,4 +6,6 @@ import it.polimi.ingsw.client.view.LoginInfo;
 public abstract class ConnectionScreen {
 
     public abstract LoginInfo getConnectionInfo();
+
+    public abstract boolean reConnect();
 }

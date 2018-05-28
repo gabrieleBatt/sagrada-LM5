@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface RemoteGameScreen extends Remote {
 
-    void addMessage(String message, boolean toKeep);
+    void addMessage(String message);
 
     void setPlayers(List<String> nicknames);
 

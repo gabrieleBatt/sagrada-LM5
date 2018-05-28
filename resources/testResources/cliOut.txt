@@ -1,5 +1,5 @@
 [37m
-Scegli la vetrata: [W1, W2, W3, W4]
+Scegli la vetrata: [31m[W1, W2, W3, W4][37m
 
 
 
@@ -9,6 +9,16 @@ Scegli la vetrata: [W1, W2, W3, W4]
 
 
 
+
+
+
+test2 Favori:0 offline                test3 Favori:0 offline                
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   3 R   [ ]   [ ]  		 
+
+Messaggi: []
 
 test1	Favori: 0 	 	 	 	 	 	Round: 1
 PrivateObjective: 
@@ -30,14 +40,6 @@ Utensili:
 [1]  Tool not found
 
 Riserva: 
-
-
-test2 Favori:0 offline                test3 Favori:0 offline                
- [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
- [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
- [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
- [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   3 R   [ ]   [ ]  		 
-
 Tracciato dei Round: 	
 
 
@@ -49,6 +51,15 @@ Tracciato dei Round:
 
 
 
+
+
+test2 Favori:0 offline                test3 Favori:0 offline                
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
+ [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   3 R   [ ]   [ ]  		 
+
+Messaggi: []
 
 test1	Favori: 0 	 	 	 	 	 	Round: 1
 PrivateObjective: 
@@ -70,13 +81,4 @@ Utensili:
 [1]  Tool not found
 
 Riserva: 
-
-
-test2 Favori:0 offline                test3 Favori:0 offline                
- [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
- [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
- [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
- [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   3 R   [ ]   [ ]  		 
-
 Tracciato dei Round: 	
-

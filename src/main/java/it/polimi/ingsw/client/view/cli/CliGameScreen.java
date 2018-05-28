@@ -29,13 +29,11 @@ public class CliGameScreen extends GameScreen {
     private boolean skip;
     private boolean undo;
     private List<String> messageRecord;
-    private Optional<String> tempMessage;
 
     public CliGameScreen(InputStream inputStream, PrintStream printStream){
         scanner = new Scanner(inputStream);
         this.printStream = printStream;
         this.messageRecord = new ArrayList<>();
-        this.tempMessage = Optional.empty();
         printStream.println((char)27+ "[37m");
         privateObjectives = new ArrayList<>();
         publicObjectives = new ArrayList<>();
@@ -46,11 +44,8 @@ public class CliGameScreen extends GameScreen {
     }
 
     @Override
-    public void addMessage(String message, boolean toKeep) {
-        if(toKeep)
-            messageRecord.add(message);
-        else
-            tempMessage = Optional.ofNullable(message);
+    public void addMessage(String message) {
+        messageRecord.add(0, message);
     }
 
     public void setPlayers(List<String> nicknames){
@@ -155,7 +150,8 @@ public class CliGameScreen extends GameScreen {
     @Override
     public String getWindow(Collection<String> o) {
         List<String> convertedNames = o.stream().map(Message::convertWindowName).collect(Collectors.toList());
-        printStream.println(Message.CHOOSE_WINDOW+": " + convertedNames);
+        printStream.println(Message.CHOOSE_WINDOW+": "+(char)27+ "[31m"+ convertedNames.toString() + (char)27+ "[37m");
+        printStream.flush();
         String choice = scanner.nextLine();
         while(!convertedNames.contains(choice)){
             printStream.println(Message.INVALID_CHOICE);
@@ -195,6 +191,7 @@ public class CliGameScreen extends GameScreen {
 
     private String getChoice (Collection<String> options){
         showAll();
+        printStream.flush();
         String choice = scanner.nextLine();
         while (!(options.contains(choice) || (choice.equalsIgnoreCase("skip")&&skip) || (choice.equalsIgnoreCase("undo")&&undo))) {
             printStream.println(Message.INVALID_CHOICE);
@@ -284,6 +281,7 @@ public class CliGameScreen extends GameScreen {
                 .map(Message::convertMessage)
                 .collect(Collectors.toList());
         printStream.println(convertMessage + (char)27 + "[31m"+" " + convertStrings +(char)27 + "[37m");
+        printStream.flush();
         choice = scanner.nextLine();
         while(!convertStrings.contains(choice)) {
             printStream.println(Message.INVALID_CHOICE);
@@ -300,16 +298,16 @@ public class CliGameScreen extends GameScreen {
     @Override
     public void showAll(){
         clear();
+        showOthersNameAndTokens();
+        showOthersWindows();
+        printStream.println(Message.MESSAGES + ": "+messageRecord+"\n");
         showNicknameAndTokensAndRound();
         showPrivateObjective();
         showWindow();
         showPublicObjectives();
         showTools();
         showPool();
-        showOthersNameAndTokens();
-        showOthersWindows();
         showRoundTrack();
-        printStream.println();
         if (skip) {
             printActive(true, Message.SKIP.toString());
             printStream.println("\t");

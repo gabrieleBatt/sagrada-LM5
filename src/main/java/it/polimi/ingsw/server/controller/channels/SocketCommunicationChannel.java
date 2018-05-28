@@ -95,7 +95,8 @@ public class SocketCommunicationChannel extends CommunicationChannel {
     @Override
     public void sendMessage(String message) {
         new JSONBuilder()
-                .build(SocketProtocol.SEND, message)
+                .build(SocketProtocol.SEND)
+                .build(SocketProtocol.MESSAGE, message)
                 .send(out);
     }
 

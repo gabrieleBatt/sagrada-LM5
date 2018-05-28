@@ -203,4 +203,12 @@ public class Game implements Runnable {
         optionalTurnActionCommand
                 .ifPresent(turnActionCommand -> actionCommandList.remove(turnActionCommand));
     }
+
+    /**
+     * Sends a message to all clients
+     * @param message message to send
+     */
+    public void sendAll(String message){
+        getCommChannels().forEach(c -> c.sendMessage(message));
+    }
 }

@@ -1,4 +1,9 @@
 {
+  "yes":"Si",
+  "no":"No",
+  "PressEnterToContinue": "Premi invio per continuare",
+  "Reconnect": "Riconnettersi",
+  "Messages": "Messaggi",
   "Choose your window":"Scegli la vetrata",
   "Invalid choice":"Scelta non valida",
   "Private objective":"Obiettivo privato",

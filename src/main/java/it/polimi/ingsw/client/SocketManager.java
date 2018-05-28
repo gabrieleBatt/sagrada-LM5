@@ -89,13 +89,23 @@ public class SocketManager{
                 updateIf(received);
             }else if (header.equals(SocketProtocol.UPDATE_PLAYER.get())){
                 updatePlayerIf(received);
+            }else if (header.equals(SocketProtocol.SEND.get())){
+                gameScreen.addMessage(received.get(SocketProtocol.MESSAGE.get()).toString());
             }else if (header.equals(SocketProtocol.END_GAME.get())){
-                //TODO
-                return new EndGameInfo(null) ;
+                return new EndGameInfo(
+                        convertRanking(getJsonList(received, SocketProtocol.LEADER_BOARD))) ;
             }
             gameScreen.showAll();
         }
         throw new ConnectException();
+    }
+
+    private List<Pair<String, Integer>> convertRanking(List<String> strings){
+        return strings
+                .stream()
+                .map(s -> new Pair<>(s.substring(0, s.indexOf(':')), Integer.parseInt(s.substring(s.indexOf('-')+1))))
+                .collect(Collectors.toList());
+
     }
 
     private void updatePlayerIf(JSONObject received){

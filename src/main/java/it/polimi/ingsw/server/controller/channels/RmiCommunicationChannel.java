@@ -46,7 +46,7 @@ public class RmiCommunicationChannel extends CommunicationChannel {
 
     @Override
     public void sendMessage(String message) {
-        gameScreen.addMessage(message,true);
+        gameScreen.addMessage(message);
     }
 
     @Override

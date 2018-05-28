@@ -21,6 +21,9 @@ import java.util.stream.Collectors;
 
 public class DefaultRules implements Rules {
 
+    private static final String PUBLIC_OBJECTIVE_MESSAGE = "PublicObjectiveDealt";
+    private static final String DRAFT_DONE = "Drafted";
+    private static final String PLACE_DONE = "Placed";
     private static DefaultRules defaultRules = new DefaultRules();
 
     private DefaultRules(){}
@@ -61,6 +64,7 @@ public class DefaultRules implements Rules {
             publicObjectives = PublicObjectiveDeck.getPublicObjectiveDeck().draw(pubObjPerGame);
             actionReceiver.getTable().setPublicObjective(publicObjectives);
             actionReceiver.getCommChannels().forEach(cc -> cc.updateView(actionReceiver.getTable()));
+            actionReceiver.sendAll(PUBLIC_OBJECTIVE_MESSAGE + ":"+publicObjectives);
             Game.getLogger().log(Level.FINE, publicObjectives.toString(), actionReceiver);
         };
     }
@@ -210,9 +214,32 @@ public class DefaultRules implements Rules {
                         .count());
                 ranking.add(new Pair<>(player,points));
             }
+            ranking.sort(this::scoreCompare);
             actionReceiver.endGame(ranking);
         };
 
+    }
+
+    private int scoreCompare(Pair<Player, Integer> p1, Pair<Player, Integer> p2){
+        if(!p1.getValue().equals(p2.getValue())){
+            return p1.getValue() - p2.getValue();
+        }else{
+            int privatePoints1 = p1.getKey().getPrivateObjective()
+                    .stream()
+                    .mapToInt(o -> o.scorePoints(p1.getKey().getGlassWindow()))
+                    .sum();
+            int privatePoints2 = p2.getKey().getPrivateObjective()
+                    .stream()
+                    .mapToInt(o -> o.scorePoints(p1.getKey().getGlassWindow()))
+                    .sum();
+            if(privatePoints1 != privatePoints2){
+                return privatePoints1 - privatePoints2;
+            }else if(p1.getKey().getTokens() != p2.getKey().getTokens()){
+                return p1.getKey().getTokens() - p2.getKey().getTokens();
+            }else{
+                return 0;
+            }
+        }
     }
 
     /**
@@ -279,6 +306,8 @@ public class DefaultRules implements Rules {
             Game.getLogger().log(Level.FINE,
                     "Drafted die "+ optionalDie
                     , this);
+
+            actionReceiver.sendAll(DRAFT_DONE+":" + optionalDie);
         };
     }
 
@@ -322,6 +351,7 @@ public class DefaultRules implements Rules {
                             .filter(c -> c.getId().equals(positionChosen.getId())).findFirst().get()
                             .placeDie(die, (coloRestriction || numberRestriction));
                 }
+                actionReceiver.sendAll(PLACE_DONE+":" + positionChosen);
                 actionReceiver
                         .getCommChannels()
                         .forEach(c -> c

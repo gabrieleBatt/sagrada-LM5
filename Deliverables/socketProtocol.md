@@ -164,7 +164,7 @@ sends in broadcast an update table message containing the leader board
     
     - server:{                                
         "header": "endGame",                    \
-        "leaderBoard: \[\<nickname-score List>] 
+        "leaderBoard: \[\<nickname:score List>] 
         }
 ```mermaid
  +----------+                 +----------+

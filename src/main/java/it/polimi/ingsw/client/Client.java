@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 public class Client {
 
     private static Logger logger = LogMaker.getLogger(Client.class.getName(), Level.ALL);
-    private static Client client = new Client();
     private static ViewAbstractFactory factory;
 
     private Client(){}
@@ -35,31 +34,31 @@ public class Client {
         }
 
         ConnectionScreen connectionScreen = factory.makeConnectionScreen();
-        GameScreen gameScreen = factory.makeGameScreen();
         EndScreen endScreen = factory.makeEndScreen();
 
-        LoginInfo loginInfo = connectionScreen.getConnectionInfo();
+        do {
+            LoginInfo loginInfo = connectionScreen.getConnectionInfo();
+            GameScreen gameScreen = factory.makeGameScreen();
 
-        Optional<EndGameInfo> endGameInfo = Optional.empty();
-        while (!endGameInfo.isPresent()) {
+            Optional<EndGameInfo> endGameInfo = Optional.empty();
             if (loginInfo.connectionType.equalsIgnoreCase("Socket")) {
-                try {
-                    SocketManager socketManager = new SocketManager(loginInfo, gameScreen);
-                    if (socketManager.login()) {
-                        endGameInfo = Optional.of(socketManager.run());
+                while (!endGameInfo.isPresent()) {
+                    try {
+                        SocketManager socketManager = new SocketManager(loginInfo, gameScreen);
+                        if (socketManager.login()) {
+                            endGameInfo = Optional.of(socketManager.run());
+                        }
+                    } catch (IOException | ParseException | NullPointerException e) {
+                        if (!connectionScreen.reConnect()) {
+                            break;
+                        }
                     }
-                } catch (IOException | ParseException e) {
-                    //TODO
-                    //reconnection
                 }
-            }else {
+            } else {
                 new RmiManager(loginInfo);
+                //TODO
             }
-        }
-        endScreen.showRanking(endGameInfo.get());
-    }
-
-    public static void lostConnection() {
-        //reLogin, reConnect
+            endGameInfo.ifPresent(endScreen::showRanking);
+        }while (endScreen.playAgain());
     }
 }

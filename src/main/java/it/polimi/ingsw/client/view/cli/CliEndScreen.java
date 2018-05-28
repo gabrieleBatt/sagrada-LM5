@@ -31,9 +31,11 @@ public class CliEndScreen extends EndScreen {
     public void showRanking(EndGameInfo endGameInfo){
         List<Pair<String,Integer>> ranking = endGameInfo.getRanking();
         clearScreen();
-        printStream.println(Message.LEADER_BOARD+":\n\n");
+        printStream.println(Message.LEADER_BOARD+":\n");
         ranking.forEach(p->printStream.println(p.getKey()+": "+p.getValue()+"\n"));
-        printStream.println("\n" + ranking.get(0).getKey() +" "+Message.WINS+"\n");
+        printStream.println("\n" + ranking.get(0).getKey() +" "+Message.WINS+"!\n");
+        printStream.println(Message.END_GAME_MESSAGE);
+        scanner.nextLine();
     }
 
     /**
@@ -52,12 +54,12 @@ public class CliEndScreen extends EndScreen {
     public boolean playAgain(){
         String answer;
         clearScreen();
-        printStream.println(Message.REPLAY+"?\n   **si**  **no**   \n");
+        printStream.println(Message.REPLAY+"?\n   **"+Message.YES+"**  **"+Message.NO+"**   \n");
         answer = scanner.nextLine();
-        while (answer.equalsIgnoreCase("si") || answer.equalsIgnoreCase("no")){
+        while (!(answer.equalsIgnoreCase(Message.YES.toString()) || answer.equalsIgnoreCase(Message.NO.toString()))){
             printStream.println(Message.INVALID_CHOICE);
             answer = scanner.nextLine();
         }
-        return answer.equalsIgnoreCase("si");
+        return answer.equalsIgnoreCase(Message.YES.toString());
     }
 }

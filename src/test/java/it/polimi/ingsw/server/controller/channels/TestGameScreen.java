@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class TestGameScreen implements RemoteGameScreen {
     @Override
-    public void addMessage(String message, boolean toKeep) {
+    public void addMessage(String message) {
         throw new UnsupportedOperationException();
     }
 
