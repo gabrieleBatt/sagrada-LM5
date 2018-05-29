@@ -197,6 +197,9 @@ public class CliGameScreen extends GameScreen {
             printStream.println(Message.INVALID_CHOICE);
             choice = scanner.nextLine();
         }
+        if(choice.equalsIgnoreCase("skip") || (choice.equalsIgnoreCase("undo"))){
+            return Message.decodeMessage(choice);
+        }
         return choice;
     }
 

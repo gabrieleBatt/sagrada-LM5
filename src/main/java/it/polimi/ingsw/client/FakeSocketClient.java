@@ -18,7 +18,7 @@ public class FakeSocketClient{
     private static final Logger logger = LogMaker.getLogger(FakeSocketClient.class.getName(), Level.ALL);
 
     public static void main(String[] args) {
-        run("player1", false);
+        run("player2", false);
     }
 
     public static void run(String nickname, boolean real){

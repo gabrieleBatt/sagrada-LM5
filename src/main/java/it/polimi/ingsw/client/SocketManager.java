@@ -103,7 +103,7 @@ public class SocketManager{
     private List<Pair<String, Integer>> convertRanking(List<String> strings){
         return strings
                 .stream()
-                .map(s -> new Pair<>(s.substring(0, s.indexOf(':')), Integer.parseInt(s.substring(s.indexOf('-')+1))))
+                .map(s -> new Pair<>(s.substring(0, s.indexOf(':')), Integer.parseInt(s.substring(s.indexOf(':')+1))))
                 .collect(Collectors.toList());
 
     }

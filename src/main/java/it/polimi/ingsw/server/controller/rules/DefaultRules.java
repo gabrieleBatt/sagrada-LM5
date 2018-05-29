@@ -220,7 +220,7 @@ public class DefaultRules implements Rules {
 
     }
 
-    private int scoreCompare(Pair<Player, Integer> p1, Pair<Player, Integer> p2){
+    private int scoreCompare(Pair<Player, Integer> p2, Pair<Player, Integer> p1){
         if(!p1.getValue().equals(p2.getValue())){
             return p1.getValue() - p2.getValue();
         }else{
