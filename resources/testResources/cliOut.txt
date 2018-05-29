@@ -12,6 +12,11 @@ Scegli la vetrata: [31m[W1, W2, W3, W4][37m
 
 
 
+
+
+
+
+
 test2 Favori:0 offline                test3 Favori:0 offline                
  [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
  [ ]   [ ]   [ ]   [ ]   [ ]  		  [ ]   [ ]   [ ]   [ ]   [ ]  		 
@@ -41,6 +46,11 @@ Utensili:
 
 Riserva: 
 Tracciato dei Round: 	
+
+
+
+
+
 
 
 

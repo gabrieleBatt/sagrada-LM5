@@ -9,12 +9,13 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 
-public abstract class GameScreen implements RemoteGameScreen {
+public abstract class GameScreen implements RemoteGameScreen, Serializable {
 
     protected static final String TOOL_PATH = "resources/clientResources/tools/";
     protected static final String GLASS_WINDOW_PATH = "resources/clientResources/glassWindows/";
@@ -30,5 +31,4 @@ public abstract class GameScreen implements RemoteGameScreen {
         }
         OBJECTIVE_PATH = "resources/clientResources/lang/"+language+"/objectives/";
     }
-
 }

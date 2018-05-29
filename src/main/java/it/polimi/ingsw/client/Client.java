@@ -6,9 +6,7 @@ import it.polimi.ingsw.client.view.LoginInfo;
 import it.polimi.ingsw.client.view.factory.*;
 import org.json.simple.parser.ParseException;
 
-import javax.security.auth.login.LoginException;
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;

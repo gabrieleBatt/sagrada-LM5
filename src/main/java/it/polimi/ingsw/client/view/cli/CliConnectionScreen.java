@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 
 public class CliConnectionScreen extends ConnectionScreen {
 
+    private static final int MAX_LEN_CREDENTIAL = 12;
+    private static final int CLEAR_SPACE = 20;
     private final Scanner scanner;
     private final PrintStream printStream;
     private Optional<LoginInfo> loginInfo;
@@ -31,11 +33,9 @@ public class CliConnectionScreen extends ConnectionScreen {
         if(loginInfo.isPresent()){
             return loginInfo.get();
         }else if (getConnectionChoiceFromUser().equalsIgnoreCase("rmi")){
-            getNicknameChoiceFromUser();
-            getPasswordFromUser();
             loginInfo = Optional.of(new LoginInfo("rmi",
                     getNicknameChoiceFromUser(),
-                    0,
+                    getPortNumberChoiceFromUser(),
                     null,
                     getPasswordFromUser()));
         }else {
@@ -96,7 +96,7 @@ public class CliConnectionScreen extends ConnectionScreen {
 
     private boolean isValid(String s){
 
-        return !s.contains(" ") && !s.isEmpty() && s.length() <= 12;
+        return !s.contains(" ") && !s.isEmpty() && s.length() <= MAX_LEN_CREDENTIAL;
     }
 
     private String getPasswordFromUser(){
@@ -163,7 +163,7 @@ public class CliConnectionScreen extends ConnectionScreen {
     }
 
     private void clearScreen() {
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < CLEAR_SPACE; i++) {
             printStream.println();
         }
     }

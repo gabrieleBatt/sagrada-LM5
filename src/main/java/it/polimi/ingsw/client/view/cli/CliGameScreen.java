@@ -18,6 +18,10 @@ import java.util.stream.Collectors;
 
 public class CliGameScreen extends GameScreen {
 
+    private static final String RED_ESC = (char)27+ "[31m";
+    private static final String WHITE_ESC = (char)27+ "[37m";
+    private static final int CELL_NUM = 20;
+    private static final int CLEAR_SPACE = 15;
     private Scanner scanner;
     private final PrintStream printStream;
     private Collection<String> privateObjectives;
@@ -34,7 +38,7 @@ public class CliGameScreen extends GameScreen {
         scanner = new Scanner(inputStream);
         this.printStream = printStream;
         this.messageRecord = new ArrayList<>();
-        printStream.println((char)27+ "[37m");
+        printStream.println( WHITE_ESC);
         privateObjectives = new ArrayList<>();
         publicObjectives = new ArrayList<>();
         toolsList = new ArrayList<>();
@@ -105,17 +109,18 @@ public class CliGameScreen extends GameScreen {
     @Override
     public void setPlayerWindow(String nickname, String windowName){
         for(PlayerClass p: playersList ){
-            if(p.nickname.equals(nickname))
+            if(p.nickname.equals(nickname)) {
                 p.glassWindow.windowName = windowName;
-            try {
-                JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(GLASS_WINDOW_PATH+windowName+".json"));
-                List<String> restrictions = new ArrayList<>((JSONArray)jsonObject.get("cells"));
-                System.out.println(restrictions);
-                for (int i = 0; i < 20; i++) {
-                    p.glassWindow.cells[i].restriction = restrictions.get(i);
+                try {
+                    JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(GLASS_WINDOW_PATH + windowName + ".json"));
+                    List<String> restrictions = new ArrayList<>((JSONArray) jsonObject.get("cells"));
+                    System.out.println(restrictions);
+                    for (int i = 0; i < CELL_NUM; i++) {
+                        p.glassWindow.cells[i].restriction = restrictions.get(i);
+                    }
+                } catch (IOException | ParseException e) {
+                    printStream.println("Window not found");
                 }
-            } catch (IOException | ParseException e) {
-                printStream.println("Window not found");
             }
         }
     }
@@ -150,7 +155,7 @@ public class CliGameScreen extends GameScreen {
     @Override
     public String getWindow(Collection<String> o) {
         List<String> convertedNames = o.stream().map(Message::convertWindowName).collect(Collectors.toList());
-        printStream.println(Message.CHOOSE_WINDOW+": "+(char)27+ "[31m"+ convertedNames.toString() + (char)27+ "[37m");
+        printStream.println(Message.CHOOSE_WINDOW+": "+ RED_ESC + convertedNames.toString() +  WHITE_ESC);
         printStream.flush();
         String choice = scanner.nextLine();
         while(!convertedNames.contains(choice)){
@@ -283,7 +288,7 @@ public class CliGameScreen extends GameScreen {
                 .stream()
                 .map(Message::convertMessage)
                 .collect(Collectors.toList());
-        printStream.println(convertMessage + (char)27 + "[31m"+" " + convertStrings +(char)27 + "[37m");
+        printStream.println(convertMessage +  RED_ESC+" " + convertStrings + WHITE_ESC);
         printStream.flush();
         choice = scanner.nextLine();
         while(!convertStrings.contains(choice)) {
@@ -295,7 +300,7 @@ public class CliGameScreen extends GameScreen {
 
     @Override
     public void endGame(List<Pair<Player, Integer>> scores) {
-        //TODO
+
     }
 
     @Override
@@ -351,12 +356,12 @@ public class CliGameScreen extends GameScreen {
 
     private void printActive(boolean active, String s){
         if(active)
-            printStream.print((char)27 + "[31m"+"{");
+            printStream.print( RED_ESC+"{");
         else
             printStream.print(" ");
         printStream.print(s);
         if(active)
-            printStream.print((char)27 + "[31m"+"} " + (char)27+ "[37m");
+            printStream.print( RED_ESC+"} " + WHITE_ESC);
         else
             printStream.print("  ");
     }
@@ -455,7 +460,7 @@ public class CliGameScreen extends GameScreen {
 
 
     private void clear(){
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < CLEAR_SPACE; i++) {
             printStream.println();
         }
     }
@@ -477,8 +482,8 @@ public class CliGameScreen extends GameScreen {
 
         public WindowClass() {
             windowName = "NotYetChosen";
-            cells = new Cell[20];
-            for (int i = 0; i < 20; i++) {
+            cells = new Cell[CELL_NUM];
+            for (int i = 0; i < CELL_NUM; i++) {
                 cells[i] = new Cell();
                 cells[i].content = " ";
                 cells[i].restriction = " ";

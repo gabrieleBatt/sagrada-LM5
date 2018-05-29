@@ -104,9 +104,7 @@ public class Game implements Runnable {
      * Reset the turn when called if the current action is a TurnActionCommand
      */
     public void resetTurn(){
-        if(actionCommandList.get(0) instanceof TurnActionCommand){
-            ((TurnActionCommand) actionCommandList.get(0)).reset(this);
-        }
+        ((TurnActionCommand) actionCommandList.get(0)).reset(this);
     }
 
     /**

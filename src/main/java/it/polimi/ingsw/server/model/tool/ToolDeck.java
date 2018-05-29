@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -33,8 +34,33 @@ import java.util.stream.Stream;
 public class ToolDeck implements Deck {
 
     private static final Logger logger = LogMaker.getLogger(ToolDeck.class.getName(), Level.ALL);
+    private static final String MOVE = "move";
+    private static final String SELECT = "select";
+    private static final String SET = "set";
+    private static final String RANDOM = "random";
+    private static final String SWAP = "swap";
+    private static final String DRAFT = "draft";
+    private static final String PLACE = "place";
+    private static final String ROLL_POOL = "rollPool";
+    private static final String ACTION_NUM = "actions";
+    private static final String ACTION = "action";
+    private static final String SKIP_TURN = "skipNextTurn";
+    private static final String NAME = "name";
+    private static final String NUMBER = "number";
+    private static final String TYPE = "type";
+    private static final String COLOR = "color";
+    private static final String CLOSE = "close";
+    private static final String CONDITIONS = "conditions";
+    private static final String RESTRICTION = "restriction";
+    private static final String FORCED = "forced";
+    private static final String CAN_SKIP = "canSkip";
+    private static final String FROM = "from";
+    private static final String MARKER = "marker";
+    private static final String WITH = "with";
+    private static final String MARKER_CONTAINER = "markerInContainer";
+    private static final String MARKER_MAP = "markerInMap";
     private static ToolDeck toolDeck = new ToolDeck();
-    private List<JSONObject> tools;
+    private static List<JSONObject> tools;
 
     /**
      * ToolDeck builder. Tool cards are generated form resources.
@@ -63,7 +89,7 @@ public class ToolDeck implements Deck {
         try {
             JSONObject js = (JSONObject) parser.parse(new FileReader(file));
             tools.add(js);
-            logger.log(Level.FINEST, "This tool " + js.get("name") + " has been added to tools", this);
+            logger.log(Level.FINEST, "This tool " + js.get(NAME) + " has been added to tools", this);
 
         } catch (IOException | ParseException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
@@ -97,46 +123,30 @@ public class ToolDeck implements Deck {
      */
     private Tool readCard(JSONObject jsonObject) {
         List<ActionCommand> actionCommands = new ArrayList<>();
-        for (long i = 1; i <= (long) jsonObject.get("actions"); i++) {
-            JSONObject jo = (JSONObject) jsonObject.get("action"+i);
-            switch (jo.get("type").toString()){
-                case "move":
-                    actionCommands.add(getMove(jo));
-                    break;
-                case "select":
-                    actionCommands.add(getSelect(jo));
-                    break;
-                case "set":
-                    actionCommands.add(getSet(jo));
-                    break;
-                case "random":
-                    actionCommands.add(getRandom(jo));
-                    break;
-                case "swap":
-                    actionCommands.add(getSwap(jo));
-                    break;
-                case "draft":
-                    actionCommands.add(getDraft(jo));
-                    break;
-                case "place":
-                    actionCommands.add(getPlace(jo));
-                    break;
-                case "rollPool":
-                    actionCommands.add(ar -> ar.getTable().getPool().roll());
-                    break;
-            }
+        for (long i = 1; i <= (long) jsonObject.get(ACTION_NUM); i++) {
+            JSONObject jo = (JSONObject) jsonObject.get(ACTION+i);
+            Map<String, Function<JSONObject, ActionCommand>> operations = new HashMap<>();
+            operations.put(MOVE, ToolDeck::getMove);
+            operations.put(SELECT, ToolDeck::getSelect);
+            operations.put(SET, ToolDeck::getSet);
+            operations.put(RANDOM, ToolDeck::getRandom);
+            operations.put(SWAP, ToolDeck::getSwap);
+            operations.put(DRAFT, ToolDeck::getDraft);
+            operations.put(PLACE, ToolDeck::getPlace);
+            operations.put(ROLL_POOL, j -> ar -> ar.getTable().getPool().roll());
+            operations.put(SKIP_TURN, j -> Game::skipNextTurn);
+
+            actionCommands.add(operations.get(jo.get(TYPE).toString()).apply(jo));
+
         }
 
-        if(jsonObject.containsKey("skipTurn") && (boolean)jsonObject.get("skipTurn")) {
-            actionCommands.add(Game::skipNextTurn);
-        }
-        List<String> strings = new ArrayList<>((JSONArray)jsonObject.get("conditions"));
+        List<String> strings = new ArrayList<>((JSONArray)jsonObject.get(CONDITIONS));
         List<ToolConditions> toolConditions = strings
                 .stream()
                 .map(ToolConditions::getCondition)
                 .collect(Collectors.toList());
 
-        return new Tool(actionCommands, jsonObject.get("name").toString(), toolConditions);
+        return new Tool(actionCommands, jsonObject.get(NAME).toString(), toolConditions);
     }
 
     /**
@@ -144,11 +154,11 @@ public class ToolDeck implements Deck {
      * @param jsonObject Object read from json file.
      * @return ActionCommand performing draft.
      */
-    private ActionCommand getDraft(JSONObject jsonObject) {
+    private static ActionCommand getDraft(JSONObject jsonObject) {
         return DefaultRules.getDefaultRules().getDraftAction(
                 getMarker(jsonObject),
                 getColor(jsonObject),
-                (String)jsonObject.get("number")
+                (String)jsonObject.get(NUMBER)
         );
     }
 
@@ -157,13 +167,13 @@ public class ToolDeck implements Deck {
      * @param jsonObject Object read from json file.
      * @return ActionCommand performing swap.
      */
-    private ActionCommand getSwap(JSONObject jsonObject) {
+    private static ActionCommand getSwap(JSONObject jsonObject) {
         return ToolActions.swapActionCommand(
                 getColor(jsonObject),
                 getNumber(jsonObject),
-                StdId.getStdId((String)jsonObject.get("with")),
-                (String)jsonObject.get("markerInContainer"),
-                (String)jsonObject.get("markerInMap")
+                StdId.getStdId((String)jsonObject.get(WITH)),
+                (String)jsonObject.get(MARKER_CONTAINER),
+                (String)jsonObject.get(MARKER_MAP)
                 );
     }
 
@@ -172,7 +182,7 @@ public class ToolDeck implements Deck {
      * @param jsonObject Object read from json file.
      * @return ActionCommand performing Random.
      */
-    private ActionCommand getRandom(JSONObject jsonObject) {
+    private static ActionCommand getRandom(JSONObject jsonObject) {
         return ToolActions.randomActionCommand(
                 getMarker(jsonObject),
                 getFunction(jsonObject)
@@ -185,14 +195,14 @@ public class ToolDeck implements Deck {
      * @param jsonObject Object read from json file.
      * @return ActionCommand performing place.
      */
-    private ActionCommand getPlace(JSONObject jsonObject) {
-        List<String> restrictions = new ArrayList<>((JSONArray)jsonObject.get("restriction"));
+    private static ActionCommand getPlace(JSONObject jsonObject) {
+        List<String> restrictions = new ArrayList<>((JSONArray)jsonObject.get(RESTRICTION));
         return DefaultRules.getDefaultRules().getPlaceAction(
                         getMarker(jsonObject),
-                        restrictions.contains("COLOR"),
-                        restrictions.contains("NUMBER"),
-                        restrictions.contains("CLOSE"),
-                        jsonObject.containsKey("forced") && (Boolean)jsonObject.get("forced")
+                        restrictions.contains(COLOR),
+                        restrictions.contains(NUMBER),
+                        restrictions.contains(CLOSE),
+                        jsonObject.containsKey(FORCED) && (Boolean)jsonObject.get(FORCED)
 
                 );
 
@@ -203,7 +213,7 @@ public class ToolDeck implements Deck {
      * @param jsonObject Object read from json file.
      * @return ActionCommand performing set.
      */
-    private ActionCommand getSet(JSONObject jsonObject) {
+    private static ActionCommand getSet(JSONObject jsonObject) {
         return ToolActions
                 .setActionCommand(
                         getMarker(jsonObject),
@@ -215,10 +225,10 @@ public class ToolDeck implements Deck {
      * @param jsonObject Object read from json file.
      * @return A List of List of identifiable, options.
      */
-    private List<List<Identifiable>> getFunction(JSONObject jsonObject) {
+    private static List<List<Identifiable>> getFunction(JSONObject jsonObject) {
         List<List<Identifiable>> identifiableList = new ArrayList<>();
         for (long i = 1; i <=6; i++) {
-            List<Long> longs = new ArrayList<>((JSONArray)jsonObject.get("set"+i));
+            List<Long> longs = new ArrayList<>((JSONArray)jsonObject.get(SET+i));
             identifiableList.add(longs
                     .stream()
                     .map(Object::toString)
@@ -233,16 +243,16 @@ public class ToolDeck implements Deck {
      * @param jsonObject Object read from json file.
      * @return ActionCommand performing move.
      */
-    private ActionCommand getMove(JSONObject jsonObject){
-        List<String> restrictions = new ArrayList<>((JSONArray)jsonObject.get("restriction"));
+    private static ActionCommand getMove(JSONObject jsonObject){
+        List<String> restrictions = new ArrayList<>((JSONArray)jsonObject.get(RESTRICTION));
         return ToolActions
                 .moveActionCommand(
                         getColor(jsonObject),
                         getNumber(jsonObject),
-                        restrictions.contains("COLOR"),
-                        restrictions.contains("NUMBER"),
-                        restrictions.contains("CLOSE"),
-                        jsonObject.containsKey("canSkip") && (Boolean)jsonObject.get("canSkip")
+                        restrictions.contains(COLOR),
+                        restrictions.contains(NUMBER),
+                        restrictions.contains(CLOSE),
+                        jsonObject.containsKey(CAN_SKIP) && (Boolean)jsonObject.get(CAN_SKIP)
 
                 );
     }
@@ -252,10 +262,10 @@ public class ToolDeck implements Deck {
      * @param jsonObject Object read from json file.
      * @return ActionCommand performing select.
      */
-    private ActionCommand getSelect(JSONObject jsonObject){
+    private static ActionCommand getSelect(JSONObject jsonObject){
         return ToolActions.selectActionCommand(
                 getMarker(jsonObject),
-                StdId.getStdId((String)jsonObject.get("from"))
+                StdId.getStdId((String)jsonObject.get(FROM))
         );
     }
 
@@ -264,8 +274,8 @@ public class ToolDeck implements Deck {
      * @param jo Object read from json file.
      * @return String, color.
      */
-    private String getColor(JSONObject jo){
-        return (String)jo.get("color");
+    private static String getColor(JSONObject jo){
+        return (String)jo.get(COLOR);
     }
 
     /**
@@ -273,8 +283,8 @@ public class ToolDeck implements Deck {
      * @param jo Object read from json file.
      * @return String, number.
      */
-    private String getNumber(JSONObject jo){
-        return (String)jo.get("number");
+    private static String getNumber(JSONObject jo){
+        return (String)jo.get(NUMBER);
     }
 
     /**
@@ -282,7 +292,7 @@ public class ToolDeck implements Deck {
      * @param jo Object read from json file.
      * @return String, marker.
      */
-    private String getMarker(JSONObject jo){
-        return (String)jo.get("marker");
+    private static String getMarker(JSONObject jo){
+        return (String)jo.get(MARKER);
     }
 }
