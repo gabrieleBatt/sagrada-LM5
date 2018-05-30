@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.client.view.EndGameInfo;
+import it.polimi.ingsw.client.view.factory.CliViewFactory;
 import javafx.util.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

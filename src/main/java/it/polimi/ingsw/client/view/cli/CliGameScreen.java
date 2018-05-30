@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.client.view.Message;
+import it.polimi.ingsw.client.view.factory.CliViewFactory;
 import it.polimi.ingsw.client.view.factory.GameScreen;
 import it.polimi.ingsw.server.model.table.Player;
 import javafx.util.Pair;
@@ -9,20 +10,17 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class CliGameScreen extends GameScreen {
+public class CliGameScreen extends GameScreen{
 
-    private static final String RED_ESC = (char)27+ "[31m";
+    private static final String COLOR_ESC = (char)27+ "[34m";
     private static final String WHITE_ESC = (char)27+ "[37m";
     private static final int CELL_NUM = 20;
     private static final int CLEAR_SPACE = 15;
-    private Scanner scanner;
+    private final Scanner scanner;
     private final PrintStream printStream;
     private Collection<String> privateObjectives;
     private Collection<String> publicObjectives;
@@ -34,11 +32,10 @@ public class CliGameScreen extends GameScreen {
     private boolean undo;
     private List<String> messageRecord;
 
-    public CliGameScreen(InputStream inputStream, PrintStream printStream){
-        scanner = new Scanner(inputStream);
-        this.printStream = printStream;
+    public CliGameScreen(InputStream in, PrintStream out){
+        this.scanner = new Scanner(in);
+        this.printStream = out;
         this.messageRecord = new ArrayList<>();
-        printStream.println( WHITE_ESC);
         privateObjectives = new ArrayList<>();
         publicObjectives = new ArrayList<>();
         toolsList = new ArrayList<>();
@@ -155,7 +152,7 @@ public class CliGameScreen extends GameScreen {
     @Override
     public String getWindow(Collection<String> o) {
         List<String> convertedNames = o.stream().map(Message::convertWindowName).collect(Collectors.toList());
-        printStream.println(Message.CHOOSE_WINDOW+": "+ RED_ESC + convertedNames.toString() +  WHITE_ESC);
+        printStream.println(Message.CHOOSE_WINDOW+": "+ COLOR_ESC + convertedNames.toString() +  WHITE_ESC);
         printStream.flush();
         String choice = scanner.nextLine();
         while(!convertedNames.contains(choice)){
@@ -288,7 +285,7 @@ public class CliGameScreen extends GameScreen {
                 .stream()
                 .map(Message::convertMessage)
                 .collect(Collectors.toList());
-        printStream.println(convertMessage +  RED_ESC+" " + convertStrings + WHITE_ESC);
+        printStream.println(convertMessage +  COLOR_ESC+" " + convertStrings + WHITE_ESC);
         printStream.flush();
         choice = scanner.nextLine();
         while(!convertStrings.contains(choice)) {
@@ -298,10 +295,6 @@ public class CliGameScreen extends GameScreen {
         return Message.decodeMessage(choice);
     }
 
-    @Override
-    public void endGame(List<Pair<Player, Integer>> scores) {
-
-    }
 
     @Override
     public void showAll(){
@@ -356,12 +349,12 @@ public class CliGameScreen extends GameScreen {
 
     private void printActive(boolean active, String s){
         if(active)
-            printStream.print( RED_ESC+"{");
+            printStream.print( COLOR_ESC+"{");
         else
             printStream.print(" ");
         printStream.print(s);
         if(active)
-            printStream.print( RED_ESC+"} " + WHITE_ESC);
+            printStream.print( COLOR_ESC+"} " + WHITE_ESC);
         else
             printStream.print("  ");
     }

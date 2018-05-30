@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.client.view.LoginInfo;
 import it.polimi.ingsw.client.view.Message;
+import it.polimi.ingsw.client.view.factory.CliViewFactory;
 import it.polimi.ingsw.client.view.factory.ConnectionScreen;
 
 import java.io.InputStream;
@@ -21,9 +22,9 @@ public class CliConnectionScreen extends ConnectionScreen {
     private Optional<LoginInfo> loginInfo;
     boolean flag;
 
-    public CliConnectionScreen(InputStream inputStream, PrintStream printStream){
-        scanner = new Scanner(inputStream);
-        this.printStream = printStream;
+    public CliConnectionScreen(InputStream in, PrintStream out){
+        this.scanner = new Scanner(in);
+        this.printStream = out;
         loginInfo = Optional.empty();
     }
 

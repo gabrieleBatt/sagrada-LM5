@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.net.interfaces.RemoteChannel;
 import it.polimi.ingsw.net.socket.JSONBuilder;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
 import it.polimi.ingsw.server.controller.channels.RmiCommunicationChannel;
@@ -23,7 +24,7 @@ import java.util.logging.Logger;
 
 public class Server extends UnicastRemoteObject implements RemoteServer {
 
-    private static Logger logger = LogMaker.getLogger(Server.class.getName(), Level.ALL);
+    transient private static Logger logger = LogMaker.getLogger(Server.class.getName(), Level.ALL);
     private static int rmiPortNumber;
     private static int socketPortNumber;
     private static final Lobby lobby = new Lobby();
@@ -90,9 +91,19 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
     }
 
     @Override
-    public void rmiLogin(RemoteGameScreen gameScreen, String nickname, String password) throws RemoteException {
+    public RemoteChannel rmiLogin(RemoteGameScreen gameScreen, String nickname, String password) throws RemoteException {
         logger.log(Level.FINE,  "logged!", nickname);
-        addToGame(new RmiCommunicationChannel(gameScreen, nickname), nickname);
+        if(!UsersDatabase.userExists(nickname)){
+            UsersDatabase.newUser(nickname, password);
+        }
+        if(UsersDatabase.authentication(nickname, password)) {
+            RmiCommunicationChannel rcc = new RmiCommunicationChannel(gameScreen, nickname);
+            addToGame(rcc, nickname);
+            UnicastRemoteObject.exportObject(rcc, 0);
+            return rcc;
+        }else{
+            return null;
+        }
     }
 
     public static void socketLogin(Socket socket){

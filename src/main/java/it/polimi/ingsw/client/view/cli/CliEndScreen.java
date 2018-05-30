@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.client.view.EndGameInfo;
 import it.polimi.ingsw.client.view.Message;
+import it.polimi.ingsw.client.view.factory.CliViewFactory;
 import it.polimi.ingsw.client.view.factory.EndScreen;
 import javafx.util.Pair;
 
@@ -19,9 +20,9 @@ public class CliEndScreen extends EndScreen {
     private final Scanner scanner;
     private final PrintStream printStream;
 
-    public CliEndScreen(InputStream inputStream, PrintStream printStream){
-        scanner = new Scanner(inputStream);
-        this.printStream = printStream;
+    public CliEndScreen(InputStream in, PrintStream out) {
+        this.scanner = new Scanner(in);
+        this.printStream = out;
     }
 
     /**

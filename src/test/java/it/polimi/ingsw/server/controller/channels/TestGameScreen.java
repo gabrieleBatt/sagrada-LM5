@@ -87,12 +87,6 @@ public class TestGameScreen implements RemoteGameScreen {
     }
 
     @Override
-    public void endGame(List<Pair<Player, Integer>> scores) {
-        throw new UnsupportedOperationException();
-
-    }
-
-    @Override
     public void showAll() {
         throw new UnsupportedOperationException();
     }

@@ -19,40 +19,40 @@ public interface Rules {
     ActionCommand getSetupRoundAction();
 
     /**
-     * Gets the list of turn actions of a player.
+     * Gets the turn action of a player.
      * @param turnPlayer player whose turn is.
-     * @return list of turn actions of a player.
+     * @return Turn action of a of a player.
      */
-    ActionCommand getTurnAction(Player turnPlayer);
+    TurnActionCommand getTurnAction(Player turnPlayer);
 
     /**
-     * Gets the list of end round actions.
-     * @return list of end round actions.
+     * Gets the end round action.
+     * @return End round action.
      */
     ActionCommand getEndRoundAction();
 
     /**
-     * Gets the list of end game actions.
-     * @return list of end game actions.
+     * Gets the end game action.
+     * @return end game action.
      */
     ActionCommand getEndGameAction();
 
     /**
-     * Gets the list of draft actions.
+     * Gets the draft action.
      * @param marker String, marker of the die drafted.
      * @param dieColor marker of die deciding the color.
      * @param dieNumber marker of die deciding the color.
-     * @return list of draft actions.
+     * @return draft action.
      */
     ActionCommand getDraftAction(String marker, String dieColor, String dieNumber);
 
     /**
-     * Gets the list of place actions.
+     * Gets place action.
      * @param marker String, marker of the die placed.
      * @param adjacencyRestriction boolean, true if there are adjacency restrictions.
      * @param coloRestriction boolean, true if there are color restrictions.
      * @param numberRestriction boolean, true if there are numeric restrictions.
-     * @return list of place actions.
+     * @return place action.
      */
     ActionCommand getPlaceAction(String marker, boolean adjacencyRestriction, boolean coloRestriction, boolean numberRestriction, boolean forced);
 }

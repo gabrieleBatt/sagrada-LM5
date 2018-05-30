@@ -23,9 +23,9 @@ public class Game implements Runnable {
     private Table table;
     private List<CommunicationChannel> commChannels;
     private HashMap<String, Die> dice;
-    private List<ActionCommand> actionCommandList;
     private final Rules rules;
     private List<Pair<Player,Integer>> ranking;
+    private ActionList actionCommandList;
 
 
     public Game(Collection<CommunicationChannel> commChannels){
@@ -35,7 +35,7 @@ public class Game implements Runnable {
                 .map(cc -> new Player(cc.getNickname()))
                 .collect(Collectors.toList()));
         this.dice = new HashMap<>();
-        this.actionCommandList = new ArrayList<>();
+        this.actionCommandList = new ActionList();
 
         actionCommandList.addAll(rules.getSetupGameActions());
 
@@ -62,9 +62,9 @@ public class Game implements Runnable {
     }
 
     public Player getTurnPlayer(){
-        ActionCommand actionCommand = actionCommandList.get(0);
-        if(actionCommand instanceof TurnActionCommand){
-            return ((TurnActionCommand) actionCommand).getPlayer();
+        Optional<TurnActionCommand> actionCommand = actionCommandList.getTurn(0);
+        if(actionCommand.isPresent()){
+            return actionCommand.get().getPlayer();
         }
         else throw new NoSuchElementException();
     }
@@ -72,6 +72,11 @@ public class Game implements Runnable {
     public void addAction(ActionCommand actionCommand){
         actionCommandList.add(0, actionCommand);
     }
+
+    public void addAction(TurnActionCommand actionCommand){
+        actionCommandList.add(0, actionCommand);
+    }
+
 
     /**
      * Executes all action in list until empty
@@ -192,7 +197,7 @@ public class Game implements Runnable {
     public void skipNextTurn() {
         Optional<TurnActionCommand> optionalTurnActionCommand= actionCommandList
                 .stream()
-                .filter(a-> a instanceof TurnActionCommand)
+                .filter(a-> actionCommandList.isTurn(a))
                 .map(a -> (TurnActionCommand)a)
                 .filter(tac->tac
                         .getPlayer()
@@ -208,5 +213,34 @@ public class Game implements Runnable {
      */
     public void sendAll(String message){
         getCommChannels().forEach(c -> c.sendMessage(message));
+    }
+
+    private class ActionList extends ArrayList<ActionCommand>{
+        private List<ActionCommand> turnCommands = new ArrayList<>();
+
+        public boolean add(TurnActionCommand actionCommand) {
+            turnCommands.add(actionCommand);
+            return super.add(actionCommand);
+        }
+
+        public void add(int index, TurnActionCommand actionCommand) {
+            turnCommands.add(actionCommand);
+            super.add(index, actionCommand);
+        }
+
+        public Optional<TurnActionCommand> getTurn(int index){
+            if(turnCommands.contains(this.get(index)))
+                return Optional.of((TurnActionCommand) this.get(index));
+            return Optional.empty();
+        }
+
+        public boolean isTurn(ActionCommand actionCommand){
+            return turnCommands.contains(actionCommand);
+        }
+
+        public boolean remove(Object o) {
+            turnCommands.remove(o);
+            return super.remove(o);
+        }
     }
 }

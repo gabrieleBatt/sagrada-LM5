@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.controller.channels;
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.net.identifiables.StdId;
+import it.polimi.ingsw.net.interfaces.RemoteChannel;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Pool;
 import it.polimi.ingsw.server.model.table.RoundTrack;
@@ -12,26 +13,25 @@ import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import it.polimi.ingsw.net.interfaces.RemoteGameScreen;
 import javafx.util.Pair;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Timer;
+import java.rmi.RemoteException;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.BiFunction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class RmiCommunicationChannel extends CommunicationChannel {
+public class RmiCommunicationChannel extends CommunicationChannel implements RemoteChannel {
     private static final Logger logger = LogMaker.getLogger(RmiCommunicationChannel.class.getName(), Level.ALL);
 
     private final String nickname;
     private final RemoteGameScreen gameScreen;
     private boolean isOffline;
+    private List<Pair<Player,Integer>> scores;
 
     public RmiCommunicationChannel(RemoteGameScreen gameScreen, String nickname) {
         this.nickname = nickname;
         this.gameScreen = gameScreen;
+        this.scores = new ArrayList<>();
     }
 
     @Override
@@ -46,14 +46,21 @@ public class RmiCommunicationChannel extends CommunicationChannel {
 
     @Override
     public void sendMessage(String message) {
-        gameScreen.addMessage(message);
+        try {
+            gameScreen.addMessage(message);
+        } catch (RemoteException e) {
+            this.setOffline();
+        }
     }
 
     @Override
     public void updateView(Pool pool) {
-        gameScreen.setPool(pool.getDice().stream().map(Identifiable::getId).collect(Collectors.toList()));
-        gameScreen.showAll();
-
+        try{
+            gameScreen.setPool(pool.getDice().stream().map(Identifiable::getId).collect(Collectors.toList()));
+            gameScreen.showAll();
+        } catch (RemoteException e) {
+            this.setOffline();
+        }
     }
 
     @Override
@@ -62,58 +69,78 @@ public class RmiCommunicationChannel extends CommunicationChannel {
         for(int i= 1;  i<roundTrack.getRound()-1; i++){
             completeRoundTrack.add(roundTrack.getDice(i).stream().map(Identifiable::getId).collect(Collectors.toList()));
         }
-        gameScreen.setRoundTrack(completeRoundTrack);
-        gameScreen.showAll();
-
+        try{
+            gameScreen.setRoundTrack(completeRoundTrack);
+            gameScreen.showAll();
+        } catch (RemoteException e) {
+            this.setOffline();
+        }
     }
 
     @Override
     public void updateView(Table table) {
-        gameScreen.setPublicObjective(table.getPublicObjectives().stream().map(Identifiable::getId).collect(Collectors.toList()));
-        gameScreen.setTools(table.getTools().stream().map(Identifiable::getId).collect(Collectors.toList()));
-        gameScreen.setPlayers(table.getPlayers().stream().map(Player::getNickname).collect(Collectors.toList()));
-        gameScreen.showAll();
+        try {
+            gameScreen.setPublicObjective(table.getPublicObjectives().stream().map(Identifiable::getId).collect(Collectors.toList()));
+            gameScreen.setTools(table.getTools().stream().map(Identifiable::getId).collect(Collectors.toList()));
+            gameScreen.setPlayers(table.getPlayers().stream().map(Player::getNickname).collect(Collectors.toList()));
+            gameScreen.showAll();
+        } catch (RemoteException e) {
+        this.setOffline();
+    }
     }
 
     @Override
     public void updateView(Player player, boolean connected) {
-        gameScreen.setPlayerConnection(player.getNickname(), connected);
-        if(player.getNickname().equals(this.nickname))
-            gameScreen.setPrivateObjectives(player.getPrivateObjective().stream().map(Identifiable::getId).collect(Collectors.toList()));
-        if(player.hasGlassWindow()){
-            gameScreen.setPlayerWindow(player.getNickname(), player.getGlassWindow().getId());
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 5; j++) {
-                    Cell c = player.getGlassWindow().getCell(i,j);
-                    if(c.isOccupied())
-                        gameScreen.setCellContent(player.getNickname(), i, j, c.getDie().getId());
+        try {
+            gameScreen.setPlayerConnection(player.getNickname(), connected);
+            if (player.getNickname().equals(this.nickname))
+                gameScreen.setPrivateObjectives(player.getPrivateObjective().stream().map(Identifiable::getId).collect(Collectors.toList()));
+            if (player.hasGlassWindow()) {
+                gameScreen.setPlayerWindow(player.getNickname(), player.getGlassWindow().getId());
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 5; j++) {
+                        Cell c = player.getGlassWindow().getCell(i, j);
+                        if (c.isOccupied())
+                            gameScreen.setCellContent(player.getNickname(), i, j, c.getDie().getId());
+                    }
                 }
             }
+            gameScreen.setPlayerToken(player.getNickname(), player.getTokens());
+            gameScreen.showAll();
+        } catch (RemoteException e) {
+            this.setOffline();
         }
-        gameScreen.setPlayerToken(player.getNickname(), player.getTokens());
-        gameScreen.showAll();
     }
 
     @Override
     public void endGame(List<Pair<Player, Integer>> scores) {
-        throw new UnsupportedOperationException();
+        this.scores = scores;
+    }
+
+    @Override
+    public List<Pair<String, Integer>> getScores() throws RemoteException {
+        return scores
+                .stream()
+                .map(p -> new Pair<>(p.getKey().getNickname(), p.getValue()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public GlassWindow chooseWindow(List<GlassWindow> glassWindows) {
-        Timer timer = new Timer();
-        startTimer(timer, this);
-        String use = gameScreen.getWindow(glassWindows.stream().map(Identifiable::getId).collect(Collectors.toList()));
-        Optional<GlassWindow> optionalGlassWindow = glassWindows.stream().filter(g -> g.getId().equals(use)).findAny();
-        if(optionalGlassWindow.isPresent()){
-            endTimer(timer);
-            return optionalGlassWindow.get();
+        try {
+            Timer timer = new Timer();
+            startTimer(timer, this);
+            String use = gameScreen.getWindow(glassWindows.stream().map(Identifiable::getId).collect(Collectors.toList()));
+            Optional<GlassWindow> optionalGlassWindow = glassWindows.stream().filter(g -> g.getId().equals(use)).findAny();
+            if (optionalGlassWindow.isPresent()) {
+                endTimer(timer);
+                return optionalGlassWindow.get();
+            }
+        } catch (RemoteException e) {
+            logger.log(Level.WARNING, e.getMessage());
         }
-        else {
-            setOffline();
-            return glassWindows.get(ThreadLocalRandom.current().nextInt(0, glassWindows.size()));
-        }
-
+        setOffline();
+        return glassWindows.get(ThreadLocalRandom.current().nextInt(0, glassWindows.size()));
     }
 
     @Override
@@ -126,7 +153,11 @@ public class RmiCommunicationChannel extends CommunicationChannel {
         return askClient(options, canSkip, undoEnabled, gameScreen::getInputFrom, message);
     }
 
-    private Identifiable askClient(List<Identifiable> options, boolean canSkip, boolean undoEnabled, BiFunction<List, String, String> function, String string){
+
+    private Identifiable askClient(List<Identifiable> options, boolean canSkip,
+                                   boolean undoEnabled,
+                                   BiFunctionRemExc<List, String, String> function,
+                                   String string){
         if(isOffline)
             return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
         List<String> use= options.stream().map(Identifiable::getId).collect(Collectors.toList());
@@ -136,7 +167,13 @@ public class RmiCommunicationChannel extends CommunicationChannel {
             use.add(StdId.UNDO.getId());
         Timer timer = new Timer();
         startTimer(timer, this);
-        String ret = function.apply(use, string);
+        String ret;
+        try {
+            ret = function.apply(use, string);
+        } catch (RemoteException e) {
+            setOffline();
+            return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
+        }
         endTimer(timer);
         if(canSkip && ret.equals(StdId.SKIP.getId()))
             return StdId.SKIP;
@@ -158,5 +195,10 @@ public class RmiCommunicationChannel extends CommunicationChannel {
         logger.log(Level.WARNING, getNickname() + " is offline");
         //TODO -- disconnect properly
         isOffline = true;
+    }
+
+    @FunctionalInterface
+    private interface BiFunctionRemExc<T, U, R>{
+        R apply(T t, U u) throws RemoteException;
     }
 }

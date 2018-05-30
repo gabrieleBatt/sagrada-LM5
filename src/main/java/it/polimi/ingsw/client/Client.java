@@ -1,12 +1,20 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.client.connection.ConnectionManager;
+import it.polimi.ingsw.client.connection.RmiManager;
+import it.polimi.ingsw.client.connection.SocketManager;
 import it.polimi.ingsw.client.view.EndGameInfo;
 import it.polimi.ingsw.client.view.LoginInfo;
 import it.polimi.ingsw.client.view.factory.*;
 import org.json.simple.parser.ParseException;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,23 +47,27 @@ public class Client {
             GameScreen gameScreen = factory.makeGameScreen();
 
             Optional<EndGameInfo> endGameInfo = Optional.empty();
+            ConnectionManager connectionManager;
+
             if (loginInfo.connectionType.equalsIgnoreCase("Socket")) {
-                while (!endGameInfo.isPresent()) {
-                    try {
-                        SocketManager socketManager = new SocketManager(loginInfo, gameScreen);
-                        if (socketManager.login()) {
-                            endGameInfo = Optional.of(socketManager.run());
-                        }
-                    } catch (IOException | ParseException | NullPointerException e) {
-                        if (!connectionScreen.reConnect()) {
-                            break;
-                        }
+                connectionManager = new SocketManager(loginInfo, gameScreen);
+            } else {
+                connectionManager = new RmiManager(loginInfo, gameScreen);
+            }
+            do{
+                try {
+                    if (connectionManager.login()) {
+                        endGameInfo = connectionManager.run();
+                    }else{
+                        break;
+                    }
+                } catch (InterruptedException | NotBoundException | IOException | ParseException | NullPointerException e) {
+                    logger.log(Level.WARNING, e.getMessage());
+                    if (!connectionScreen.reConnect()) {
+                        break;
                     }
                 }
-            } else {
-                new RmiManager(loginInfo);
-                //TODO
-            }
+            }while ((!endGameInfo.isPresent()));
             endGameInfo.ifPresent(endScreen::showRanking);
         }while (endScreen.playAgain());
     }

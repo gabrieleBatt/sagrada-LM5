@@ -1,5 +1,9 @@
-[37m
-Scegli la vetrata: [31m[W1, W2, W3, W4][37m
+Scegli la vetrata: [34m[W1, W2, W3, W4][37m
+
+
+
+
+
 
 
 
@@ -25,10 +29,10 @@ PrivateObjective:
 Objective not found
 Objective not found
 
-[31m{[ ][31m} [37m [ ]  [31m{[ ][31m} [37m [ ]   [ ]
+[34m{[ ][34m} [37m [ ]  [34m{[ ][34m} [37m [ ]   [ ]
  [ ]   [ ]   [ ]   [ ]   [ ]
- [ ]   [ ]  [31m{[ ][31m} [37m [ ]   [ ]
- [ ]  [31m{[ ][31m} [37m [ ]   [ ]   [ ]
+ [ ]   [ ]  [34m{[ ][34m} [37m [ ]   [ ]
+ [ ]  [34m{[ ][34m} [37m [ ]   [ ]   [ ]
 
 
 PublicObjective:
@@ -41,6 +45,11 @@ Utensili:
 
 Riserva:
 Tracciato dei Round:
+
+
+
+
+
 
 
 

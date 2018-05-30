@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 
-public abstract class GameScreen implements RemoteGameScreen, Serializable {
+public abstract class GameScreen implements RemoteGameScreen {
 
     protected static final String TOOL_PATH = "resources/clientResources/tools/";
     protected static final String GLASS_WINDOW_PATH = "resources/clientResources/glassWindows/";

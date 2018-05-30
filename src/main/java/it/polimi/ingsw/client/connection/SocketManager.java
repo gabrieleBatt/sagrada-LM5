@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client;
+package it.polimi.ingsw.client.connection;
 
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.client.view.EndGameInfo;
@@ -15,6 +15,7 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 /**
  * Used to manage the view by socket communication
  */
-public class SocketManager{
+public class SocketManager extends ConnectionManager{
 
     private static Logger logger = LogMaker.getLogger(SocketManager.class.getName(), Level.ALL);
     private final String nickname;
@@ -34,15 +35,12 @@ public class SocketManager{
     private PrintWriter out;
     private final GameScreen gameScreen;
 
-    SocketManager(LoginInfo loginInfo, GameScreen gameScreen) throws IOException {
+    public SocketManager(LoginInfo loginInfo, GameScreen gameScreen){
         ip = loginInfo.ip;
         port = loginInfo.portNumber;
         nickname = loginInfo.nickname;
         password = loginInfo.password;
         this.gameScreen = gameScreen;
-        Socket socket = new Socket(ip, port);
-        out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
     private Collection<String> jsonArrayToCollection(JSONArray jsonArray){
@@ -56,7 +54,8 @@ public class SocketManager{
     /**
      * Handles the channel until its on or the game ends
      */
-    EndGameInfo run() throws IOException, ParseException {
+    @Override
+    public Optional<EndGameInfo> run() throws IOException, ParseException {
         JSONObject received;
         while ((received = (JSONObject) (new JSONParser()).parse(in.readLine())) != null) {
             Object header = received.get(SocketProtocol.HEADER.get());
@@ -92,8 +91,8 @@ public class SocketManager{
             }else if (header.equals(SocketProtocol.SEND.get())){
                 gameScreen.addMessage(received.get(SocketProtocol.MESSAGE.get()).toString());
             }else if (header.equals(SocketProtocol.END_GAME.get())){
-                return new EndGameInfo(
-                        convertRanking(getJsonList(received, SocketProtocol.LEADER_BOARD))) ;
+                return Optional.of(new EndGameInfo(
+                        convertRanking(getJsonList(received, SocketProtocol.LEADER_BOARD))));
             }
             gameScreen.showAll();
         }
@@ -108,7 +107,7 @@ public class SocketManager{
 
     }
 
-    private void updatePlayerIf(JSONObject received){
+    private void updatePlayerIf(JSONObject received) throws RemoteException {
         String player = received.get(SocketProtocol.PLAYER.get()).toString();
         if(received.containsKey(SocketProtocol.TOKEN.get())) {
             gameScreen.setPlayerToken(player, Integer.parseInt(received.get(SocketProtocol.TOKEN.get()).toString()));
@@ -130,7 +129,7 @@ public class SocketManager{
     }
 
 
-    private void updateIf(JSONObject received){
+    private void updateIf(JSONObject received) throws RemoteException {
         if (received.containsKey(SocketProtocol.POOL.get())){
             Collection<String> strings = getJsonList(received, SocketProtocol.POOL);
             gameScreen.setPool(strings);
@@ -161,7 +160,7 @@ public class SocketManager{
         }
     }
 
-    private void updateRoundTrack(JSONObject received){
+    private void updateRoundTrack(JSONObject received) throws RemoteException {
         Collection<String> strings = getJsonList(received, SocketProtocol.ROUND_TRACK);
         List<List<String>> lists = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -182,7 +181,11 @@ public class SocketManager{
         return new ArrayList<String>(jsonArray);
     }
 
+    @Override
     public boolean login() throws IOException, ParseException {
+        Socket socket = new Socket(ip, port);
+        out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         new JSONBuilder().build(SocketProtocol.LOGIN)
                 .build(SocketProtocol.NICKNAME, nickname)
                 .build(SocketProtocol.PASSWORD, password)

@@ -3,6 +3,10 @@ package it.polimi.ingsw.client.view.factory;
 import it.polimi.ingsw.client.view.cli.CliConnectionScreen;
 import it.polimi.ingsw.client.view.cli.CliEndScreen;
 import it.polimi.ingsw.client.view.cli.CliGameScreen;
+import jdk.internal.util.xml.impl.Input;
+
+import java.io.*;
+import java.util.Scanner;
 
 public class CliViewFactory implements ViewAbstractFactory {
 
@@ -21,6 +25,7 @@ public class CliViewFactory implements ViewAbstractFactory {
     public CliEndScreen makeEndScreen() {
         return new CliEndScreen(System.in, System.out);
     }
+
 }
 
 

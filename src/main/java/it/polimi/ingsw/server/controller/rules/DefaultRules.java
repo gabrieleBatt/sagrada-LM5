@@ -166,7 +166,7 @@ public class DefaultRules implements Rules {
      * @return list of turn actions of a player.
      */
     @Override
-    public ActionCommand getTurnAction(Player turnPlayer) {
+    public TurnActionCommand getTurnAction(Player turnPlayer) {
         return new TurnActionCommand(turnPlayer);
     }
 

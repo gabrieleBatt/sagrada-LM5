@@ -4,42 +4,41 @@ import it.polimi.ingsw.server.model.table.Player;
 import javafx.util.Pair;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.List;
 
 public interface RemoteGameScreen extends Remote {
 
-    void addMessage(String message);
+    void addMessage(String message) throws RemoteException;
 
-    void setPlayers(List<String> nicknames);
+    void setPlayers(List<String> nicknames) throws RemoteException;
 
-    void setPrivateObjectives(Collection<String> privateObjectives);
+    void setPrivateObjectives(Collection<String> privateObjectives) throws RemoteException;
 
-    void setPublicObjective(Collection<String> publicObjectives);
+    void setPublicObjective(Collection<String> publicObjectives) throws RemoteException;
 
-    void setTools(Collection<String> tools);
+    void setTools(Collection<String> tools) throws RemoteException;
 
-    void setToolUsed(String tool, boolean used);
+    void setToolUsed(String tool, boolean used) throws RemoteException;
 
-    void setPlayerToken(String nickname, int tokens);
+    void setPlayerToken(String nickname, int tokens) throws RemoteException;
 
-    void setPlayerConnection(String nickname, boolean isConnected);
+    void setPlayerConnection(String nickname, boolean isConnected) throws RemoteException;
 
-    void setPlayerWindow(String nickname, String windowName);
+    void setPlayerWindow(String nickname, String windowName) throws RemoteException;
 
-    void setCellContent(String nickname, int x, int y, String die);
+    void setCellContent(String nickname, int x, int y, String die) throws RemoteException;
 
-    void setPool(Collection<String> dice);
+    void setPool(Collection<String> dice) throws RemoteException;
 
-    void setRoundTrack(List<List<String>> dice);
+    void setRoundTrack(List<List<String>> dice)throws RemoteException;
 
-    String getWindow(Collection<String> o);
+    String getWindow(Collection<String> o)throws RemoteException;
 
-    String getInput(Collection<String> options, String container);
+    String getInput(Collection<String> options, String container)throws RemoteException;
 
-    String getInputFrom(Collection<String> strings, String message);
+    String getInputFrom(Collection<String> strings, String message)throws RemoteException;
 
-    void endGame(List<Pair<Player, Integer>> scores);
-
-    void showAll();
+    void showAll()throws RemoteException;
 }
