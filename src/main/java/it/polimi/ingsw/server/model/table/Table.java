@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.model.table;
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.model.objective.PublicObjective;
 import it.polimi.ingsw.server.model.table.dice.DiceBag;
-import it.polimi.ingsw.server.model.tool.Effect;
 import it.polimi.ingsw.server.model.tool.Tool;
 
 import java.util.*;
@@ -24,7 +23,6 @@ public class Table {
     private final DiceBag diceBag;
     private final Pool pool;
     private final RoundTrack roundTrack;
-    private Set<Effect> effects;
 
     /**
      * Creates table with all the players
@@ -34,7 +32,6 @@ public class Table {
         this.players = new ArrayList<>(players);
         this.diceBag = new DiceBag();
         this.roundTrack = new RoundTrack();
-        this.effects = new HashSet<>();
         this.pool = new Pool();
         this.publicObjectives = new HashSet<>();
         this.tools = new HashSet<>();
@@ -158,21 +155,5 @@ public class Table {
         return roundTrack;
     }
 
-    /**
-     * Gets effects active in this game
-     * @return Set of effects
-     */
-    public Collection<Effect> getEffects() {
-        return new HashSet<>(effects);
-    }
 
-    /**
-     * Adds effects to the effect's Set
-     * @param effect to be added
-     */
-    public void addEffect(Effect effect){
-        effects.add(effect);
-        logger.log(Level.FINEST, "This effect: " + effect+ " has been added", this);
-
-    }
 }

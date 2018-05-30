@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.objective;
 
+import it.polimi.ingsw.server.controller.deck.PrivateObjectiveDeck;
 import it.polimi.ingsw.server.exception.DeckTooSmallException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

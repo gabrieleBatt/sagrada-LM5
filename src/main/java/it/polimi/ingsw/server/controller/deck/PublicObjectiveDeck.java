@@ -1,8 +1,11 @@
-package it.polimi.ingsw.server.model.objective;
+package it.polimi.ingsw.server.controller.deck;
 
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.exception.DeckTooSmallException;
-import it.polimi.ingsw.server.model.table.Deck;
+import it.polimi.ingsw.server.model.objective.AreaPublicObjective;
+import it.polimi.ingsw.server.model.objective.Coordinate;
+import it.polimi.ingsw.server.model.objective.PublicObjective;
+import it.polimi.ingsw.server.model.objective.SetPublicObjective;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -25,25 +28,14 @@ public class PublicObjectiveDeck implements Deck {
 
     private static final Logger logger = LogMaker.getLogger(PublicObjectiveDeck.class.getName(), Level.ALL);
     private static PublicObjectiveDeck publicObjectiveDeck = new PublicObjectiveDeck();
-    private List<JSONObject> publicObjectives;
+    private List<File> publicObjectives;
 
     private PublicObjectiveDeck(){
         publicObjectives = new ArrayList<>();
         Path path = Paths.get("resources/serverResources/objectives/public");
         try (Stream<Path> files = Files.list(path)){
-            files.forEach(f -> addCard(f.toFile()));
+            files.forEach(f -> publicObjectives.add(f.toFile()));
         } catch (IOException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
-    }
-
-    private void addCard(File file) {
-        JSONParser parser = new JSONParser();
-        try {
-            JSONObject js = (JSONObject)parser.parse(new FileReader(file));
-            publicObjectives.add(js);
-            logger.log(Level.FINEST,  "This public objective "+ js.get("name") +" has been added to publicObjectives", this);
-        } catch (IOException | ParseException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
@@ -64,13 +56,26 @@ public class PublicObjectiveDeck implements Deck {
         }
 
         for(Integer i: integerSet){
-            ret.add(readCard(publicObjectives.get(i)));
-
+            Optional<JSONObject> optional = parse(publicObjectives.get(i));
+            optional.ifPresent(jsonObject -> ret.add(readCard(jsonObject)));
         }
 
 
         return ret;
     }
+
+    private Optional<JSONObject> parse(File f){
+        JSONParser parser = new JSONParser();
+        JSONObject js = null;
+        try {
+            js = (JSONObject)parser.parse(new FileReader(f));
+            logger.log(Level.FINEST,  "This public objective "+ js.get("name") +" has been added to publicObjectives", this);
+        } catch (IOException | ParseException e) {
+            logger.log(Level.WARNING, e.getMessage(), e);
+        }
+        return Optional.ofNullable(js);
+    }
+
 
     private PublicObjective readCard(JSONObject jsonObject){
         if ((jsonObject.get("type")).equals("area")) return readAreaCard(jsonObject);

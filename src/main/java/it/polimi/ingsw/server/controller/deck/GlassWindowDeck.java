@@ -1,9 +1,10 @@
-package it.polimi.ingsw.server.model.table.glasswindow;
+package it.polimi.ingsw.server.controller.deck;
 
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.exception.DeckTooSmallException;
-import it.polimi.ingsw.server.model.table.Deck;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
+import it.polimi.ingsw.server.model.table.glasswindow.Cell;
+import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -28,13 +29,13 @@ public class GlassWindowDeck implements Deck {
 
     private static final Logger logger = LogMaker.getLogger(GlassWindowDeck.class.getName(), Level.ALL);
     private static GlassWindowDeck glassWindowDeck = new GlassWindowDeck();
-    private List<JSONObject> glassWindowCards;
+    private List<File> glassWindowCards;
 
     private GlassWindowDeck(){
         glassWindowCards = new ArrayList<>();
         Path path = Paths.get("resources/serverResources/glassWindows");
         try (Stream<Path> files = Files.list(path)){
-            files.forEach(f -> addCard(f.toFile()));
+            files.forEach(f -> glassWindowCards.add(f.toFile()));
         } catch (IOException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
@@ -59,25 +60,25 @@ public class GlassWindowDeck implements Deck {
         }
 
         for(Integer i: integerSet){
-            ret.add(readCard(glassWindowCards.get(i), 1));
-            ret.add(readCard(glassWindowCards.get(i), 2));
-
+            Optional<JSONObject> optional = parse(glassWindowCards.get(i));
+            optional.ifPresent(jsonObject -> ret.add(readCard(jsonObject, 1)));
+            optional.ifPresent(jsonObject -> ret.add(readCard(jsonObject, 2)));
         }
         logger.log(Level.FINEST, num + "GlassWindows have been drawn ", this);
 
         return ret;
     }
 
-    private void addCard(File file){
+    private Optional<JSONObject> parse(File file){
         JSONParser parser = new JSONParser();
+        JSONObject js = null;
         try {
-            JSONObject js = (JSONObject)parser.parse(new FileReader(file));
-            glassWindowCards.add(js);
+            js = (JSONObject)parser.parse(new FileReader(file));
             logger.log(Level.FINEST,  "GlassWindow "+ js.get("name1") + "/" + js.get("name2") +" has been added to glassWindowCards", this);
-
         } catch (IOException | ParseException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
+        return Optional.ofNullable(js);
     }
 
     private GlassWindow readCard(JSONObject jsonGlassWindow, int x) {

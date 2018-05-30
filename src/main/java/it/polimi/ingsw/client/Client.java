@@ -9,12 +9,8 @@ import it.polimi.ingsw.client.view.LoginInfo;
 import it.polimi.ingsw.client.view.factory.*;
 import org.json.simple.parser.ParseException;
 
-import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;

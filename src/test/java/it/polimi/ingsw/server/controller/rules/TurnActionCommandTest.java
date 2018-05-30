@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.controller.channels.MockCommunicationChannel;
 import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.glasswindow.Cell;
-import it.polimi.ingsw.server.model.table.glasswindow.GlassWindowDeck;
+import it.polimi.ingsw.server.controller.deck.GlassWindowDeck;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.table;
+package it.polimi.ingsw.server.controller.deck;
 
 import it.polimi.ingsw.server.exception.DeckTooSmallException;
 

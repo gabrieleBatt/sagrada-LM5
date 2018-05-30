@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.tool;
+package it.polimi.ingsw.server.controller.deck;
 
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.net.identifiables.Identifiable;
@@ -8,7 +8,8 @@ import it.polimi.ingsw.server.exception.DeckTooSmallException;
 import it.polimi.ingsw.server.controller.rules.ActionCommand;
 import it.polimi.ingsw.server.controller.rules.DefaultRules;
 import it.polimi.ingsw.server.controller.rules.ToolActions;
-import it.polimi.ingsw.server.model.table.Deck;
+import it.polimi.ingsw.server.model.tool.Tool;
+import it.polimi.ingsw.server.model.tool.ToolConditions;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -60,7 +61,7 @@ public class ToolDeck implements Deck {
     private static final String MARKER_CONTAINER = "markerInContainer";
     private static final String MARKER_MAP = "markerInMap";
     private static ToolDeck toolDeck = new ToolDeck();
-    private static List<JSONObject> tools;
+    private static List<File> tools;
 
     /**
      * ToolDeck builder. Tool cards are generated form resources.
@@ -69,7 +70,7 @@ public class ToolDeck implements Deck {
         tools = new ArrayList<>();
         Path path = Paths.get("resources/serverResources/tools");
         try (Stream<Path> files = Files.list(path)){
-            files.forEach((f) -> addCard(f.toFile()));
+            files.forEach(f -> tools.add(f.toFile()));
         } catch (IOException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
@@ -84,16 +85,16 @@ public class ToolDeck implements Deck {
         return toolDeck;
     }
 
-    private void addCard(File file) {
+    private Optional<JSONObject> parse(File file) {
         JSONParser parser = new JSONParser();
+        JSONObject js = null;
         try {
-            JSONObject js = (JSONObject) parser.parse(new FileReader(file));
-            tools.add(js);
+            js = (JSONObject) parser.parse(new FileReader(file));
             logger.log(Level.FINEST, "This tool " + js.get(NAME) + " has been added to tools", this);
-
         } catch (IOException | ParseException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
+        return Optional.ofNullable(js);
     }
 
 
@@ -108,7 +109,8 @@ public class ToolDeck implements Deck {
         }
 
         for(Integer i: integerSet){
-            ret.add(readCard(tools.get(i)));
+            Optional<JSONObject> optional = parse(tools.get(i));
+            optional.ifPresent(jsonObject -> ret.add(readCard(jsonObject)));
         }
         logger.log(Level.FINEST, num + " tools have been drawn ", this);
         logger.log(Level.FINEST, " These tools have been added: " + ret, this);

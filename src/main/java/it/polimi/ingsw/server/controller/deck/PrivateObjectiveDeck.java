@@ -1,8 +1,9 @@
-package it.polimi.ingsw.server.model.objective;
+package it.polimi.ingsw.server.controller.deck;
 
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.exception.DeckTooSmallException;
-import it.polimi.ingsw.server.model.table.Deck;
+import it.polimi.ingsw.server.model.objective.ColorPrivateObjective;
+import it.polimi.ingsw.server.model.objective.PrivateObjective;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -24,13 +25,13 @@ public class PrivateObjectiveDeck implements Deck {
 
     private static final Logger logger = LogMaker.getLogger(PrivateObjectiveDeck.class.getName(), Level.ALL);
     private static PrivateObjectiveDeck privateObjectiveDeck = new PrivateObjectiveDeck();
-    private List<JSONObject> privateObjectives;
+    private List<File> privateObjectives;
 
     private PrivateObjectiveDeck(){
         privateObjectives = new ArrayList<>();
         Path path = Paths.get("resources/serverResources/objectives/private");
         try (Stream<Path> files = Files.list(path)){
-            files.forEach(f -> addCard(f.toFile()));
+            files.forEach(f -> privateObjectives.add(f.toFile()));
         } catch (IOException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
@@ -40,15 +41,17 @@ public class PrivateObjectiveDeck implements Deck {
         return privateObjectiveDeck;
     }
 
-    private void addCard(File file) {
+    private Optional<JSONObject> parse(File file) {
         JSONParser parser = new JSONParser();
+        JSONObject js = null;
         try {
-            JSONObject js = (JSONObject)parser.parse(new FileReader(file));
-            privateObjectives.add(js);
+            js = (JSONObject)parser.parse(new FileReader(file));
             logger.log(Level.FINEST,  "This private objective "+ js.get("name") +" has been added to privateObjectives", this);
+
         } catch (IOException | ParseException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
+        return Optional.ofNullable(js);
     }
 
     @Override
@@ -63,7 +66,8 @@ public class PrivateObjectiveDeck implements Deck {
         }
 
         for(Integer i: integerSet){
-            ret.add(readCard(privateObjectives.get(i)));
+            Optional<JSONObject> optional = parse(privateObjectives.get(i));
+            optional.ifPresent(jsonObject -> ret.add(readCard(jsonObject)));
         }
         logger.log(Level.FINEST, num + " private objectives have been drawn ", this);
         logger.log(Level.FINEST, " These are private objectives added: " + ret, this);

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.model.table;
 
-import it.polimi.ingsw.server.model.tool.Effect;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -61,16 +60,6 @@ class TableTest {
         Assertions.assertTrue(iterator.hasNext());
         Assertions.assertEquals(player2, iterator.next());
         Assertions.assertFalse(iterator.hasNext());
-    }
-
-    @DisplayName("Get current effects")
-    @Test
-    void getEffects() {
-        Effect e = new Effect();
-        Assertions.assertEquals(0, table.getEffects().size());
-        table.addEffect(e);
-        Assertions.assertEquals(1, table.getEffects().size());
-        Assertions.assertTrue(table.getEffects().contains(e));
     }
 
     @DisplayName("Get players by name")

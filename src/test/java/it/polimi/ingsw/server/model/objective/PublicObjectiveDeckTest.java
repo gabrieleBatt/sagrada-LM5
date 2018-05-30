@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.objective;
 
+import it.polimi.ingsw.server.controller.deck.PublicObjectiveDeck;
 import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
