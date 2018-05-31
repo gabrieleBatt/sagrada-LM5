@@ -3,12 +3,10 @@ package it.polimi.ingsw.client.connection;
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.client.view.EndGameInfo;
 import it.polimi.ingsw.client.view.LoginInfo;
-import it.polimi.ingsw.client.view.factory.GameScreen;
 import it.polimi.ingsw.net.interfaces.RemoteChannel;
 import it.polimi.ingsw.net.interfaces.RemoteGameScreen;
 import it.polimi.ingsw.net.interfaces.RemoteServer;
 import javafx.util.Pair;
-import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -27,7 +25,6 @@ import java.util.logging.Logger;
 public class RmiManager extends ConnectionManager{
 
     private static Logger logger = LogMaker.getLogger(RmiManager.class.getName(), Level.ALL);
-    private RemoteServer server;
     private final LoginInfo loginInfo;
     private RemoteGameScreen gameScreen;
     private RemoteChannel remoteChannel;
@@ -40,7 +37,7 @@ public class RmiManager extends ConnectionManager{
     }
 
     @Override
-    public Optional<EndGameInfo> run() throws IOException, ParseException, InterruptedException {
+    public Optional<EndGameInfo> run() throws InterruptedException {
 
         Thread thread = new Thread(() -> {
             do{
@@ -68,8 +65,8 @@ public class RmiManager extends ConnectionManager{
     }
 
     @Override
-    public boolean login() throws IOException, ParseException, NotBoundException {
-        server = (RemoteServer)LocateRegistry.getRegistry(loginInfo.portNumber).lookup("Server");
+    public boolean login() throws IOException, NotBoundException {
+        RemoteServer server = (RemoteServer) LocateRegistry.getRegistry(loginInfo.portNumber).lookup("Server");
         UnicastRemoteObject.exportObject(gameScreen, 0);
         remoteChannel = server.rmiLogin(gameScreen, loginInfo.nickname, loginInfo.password);
         return remoteChannel != null;

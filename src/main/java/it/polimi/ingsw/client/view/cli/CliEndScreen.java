@@ -16,6 +16,7 @@ import java.util.Scanner;
  */
 public class CliEndScreen extends EndScreen {
 
+    private static final int CLEAR_SPACE = 20;
     private final Scanner scanner;
     private final PrintStream printStream;
 
@@ -42,7 +43,7 @@ public class CliEndScreen extends EndScreen {
      * Cleans user screen.
      */
     private void clearScreen() {
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < CLEAR_SPACE; i++) {
             printStream.println();
         }
     }

@@ -72,7 +72,7 @@ public class TurnActionCommand implements ActionCommand{
             options.add(USE_TOOL);
 
             //choose first action
-            actionChosen = cc.chooseFrom(options, Message.NEXT_MOVE.toString(), true, false);
+            actionChosen = cc.chooseFrom(options, Message.NEXT_MOVE.name(), true, false);
             doActionChosen(actionChosen, actionReceiver);
         }while(reset);
         backUp(actionReceiver);
@@ -81,7 +81,7 @@ public class TurnActionCommand implements ActionCommand{
             //choose second action
             if(!skip) {
                 options.remove(actionChosen);
-                actionChosen = cc.chooseFrom(options, Message.NEXT_MOVE.toString(), true, true);
+                actionChosen = cc.chooseFrom(options, Message.NEXT_MOVE.name(), true, true);
                 doActionChosen(actionChosen, actionReceiver);
             }
         }while(reset);

@@ -13,60 +13,57 @@ import java.util.regex.Pattern;
 
 public enum Message {
 
-    YES("yes"),
-    NO("no"),
-    END_GAME_MESSAGE("PressEnterToContinue"),
-    RE_CONNECT("Reconnect"),
-    MESSAGES("Messages"),
-    REPLAY("Replay"),
-    WINS("wins"),
-    LEADER_BOARD("LeaderBoard"),
-    CHOOSE_CONNECTION("ChooseConnectionType"),
-    CHOOSE_NICKNAME("ChooseNickname"),
-    INSERT_PASSWORD("InsertPassword"),
-    CREDENTIAL_POLICY("NoCredentialPolicy"),
-    PORT_NUMBER("InsertPortNumber"),
-    IP_NUMBER("InsertIp"),
-    CHOOSE_WINDOW("Choose your window"),
-    INVALID_CHOICE("InvalidChoice"),
-    PRIVATE_OBJ("PrivateObjective"),
-    PUBLIC_OBJ("PublicObjective"),
-    TOOL("Tools"),
-    TOKENS("Favors"),
-    ONLINE("online"),
-    OFFLINE("offline"),
-    ROUND("Round"),
-    DRAFT_POOL("Pool"),
-    POINTS("Points"),
-    SKIP("skip"),
-    UNDO("undo"),
-    ROUND_TRACK("RoundTrack"),
-    NEXT_MOVE("chooseNextMove"),
-    USE_TOOL("useTool"),
-    DRAFT("draftDice"),
-    DRAFT_DONE("Drafted"),
-    PLACE_DONE("Drafted");
+    YES(),
+    NO(),
+    END_GAME_MESSAGE(),
+    RE_CONNECT(),
+    MESSAGES(),
+    REPLAY(),
+    WINS(),
+    LEADER_BOARD,
+    CHOOSE_CONNECTION(),
+    CHOOSE_NICKNAME(),
+    INSERT_PASSWORD(),
+    CREDENTIAL_POLICY(),
+    PORT_NUMBER(),
+    IP_NUMBER(),
+    CHOOSE_WINDOW(),
+    INVALID_CHOICE(),
+    PRIVATE_OBJ(),
+    PUBLIC_OBJ(),
+    TOOL(),
+    TOKENS(),
+    ONLINE(),
+    OFFLINE(),
+    ROUND(),
+    DRAFT_POOL(),
+    POINTS(),
+    SKIP(),
+    UNDO(),
+    ROUND_TRACK(),
+    NEXT_MOVE(),
+    USE_TOOL(),
+    DRAFT(),
+    DRAFT_DONE(),
+    PLACE_DONE();
 
-    private Optional<String> message;
-    private final String defaultMessage;
+   private String message;
 
-    Message(String defaultMessage) {
-        this.defaultMessage = defaultMessage;
+    Message() {
         try {
             JSONObject config = (JSONObject) new JSONParser().parse(new FileReader("resources/clientResources/config.json"));
             String language = ((String) config.get("language")).toLowerCase();
             JSONObject translator = (JSONObject) new JSONParser().parse(new FileReader("resources/clientResources/lang/"+language+"/"+language+".json"));
-            this.message = Optional.ofNullable((String)translator.get(defaultMessage));
-
+            Optional.ofNullable((String)translator.get(this.name())).ifPresent(s -> this.message = s);
         } catch (IOException | ParseException e) {
-            this.message = Optional.empty();
+            this.message = this.toString();
         }
     }
 
     public static String  convertMessage(String defaultMessage){
         Optional<Message> optional =  Arrays
                 .stream(Message.values())
-                .filter(m -> m.defaultMessage.equals(defaultMessage))
+                .filter(m -> m.name().equals(defaultMessage))
                 .findFirst();
         if(optional.isPresent()){
             return optional.get().toString();
@@ -78,11 +75,10 @@ public enum Message {
     public static String decodeMessage(String choice) {
         Optional<Message> optional =  Arrays
                 .stream(Message.values())
-                .filter(m -> m.message.isPresent())
-                .filter(m -> m.message.get().equals(choice))
+                .filter(m -> m.message.equals(choice))
                 .findFirst();
         if(optional.isPresent()){
-            return optional.get().defaultMessage;
+            return optional.get().name();
         }else{
             throw new IllegalArgumentException();
         }
@@ -90,7 +86,7 @@ public enum Message {
 
     @Override
     public String toString() {
-        return message.orElse(defaultMessage);
+        return message;
     }
 
     public static String convertWindowName(String name){

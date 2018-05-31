@@ -16,10 +16,11 @@ public class CliConnectionScreen extends ConnectionScreen {
 
     private static final int MAX_LEN_CREDENTIAL = 12;
     private static final int CLEAR_SPACE = 20;
+    private static final String RMI = "rmi";
+    private static final String SOCKET = "socket";
     private final Scanner scanner;
     private final PrintStream printStream;
     private Optional<LoginInfo> loginInfo;
-    boolean flag;
 
     public CliConnectionScreen(InputStream in, PrintStream out){
         this.scanner = new Scanner(in);
@@ -32,14 +33,14 @@ public class CliConnectionScreen extends ConnectionScreen {
 
         if(loginInfo.isPresent()){
             return loginInfo.get();
-        }else if (getConnectionChoiceFromUser().equalsIgnoreCase("rmi")){
-            loginInfo = Optional.of(new LoginInfo("rmi",
+        }else if (getConnectionChoiceFromUser().equalsIgnoreCase(RMI)){
+            loginInfo = Optional.of(new LoginInfo(RMI,
                     getNicknameChoiceFromUser(),
                     getPortNumberChoiceFromUser(),
                     null,
                     getPasswordFromUser()));
         }else {
-            loginInfo = Optional.of(new LoginInfo("socket",
+            loginInfo = Optional.of(new LoginInfo(SOCKET,
                     getNicknameChoiceFromUser(),
                     getPortNumberChoiceFromUser(),
                     getIpFromUser(),
@@ -61,19 +62,18 @@ public class CliConnectionScreen extends ConnectionScreen {
 
         String choice = scanner.nextLine();
 
-        while (!(choice.equalsIgnoreCase("RMI") || choice.equalsIgnoreCase("R") ||
-                choice.equalsIgnoreCase("Socket") || choice.equalsIgnoreCase("S") )){
+        while (!(choice.equalsIgnoreCase(RMI) || choice.equalsIgnoreCase("R") ||
+                choice.equalsIgnoreCase(SOCKET) || choice.equalsIgnoreCase("S") )){
             clearScreen();
             printStream.println(Message.INVALID_CHOICE+"\n" +
-                    "**RMI**  **Socket** :  \n");
+                    "**"+RMI+"**  **"+SOCKET+"** :  \n");
 
             choice = scanner.nextLine();
         }
         if (choice.toUpperCase().contains("R")) {
-            flag = true;
-            return "rmi";
+            return RMI;
         } else
-            return "socket";
+            return SOCKET;
 
     }
 
@@ -83,7 +83,7 @@ public class CliConnectionScreen extends ConnectionScreen {
                         Message.CREDENTIAL_POLICY +"\n");
 
         String choice = scanner.nextLine();
-        while (!isValid(choice)) {
+        while (notValid(choice)) {
             clearScreen();
             printStream.println(Message.INVALID_CHOICE+"\n" +
                             Message.CREDENTIAL_POLICY+ "\n");
@@ -94,9 +94,8 @@ public class CliConnectionScreen extends ConnectionScreen {
         return choice;
     }
 
-    private boolean isValid(String s){
-
-        return !s.contains(" ") && !s.isEmpty() && s.length() <= MAX_LEN_CREDENTIAL;
+    private boolean notValid(String s){
+        return s.contains(" ") || s.isEmpty() || s.length() > MAX_LEN_CREDENTIAL;
     }
 
     private String getPasswordFromUser(){
@@ -105,7 +104,7 @@ public class CliConnectionScreen extends ConnectionScreen {
                 Message.CREDENTIAL_POLICY +"\n");
 
         String choice = scanner.nextLine();
-        while (!isValid(choice)) {
+        while (notValid(choice)) {
             clearScreen();
             printStream.println(Message.INVALID_CHOICE+"\n" +
                     Message.CREDENTIAL_POLICY+ "\n");

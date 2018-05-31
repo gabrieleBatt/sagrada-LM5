@@ -293,7 +293,7 @@ public class DefaultRules implements Rules {
                 if(optionalDie.isPresent()) {
                     actionReceiver.getTable().getPool().takeDie(optionalDie.get());
                     actionReceiver.getMap().put(marker, optionalDie.get());
-                    actionReceiver.sendAll(Message.DRAFT_DONE+":" + optionalDie.get());
+                    actionReceiver.sendAll(Message.DRAFT_DONE.name()+":" + optionalDie.get());
                 }
             }
 
@@ -352,7 +352,7 @@ public class DefaultRules implements Rules {
                             .filter(c -> c.getId().equals(positionChosen.getId())).findFirst().get()
                             .placeDie(die, (coloRestriction || numberRestriction));
                 }
-                actionReceiver.sendAll(Message.PLACE_DONE+":" + positionChosen.getId());
+                actionReceiver.sendAll(Message.PLACE_DONE.name()+":" + positionChosen.getId());
                 actionReceiver
                         .getCommChannels()
                         .forEach(c -> c

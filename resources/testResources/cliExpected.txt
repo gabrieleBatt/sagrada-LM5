@@ -25,7 +25,7 @@ test2 Favori:0 offline                test3 Favori:0 offline
 Messaggi: []
 
 test1	Favori: 0 	 	 	 	 	 	Round: 1
-PrivateObjective:
+Obiettivo privato:
 Objective not found
 Objective not found
 
@@ -35,7 +35,7 @@ Objective not found
  [ ]  [34m{[ ][34m} [37m [ ]   [ ]   [ ]
 
 
-PublicObjective:
+Obbiettivi pubblici:
 Objective not found
 Objective not found
 Utensili:
@@ -71,7 +71,7 @@ test2 Favori:0 offline                test3 Favori:0 offline
 Messaggi: []
 
 test1	Favori: 0 	 	 	 	 	 	Round: 1
-PrivateObjective:
+Obiettivo privato:
 Objective not found
 Objective not found
 
@@ -81,7 +81,7 @@ Objective not found
  [ ]   [ ]   [ ]   [ ]   [ ]
 
 
-PublicObjective:
+Obbiettivi pubblici:
 Objective not found
 Objective not found
 Utensili:

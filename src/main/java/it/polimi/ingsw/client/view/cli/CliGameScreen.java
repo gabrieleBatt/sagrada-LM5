@@ -2,6 +2,8 @@ package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.net.Message;
 import it.polimi.ingsw.client.view.factory.GameScreen;
+import it.polimi.ingsw.net.identifiables.Identifiable;
+import it.polimi.ingsw.net.identifiables.StdId;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,6 +19,10 @@ public class CliGameScreen extends GameScreen{
     private static final String WHITE_ESC = (char)27+ "[37m";
     private static final int CELL_NUM = 20;
     private static final int CLEAR_SPACE = 15;
+    private static final Object CARD_NAME = "name";
+    private static final Object CARD_POINTS = "points";
+    private static final Object CARD_DESCRIPTION = "description";
+    private static final Object WINDOW_CELLS = "cells";
     private final Scanner scanner;
     private final PrintStream printStream;
     private Collection<String> privateObjectives;
@@ -107,7 +113,7 @@ public class CliGameScreen extends GameScreen{
                 p.glassWindow.windowName = windowName;
                 try {
                     JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(GLASS_WINDOW_PATH + windowName + ".json"));
-                    List<String> restrictions = new ArrayList<>((JSONArray) jsonObject.get("cells"));
+                    List<String> restrictions = new ArrayList<>((JSONArray) jsonObject.get(WINDOW_CELLS));
                     System.out.println(restrictions);
                     for (int i = 0; i < CELL_NUM; i++) {
                         p.glassWindow.cells[i].restriction = restrictions.get(i);
@@ -163,22 +169,22 @@ public class CliGameScreen extends GameScreen{
     public String getInput(Collection<String> options, String container) {
         skip = false;
         undo = false;
-        if(options.contains("skip")){
+        if(options.contains(StdId.SKIP.getId())){
             skip = true;
-            options.remove("skip");
+            options.remove(StdId.SKIP.getId());
         }
-        if(options.contains("undo")){
+        if(options.contains(StdId.UNDO.getId())){
             undo = true;
-            options.remove("undo");
+            options.remove(StdId.UNDO.getId());
         }
         String ret;
-        if(container.equalsIgnoreCase("pool")) {
+        if(container.equalsIgnoreCase(StdId.POOL.getId())) {
             ret = poolGetInput(options);
-        }else if (container.equalsIgnoreCase("roundTrack")) {
+        }else if (container.equalsIgnoreCase(StdId.ROUND_TRACK.getId())) {
             ret = roundTrackGetInput(options);
-        }else if (container.equalsIgnoreCase("glassWindow")) {
+        }else if (container.equalsIgnoreCase(StdId.GLASS_WINDOW.getId())) {
             ret = windowGetInput(options);
-        }else if (container.equalsIgnoreCase("table")) {
+        }else if (container.equalsIgnoreCase(StdId.TABLE.getId())) {
             ret = tableGetInput(options);
         }else{
             throw new IllegalArgumentException();
@@ -192,11 +198,11 @@ public class CliGameScreen extends GameScreen{
         showAll();
         printStream.flush();
         String choice = scanner.nextLine();
-        while (!(options.contains(choice) || (choice.equalsIgnoreCase("skip")&&skip) || (choice.equalsIgnoreCase("undo")&&undo))) {
+        while (!(options.contains(choice) || (choice.equalsIgnoreCase(StdId.SKIP.getId())&&skip) || (choice.equalsIgnoreCase("undo")&&undo))) {
             printStream.println(Message.INVALID_CHOICE);
             choice = scanner.nextLine();
         }
-        if(choice.equalsIgnoreCase("skip") || (choice.equalsIgnoreCase("undo"))){
+        if(choice.equalsIgnoreCase(StdId.SKIP.getId()) || (choice.equalsIgnoreCase("undo"))){
             return Message.decodeMessage(choice);
         }
         return choice;
@@ -277,6 +283,7 @@ public class CliGameScreen extends GameScreen{
     @Override
     public String getInputFrom(Collection<String> strings, String message) {
         String choice;
+        System.out.println(message);
         String convertMessage = Message.convertMessage(message);
         List<String> convertStrings = strings
                 .stream()
@@ -367,8 +374,8 @@ public class CliGameScreen extends GameScreen{
     private void showObjective(String name){
         try {
             JSONObject jsonObject = ((JSONObject) new JSONParser().parse(new FileReader(OBJECTIVE_PATH+name+".json")));
-            printStream.print(jsonObject.get("name").toString() + ",\t"+Message.POINTS+":" + jsonObject.get("points"));
-            printStream.println(",\t" + jsonObject.get("description"));
+            printStream.print(jsonObject.get(CARD_NAME).toString() + ",\t"+Message.POINTS+":" + jsonObject.get(CARD_POINTS));
+            printStream.println(",\t" + jsonObject.get(CARD_DESCRIPTION));
         } catch (IOException | ParseException e) {
             printStream.println("Objective not found");
         }
@@ -391,8 +398,8 @@ public class CliGameScreen extends GameScreen{
                  }else
                      printStream.print("[1]  ");
                  JSONObject jsonObject = ((JSONObject) new JSONParser().parse(new FileReader(TOOL_PATH+tool.toolName+".json")));
-                 printActive(tool.active, jsonObject.get("name").toString());
-                 printStream.print("\t" + jsonObject.get("description"));
+                 printActive(tool.active, jsonObject.get(CARD_NAME).toString());
+                 printStream.print("\t" + jsonObject.get(CARD_DESCRIPTION));
              } catch (IOException | ParseException e) {
                  printStream.print("Tool not found");
              }
@@ -470,7 +477,7 @@ public class CliGameScreen extends GameScreen{
         String windowName;
         Cell[] cells;
 
-        public WindowClass() {
+        WindowClass() {
             windowName = "NotYetChosen";
             cells = new Cell[CELL_NUM];
             for (int i = 0; i < CELL_NUM; i++) {

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.view.cli;
 
-import it.polimi.ingsw.client.view.factory.CliViewFactory;
 import it.polimi.ingsw.client.view.factory.GameScreen;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -63,7 +62,7 @@ class CliGameScreenTest {
         Scanner scanner1 = new Scanner(new FileInputStream(fileOut));
         Scanner scanner2 = new Scanner(new FileInputStream(fileExpected));
         while(scanner1.hasNext()){
-            Assertions.assertEquals(scanner1.next(), scanner2.next());
+            Assertions.assertEquals(scanner2.next(), scanner1.next());
         }
 
     }
