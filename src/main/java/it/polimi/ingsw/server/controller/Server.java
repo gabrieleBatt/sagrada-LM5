@@ -117,10 +117,9 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
      * @param nickname the player nickname
      * @param password the player password
      * @return the coupled remote channel
-     * @throws RemoteException
      */
     @Override
-    public RemoteChannel rmiLogin(RemoteGameScreen gameScreen, String nickname, String password) throws RemoteException {
+    public synchronized RemoteChannel rmiLogin(RemoteGameScreen gameScreen, String nickname, String password) throws RemoteException {
         logger.log(Level.FINE,  "logged!", nickname);
         if(UsersDatabase.createOrAuthenticate(nickname, password)){
             RmiCommunicationChannel rcc = new RmiCommunicationChannel(gameScreen, nickname);
@@ -132,7 +131,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
         }
     }
 
-    private static void socketLogin(Socket socket){
+    private synchronized static void socketLogin(Socket socket){
         try {
             PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -179,7 +178,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
         }
     }
 
-    private static void addToGame(CommunicationChannel ccToAdd, String nickname){
+    private synchronized static void addToGame(CommunicationChannel ccToAdd, String nickname){
         Boolean alreadyInGame = false;
         //check if already in lobby
         for (CommunicationChannel communicationChannel : lobby.getCommChannels()) {

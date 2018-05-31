@@ -68,7 +68,7 @@ public enum Message {
         if(optional.isPresent()){
             return optional.get().toString();
         }else{
-            throw new IllegalArgumentException();
+            return defaultMessage;
         }
     }
 
@@ -80,7 +80,7 @@ public enum Message {
         if(optional.isPresent()){
             return optional.get().name();
         }else{
-            throw new IllegalArgumentException();
+            return choice;
         }
     }
 

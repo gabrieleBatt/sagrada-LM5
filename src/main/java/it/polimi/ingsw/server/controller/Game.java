@@ -48,11 +48,11 @@ public class Game implements Runnable {
             Player firstOfRound = players.next();
             Iterator<Player> roundIterator = getTable().getPlayersIterator(firstOfRound, false, false);
             while (roundIterator.hasNext()){
-                actionCommandList.add(rules.getTurnAction(roundIterator.next()));
+                actionCommandList.add(rules.getTurnAction(roundIterator.next(), false));
             }
             roundIterator = getTable().getPlayersIterator(firstOfRound, false, true);
             while (roundIterator.hasNext()){
-                actionCommandList.add(rules.getTurnAction(roundIterator.next()));
+                actionCommandList.add(rules.getTurnAction(roundIterator.next(), true));
             }
             actionCommandList.add(rules.getEndRoundAction());
         }
@@ -124,7 +124,7 @@ public class Game implements Runnable {
      * Reset the turn when called if the current action is a TurnActionCommand
      */
     public void resetTurn(){
-        ((TurnActionCommand) actionCommandList.get(0)).reset(this);
+        ((TurnActionCommand) actionCommandList.get(0)).reset();
     }
 
     /**

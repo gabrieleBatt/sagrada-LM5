@@ -5,6 +5,7 @@ import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.net.identifiables.StdId;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
+import it.polimi.ingsw.server.controller.deck.ToolDeck;
 import it.polimi.ingsw.server.model.objective.PrivateObjective;
 import it.polimi.ingsw.server.controller.deck.PrivateObjectiveDeck;
 import it.polimi.ingsw.server.model.objective.PublicObjective;
@@ -14,6 +15,7 @@ import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.glasswindow.Cell;
 import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import it.polimi.ingsw.server.controller.deck.GlassWindowDeck;
+import it.polimi.ingsw.server.model.tool.Tool;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -52,9 +54,10 @@ public class DefaultRules implements Rules {
      * @return ActionCommand that deals the tools on table.
      */
     protected ActionCommand dealTool(int toolPerGame) {
-        return actionReceiver -> {
-            //TODO
-        };
+        return actionReceiver ->
+                actionReceiver.getTable()
+                        .setTools(ToolDeck.getToolDeck()
+                                .draw(toolPerGame));
     }
 
     /**
@@ -167,11 +170,12 @@ public class DefaultRules implements Rules {
     /**
      * Gets the list of turn actions of a player.
      * @param turnPlayer player whose turn is.
+     * @param secondTurn boolean, true if is second turn.
      * @return list of turn actions of a player.
      */
     @Override
-    public TurnActionCommand getTurnAction(Player turnPlayer) {
-        return new TurnActionCommand(turnPlayer);
+    public TurnActionCommand getTurnAction(Player turnPlayer, boolean secondTurn) {
+        return new TurnActionCommand(turnPlayer, secondTurn);
     }
 
     /**
@@ -319,12 +323,12 @@ public class DefaultRules implements Rules {
      * Gets the list of place actions.
      * @param marker String, marker of the die placed.
      * @param adjacencyRestriction boolean, true if there are adjacency restrictions.
-     * @param coloRestriction boolean, true if there are color restrictions.
+     * @param colorRestriction boolean, true if there are color restrictions.
      * @param numberRestriction boolean, true if there are numeric restrictions
      * @return list of place actions.
      */
     @Override
-    public ActionCommand getPlaceAction(String marker, boolean adjacencyRestriction, boolean coloRestriction, boolean numberRestriction, boolean forced) {
+    public ActionCommand getPlaceAction(String marker, boolean adjacencyRestriction, boolean colorRestriction, boolean numberRestriction, boolean forced) {
         return actionReceiver -> {
             Player player = actionReceiver.getTurnPlayer();
             //finds channel to communicate with
@@ -336,7 +340,7 @@ public class DefaultRules implements Rules {
             //filter options
             List<Cell> cells = new ArrayList<>(player.getGlassWindow().availableCells(die, !adjacencyRestriction))
                     .stream()
-                    .filter(c -> c.isAllowed(die.getColor()) || !coloRestriction)
+                    .filter(c -> c.isAllowed(die.getColor()) || !colorRestriction)
                     .filter(c -> c.isAllowed(die.getNumber()) || !numberRestriction)
                     .collect(Collectors.toList());
 
@@ -350,7 +354,7 @@ public class DefaultRules implements Rules {
                 } else {
                     player.getGlassWindow().getCellList().stream()
                             .filter(c -> c.getId().equals(positionChosen.getId())).findFirst().get()
-                            .placeDie(die, (coloRestriction || numberRestriction));
+                            .placeDie(die, (colorRestriction || numberRestriction));
                 }
                 actionReceiver.sendAll(Message.PLACE_DONE.name()+":" + positionChosen.getId());
                 actionReceiver

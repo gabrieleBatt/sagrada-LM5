@@ -139,7 +139,7 @@ public class SocketManager implements ConnectionManager{
             updateRoundTrack(received);
         }
         if (received.containsKey(SocketProtocol.TOOL.get())){
-            Collection<String> strings = getJsonList(received, SocketProtocol.ROUND_TRACK);
+            Collection<String> strings = getJsonList(received, SocketProtocol.TOOL);
             List<Pair<String, Boolean>> pairs = strings
                     .stream()
                     .map(s -> new Pair<>(s.substring(0, s.indexOf('-')), s.contains("true")))

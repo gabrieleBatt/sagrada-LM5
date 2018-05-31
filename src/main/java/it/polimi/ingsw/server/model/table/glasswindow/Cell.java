@@ -61,7 +61,7 @@ public class Cell implements Identifiable {
      * @param ignoreRestriction:boolean which indicates whether the restriction has to be ignored or not
      * @throws DieNotAllowedException :Exception thrown if die can't be placed due to restrictions
      */
-    public void placeDie(Die die, boolean ignoreRestriction) throws DieNotAllowedException {
+    public void placeDie(Die die, boolean ignoreRestriction) {
         if(ignoreRestriction || (isAllowed(die.getNumber()) && isAllowed(die.getColor()))){
             this.die = Optional.of(die);
             logger.log(Level.FINEST, "This die "+ die.getId()+ " has been placed in this cell:" + this.getId(), this);

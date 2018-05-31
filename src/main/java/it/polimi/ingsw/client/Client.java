@@ -51,11 +51,8 @@ public class Client {
                     }
                 } catch (InterruptedException | NotBoundException | IOException | ParseException | NullPointerException e) {
                     logger.log(Level.WARNING, e.getMessage());
-                    if (!connectionScreen.reConnect()) {
-                        break;
-                    }
                 }
-            }while ((!endGameInfo.isPresent()));
+            }while ((!endGameInfo.isPresent() && connectionScreen.reConnect()));
             endGameInfo.ifPresent(endScreen::showRanking);
         }while (endScreen.playAgain());
     }

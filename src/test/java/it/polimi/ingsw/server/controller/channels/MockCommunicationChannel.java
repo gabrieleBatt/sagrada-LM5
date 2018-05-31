@@ -81,6 +81,8 @@ public class MockCommunicationChannel extends CommunicationChannel {
     @Override
     public Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled) {
         List<Identifiable> idList = new ArrayList<>(options);
+        if(idList.size() == 0)
+           return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
         return idList.get(ThreadLocalRandom.current().nextInt(0, idList.size()));
     }
 
@@ -92,6 +94,8 @@ public class MockCommunicationChannel extends CommunicationChannel {
     @Override
     public Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled) {
         List<Identifiable> op = new ArrayList<>(options);
+        if(op.size() == 0)
+            return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
         return op.get(ThreadLocalRandom.current().nextInt(0, op.size()));
     }
 

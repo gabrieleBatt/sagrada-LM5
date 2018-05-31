@@ -21,9 +21,10 @@ public interface Rules {
     /**
      * Gets the turn action of a player.
      * @param turnPlayer player whose turn is.
+     * @param secondTurn boolean, true if is second turn.
      * @return Turn action of a of a player.
      */
-    TurnActionCommand getTurnAction(Player turnPlayer);
+    TurnActionCommand getTurnAction(Player turnPlayer, boolean secondTurn);
 
     /**
      * Gets the end round action.
