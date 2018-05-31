@@ -18,23 +18,13 @@ import java.util.concurrent.ThreadLocalRandom;
  * Simulates a client behaviour.
  */
 public class MockCommunicationChannel extends CommunicationChannel {
-    String nickName;
 
     /**
      * Creates a communication channel setting the player's nickname.
      * @param nickName String, player's nickname.
      */
     public MockCommunicationChannel(String nickName){
-        this.nickName=nickName;
-    }
-
-    /**
-     * Gets player's nickname.
-     * @return String, player's nickname.
-     */
-    @Override
-    public String getNickname() {
-        return this.nickName;
+        super(nickName);
     }
 
     /**

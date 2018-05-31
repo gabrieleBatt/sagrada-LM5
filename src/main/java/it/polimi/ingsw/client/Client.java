@@ -15,10 +15,12 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * client main class
+ */
 public class Client {
 
     private static Logger logger = LogMaker.getLogger(Client.class.getName(), Level.ALL);
-    private static ViewAbstractFactory factory;
 
     private Client(){}
 
@@ -27,6 +29,7 @@ public class Client {
     }
 
     public static void main(String[] args) {
+        ViewAbstractFactory factory;
         if(args.length == 1 &&
                 (args[0].equalsIgnoreCase("-gui") ||
                         args[0].equalsIgnoreCase("-g"))){

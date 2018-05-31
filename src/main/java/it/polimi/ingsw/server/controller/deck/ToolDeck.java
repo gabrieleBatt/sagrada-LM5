@@ -81,7 +81,7 @@ public class ToolDeck implements Deck {
      * Gets tool deck.
      * @return tool deck.
      */
-    public static ToolDeck getToolDeck() {
+    static ToolDeck getToolDeck() {
         return toolDeck;
     }
 
@@ -145,7 +145,7 @@ public class ToolDeck implements Deck {
         List<String> strings = new ArrayList<>((JSONArray)jsonObject.get(CONDITIONS));
         List<ToolConditions> toolConditions = strings
                 .stream()
-                .map(ToolConditions::getCondition)
+                .map(ToolConditions::valueOf)
                 .collect(Collectors.toList());
 
         return new Tool(actionCommands, jsonObject.get(NAME).toString(), toolConditions);

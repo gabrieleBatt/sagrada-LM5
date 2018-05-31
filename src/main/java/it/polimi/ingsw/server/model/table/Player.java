@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Player is a concrete class representing a game's player. Its' main attributes are nickname, tokens, glasswindow,
+ * Player is a concrete class representing a game's player. Its' main attributes are nickname, tokens, glassWindow,
  * privateObjective.
  */
 public class Player implements Memento {
@@ -19,9 +19,8 @@ public class Player implements Memento {
     private static final Logger logger = LogMaker.getLogger(Player.class.getName(), Level.ALL);
     private final String nickname;
     private int tokens;
-    private Optional<GlassWindow> glassWindow;
+    private GlassWindow glassWindow;
     private HashSet<PrivateObjective> privateObjective;
-    private boolean connected;
     private Deque<List<Optional<Die>>> glassWindowMemento;
     private Deque<Integer> tokensMemento;
 
@@ -32,7 +31,6 @@ public class Player implements Memento {
     public Player(String nickname)
     {
         this.privateObjective = new HashSet<>();
-        glassWindow = Optional.empty();
         this.nickname = nickname;
         tokensMemento = new ArrayDeque<>();
         glassWindowMemento = new ArrayDeque<>();
@@ -47,14 +45,14 @@ public class Player implements Memento {
     }
 
     /**
-     * Gets the glasswindow
-     * @return: glasswindow
-     * @throws NoSuchElementException exception thrown if there's no glasswindow
+     * Gets the glassWindow
+     * @return: glassWindow
+     * @throws NoSuchElementException exception thrown if there's no glassWindow
      */
     public GlassWindow getGlassWindow(){
-        if(glassWindow.isPresent())
-            return glassWindow.get();
-        else throw new NoSuchElementException("The player"+ this.nickname +" doesn't have a glasswindow");
+        if(hasGlassWindow())
+            return glassWindow;
+        else throw new NoSuchElementException("The player"+ this.nickname +" doesn't have a glassWindow");
     }
 
     /**
@@ -62,15 +60,15 @@ public class Player implements Memento {
      * @return true if there's a glass window, otherwise false
      */
     public boolean hasGlassWindow(){
-        return glassWindow.isPresent();
+        return glassWindow != null;
     }
 
     /**
-     * Sets the glasswindow
-     * @param glassWindow
+     * Sets the glassWindow
+     * @param glassWindow to set
      */
     public void setGlassWindow(GlassWindow glassWindow){
-        this.glassWindow = Optional.of(glassWindow);
+        this.glassWindow = glassWindow;
         logger.log(Level.FINEST, "GlassWindow" + glassWindow.getName() + "have been set", this);
 
     }
@@ -98,7 +96,7 @@ public class Player implements Memento {
      * @return list of private objective
      */
     public Collection<PrivateObjective> getPrivateObjective(){
-        return (Collection<PrivateObjective>)privateObjective.clone();
+        return new ArrayList<>(privateObjective);
     }
 
     /**
@@ -108,7 +106,6 @@ public class Player implements Memento {
     public void addPrivateObjective (PrivateObjective newPrivateObjective){
         this.privateObjective.add(newPrivateObjective);
         logger.log(Level.FINEST, "This private objective:" + newPrivateObjective.toString()+ "has been added", this);
-
     }
 
     /**
@@ -118,7 +115,6 @@ public class Player implements Memento {
     public void addPrivateObjective(Collection<PrivateObjective> newPrivateObjective){
         this.privateObjective.addAll(newPrivateObjective);
         logger.log(Level.FINEST, "These private objectives:"+ newPrivateObjective.toString() + "have been added", this);
-
     }
 
     /**
@@ -131,13 +127,6 @@ public class Player implements Memento {
         ret = ret + this.nickname + "has:\n" + this.tokens + "number of tokens\n"+ this.glassWindow.toString() + "\n" +
         "private objective:" + this.privateObjective.toString() + "\n";
         return ret;
-    }
-
-    /**
-     * Prints the override toString of an object Player
-     */
-    public void dump(){
-        System.console().writer().println(this);
     }
 
     /**
@@ -163,10 +152,15 @@ public class Player implements Memento {
      */
     @Override
     public void getMemento() {
-        this.tokens = tokensMemento.peek();
-        List<Optional<Die>> dieList = new ArrayList<>(glassWindowMemento.peek());
-        for(int i = 0; i<20; i++) {
-            this.getGlassWindow().getCellList().get(i).placeOptionalDie(dieList.get(i));
+        Optional<Integer> optionalInteger = Optional.ofNullable(tokensMemento.peek());
+        optionalInteger.ifPresent(integer -> this.tokens = integer);
+
+        Optional<List<Optional<Die>>> optionalList = Optional.ofNullable(glassWindowMemento.peek());
+        if(optionalList.isPresent()) {
+            List<Optional<Die>> dieList = new ArrayList<>(optionalList.get());
+            for (int i = 0; i < 20; i++) {
+                this.getGlassWindow().getCellList().get(i).placeOptionalDie(dieList.get(i));
+            }
         }
     }
 }

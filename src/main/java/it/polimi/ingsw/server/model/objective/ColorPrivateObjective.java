@@ -8,6 +8,10 @@ import it.polimi.ingsw.server.model.table.dice.DieColor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * A public objective that, for each die of a specific color, awards its
+ * value in points
+ */
 public class ColorPrivateObjective extends PrivateObjective {
 
     private static final Logger logger = LogMaker.getLogger(ColorPrivateObjective.class.getName(), Level.ALL);
@@ -20,9 +24,9 @@ public class ColorPrivateObjective extends PrivateObjective {
     }
 
     /**
-     * Returns the score the player gets due to the private objective
-     * @param glassWindow
-     * @return
+     * scores the points of the objective only
+     * @param glassWindow on witch score the point of the objective
+     * @return points scored on the glasswindow
      */
     @Override
     public int scorePoints(GlassWindow glassWindow) {

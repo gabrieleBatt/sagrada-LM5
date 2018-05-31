@@ -1,6 +1,7 @@
-package it.polimi.ingsw.server.model.objective;
+package it.polimi.ingsw.server.controller.deck;
 
 import it.polimi.ingsw.server.exception.DieNotAllowedException;
+import it.polimi.ingsw.server.model.objective.ColorPrivateObjective;
 import it.polimi.ingsw.server.model.table.glasswindow.Cell;
 import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import it.polimi.ingsw.server.model.table.dice.Die;

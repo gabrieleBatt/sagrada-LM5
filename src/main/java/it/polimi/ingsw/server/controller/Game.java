@@ -8,6 +8,7 @@ import it.polimi.ingsw.server.controller.rules.DefaultRules;
 import it.polimi.ingsw.server.controller.rules.Rules;
 import it.polimi.ingsw.server.controller.rules.TurnActionCommand;
 import it.polimi.ingsw.server.model.table.Player;
+import it.polimi.ingsw.server.model.table.RoundTrack;
 import it.polimi.ingsw.server.model.table.Table;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import javafx.util.Pair;
@@ -37,11 +38,12 @@ public class Game implements Runnable {
         this.dice = new HashMap<>();
         this.actionCommandList = new ActionList();
 
+        //setup the game actions to play
         actionCommandList.addAll(rules.getSetupGameActions());
-
         Iterator<Player> players = getTable()
                 .getPlayersIterator(getTable().getPlayers().get(0), true, false);
-        for (int i = 0; i < 10; i++) {
+        //setup rounds
+        for (int i = 0; i < RoundTrack.ROUND_NUM; i++) {
             actionCommandList.add(rules.getSetupRoundAction());
             Player firstOfRound = players.next();
             Iterator<Player> roundIterator = getTable().getPlayersIterator(firstOfRound, false, false);
@@ -57,10 +59,18 @@ public class Game implements Runnable {
         actionCommandList.add(rules.getEndGameAction());
     }
 
+    /**
+     * gets the rules of the game
+     * @return the rules of the game
+     */
     public Rules getRules() {
         return rules;
     }
 
+    /**
+     * Returns the player who is playing the current turn
+     * @return the player who is playing the current turn
+     */
     public Player getTurnPlayer(){
         Optional<TurnActionCommand> actionCommand = actionCommandList.getTurn(0);
         if(actionCommand.isPresent()){
@@ -69,10 +79,18 @@ public class Game implements Runnable {
         else throw new NoSuchElementException();
     }
 
+    /**
+     * Adds an action to the list of actions
+     * @param actionCommand to add
+     */
     public void addAction(ActionCommand actionCommand){
         actionCommandList.add(0, actionCommand);
     }
 
+    /**
+     * Adds a turn to the list of actions
+     * @param actionCommand to add
+     */
     public void addAction(TurnActionCommand actionCommand){
         actionCommandList.add(0, actionCommand);
     }
@@ -85,16 +103,13 @@ public class Game implements Runnable {
     public void run() {
         while(!actionCommandList.isEmpty()){
             this.updateAll();
-            try {
-                actionCommandList.get(0).execute(this);
-                actionCommandList.remove(0);
-            } catch (DieNotAllowedException e) {
-                logger.log(Level.WARNING, e.getMessage(), e);
-            }
+            ActionCommand actionCommand = actionCommandList.get(0);
+            actionCommand.execute(this);
+            actionCommandList.remove(actionCommand);
         }
     }
 
-    public void updateAll(){
+    private void updateAll(){
         for (CommunicationChannel commChannel : commChannels) {
             commChannel.updateView(getTable());
             commChannel.updateView(getTable().getPool());
@@ -167,7 +182,7 @@ public class Game implements Runnable {
      * Add a new communicationChannel removing, if present, one with the same nickname
      * @param newCc communicationChannel to add
      */
-    public synchronized void changeChannel(CommunicationChannel newCc){
+    synchronized void changeChannel(CommunicationChannel newCc){
         commChannels = getCommChannels().stream()
                 .filter(cc -> !cc.getNickname().equals(newCc.getNickname()))
                 .collect(Collectors.toList());
@@ -228,13 +243,13 @@ public class Game implements Runnable {
             super.add(index, actionCommand);
         }
 
-        public Optional<TurnActionCommand> getTurn(int index){
+        Optional<TurnActionCommand> getTurn(int index){
             if(turnCommands.contains(this.get(index)))
                 return Optional.of((TurnActionCommand) this.get(index));
             return Optional.empty();
         }
 
-        public boolean isTurn(ActionCommand actionCommand){
+        boolean isTurn(ActionCommand actionCommand){
             return turnCommands.contains(actionCommand);
         }
 

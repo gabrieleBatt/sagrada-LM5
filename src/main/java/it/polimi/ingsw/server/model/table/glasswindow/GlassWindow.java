@@ -209,13 +209,6 @@ public class GlassWindow implements Identifiable {
     }
 
     /**
-     * Prints the override toString of an object GlassWindow.
-     */
-    public void dump(){
-        System.console().writer().println(this);
-    }
-
-    /**
      * Gets the list of the cells of the glass window.
      * @return list of the cells of te glass window.
      */
@@ -223,6 +216,10 @@ public class GlassWindow implements Identifiable {
         return new ArrayList<>(cellList);
     }
 
+    /**
+     * returns the identifiable unique id
+     * @return the id
+     */
     @Override
     public String getId() {
         return name;

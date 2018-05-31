@@ -1,6 +1,6 @@
 {
   "name": "Cork-BakedStraightedge",
-  "conditions":["cancelDrafting"],
+  "conditions":["CANCEL_DRAFTING"],
   "toolColor": "Y",
   "actions":2,
   "action1": {

@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- * Used to manage the view by socket communication
+ * Manages the view by socket communication
  */
 public class SocketManager extends ConnectionManager{
 

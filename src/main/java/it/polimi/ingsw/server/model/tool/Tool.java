@@ -67,12 +67,16 @@ public class Tool implements Identifiable {
 
     /**
      * Gets tool use
-     * @return, boolean, true if is used
+     * @return boolean, true if is used
      */
     public boolean isUsed() {
         return used;
     }
 
+    /**
+     * returns the identifiable unique id
+     * @return the id
+     */
     @Override
     public String getId() {
         return getName();

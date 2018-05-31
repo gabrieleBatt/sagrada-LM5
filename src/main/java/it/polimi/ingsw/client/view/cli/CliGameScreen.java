@@ -1,10 +1,7 @@
 package it.polimi.ingsw.client.view.cli;
 
-import it.polimi.ingsw.client.view.Message;
-import it.polimi.ingsw.client.view.factory.CliViewFactory;
+import it.polimi.ingsw.net.Message;
 import it.polimi.ingsw.client.view.factory.GameScreen;
-import it.polimi.ingsw.server.model.table.Player;
-import javafx.util.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

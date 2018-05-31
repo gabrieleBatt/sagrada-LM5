@@ -7,6 +7,10 @@ import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import java.util.Collection;
 import java.util.HashSet;
 
+/**
+ * A public objective that awards points for each set, specific to the objective,
+ * found in the glass window.
+ */
 public class SetPublicObjective extends PublicObjective {
 
     private int points;
@@ -20,6 +24,11 @@ public class SetPublicObjective extends PublicObjective {
         this.colors = new HashSet<>(colors);
     }
 
+    /**
+     * scores the points of the objective only
+     * @param glassWindow on witch score the point of the objective
+     * @return points scored on the glassWindow
+     */
     @Override
     public int scorePoints(GlassWindow glassWindow) {
         int ret = 20;

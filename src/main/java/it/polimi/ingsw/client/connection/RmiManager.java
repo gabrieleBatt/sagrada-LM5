@@ -21,6 +21,9 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Manages the view by rmi communication
+ */
 public class RmiManager extends ConnectionManager{
 
     private static Logger logger = LogMaker.getLogger(RmiManager.class.getName(), Level.ALL);

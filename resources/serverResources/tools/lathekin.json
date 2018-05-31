@@ -1,6 +1,6 @@
 {
   "name": "Lathekin",
-  "conditions":["withDrafting"],
+  "conditions":["WITH_DRAFTING"],
   "toolColor": "Y",
   "actions":2,
   "action1": {

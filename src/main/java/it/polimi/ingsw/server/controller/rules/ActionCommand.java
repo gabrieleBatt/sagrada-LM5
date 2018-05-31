@@ -4,5 +4,10 @@ import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.exception.*;
 
 public interface ActionCommand {
-    void execute(Game actionReceiver) throws DieNotAllowedException;
+
+    /**
+     * Execute the action on the specified game
+     * @param actionReceiver receiver of the action
+     */
+    void execute(Game actionReceiver);
 }

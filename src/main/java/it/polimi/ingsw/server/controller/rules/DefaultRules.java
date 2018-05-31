@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.rules;
 
+import it.polimi.ingsw.net.Message;
 import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.net.identifiables.StdId;
 import it.polimi.ingsw.server.controller.Game;
@@ -22,8 +23,6 @@ import java.util.stream.Collectors;
 public class DefaultRules implements Rules {
 
     private static final String PUBLIC_OBJECTIVE_MESSAGE = "PublicObjectiveDealt";
-    private static final String DRAFT_DONE = "Drafted";
-    private static final String PLACE_DONE = "Placed";
     private static DefaultRules defaultRules = new DefaultRules();
 
     private DefaultRules(){}
@@ -47,7 +46,12 @@ public class DefaultRules implements Rules {
         return ret;
     }
 
-    ActionCommand dealTool(int toolPerGame) {
+    /**
+     * Gives an action command that deals the public objective on table.
+     * @param toolPerGame int, amount of tools to set on table.
+     * @return ActionCommand that deals the tools on table.
+     */
+    protected ActionCommand dealTool(int toolPerGame) {
         return actionReceiver -> {
             //TODO
         };
@@ -58,7 +62,7 @@ public class DefaultRules implements Rules {
      * @param pubObjPerGame int, amount of public objective to set on table.
      * @return ActionCommand that deals the public objective on table.
      */
-    ActionCommand dealPublicObjective(int pubObjPerGame) {
+    protected ActionCommand dealPublicObjective(int pubObjPerGame) {
         return actionReceiver -> {
             List<PublicObjective> publicObjectives = null;
             publicObjectives = PublicObjectiveDeck.getPublicObjectiveDeck().draw(pubObjPerGame);
@@ -77,8 +81,8 @@ public class DefaultRules implements Rules {
         return actionReceiver -> {
             List<Player> players = actionReceiver.getTable().getPlayers();
             for(Player player:players) {
-                    player.setTokens(player.getGlassWindow().getDifficulty());
-                    }
+                player.setTokens(player.getGlassWindow().getDifficulty());
+            }
             for (Player player : actionReceiver.getTable().getPlayers()) {
                 actionReceiver
                         .getCommChannels()
@@ -220,6 +224,9 @@ public class DefaultRules implements Rules {
 
     }
 
+    /*
+     * Comparator to order ranking
+     */
     private int scoreCompare(Pair<Player, Integer> p2, Pair<Player, Integer> p1){
         if(!p1.getValue().equals(p2.getValue())){
             return p1.getValue() - p2.getValue();
@@ -254,10 +261,7 @@ public class DefaultRules implements Rules {
         return actionReceiver -> {
             Player player = actionReceiver.getTurnPlayer();
             //finds channel to communicate with
-            CommunicationChannel cc = actionReceiver.getCommChannels()
-                    .stream()
-                    .filter(c -> c.getNickname().equals(player.getNickname()))
-                    .findFirst().get();
+            CommunicationChannel cc = actionReceiver.getChannel(player.getNickname());
 
             //make options
             List<Die> dieOptions = new ArrayList<>(actionReceiver.getTable().getPool().getDice());
@@ -289,6 +293,7 @@ public class DefaultRules implements Rules {
                 if(optionalDie.isPresent()) {
                     actionReceiver.getTable().getPool().takeDie(optionalDie.get());
                     actionReceiver.getMap().put(marker, optionalDie.get());
+                    actionReceiver.sendAll(Message.DRAFT_DONE+":" + optionalDie.get());
                 }
             }
 
@@ -307,7 +312,6 @@ public class DefaultRules implements Rules {
                     "Drafted die "+ optionalDie
                     , this);
 
-            actionReceiver.sendAll(DRAFT_DONE+":" + optionalDie);
         };
     }
 
@@ -324,10 +328,7 @@ public class DefaultRules implements Rules {
         return actionReceiver -> {
             Player player = actionReceiver.getTurnPlayer();
             //finds channel to communicate with
-            CommunicationChannel cc = actionReceiver.getCommChannels()
-                    .stream()
-                    .filter(c -> c.getNickname().equals(player.getNickname()))
-                    .findFirst().get();
+            CommunicationChannel cc = actionReceiver.getChannel(player.getNickname());
 
             //get die
             Die die = actionReceiver.getMap().get(marker);
@@ -351,7 +352,7 @@ public class DefaultRules implements Rules {
                             .filter(c -> c.getId().equals(positionChosen.getId())).findFirst().get()
                             .placeDie(die, (coloRestriction || numberRestriction));
                 }
-                actionReceiver.sendAll(PLACE_DONE+":" + positionChosen);
+                actionReceiver.sendAll(Message.PLACE_DONE+":" + positionChosen.getId());
                 actionReceiver
                         .getCommChannels()
                         .forEach(c -> c

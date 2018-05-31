@@ -23,27 +23,28 @@ import java.util.stream.Collectors;
 public class RmiCommunicationChannel extends CommunicationChannel implements RemoteChannel {
     private static final Logger logger = LogMaker.getLogger(RmiCommunicationChannel.class.getName(), Level.ALL);
 
-    private final String nickname;
     private final RemoteGameScreen gameScreen;
     private boolean isOffline;
     private List<Pair<Player,Integer>> scores;
 
     public RmiCommunicationChannel(RemoteGameScreen gameScreen, String nickname) {
-        this.nickname = nickname;
+        super(nickname);
         this.gameScreen = gameScreen;
         this.scores = new ArrayList<>();
     }
 
-    @Override
-    public String getNickname() {
-        return nickname;
-    }
-
+    /**
+     * Returns true if player is connected.
+     * @return true if is connected, false otherwise.
+     */
     @Override
     public boolean isOffline() {
         return isOffline;
     }
 
+    /**
+     * Sends a message to visualize
+     */
     @Override
     public void sendMessage(String message) {
         try {
@@ -53,6 +54,9 @@ public class RmiCommunicationChannel extends CommunicationChannel implements Rem
         }
     }
 
+    /**
+     * Updates any change in the pool.
+     */
     @Override
     public void updateView(Pool pool) {
         try{
@@ -63,6 +67,9 @@ public class RmiCommunicationChannel extends CommunicationChannel implements Rem
         }
     }
 
+    /**
+     * Updates any change in the roundTrack.
+     */
     @Override
     public void updateView(RoundTrack roundTrack) {
         List<List<String>> completeRoundTrack = new ArrayList<>();
@@ -77,6 +84,9 @@ public class RmiCommunicationChannel extends CommunicationChannel implements Rem
         }
     }
 
+    /**
+     * Updates any change in the public cards(objectives and tools) and the name of the players.
+     */
     @Override
     public void updateView(Table table) {
         try {
@@ -86,14 +96,19 @@ public class RmiCommunicationChannel extends CommunicationChannel implements Rem
             gameScreen.showAll();
         } catch (RemoteException e) {
         this.setOffline();
-    }
+        }
     }
 
+    /**
+     * Updates any change in the player and their glassWindow.
+     * @param connected true if player is still connected
+     * @param player player to update
+     */
     @Override
     public void updateView(Player player, boolean connected) {
         try {
             gameScreen.setPlayerConnection(player.getNickname(), connected);
-            if (player.getNickname().equals(this.nickname))
+            if (player.getNickname().equals(getNickname()))
                 gameScreen.setPrivateObjectives(player.getPrivateObjective().stream().map(Identifiable::getId).collect(Collectors.toList()));
             if (player.hasGlassWindow()) {
                 gameScreen.setPlayerWindow(player.getNickname(), player.getGlassWindow().getId());
@@ -112,11 +127,19 @@ public class RmiCommunicationChannel extends CommunicationChannel implements Rem
         }
     }
 
+    /**
+     * tells the client the game has ended and the results
+     * @param scores - list of players and their scores
+     */
     @Override
     public void endGame(List<Pair<Player, Integer>> scores) {
         this.scores = scores;
     }
 
+    /**
+     * Return the scores
+     * @return the scores
+     */
     @Override
     public List<Pair<String, Integer>> getScores() throws RemoteException {
         return scores
@@ -125,6 +148,11 @@ public class RmiCommunicationChannel extends CommunicationChannel implements Rem
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Returns the chosen glassWindow among the given.
+     * @param glassWindows List of glassWindows given.
+     * @return Object glassWindow, the one chosen.
+     */
     @Override
     public GlassWindow chooseWindow(List<GlassWindow> glassWindows) {
         try {
@@ -143,11 +171,24 @@ public class RmiCommunicationChannel extends CommunicationChannel implements Rem
         return glassWindows.get(ThreadLocalRandom.current().nextInt(0, glassWindows.size()));
     }
 
+    /**
+     * Returns the chosen option among the given.
+     * @param options List of options given.
+     * @param container it's the object that contains the options
+     * @param canSkip tells if the button canSkip is available for that player in that move
+     * @param undoEnabled tells if the button undo is available for that player in that move
+     * @return The option chosen.
+     */
     @Override
     public Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled) {
         return askClient(options, canSkip, undoEnabled, gameScreen::getInput, container.getId());
     }
 
+    /**
+     * Returns the chosen option among the given.
+     * @param options List of options given.
+     * @return The option chosen.
+     */
     @Override
     public Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled) {
         return askClient(options, canSkip, undoEnabled, gameScreen::getInputFrom, message);
@@ -190,6 +231,9 @@ public class RmiCommunicationChannel extends CommunicationChannel implements Rem
         return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
     }
 
+    /**
+     * Used to set a channel as it went offline
+     */
     @Override
     public void setOffline() {
         logger.log(Level.WARNING, getNickname() + " is offline");

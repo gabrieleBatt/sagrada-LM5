@@ -1,6 +1,7 @@
-package it.polimi.ingsw.server.model.tool;
+package it.polimi.ingsw.server.controller.deck;
 
 import it.polimi.ingsw.server.controller.deck.ToolDeck;
+import it.polimi.ingsw.server.model.tool.Tool;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -126,7 +126,7 @@ public class Cell implements Identifiable {
 
     /**
      * checks if two cells are the same by id
-     * @param cell
+     * @param cell to confront
      * @return true if cells has the same id
      */
     @Override
@@ -159,13 +159,6 @@ public class Cell implements Identifiable {
         }else
             ret = ret + "is empty";
         return ret;
-    }
-
-    /**
-     * Prints the override toString of an object Cell
-     */
-    public void dump(){
-        System.console().writer().println(this);
     }
 
     public void placeOptionalDie(Optional<Die> die){

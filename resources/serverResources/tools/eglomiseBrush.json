@@ -1,6 +1,6 @@
 {
   "name": "EglomiseBrush",
-  "conditions":["withDrafting"],
+  "conditions":["WITH_DRAFTING"],
   "toolColor": "C",
   "actions":1,
   "action1": {

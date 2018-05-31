@@ -1,6 +1,6 @@
 {
   "name": "GlazingHammer",
-  "conditions":["beforeDrafting" , "secondTurn"],
+  "conditions":["BEFORE_DRAFTING" , "SECOND_TURN"],
   "toolColor": "C",
   "actions":1,
   "action1": {

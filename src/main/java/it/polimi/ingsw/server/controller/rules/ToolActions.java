@@ -210,13 +210,13 @@ public class ToolActions {
 
     /**
      * Generates the action command used to swap a die with another one
-     * on the roundtrack.
+     * on the roundTrack.
      * @param markerDieToTake String, marker of die to take from HashMap.
      * @param markerDieToSet String, marker of die to set.
      * @param dieColor marker of die deciding the color.
      * @param dieNumber marker of die deciding the number.
      * @return action command used to swap a die with another one
-     * on the roundtrack.
+     * on the roundTrack.
      */
     private static ActionCommand swapFromRoundTrack( String dieColor, String dieNumber,String markerDieToTake, String markerDieToSet){
         return actionReceiver -> {
@@ -254,9 +254,9 @@ public class ToolActions {
     }
 
     /**
-     * Gets the list of dice on roundtrack.
+     * Gets the list of dice on roundTrack.
      * @param actionReceiver object Game.
-     * @return list of dice on roundtrack.
+     * @return list of dice on roundTrack.
      */
     private static List<Die> getDiceOnRoundTrack (Game actionReceiver){
         List<Die> dieOptions = new ArrayList<>();

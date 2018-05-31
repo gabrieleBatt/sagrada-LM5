@@ -22,6 +22,9 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Main server class, handles new connection and re-connections
+ */
 public class Server extends UnicastRemoteObject implements RemoteServer {
 
     transient private static Logger logger = LogMaker.getLogger(Server.class.getName(), Level.ALL);
@@ -29,21 +32,33 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
     private static int socketPortNumber;
     private static final Lobby lobby = new Lobby();
     private static Set<Game> games = new HashSet<>();
+
     private static long loginTime;
     private static Server server;
 
+    private static final String CONFIG_PATH = "resources/ServerResources/config.json";
+    private static final String LOGIN_TIME = "loginTime";
+    private static final int STD_LOGIN_TIME = 60;
+    private static final String RMI_PORT = "rmiPortNumber";
+    private static final int STD_RMI_PORT = 50001;
+    private static final String SOCKET_PORT = "socketPortNumber";
+    private static final int STD_SOCKET_PORT = 50000;
+
+    /*
+     * Server configuration
+     */
     static {
         JSONObject config;
         try {
             JSONParser parser = new JSONParser();
-            config = (JSONObject)parser.parse(new FileReader(new File("resources/ServerResources/config.json")));
-            loginTime = (long)config.get("loginTime");
-            rmiPortNumber  = Math.toIntExact((long)config.get("rmiPortNumber"));
-            socketPortNumber = Math.toIntExact((long)config.get("socketPortNumber"));
+            config = (JSONObject)parser.parse(new FileReader(new File(CONFIG_PATH)));
+            loginTime = (long)config.get(LOGIN_TIME);
+            rmiPortNumber  = Math.toIntExact((long)config.get(RMI_PORT));
+            socketPortNumber = Math.toIntExact((long)config.get(SOCKET_PORT));
         } catch (ParseException | IOException e) {
-            loginTime = 60;
-            rmiPortNumber  = 50001;
-            socketPortNumber = 50000;
+            loginTime = STD_LOGIN_TIME;
+            rmiPortNumber  = STD_RMI_PORT;
+            socketPortNumber = STD_SOCKET_PORT;
         }
 
         try {
@@ -53,24 +68,29 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
         }
     }
 
+
     private Server() throws RemoteException {
         super();
     }
 
     /**
      * gets the instance of the server
-     * @return
+     * @return the instance of the server
      */
     public static Server getServer() {
         return server;
     }
 
-    public static void addGame(Game game){
+    static void addGame(Game game){
         games.add(game);
         new Thread(game).start();
     }
 
+    /**
+     * Main server
+     */
     public static void main(String[] args) {
+        //Rmi connection
         try {
             LocateRegistry.createRegistry(rmiPortNumber)
                     .rebind("Server", server);
@@ -79,6 +99,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
             logger.log(Level.WARNING, "Rmi server failed", e);
             return;
         }
+        //Socket connection
         while (!Thread.interrupted()) {
             try (ServerSocket serverSocket = new ServerSocket(socketPortNumber)) {
                 logger.log(Level.CONFIG, "Socket server ready on port: " + socketPortNumber);
@@ -90,13 +111,18 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
         }
     }
 
+    /**
+     * Login for a client using rmi connection
+     * @param gameScreen the client remote game screen
+     * @param nickname the player nickname
+     * @param password the player password
+     * @return the coupled remote channel
+     * @throws RemoteException
+     */
     @Override
     public RemoteChannel rmiLogin(RemoteGameScreen gameScreen, String nickname, String password) throws RemoteException {
         logger.log(Level.FINE,  "logged!", nickname);
-        if(!UsersDatabase.userExists(nickname)){
-            UsersDatabase.newUser(nickname, password);
-        }
-        if(UsersDatabase.authentication(nickname, password)) {
+        if(UsersDatabase.createOrAuthenticate(nickname, password)){
             RmiCommunicationChannel rcc = new RmiCommunicationChannel(gameScreen, nickname);
             addToGame(rcc, nickname);
             UnicastRemoteObject.exportObject(rcc, 0);
@@ -106,12 +132,13 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
         }
     }
 
-    public static void socketLogin(Socket socket){
+    private static void socketLogin(Socket socket){
         try {
             PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             JSONObject loginMessage;
 
+            //login timer start
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -124,15 +151,13 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
                 }
             }, loginTime * 1000);
 
+            //receive login message
             if((loginMessage = (JSONObject)(new JSONParser()).parse(in.readLine())) != null) {
                 timer.cancel();
                 if (loginMessage.get(SocketProtocol.HEADER.get()).equals(SocketProtocol.LOGIN.get())) {
                     String nickname = (String)loginMessage.get(SocketProtocol.NICKNAME.get());
                     String password =  (String)loginMessage.get(SocketProtocol.PASSWORD.get());
-                    if(!UsersDatabase.userExists(nickname)){
-                        UsersDatabase.newUser(nickname, password);
-                    }
-                    if(UsersDatabase.authentication(nickname, password)){
+                    if(UsersDatabase.createOrAuthenticate(nickname, password)){
                         logger.log(Level.FINE, "logged!", nickname);
                         addToGame(new SocketCommunicationChannel(socket, in, out, nickname), nickname);
                         new JSONBuilder()
@@ -156,6 +181,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
 
     private static void addToGame(CommunicationChannel ccToAdd, String nickname){
         Boolean alreadyInGame = false;
+        //check if already in lobby
         for (CommunicationChannel communicationChannel : lobby.getCommChannels()) {
             if (communicationChannel.getNickname().equals(nickname)) {
                 alreadyInGame = true;
@@ -163,6 +189,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
                 logger.log(Level.FINE, nickname + " reconnected to lobby");
             }
         }
+        //check if already in game
         for (Game game : games) {
             for (CommunicationChannel communicationChannel : game.getCommChannels()) {
                 if (communicationChannel.getNickname().equals(nickname)) {
@@ -180,6 +207,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
         }
     }
 
-    public synchronized static void endGame(Game game){games.remove(game);
+    public synchronized static void endGame(Game game){
+        games.remove(game);
     }
 }

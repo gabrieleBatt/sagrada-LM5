@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.util.Optional;
 
+/**
+ * Manages the view
+ */
 public abstract class ConnectionManager {
 
     public abstract Optional<EndGameInfo> run() throws IOException, ParseException, InterruptedException;

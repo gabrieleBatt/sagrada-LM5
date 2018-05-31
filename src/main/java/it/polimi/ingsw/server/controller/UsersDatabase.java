@@ -9,16 +9,15 @@ import java.util.logging.Logger;
 /**
  * Map of users password and nickname
  */
-public class UsersDatabase extends HashMap<String, String> {
+class UsersDatabase extends HashMap<String, String> {
 
     private static Logger logger = LogMaker.getLogger(UsersDatabase.class.getName(), Level.ALL);
     private static UsersDatabase usersDatabase = new UsersDatabase();
 
     private UsersDatabase(){
-
     }
 
-    public static void newUser(String nickname, String password){
+    static void newUser(String nickname, String password){
         if(!usersDatabase.containsKey(nickname)) {
             usersDatabase.put(nickname, password);
             logger.log(Level.FINE, "New User:" + nickname + ", " + password);
@@ -26,14 +25,20 @@ public class UsersDatabase extends HashMap<String, String> {
             throw new IllegalArgumentException("User " + nickname + " already registered");
     }
 
-    public static boolean authentication(String nickname, String password){
+    static boolean authentication(String nickname, String password){
         boolean ret = usersDatabase.containsKey(nickname) && usersDatabase.get(nickname).equals(password);
         logger.log(Level.FINE, "Authentication", ret);
         return ret;
     }
 
-    public static boolean userExists(String nickname){
+    static boolean userExists(String nickname){
         return usersDatabase.containsKey(nickname);
     }
 
+    static boolean createOrAuthenticate(String nickname, String password) {
+        if (!userExists(nickname)) {
+            UsersDatabase.newUser(nickname, password);
+            return true;
+        } else return authentication(nickname, password);
+    }
 }

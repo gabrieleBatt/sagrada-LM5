@@ -9,6 +9,10 @@ import java.util.Optional;
 
 public interface RemoteChannel extends Remote {
 
+    /**
+     * Return the scores
+     * @return the scores
+     */
     List<Pair<String, Integer>> getScores() throws RemoteException;
 
 }

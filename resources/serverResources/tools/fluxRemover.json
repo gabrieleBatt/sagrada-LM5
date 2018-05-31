@@ -1,6 +1,6 @@
 {
   "name": "FluxRemover",
-  "conditions":["cancelDrafting"],
+  "conditions":["CANCEL_DRAFTING"],
   "actions":4,
   "toolColor": "M",
   "action1": {

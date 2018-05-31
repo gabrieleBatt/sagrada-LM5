@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.controller.channels;
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.net.identifiables.StdId;
-import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.net.socket.JSONBuilder;
 import it.polimi.ingsw.net.socket.SocketProtocol;
 import it.polimi.ingsw.server.model.table.Player;
@@ -34,19 +33,21 @@ public class SocketCommunicationChannel extends CommunicationChannel {
     private static final Logger logger = LogMaker.getLogger(SocketCommunicationChannel.class.getName(), Level.ALL);
     private static long pingTimeout;
     private final Socket socket;
-    private final String nickname;
     private final BufferedReader in;
     private final PrintWriter out;
     private boolean connected;
+    private static final String PING_TIMEOUT = "pingTimeout";
+    private static final int STD_PING_TIMEOUT = 1;
+    private static final String CONFIG_PATH = "resources/ServerResources/config.json";
 
 
     static {
         JSONObject config;
         try {
-            config = (JSONObject)new JSONParser().parse(new FileReader(new File("resources/ServerResources/config.json")));
-            pingTimeout = (long)config.get("pingTimeout");
+            config = (JSONObject)new JSONParser().parse(new FileReader(new File(CONFIG_PATH)));
+            pingTimeout = (long)config.get(PING_TIMEOUT);
         } catch (ParseException | IOException e) {
-            pingTimeout = 5;
+            pingTimeout = STD_PING_TIMEOUT;
         }
     }
 
@@ -58,9 +59,9 @@ public class SocketCommunicationChannel extends CommunicationChannel {
      * @param nickname client's nickname
      */
     public SocketCommunicationChannel(Socket socket, BufferedReader in, PrintWriter out, String nickname){
+        super(nickname);
         this.connected = true;
         this.socket = socket;
-        this.nickname = nickname;
         this.in = in;
         this.out = out;
         pingUntilConnected(pingTimeout);
@@ -71,27 +72,27 @@ public class SocketCommunicationChannel extends CommunicationChannel {
             while (connected) {
                 try {
                     if (!socket.getInetAddress().isReachable(Math.toIntExact(timeout))) {
-                        disconnect();
+                        setOffline();
                     }
                 } catch (Exception e) {
-                    disconnect();
+                    setOffline();
                 }
             }
         });
     }
 
-
-
-    @Override
-    public String getNickname() {
-        return nickname;
-    }
-
+    /**
+     * Returns true if player is connected.
+     * @return true if is connected, false otherwise.
+     */
     @Override
     public boolean isOffline() {
         return !connected;
     }
 
+    /**
+     * Sends a message to visualize
+     */
     @Override
     public void sendMessage(String message) {
         new JSONBuilder()
@@ -100,6 +101,9 @@ public class SocketCommunicationChannel extends CommunicationChannel {
                 .send(out);
     }
 
+    /**
+     * Updates any change in the pool.
+     */
     @Override
     public void updateView(Pool pool) {
         List<String> param = new ArrayList<>();
@@ -112,6 +116,9 @@ public class SocketCommunicationChannel extends CommunicationChannel {
                 .send(out);
     }
 
+    /**
+     * Updates any change in the roundTrack.
+     */
     @Override
     public void updateView(RoundTrack roundTrack) {
         List<String> param = new ArrayList<>();
@@ -127,6 +134,9 @@ public class SocketCommunicationChannel extends CommunicationChannel {
                 .send(out);
     }
 
+    /**
+     * Updates any change in the public cards(objectives and tools) and the name of the players.
+     */
     @Override
     public void updateView(Table table) {
 
@@ -156,6 +166,11 @@ public class SocketCommunicationChannel extends CommunicationChannel {
         jsonBuilder.send(out);
     }
 
+    /**
+     * Updates any change in the player and their glassWindow.
+     * @param connected true if player is still connected
+     * @param player player to update
+     */
     @Override
     public void updateView(Player player, boolean connected) {
         JSONBuilder jsonBuilder = new JSONBuilder()
@@ -191,6 +206,10 @@ public class SocketCommunicationChannel extends CommunicationChannel {
 
     }
 
+    /**
+     * tells the client the game has ended and the results
+     * @param scores - list of players and their scores
+     */
     @Override
     public void endGame(List<Pair<Player, Integer>> scores) {
         List<String> param = new ArrayList<>();
@@ -203,6 +222,11 @@ public class SocketCommunicationChannel extends CommunicationChannel {
                 .send(out);
     }
 
+    /**
+     * Returns the chosen glassWindow among the given.
+     * @param glassWindows List of glassWindows given.
+     * @return Object glassWindow, the one chosen.
+     */
     @Override
     public GlassWindow chooseWindow(List<GlassWindow> glassWindows) {
         Timer timer = new Timer();
@@ -228,31 +252,28 @@ public class SocketCommunicationChannel extends CommunicationChannel {
                     if (glassWindow.isPresent()) {
                         return glassWindow.get();
                     } else {
-                        disconnect();
+                        setOffline();
                     }
                 } else {
-                    disconnect();
+                    setOffline();
                 }
             }
         }catch(ParseException | IOException | NullPointerException e){
             logger.log(Level.WARNING, e.getMessage(), e);
-            disconnect();
+            setOffline();
         }
         return glassWindows.get(ThreadLocalRandom.current().nextInt(0, glassWindows.size()));
     }
 
-    private void disconnect(){
-        logger.log(Level.WARNING, getNickname() + " diconnected");
-        connected = false;
-        try {
-            out.close();
-            in.close();
-            socket.close();
-        } catch (IOException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
-    }
 
+    /**
+     * Returns the chosen option among the given.
+     * @param options List of options given.
+     * @param container it's the object that contains the options
+     * @param canSkip tells if the button canSkip is available for that player in that move
+     * @param undoEnabled tells if the button undo is available for that player in that move
+     * @return The option chosen.
+     */
     @Override
     public Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled) {
         if(isOffline()) return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
@@ -300,12 +321,17 @@ public class SocketCommunicationChannel extends CommunicationChannel {
             }
         }catch(ParseException  | IOException |NullPointerException e){
             logger.log(Level.WARNING, e.getMessage(), e);
-            disconnect();
+            setOffline();
         }
-        disconnect();
+        setOffline();
         return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
     }
 
+    /**
+     * Returns the chosen option among the given.
+     * @param options List of options given.
+     * @return The option chosen.
+     */
     @Override
     public Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled) {
         if(isOffline()) return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
@@ -316,9 +342,20 @@ public class SocketCommunicationChannel extends CommunicationChannel {
         return receiveResponse(options, SocketProtocol.SELECT_FROM, canSkip, undoEnabled);
     }
 
+    /**
+     * Used to set a channel as it went offline
+     */
     @Override
     public void setOffline() {
-        disconnect();
+        logger.log(Level.WARNING, getNickname() + " diconnected");
+        connected = false;
+        try {
+            out.close();
+            in.close();
+            socket.close();
+        } catch (IOException e) {
+            logger.log(Level.WARNING, e.getMessage(), e);
+        }
     }
 }
 

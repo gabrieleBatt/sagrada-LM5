@@ -1,8 +1,7 @@
 package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.client.view.EndGameInfo;
-import it.polimi.ingsw.client.view.Message;
-import it.polimi.ingsw.client.view.factory.CliViewFactory;
+import it.polimi.ingsw.net.Message;
 import it.polimi.ingsw.client.view.factory.EndScreen;
 import javafx.util.Pair;
 

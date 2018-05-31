@@ -29,16 +29,24 @@ import java.util.logging.Level;
  */
 public abstract class CommunicationChannel{
 
+    private final String nickname;
     private static long responseTime;
+    private static final String TURN_TIME = "turnTime";
+    private static final int STD_TURN_TIME = 60;
+    private static final String CONFIG_PATH = "resources/ServerResources/config.json";
 
     static {
         JSONObject config = null;
         try {
-            config = (JSONObject)new JSONParser().parse(new FileReader(new File("resources/ServerResources/config.json")));
-            responseTime = (long) config.get("turnTime");
+            config = (JSONObject)new JSONParser().parse(new FileReader(new File(CONFIG_PATH)));
+            responseTime = (long) config.get(TURN_TIME);
         } catch (ParseException | IOException e) {
-            responseTime = 60;
+            responseTime = STD_TURN_TIME;
         }
+    }
+
+    public CommunicationChannel(String nickname){
+        this.nickname = nickname;
     }
 
     /**
@@ -79,7 +87,9 @@ public abstract class CommunicationChannel{
      * Creates a communication channel setting the player's nickname.
      * @return String, player's nickname.
      */
-    public abstract String getNickname();
+    public String getNickname(){
+        return nickname;
+    }
 
     /**
      * Returns true if player is connected.
@@ -94,19 +104,16 @@ public abstract class CommunicationChannel{
 
     /**
      * Updates any change in the pool.
-     * @param pool
      */
     public abstract void updateView(Pool pool);
 
     /**
      * Updates any change in the roundTrack.
-     * @param roundTrack
      */
     public abstract void updateView(RoundTrack roundTrack);
 
     /**
      * Updates any change in the public cards(objectives and tools) and the name of the players.
-     * @param table
      */
     public abstract void updateView(Table table);
 
@@ -124,9 +131,9 @@ public abstract class CommunicationChannel{
     public abstract void endGame(List<Pair<Player, Integer>> scores);
 
     /**
-     * Returns the chosen glasswindow among the given.
+     * Returns the chosen glassWindow among the given.
      * @param glassWindows List of glassWindows given.
-     * @return Object glasswindow, the one chosen.
+     * @return Object glassWindow, the one chosen.
      */
     public abstract GlassWindow chooseWindow(List<GlassWindow> glassWindows);
 

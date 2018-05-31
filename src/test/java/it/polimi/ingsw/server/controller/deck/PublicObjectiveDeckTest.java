@@ -1,7 +1,8 @@
-package it.polimi.ingsw.server.model.objective;
+package it.polimi.ingsw.server.controller.deck;
 
 import it.polimi.ingsw.server.controller.deck.PublicObjectiveDeck;
 import it.polimi.ingsw.server.exception.*;
+import it.polimi.ingsw.server.model.objective.PublicObjective;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import it.polimi.ingsw.server.model.table.glasswindow.Cell;
@@ -27,7 +28,7 @@ class PublicObjectiveDeckTest {
         Assertions.assertThrows(DeckTooSmallException.class, () -> PublicObjectiveDeck.getPublicObjectiveDeck().draw(100));
     }
 
-    @DisplayName("Area parsing control")
+    @DisplayName("Target parsing control")
     @Test
     void parseTest1() throws DieNotAllowedException {
         List<PublicObjective> cards = PublicObjectiveDeck.getPublicObjectiveDeck().draw(10);

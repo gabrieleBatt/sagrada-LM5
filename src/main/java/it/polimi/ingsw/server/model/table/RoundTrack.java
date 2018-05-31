@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 public class RoundTrack implements Memento {
 
     private static final Logger logger = LogMaker.getLogger(RoundTrack.class.getName(), Level.ALL);
+    public static final int ROUND_NUM = 10;
     private List<ArrayList<Die>> dice;
     private Deque<List<ArrayList<Die>>> roundTrackMemento;
 
@@ -39,7 +40,7 @@ public class RoundTrack implements Memento {
      * @throws EndGameException exception thrown if the game is over
      */
     public void endRound (Collection<Die> d) {
-        if (dice.size() < 10) {
+        if (dice.size() < ROUND_NUM) {
             dice.add(new ArrayList<>(d));
             logger.log(Level.FINEST, "This round: " + (getRound()+(-1)) + " just ended, these dice remained on the table: "+ d, this);
         }else

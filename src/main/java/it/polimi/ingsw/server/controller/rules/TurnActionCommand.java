@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.rules;
 
+import it.polimi.ingsw.net.Message;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.net.identifiables.StdId;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
@@ -21,30 +22,38 @@ import static it.polimi.ingsw.net.identifiables.StdId.*;
 
 public class TurnActionCommand implements ActionCommand{
 
-    private static final String NEXT_MOVE = "chooseNextMove";
     private boolean reset;
     private boolean skip;
     private CommunicationChannel cc;
     private static long turnTime;
 
+    private static final String TURN_TIME = "turnTime";
+    private static final int STD_TURN_TIME = 60;
+    private static final String CONFIG_PATH = "resources/ServerResources/config.json";
+
+    //Turn configuration
     static {
         JSONObject config;
         try {
-            config = (JSONObject)new JSONParser().parse(new FileReader(new File("resources/ServerResources/config.json")));
-            turnTime = (long)config.get("turnTime");
+            config = (JSONObject)new JSONParser().parse(new FileReader(new File(CONFIG_PATH)));
+            turnTime = (long)config.get(TURN_TIME);
         } catch (ParseException | IOException e) {
-            turnTime = 60;
+            turnTime = STD_TURN_TIME;
         }
     }
 
     private Player player;
 
-    public TurnActionCommand(Player player){
+    TurnActionCommand(Player player){
         this.player = player;
     }
 
+    /**
+     * Execute all the turn actions on the specified game
+     * @param actionReceiver receiver of the action
+     */
     @Override
-    public void execute(Game actionReceiver) throws DieNotAllowedException {
+    public void execute(Game actionReceiver){
         Timer timer = new Timer();
         startTimer(timer);
         backUp(actionReceiver);
@@ -63,7 +72,7 @@ public class TurnActionCommand implements ActionCommand{
             options.add(USE_TOOL);
 
             //choose first action
-            actionChosen = cc.chooseFrom(options, NEXT_MOVE, true, false);
+            actionChosen = cc.chooseFrom(options, Message.NEXT_MOVE.toString(), true, false);
             doActionChosen(actionChosen, actionReceiver);
         }while(reset);
         backUp(actionReceiver);
@@ -72,7 +81,7 @@ public class TurnActionCommand implements ActionCommand{
             //choose second action
             if(!skip) {
                 options.remove(actionChosen);
-                actionChosen = cc.chooseFrom(options, NEXT_MOVE, true, true);
+                actionChosen = cc.chooseFrom(options, Message.NEXT_MOVE.toString(), true, true);
                 doActionChosen(actionChosen, actionReceiver);
             }
         }while(reset);
@@ -131,13 +140,17 @@ public class TurnActionCommand implements ActionCommand{
         }
     }
 
+    /**
+     * returns the player who is playing
+     * @return he player who is playing
+     */
     public Player getPlayer() {
         return player;
     }
 
     /**
      * Resets the turn to the start or to the last checkpoint action (es. reRolling)
-     * @param actionReceiver
+     * @param actionReceiver to reset
      */
     public void reset(Game actionReceiver) {
         reset = true;
@@ -150,6 +163,10 @@ public class TurnActionCommand implements ActionCommand{
         actionReceiver.getCommChannels().forEach(c -> c.updateView(actionReceiver.getTable().getRoundTrack()));
     }
 
+    /**
+     * create a checkpoint
+     * @param actionReceiver to backup
+     */
     private void backUp(Game actionReceiver)  {
         player.addMemento();
         actionReceiver.getTable().getPool().addMemento();

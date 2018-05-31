@@ -17,34 +17,42 @@ import java.util.stream.Collectors;
 /**
  * The channels are added to the lobby witch when full or after a timer has elapsed starts the game
  */
-public class Lobby {
+class Lobby {
 
     private static final Logger logger = LogMaker.getLogger(Lobby.class.getName(), Level.ALL);
     private static long timerSeconds;
     private Set<CommunicationChannel> commChannelSet;
     private Timer timer;
 
+
+    private static final String TIMER_SECONDS = "timerSeconds";
+    private static final long STD_TIMER_SECONDS = 60;
+    private static final String CONFIG_PATH = "resources/ServerResources/config.json";
+
+    /*
+     * Lobby configuration
+     */
     static{
-        JSONObject config = null;
+        JSONObject config;
         try {
             JSONParser parser = new JSONParser();
-            config = (JSONObject)parser.parse(new FileReader(new File("resources/ServerResources/config.json")));
-            timerSeconds = (long)config.get("timerSeconds");
+            config = (JSONObject)parser.parse(new FileReader(new File(CONFIG_PATH)));
+            timerSeconds = (long)config.get(TIMER_SECONDS);
         } catch (ParseException | IOException e) {
-            timerSeconds = 60;
+            timerSeconds = STD_TIMER_SECONDS;
             logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
-    public Lobby(){
+    Lobby(){
         commChannelSet = new HashSet<>();
     }
 
     /**
      * adds a channel, a client, to the lobby
-     * @param communicationChannel
+     * @param communicationChannel to add
      */
-    public void addChannel(CommunicationChannel communicationChannel){
+    void addChannel(CommunicationChannel communicationChannel){
         logger.log(Level.FINER, "Adding channel to lobby", communicationChannel);
         commChannelSet.add(communicationChannel);
         if(commChannelSet.size() > 1){
@@ -61,7 +69,7 @@ public class Lobby {
      * Returns a copied set og the channels in the lobby
      * @return the collection of channels
      */
-    public Collection<CommunicationChannel> getCommChannelSet() {
+    Collection<CommunicationChannel> getCommChannelSet() {
         return new HashSet<>(commChannelSet);
     }
 
@@ -88,7 +96,7 @@ public class Lobby {
      * Gets the commChannels currently in the lobby
      * @return the commChannels currently in the lobby
      */
-    public Collection<CommunicationChannel> getCommChannels() {
+    Collection<CommunicationChannel> getCommChannels() {
         return new HashSet<>(commChannelSet);
     }
 
@@ -96,7 +104,7 @@ public class Lobby {
      * Add a new communicationChannel removing, if present, one with the same nickname
      * @param newCc communicationChannel to add
      */
-    public void changeChannel(CommunicationChannel newCc){
+    void changeChannel(CommunicationChannel newCc){
         commChannelSet = getCommChannels().stream()
                 .filter(cc -> !cc.getNickname().equals(newCc.getNickname()))
                 .collect(Collectors.toSet());

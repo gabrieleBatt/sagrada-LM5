@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.view;
+package it.polimi.ingsw.net;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -43,7 +43,9 @@ public enum Message {
     ROUND_TRACK("RoundTrack"),
     NEXT_MOVE("chooseNextMove"),
     USE_TOOL("useTool"),
-    DRAFT("draftDice");
+    DRAFT("draftDice"),
+    DRAFT_DONE("Drafted"),
+    PLACE_DONE("Drafted");
 
     private Optional<String> message;
     private final String defaultMessage;

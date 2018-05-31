@@ -1,7 +1,8 @@
-package it.polimi.ingsw.server.model.table.glasswindow;
+package it.polimi.ingsw.server.controller.deck;
 
 import it.polimi.ingsw.server.controller.deck.GlassWindowDeck;
 import it.polimi.ingsw.server.exception.DeckTooSmallException;
+import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
