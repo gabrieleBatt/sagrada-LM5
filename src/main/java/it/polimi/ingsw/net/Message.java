@@ -47,16 +47,16 @@ public enum Message {
     DRAFT_DONE(),
     PLACE_DONE();
 
-   private String message;
+   private String value;
 
     Message() {
         try {
             JSONObject config = (JSONObject) new JSONParser().parse(new FileReader("resources/clientResources/config.json"));
             String language = ((String) config.get("language")).toLowerCase();
             JSONObject translator = (JSONObject) new JSONParser().parse(new FileReader("resources/clientResources/lang/"+language+"/"+language+".json"));
-            Optional.ofNullable((String)translator.get(this.name())).ifPresent(s -> this.message = s);
+            Optional.ofNullable((String)translator.get(this.name())).ifPresent(s -> this.value = s);
         } catch (IOException | ParseException e) {
-            this.message = this.toString();
+            this.value = this.toString();
         }
     }
 
@@ -75,7 +75,7 @@ public enum Message {
     public static String decodeMessage(String choice) {
         Optional<Message> optional =  Arrays
                 .stream(Message.values())
-                .filter(m -> m.message.equals(choice))
+                .filter(m -> m.value.equals(choice))
                 .findFirst();
         if(optional.isPresent()){
             return optional.get().name();
@@ -86,7 +86,7 @@ public enum Message {
 
     @Override
     public String toString() {
-        return message;
+        return value;
     }
 
     public static String convertWindowName(String name){

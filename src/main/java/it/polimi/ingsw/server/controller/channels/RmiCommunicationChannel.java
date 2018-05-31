@@ -20,7 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class RmiCommunicationChannel extends CommunicationChannel implements RemoteChannel {
+public final class RmiCommunicationChannel extends CommunicationChannel implements RemoteChannel {
     private static final Logger logger = LogMaker.getLogger(RmiCommunicationChannel.class.getName(), Level.ALL);
 
     private final RemoteGameScreen gameScreen;

@@ -44,8 +44,4 @@ class SocketCommunicationChannelTest{
             Assertions.assertEquals(scanner1.next(), scanner2.next());
         }
     }
-
-    @AfterEach
-    void report(){
-    }
 }

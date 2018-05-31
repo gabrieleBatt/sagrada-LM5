@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * For example for Column variety the area is a column:[(0,0),(1,0),(2,0),(3,0)]
  * and the multiplicity is any for the numbers and zero or one for each color.
  */
-public class AreaPublicObjective extends PublicObjective {
+public final class AreaPublicObjective extends PublicObjective {
 
     private static final Logger logger = LogMaker.getLogger(AreaPublicObjective.class.getName(), Level.ALL);
     private List<Target> targetList;

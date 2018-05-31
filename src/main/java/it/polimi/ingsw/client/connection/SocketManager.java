@@ -24,11 +24,12 @@ import java.util.stream.Collectors;
 /**
  * Manages the view by socket communication
  */
-public class SocketManager extends ConnectionManager{
+public class SocketManager implements ConnectionManager{
 
     private static Logger logger = LogMaker.getLogger(SocketManager.class.getName(), Level.ALL);
     private final String nickname;
     private final String password;
+    private Socket socket;
     private final String ip;
     private final int port;
     private BufferedReader in;
@@ -178,12 +179,12 @@ public class SocketManager extends ConnectionManager{
 
     private List<String> getJsonList(JSONObject jsonObject, SocketProtocol socketProtocol){
         JSONArray jsonArray = (JSONArray)jsonObject.get(socketProtocol.get());
-        return new ArrayList<String>(jsonArray);
+        return new ArrayList<>(jsonArray);
     }
 
     @Override
     public boolean login() throws IOException, ParseException {
-        Socket socket = new Socket(ip, port);
+        socket = new Socket(ip, port);
         out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         new JSONBuilder().build(SocketProtocol.LOGIN)
@@ -191,14 +192,13 @@ public class SocketManager extends ConnectionManager{
                 .build(SocketProtocol.PASSWORD, password)
                 .send(out);
         JSONObject received;
-        if ((received = (JSONObject) (new JSONParser()).parse(in.readLine())) != null) {
-            if (received.get(SocketProtocol.HEADER.get()).equals(SocketProtocol.LOGIN.get())) {
-                if (received.get(SocketProtocol.RESULT.get()).equals("success")) {
-                    logger.log(Level.FINE, "Login success");
-                    return true;
-                } else {
-                    logger.log(Level.FINE, received.get(SocketProtocol.RESULT.get()).toString());
-                }
+        if ((received = (JSONObject) (new JSONParser()).parse(in.readLine())) != null &&
+            received.get(SocketProtocol.HEADER.get()).equals(SocketProtocol.LOGIN.get())) {
+            if (received.get(SocketProtocol.RESULT.get()).equals("success")) {
+                logger.log(Level.FINE, "Login success");
+                return true;
+            } else {
+                logger.log(Level.FINE, "Message received ",received.get(SocketProtocol.RESULT.get()));
             }
         }
         throw new ConnectException();

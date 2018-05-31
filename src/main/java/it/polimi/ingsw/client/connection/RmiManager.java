@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 /**
  * Manages the view by rmi communication
  */
-public class RmiManager extends ConnectionManager{
+public class RmiManager implements ConnectionManager{
 
     private static Logger logger = LogMaker.getLogger(RmiManager.class.getName(), Level.ALL);
     private final LoginInfo loginInfo;
@@ -44,9 +44,7 @@ public class RmiManager extends ConnectionManager{
                 try {
                     Thread.sleep(1000);
                     this.scores = remoteChannel.getScores();
-                } catch (InterruptedException e) {
-                    logger.log(Level.WARNING, e.getMessage());
-                } catch (RemoteException e) {
+                } catch (InterruptedException | RemoteException e) {
                     logger.log(Level.WARNING, e.getMessage());
                     break;
                 }

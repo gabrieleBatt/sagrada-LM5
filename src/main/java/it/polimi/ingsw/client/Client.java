@@ -22,6 +22,13 @@ public class Client {
 
     private static Logger logger = LogMaker.getLogger(Client.class.getName(), Level.ALL);
 
+    private static ViewAbstractFactory factory;
+    private static ConnectionScreen connectionScreen;
+    private static EndScreen endScreen;
+    private static GameScreen gameScreen;
+    private static ConnectionManager connectionManager;;
+    private static LoginInfo loginInfo;
+
     private Client(){}
 
     public static Logger getLogger() {
@@ -29,30 +36,12 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        ViewAbstractFactory factory;
-        if(args.length == 1 &&
-                (args[0].equalsIgnoreCase("-gui") ||
-                        args[0].equalsIgnoreCase("-g"))){
-            factory = new GuiViewFactory();
-        }else{
-            factory = new CliViewFactory();
-        }
-
-        ConnectionScreen connectionScreen = factory.makeConnectionScreen();
-        EndScreen endScreen = factory.makeEndScreen();
-
+        readArgs(args);
+        connectionScreen = factory.makeConnectionScreen();
+        endScreen = factory.makeEndScreen();
+        setConnection();
         do {
-            LoginInfo loginInfo = connectionScreen.getConnectionInfo();
-            GameScreen gameScreen = factory.makeGameScreen();
-
             Optional<EndGameInfo> endGameInfo = Optional.empty();
-            ConnectionManager connectionManager;
-
-            if (loginInfo.connectionType.equalsIgnoreCase("Socket")) {
-                connectionManager = new SocketManager(loginInfo, gameScreen);
-            } else {
-                connectionManager = new RmiManager(loginInfo, gameScreen);
-            }
             do{
                 try {
                     if (connectionManager.login()) {
@@ -69,5 +58,26 @@ public class Client {
             }while ((!endGameInfo.isPresent()));
             endGameInfo.ifPresent(endScreen::showRanking);
         }while (endScreen.playAgain());
+    }
+
+    private static void readArgs(String[] args){
+        if(args.length == 1 &&
+                (args[0].equalsIgnoreCase("-gui") ||
+                        args[0].equalsIgnoreCase("-g"))){
+            factory = new GuiViewFactory();
+        }else{
+            factory = new CliViewFactory();
+        }
+    }
+
+    private static void setConnection(){
+        loginInfo = connectionScreen.getConnectionInfo();
+        gameScreen = factory.makeGameScreen();
+        if (loginInfo.connectionType.equalsIgnoreCase("Socket")) {
+            connectionManager = new SocketManager(loginInfo, gameScreen);
+        } else {
+            connectionManager = new RmiManager(loginInfo, gameScreen);
+        }
+
     }
 }

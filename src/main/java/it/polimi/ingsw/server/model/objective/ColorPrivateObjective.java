@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  * A public objective that, for each die of a specific color, awards its
  * value in points
  */
-public class ColorPrivateObjective extends PrivateObjective {
+public final class ColorPrivateObjective extends PrivateObjective {
 
     private static final Logger logger = LogMaker.getLogger(ColorPrivateObjective.class.getName(), Level.ALL);
     private DieColor color;

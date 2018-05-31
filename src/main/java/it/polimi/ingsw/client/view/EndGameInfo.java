@@ -5,7 +5,7 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EndGameInfo {
+public final class EndGameInfo {
 
     private final List<Pair<String,Integer>> ranking;
 

@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 /**
  * Builder of json objects used for socket communication
  */
-public class JSONBuilder{
+public final class JSONBuilder{
 
     private static Logger logger = LogMaker.getLogger(JSONBuilder.class.getName(), Level.OFF);
     private JSONObject jsonObject;

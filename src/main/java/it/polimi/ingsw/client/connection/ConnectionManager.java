@@ -10,10 +10,10 @@ import java.util.Optional;
 /**
  * Manages the view
  */
-public abstract class ConnectionManager {
+public interface ConnectionManager {
 
-    public abstract Optional<EndGameInfo> run() throws IOException, ParseException, InterruptedException;
+    Optional<EndGameInfo> run() throws IOException, ParseException, InterruptedException;
 
-    public abstract boolean login() throws IOException, ParseException, NotBoundException;
+    boolean login() throws IOException, ParseException, NotBoundException;
 
 }

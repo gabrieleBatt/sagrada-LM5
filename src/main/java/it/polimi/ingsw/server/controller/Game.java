@@ -231,7 +231,7 @@ public class Game implements Runnable {
     }
 
     private class ActionList extends ArrayList<ActionCommand>{
-        private List<ActionCommand> turnCommands = new ArrayList<>();
+        transient private List<ActionCommand> turnCommands = new ArrayList<>();
 
         public boolean add(TurnActionCommand actionCommand) {
             turnCommands.add(actionCommand);
@@ -253,6 +253,7 @@ public class Game implements Runnable {
             return turnCommands.contains(actionCommand);
         }
 
+        @Override
         public boolean remove(Object o) {
             turnCommands.remove(o);
             return super.remove(o);

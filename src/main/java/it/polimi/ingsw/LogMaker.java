@@ -30,7 +30,6 @@ public class LogMaker {
             ch.setLevel(level);
             ch.setFormatter(formatter);
         } catch (IOException e) {
-            //System.exit(1);
         }
     }
 

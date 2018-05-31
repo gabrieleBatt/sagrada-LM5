@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.view;
 
-public class LoginInfo{
+public final class LoginInfo{
 
     public final String connectionType;
     public final String nickname;

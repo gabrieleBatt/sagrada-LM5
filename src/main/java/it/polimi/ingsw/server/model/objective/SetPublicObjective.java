@@ -11,7 +11,7 @@ import java.util.HashSet;
  * A public objective that awards points for each set, specific to the objective,
  * found in the glass window.
  */
-public class SetPublicObjective extends PublicObjective {
+public final class SetPublicObjective extends PublicObjective {
 
     private int points;
     private Collection<Integer> numbers;

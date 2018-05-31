@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.net.Message;
 import it.polimi.ingsw.client.view.factory.GameScreen;
-import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.net.identifiables.StdId;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -23,6 +22,7 @@ public class CliGameScreen extends GameScreen{
     private static final Object CARD_POINTS = "points";
     private static final Object CARD_DESCRIPTION = "description";
     private static final Object WINDOW_CELLS = "cells";
+    private static final String JSON_EXTENSION = ".json";
     private final Scanner scanner;
     private final PrintStream printStream;
     private Collection<String> privateObjectives;
@@ -112,9 +112,8 @@ public class CliGameScreen extends GameScreen{
             if(p.nickname.equals(nickname)) {
                 p.glassWindow.windowName = windowName;
                 try {
-                    JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(GLASS_WINDOW_PATH + windowName + ".json"));
+                    JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(GLASS_WINDOW_PATH + windowName + JSON_EXTENSION));
                     List<String> restrictions = new ArrayList<>((JSONArray) jsonObject.get(WINDOW_CELLS));
-                    System.out.println(restrictions);
                     for (int i = 0; i < CELL_NUM; i++) {
                         p.glassWindow.cells[i].restriction = restrictions.get(i);
                     }
@@ -283,7 +282,6 @@ public class CliGameScreen extends GameScreen{
     @Override
     public String getInputFrom(Collection<String> strings, String message) {
         String choice;
-        System.out.println(message);
         String convertMessage = Message.convertMessage(message);
         List<String> convertStrings = strings
                 .stream()
@@ -316,7 +314,8 @@ public class CliGameScreen extends GameScreen{
         if (skip) {
             printActive(true, Message.SKIP.toString());
             printStream.println("\t");
-        }if (undo) {
+        }
+        if (undo) {
             printActive(true, Message.UNDO.toString());
             printStream.println("\n\n");
         }
@@ -373,7 +372,7 @@ public class CliGameScreen extends GameScreen{
 
     private void showObjective(String name){
         try {
-            JSONObject jsonObject = ((JSONObject) new JSONParser().parse(new FileReader(OBJECTIVE_PATH+name+".json")));
+            JSONObject jsonObject = ((JSONObject) new JSONParser().parse(new FileReader(OBJECTIVE_PATH+name+JSON_EXTENSION)));
             printStream.print(jsonObject.get(CARD_NAME).toString() + ",\t"+Message.POINTS+":" + jsonObject.get(CARD_POINTS));
             printStream.println(",\t" + jsonObject.get(CARD_DESCRIPTION));
         } catch (IOException | ParseException e) {
@@ -397,7 +396,7 @@ public class CliGameScreen extends GameScreen{
                      printStream.print("[2]  ");
                  }else
                      printStream.print("[1]  ");
-                 JSONObject jsonObject = ((JSONObject) new JSONParser().parse(new FileReader(TOOL_PATH+tool.toolName+".json")));
+                 JSONObject jsonObject = ((JSONObject) new JSONParser().parse(new FileReader(TOOL_PATH+tool.toolName+JSON_EXTENSION)));
                  printActive(tool.active, jsonObject.get(CARD_NAME).toString());
                  printStream.print("\t" + jsonObject.get(CARD_DESCRIPTION));
              } catch (IOException | ParseException e) {

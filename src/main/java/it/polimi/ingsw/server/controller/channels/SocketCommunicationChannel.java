@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 /**
  * Communication channel implemented with socket communication.
  */
-public class SocketCommunicationChannel extends CommunicationChannel {
+public final class SocketCommunicationChannel extends CommunicationChannel {
 
     private static final Logger logger = LogMaker.getLogger(SocketCommunicationChannel.class.getName(), Level.ALL);
     private static long pingTimeout;
