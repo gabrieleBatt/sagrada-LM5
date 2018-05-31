@@ -1,5 +1,5 @@
 {
-  "name": "LensCutter",
+  "name": "lensCutter",
   "conditions":["CANCEL_DRAFTING"],
   "toolColor": "G",
   "actions":3,

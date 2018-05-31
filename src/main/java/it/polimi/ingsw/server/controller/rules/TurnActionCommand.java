@@ -66,6 +66,8 @@ public class TurnActionCommand implements ActionCommand{
         backUp();
         List<Identifiable> options;
         Identifiable actionChosen;
+        actionReceiver.sendAll(Message.START_TURN.name());
+        actionReceiver.sendAll(player.getNickname());
         do {
             drafted = false;
             reset = false;
@@ -90,6 +92,9 @@ public class TurnActionCommand implements ActionCommand{
             }
         }while(reset);
         timer.cancel();
+        actionReceiver.sendAll(Message.END_TURN.name());
+        actionReceiver.sendAll(player.getNickname());
+
     }
 
     private void startTimer(Timer timer) {

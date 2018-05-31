@@ -45,9 +45,22 @@ public enum Message {
     USE_TOOL(),
     DRAFT(),
     DRAFT_DONE(),
-    PLACE_DONE();
+    PLACE_DONE(),
+    DEALT_TOOLS(),
+    DEALT_PUB_OBJ(),
+    RECEIVED_GLASS_WINDOW(),
+    NEW_POOL(),
+    END_ROUND(),
+    END_TURN(),
+    START_TURN(),
+    RANDOM_NUMBER(),
+    SELECT_DIE(),
+    SWAPPED(),
+    MOVED(),
+    BEEN_SET(),
+    SET_DIE();
 
-   private String value;
+    private String value;
 
     Message() {
         try {
@@ -56,7 +69,7 @@ public enum Message {
             JSONObject translator = (JSONObject) new JSONParser().parse(new FileReader("resources/clientResources/lang/"+language+"/"+language+".json"));
             Optional.ofNullable((String)translator.get(this.name())).ifPresent(s -> this.value = s);
         } catch (IOException | ParseException e) {
-            this.value = this.toString();
+            this.value = this.name();
         }
     }
 
@@ -89,7 +102,7 @@ public enum Message {
         return value;
     }
 
-    public static String convertWindowName(String name){
+    public static String convertName(String name){
         Matcher matcher = Pattern.compile("[A-Z]").matcher(name);
         StringBuffer buff = new StringBuffer();
         while(matcher.find()){
@@ -98,7 +111,7 @@ public enum Message {
         return new String(matcher.appendTail(buff).replace(0,1, ""+Character.toUpperCase(buff.charAt(0))));
     }
 
-    public static String decodeWindowName(String name){
+    public static String decodeName(String name){
         Matcher matcher = Pattern.compile("\\s").matcher(name);
         StringBuffer buff = new StringBuffer();
         while(matcher.find()){

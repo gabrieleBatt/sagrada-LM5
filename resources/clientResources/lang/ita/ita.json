@@ -31,5 +31,18 @@
   "WINS":"vince",
   "LEADER_BOARD":"Classifica",
   "DRAFT_DONE": "Drafted",
-  "PLACE_DONE": "Placed"
+  "PLACE_DONE": "Placed",
+  "DEALT_TOOLS": "Tool scelti",
+  "DEALT_PUB_OBJ": "Obiettivi pubblici scelti",
+  "RECEIVED_GLASS_WINDOW": "Vetrata scelta",
+  "NEW_POOL": "Pool tirata",
+  "END_ROUND": "Fine round di",
+  "END_TURN": "Fine turn do",
+  "START_TURN": "Inizio turno do",
+  "RANDOM_NUMBER": "Lanciato il dado",
+  "SELECT_DIE": "Numero scelto",
+  "SWAPPED": "Scambiato con",
+  "MOVED":"Spostato",
+  "BEEN_SET":"Numero del dado scelto",
+  "SET_DIE": "Scegli il numero del dado"
 }

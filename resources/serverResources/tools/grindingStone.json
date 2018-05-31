@@ -1,5 +1,5 @@
 {
-  "name": "GrindingStone",
+  "name": "grindingStone",
   "conditions":["CANCEL_DRAFTING"],
   "toolColor": "G",
   "actions":3,

@@ -1,5 +1,5 @@
 {
-  "name": "GrozingPliers",
+  "name": "grozingPliers",
   "conditions":["CANCEL_DRAFTING"],
   "toolColor": "M",
   "actions":3,

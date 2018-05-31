@@ -54,10 +54,13 @@ public class DefaultRules implements Rules {
      * @return ActionCommand that deals the tools on table.
      */
     protected ActionCommand dealTool(int toolPerGame) {
-        return actionReceiver ->
-                actionReceiver.getTable()
-                        .setTools(ToolDeck.getToolDeck()
-                                .draw(toolPerGame));
+        return actionReceiver -> {
+            actionReceiver.getTable()
+                    .setTools(ToolDeck.getToolDeck()
+                            .draw(toolPerGame));
+            actionReceiver.sendAll(actionReceiver.getTable().getTools().toString());
+            actionReceiver.sendAll(Message.DEALT_TOOLS.name());
+        };
     }
 
     /**
@@ -71,7 +74,8 @@ public class DefaultRules implements Rules {
             publicObjectives = PublicObjectiveDeck.getPublicObjectiveDeck().draw(pubObjPerGame);
             actionReceiver.getTable().setPublicObjective(publicObjectives);
             actionReceiver.getCommChannels().forEach(cc -> cc.updateView(actionReceiver.getTable()));
-            actionReceiver.sendAll(PUBLIC_OBJECTIVE_MESSAGE + ":"+publicObjectives);
+            actionReceiver.sendAll(actionReceiver.getTable().getPublicObjectives().toString());
+            actionReceiver.sendAll(Message.DEALT_PUB_OBJ.name());
             Game.getLogger().log(Level.FINE, publicObjectives.toString(), actionReceiver);
         };
     }
@@ -123,6 +127,8 @@ public class DefaultRules implements Rules {
                         .forEach(cc -> cc.updateView(player, !actionReceiver
                                                                     .getChannel(player.getNickname())
                                                                     .isOffline()));
+                actionReceiver.sendAll(player.getGlassWindow().getId());
+                actionReceiver.sendAll(Message.RECEIVED_GLASS_WINDOW.name());
             }
             Game.getLogger().log(Level.FINE, "Glass windows dealt", actionReceiver);
         };
@@ -163,6 +169,7 @@ public class DefaultRules implements Rules {
             Collection<Die> drawnDice = actionReceiver.getTable().getDiceBag().drawDice(players*2+1);
             actionReceiver.getTable().getPool().setDice(drawnDice);
             actionReceiver.getCommChannels().forEach(cc -> cc.updateView(actionReceiver.getTable().getPool()));
+            actionReceiver.sendAll(Message.NEW_POOL.name());
             Game.getLogger().log(Level.FINE, "dice drawn " + drawnDice, actionReceiver);
         };
     }
@@ -194,6 +201,9 @@ public class DefaultRules implements Rules {
                   .forEach(cc -> cc.updateView(actionReceiver.getTable().getPool()));
           actionReceiver.getCommChannels()
                   .forEach(cc -> cc.updateView(actionReceiver.getTable().getRoundTrack()));
+
+          actionReceiver.sendAll(Message.END_ROUND.name());
+
           Game.getLogger().log(Level.FINE, "dice left set in the round rack\n"+diceLeft.toString(), actionReceiver);
         };
     }
@@ -297,7 +307,8 @@ public class DefaultRules implements Rules {
                 if(optionalDie.isPresent()) {
                     actionReceiver.getTable().getPool().takeDie(optionalDie.get());
                     actionReceiver.getMap().put(marker, optionalDie.get());
-                    actionReceiver.sendAll(Message.DRAFT_DONE.name()+":" + optionalDie.get());
+                    actionReceiver.sendAll(optionalDie.get().toString().substring(0, 2));
+                    actionReceiver.sendAll(Message.DRAFT_DONE.name());
                 }
             }
 
@@ -356,7 +367,8 @@ public class DefaultRules implements Rules {
                             .filter(c -> c.getId().equals(positionChosen.getId())).findFirst().get()
                             .placeDie(die, (colorRestriction || numberRestriction));
                 }
-                actionReceiver.sendAll(Message.PLACE_DONE.name()+":" + positionChosen.getId());
+                actionReceiver.sendAll(positionChosen.getId());
+                actionReceiver.sendAll(Message.PLACE_DONE.name());
                 actionReceiver
                         .getCommChannels()
                         .forEach(c -> c

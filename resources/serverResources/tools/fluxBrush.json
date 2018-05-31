@@ -1,5 +1,5 @@
 {
-  "name": "FluxBrush",
+  "name": "fluxBrush",
   "conditions":["CANCEL_DRAFTING"],
   "toolColor": "M",
   "actions":3,

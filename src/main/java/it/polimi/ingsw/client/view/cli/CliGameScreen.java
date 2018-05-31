@@ -49,7 +49,7 @@ public class CliGameScreen extends GameScreen{
 
     @Override
     public void addMessage(String message) {
-        messageRecord.add(0, message);
+        messageRecord.add(0, Message.convertMessage(message));
     }
 
     public void setPlayers(List<String> nicknames){
@@ -110,19 +110,26 @@ public class CliGameScreen extends GameScreen{
     public void setPlayerWindow(String nickname, String windowName){
         for(PlayerClass p: playersList ){
             if(p.nickname.equals(nickname)) {
-                p.glassWindow.windowName = windowName;
-                try {
-                    JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(GLASS_WINDOW_PATH + windowName + JSON_EXTENSION));
-                    List<String> restrictions = new ArrayList<>((JSONArray) jsonObject.get(WINDOW_CELLS));
-                    for (int i = 0; i < CELL_NUM; i++) {
-                        p.glassWindow.cells[i].restriction = restrictions.get(i);
-                    }
-                } catch (IOException | ParseException e) {
-                    printStream.println("Window not found");
-                }
+                p.glassWindow = makeWindow(windowName);
             }
         }
     }
+
+    private WindowClass makeWindow(String windowName){
+        WindowClass ret = new WindowClass();
+        ret.windowName = windowName;
+        try {
+            JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(GLASS_WINDOW_PATH + windowName + JSON_EXTENSION));
+            List<String> restrictions = new ArrayList<>((JSONArray) jsonObject.get(WINDOW_CELLS));
+            for (int i = 0; i < CELL_NUM; i++) {
+                ret.cells[i].restriction = restrictions.get(i);
+            }
+        } catch (IOException | ParseException e) {
+            printStream.println("Window not found");
+        }
+        return ret;
+    }
+
 
     @Override
     public void setCellContent(String nickname, int x, int y, String die){
@@ -153,15 +160,16 @@ public class CliGameScreen extends GameScreen{
 
     @Override
     public String getWindow(Collection<String> o) {
-        List<String> convertedNames = o.stream().map(Message::convertWindowName).collect(Collectors.toList());
+        List<String> convertedNames = o.stream().map(Message::convertName).collect(Collectors.toList());
         printStream.println(Message.CHOOSE_WINDOW+": "+ COLOR_ESC + convertedNames.toString() +  WHITE_ESC);
         printStream.flush();
+        showOthersWindows(o.stream().map(this::makeWindow).collect(Collectors.toList()));
         String choice = scanner.nextLine();
         while(!convertedNames.contains(choice)){
             printStream.println(Message.INVALID_CHOICE);
             choice = scanner.nextLine();
         }
-        return Message.decodeWindowName(choice);
+        return Message.decodeName(choice);
     }
 
     @Override
@@ -213,13 +221,13 @@ public class CliGameScreen extends GameScreen{
                 tool.active = true;
         }
 
-        String ret = getChoice(options);
+        String ret = getChoice(options.stream().map(Message::convertName).collect(Collectors.toList()));
 
         for(ToolClass tool: toolsList)
             tool.active = false;
 
 
-        return ret;
+        return Message.decodeName(ret);
     }
 
 
@@ -302,7 +310,7 @@ public class CliGameScreen extends GameScreen{
     public void showAll(){
         clear();
         showOthersNameAndTokens();
-        showOthersWindows();
+        showOthersWindows(playersList.subList(1,playersList.size()).stream().map(p -> p.glassWindow).collect(Collectors.toList()));
         printStream.println(Message.MESSAGES + ": "+messageRecord+"\n");
         showNicknameAndTokensAndRound();
         showPrivateObjective();
@@ -425,11 +433,11 @@ public class CliGameScreen extends GameScreen{
         printStream.print("\n");
     }
 
-    private void showOthersWindows() {
+    private void showOthersWindows(List<WindowClass> windowClasses) {
         for (int x = 0; x < 4; x++) {
-            for (PlayerClass p : playersList.subList(1, playersList.size())) {
+            for (WindowClass windowClass : windowClasses) {
                 for (int y = 0; y < 5; y++) {
-                    Cell c = p.glassWindow.cells[x * 5 + y];
+                    Cell c = windowClass.cells[x * 5 + y];
                     if(c.content.equals(" ")) {
                         printActive(c.active, "[" + c.restriction + "]");
                     }else{

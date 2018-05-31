@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.rules;
 
+import it.polimi.ingsw.net.Message;
 import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.net.identifiables.StdId;
 import it.polimi.ingsw.server.controller.Game;
@@ -29,9 +30,14 @@ public class ToolActions {
                 CommunicationChannel cc = actionReceiver.getChannel(player.getNickname());
                 Die die = actionReceiver.getMap().get(marker);
                 List<Identifiable> optionList = options.get(die.getNumber()-1);
-                Identifiable actionChosen = cc.chooseFrom(optionList,INCREASE_DECREASE,false,false);
+                Identifiable actionChosen = cc.chooseFrom(optionList, Message.SET_DIE.toString(),false,false);
                 die.setNumber(Integer.parseInt(actionChosen.getId()));
+
                 Game.getLogger().log(Level.FINE,"New die value: "+ die.getNumber(),die);
+
+                actionReceiver.sendAll(die.getId().substring(0, 2));
+                actionReceiver.sendAll(Message.BEEN_SET.name());
+
             };
         }
 
@@ -41,14 +47,16 @@ public class ToolActions {
      * @param optionList  List of possible value of die after rolling.
      * @return ActionCommand used to let the player roll a die.
      */
-        public static ActionCommand randomActionCommand(String marker, List<List<Identifiable>> optionList){
-            return actionReceiver -> {
-                Die die = actionReceiver.getMap().get(marker);
-                int index = ThreadLocalRandom.current().nextInt(0, optionList.get(die.getNumber()-1).size());
-                die.setNumber(Integer.parseInt(optionList.get(die.getNumber()-1).get(index).getId()));
-                Game.getLogger().log(Level.FINE,"Dice rolled: " + die.toString(),die);
-            };
-        }
+    public static ActionCommand randomActionCommand(String marker, List<List<Identifiable>> optionList){
+        return actionReceiver -> {
+            Die die = actionReceiver.getMap().get(marker);
+            int index = ThreadLocalRandom.current().nextInt(0, optionList.get(die.getNumber()-1).size());
+            die.setNumber(Integer.parseInt(optionList.get(die.getNumber()-1).get(index).getId()));
+            actionReceiver.sendAll(die.getId().substring(0, 2));
+            actionReceiver.sendAll(Message.RANDOM_NUMBER.name());
+            Game.getLogger().log(Level.FINE,"Dice rolled: " + die.toString(),die);
+        };
+    }
 
     /**
      * Generates the action command used to select a die. It receives a StdId identifying the
@@ -88,7 +96,10 @@ public class ToolActions {
 
                     actionReceiver.getMap().put(marker, die);
 
-                Game.getLogger().log(Level.FINE,"Added die in cell " + cellChosen + " to HashMap", player.getGlassWindow()
+                    actionReceiver.sendAll(die.getId().substring(0, 2));
+                    actionReceiver.sendAll(Message.SELECT_DIE.name());
+
+                    Game.getLogger().log(Level.FINE,"Added die in cell " + cellChosen + " to HashMap", player.getGlassWindow()
                         .getCell(Character.getNumericValue(cellChosen.getId().charAt(0)),Character.getNumericValue(cellChosen.getId().charAt(1))).getDie());
                 }
             };
@@ -110,7 +121,10 @@ public class ToolActions {
                 }else {
                     Die die = getDieChosen(dieOptions,dieChosen);
                     actionReceiver.getMap().put(marker, die);
-                Game.getLogger().log(Level.FINE,"Added die form Pool" + dieChosen + " to HashMap",dieChosen);
+                    actionReceiver.sendAll(die.getId().substring(0, 2));
+                    actionReceiver.sendAll(Message.SELECT_DIE.name());
+
+                    Game.getLogger().log(Level.FINE,"Added die form Pool" + dieChosen + " to HashMap",dieChosen);
 
                 }
 
@@ -133,7 +147,10 @@ public class ToolActions {
                 } else {
                     Die die = getDieChosen(dieOptions,dieChosen);
                     actionReceiver.getMap().put(marker, die);
-                Game.getLogger().log(Level.FINE, "Added die form RoundTrack" + dieChosen + " to HashMap", dieChosen);
+                    actionReceiver.sendAll(die.getId().substring(0, 2));
+                    actionReceiver.sendAll(Message.SELECT_DIE.name());
+
+                    Game.getLogger().log(Level.FINE, "Added die form RoundTrack" + dieChosen + " to HashMap", dieChosen);
                 }
             };
         }
@@ -175,6 +192,10 @@ public class ToolActions {
                 actionReceiver.getTable().getDiceBag().placeDie(dieToSet);
                 Die dieToTake = actionReceiver.getTable().getDiceBag().drawDice(1).iterator().next();
                 actionReceiver.getMap().put(markerDieToTake,dieToTake);
+
+                actionReceiver.sendAll(dieToTake.getId().substring(0, 2));
+                actionReceiver.sendAll(Message.SWAPPED.name());
+                actionReceiver.sendAll(dieToSet.getId().substring(0, 2));
             };
     }
 
@@ -234,6 +255,10 @@ public class ToolActions {
                 actionReceiver.getTable().getRoundTrack().switchDie(dieToSwap, die);
                 Game.getLogger().log(Level.FINE,
                         "Switched die "+ die +" with die "+dieToSwap+" from Window");
+
+                actionReceiver.sendAll(die.getId().substring(0, 2));
+                actionReceiver.sendAll(Message.SWAPPED.name());
+                actionReceiver.sendAll(dieToSwap.getId().substring(0, 2));
 
             }
         };
@@ -304,6 +329,10 @@ public class ToolActions {
                 }else {
                     Cell cell = getCellChosen(cellList, cellChosenId);
                     cell.placeDie(die, true);
+
+                    actionReceiver.sendAll(cell.getId());
+                    actionReceiver.sendAll(Message.MOVED.name());
+                    actionReceiver.sendAll(die.getId().substring(0, 2));
                     Game.getLogger().log(Level.FINE, "Die moved");
                 }
             }

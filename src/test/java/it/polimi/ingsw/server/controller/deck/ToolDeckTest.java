@@ -14,29 +14,29 @@ class ToolDeckTest {
     @Test
     void draw() {
         List<Tool> toolList = ToolDeck.getToolDeck().draw(12);
-        Tool tool1 = toolList.stream().filter(t -> t.getName().equals("CopperFoilBurnisher")).findFirst().get();
+        Tool tool1 = toolList.stream().filter(t -> t.getName().equals("copperFoilBurnisher")).findFirst().get();
         Assertions.assertEquals(1,tool1.getActionCommandList().size());
-        Tool tool2 = toolList.stream().filter(t -> t.getName().equals("Cork-BakedStraightedge")).findFirst().get();
+        Tool tool2 = toolList.stream().filter(t -> t.getName().equals("cork-BakedStraightedge")).findFirst().get();
         Assertions.assertEquals(2,tool2.getActionCommandList().size());
-        Tool tool3 = toolList.stream().filter(t -> t.getName().equals("EglomiseBrush")).findFirst().get();
+        Tool tool3 = toolList.stream().filter(t -> t.getName().equals("eglomiseBrush")).findFirst().get();
         Assertions.assertEquals(1,tool3.getActionCommandList().size());
-        Tool tool4 = toolList.stream().filter(t -> t.getName().equals("FluxBrush")).findFirst().get();
+        Tool tool4 = toolList.stream().filter(t -> t.getName().equals("fluxBrush")).findFirst().get();
         Assertions.assertEquals(3,tool4.getActionCommandList().size());
-        Tool tool5 = toolList.stream().filter(t -> t.getName().equals("FluxRemover")).findFirst().get();
+        Tool tool5 = toolList.stream().filter(t -> t.getName().equals("fluxRemover")).findFirst().get();
         Assertions.assertEquals(4,tool5.getActionCommandList().size());
-        Tool tool6 = toolList.stream().filter(t -> t.getName().equals("GlazingHammer")).findFirst().get();
+        Tool tool6 = toolList.stream().filter(t -> t.getName().equals("glazingHammer")).findFirst().get();
         Assertions.assertEquals(1,tool6.getActionCommandList().size());
-        Tool tool7 = toolList.stream().filter(t -> t.getName().equals("GrindingStone")).findFirst().get();
+        Tool tool7 = toolList.stream().filter(t -> t.getName().equals("grindingStone")).findFirst().get();
         Assertions.assertEquals(3,tool7.getActionCommandList().size());
-        Tool tool8 = toolList.stream().filter(t -> t.getName().equals("GrozingPliers")).findFirst().get();
+        Tool tool8 = toolList.stream().filter(t -> t.getName().equals("grozingPliers")).findFirst().get();
         Assertions.assertEquals(3,tool8.getActionCommandList().size());
-        Tool tool9 = toolList.stream().filter(t -> t.getName().equals("Lathekin")).findFirst().get();
+        Tool tool9 = toolList.stream().filter(t -> t.getName().equals("lathekin")).findFirst().get();
         Assertions.assertEquals(2,tool9.getActionCommandList().size());
-        Tool tool10 = toolList.stream().filter(t -> t.getName().equals("LensCutter")).findFirst().get();
+        Tool tool10 = toolList.stream().filter(t -> t.getName().equals("lensCutter")).findFirst().get();
         Assertions.assertEquals(3,tool10.getActionCommandList().size());
-        Tool tool11 = toolList.stream().filter(t -> t.getName().equals("RunningPliers")).findFirst().get();
+        Tool tool11 = toolList.stream().filter(t -> t.getName().equals("runningPliers")).findFirst().get();
         Assertions.assertEquals(3,tool11.getActionCommandList().size());
-        Tool tool12 = toolList.stream().filter(t -> t.getName().equals("TapWheel")).findFirst().get();
+        Tool tool12 = toolList.stream().filter(t -> t.getName().equals("tapWheel")).findFirst().get();
         Assertions.assertEquals(3,tool12.getActionCommandList().size());
     }
 }

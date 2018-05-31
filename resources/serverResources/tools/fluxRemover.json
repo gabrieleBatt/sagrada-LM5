@@ -1,5 +1,5 @@
 {
-  "name": "FluxRemover",
+  "name": "fluxRemover",
   "conditions":["CANCEL_DRAFTING"],
   "actions":4,
   "toolColor": "M",
