@@ -37,7 +37,7 @@ class ToolActionsTest {
         game = new Game(cc);
         player = new Player("player");
         player.setGlassWindow(GlassWindowDeck.getGlassWindowDeck().draw(1).get(0));
-        game.addAction(new TurnActionCommand(player));
+        game.addAction(new TurnActionCommand(player,false));
     }
 
     @DisplayName("Test set")

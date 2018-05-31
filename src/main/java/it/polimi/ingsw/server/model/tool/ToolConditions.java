@@ -8,6 +8,5 @@ public enum ToolConditions {
     CANCEL_DRAFTING(),
     BEFORE_DRAFTING(),
     SECOND_TURN(),
-    FIRST_TURN(),
-    WITH_DRAFTING();
+    FIRST_TURN()
 }

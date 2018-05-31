@@ -108,8 +108,9 @@ public class RmiCommunicationChannel extends CommunicationChannel implements Rem
     public void updateView(Player player, boolean connected) {
         try {
             gameScreen.setPlayerConnection(player.getNickname(), connected);
-            if (player.getNickname().equals(getNickname()))
+            if (player.getNickname().equals(this.getNickname())) {
                 gameScreen.setPrivateObjectives(player.getPrivateObjective().stream().map(Identifiable::getId).collect(Collectors.toList()));
+            }
             if (player.hasGlassWindow()) {
                 gameScreen.setPlayerWindow(player.getNickname(), player.getGlassWindow().getId());
                 for (int i = 0; i < 4; i++) {

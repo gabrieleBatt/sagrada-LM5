@@ -1,6 +1,6 @@
 {
   "name": "TapWheel",
-  "conditions":["WITH_DRAFTING"],
+  "conditions":[],
   "toolColor": "R",
   "actions":3,
   "action1": {

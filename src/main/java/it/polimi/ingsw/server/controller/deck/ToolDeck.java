@@ -81,7 +81,7 @@ public class ToolDeck implements Deck {
      * Gets tool deck.
      * @return tool deck.
      */
-    static ToolDeck getToolDeck() {
+    public static ToolDeck getToolDeck() {
         return toolDeck;
     }
 
@@ -201,9 +201,9 @@ public class ToolDeck implements Deck {
         List<String> restrictions = new ArrayList<>((JSONArray)jsonObject.get(RESTRICTION));
         return DefaultRules.getDefaultRules().getPlaceAction(
                         getMarker(jsonObject),
-                        restrictions.contains(COLOR),
-                        restrictions.contains(NUMBER),
-                        restrictions.contains(CLOSE),
+                        !restrictions.contains(CLOSE),
+                        !restrictions.contains(COLOR),
+                        !restrictions.contains(NUMBER),
                         jsonObject.containsKey(FORCED) && (Boolean)jsonObject.get(FORCED)
 
                 );

@@ -29,7 +29,7 @@ class TurnActionCommandTest {
         game = new Game(ccl);
         Player player = new Player("p1");
         player.setGlassWindow(GlassWindowDeck.getGlassWindowDeck().draw(1).get(0));
-        game.addAction(new TurnActionCommand(player));
+        game.addAction(new TurnActionCommand(player,false));
     }
 
     @DisplayName("Testing turn")
@@ -39,13 +39,15 @@ class TurnActionCommandTest {
             actionCommand.execute(game);
         }
         DefaultRules.getDefaultRules().getSetupRoundAction().execute(game);
-        DefaultRules.getDefaultRules().getTurnAction(game.getTable().getPlayer("p1")).execute(game);
-        Assertions.assertTrue( 4 <= game.getTable().getPool().getDice().size());
+
+        TurnActionCommand turnActionCommand =DefaultRules.getDefaultRules().getTurnAction(game.getTable().getPlayer("p1"), false);
+        game.addAction(turnActionCommand);
+        turnActionCommand.execute(game);
+        Assertions.assertTrue( 3 <= game.getTable().getPool().getDice().size());
         Assertions.assertTrue( 5 >= game.getTable().getPool().getDice().size());
-        Assertions.assertTrue(1 >= game.getTable().getPlayer("p1").getGlassWindow().getCellList().stream().filter(Cell::isOccupied).count());
+        Assertions.assertTrue(2 >= game.getTable().getPlayer("p1").getGlassWindow().getCellList().stream().filter(Cell::isOccupied).count());
         Assertions.assertTrue(0 <= game.getTable().getPlayer("p1").getGlassWindow().getCellList().stream().filter(Cell::isOccupied).count());
-        //TODO
-        //Tools missing
+
     }
 
 }

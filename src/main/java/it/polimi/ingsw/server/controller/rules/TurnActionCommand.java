@@ -8,6 +8,7 @@ import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.tool.Tool;
+import it.polimi.ingsw.server.model.tool.ToolConditions;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -17,6 +18,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.net.identifiables.StdId.*;
 
@@ -24,8 +26,13 @@ public class TurnActionCommand implements ActionCommand{
 
     private boolean reset;
     private boolean skip;
+    private final boolean secondTurn;
+    private final Player player;
     private CommunicationChannel cc;
     private static long turnTime;
+    private boolean drafted;
+    private Game actionReceiver;
+
 
     private static final String TURN_TIME = "turnTime";
     private static final int STD_TURN_TIME = 60;
@@ -42,47 +49,44 @@ public class TurnActionCommand implements ActionCommand{
         }
     }
 
-    private Player player;
-
-    TurnActionCommand(Player player){
+    TurnActionCommand(Player player, boolean secondTurn){
         this.player = player;
+        this.secondTurn = secondTurn;
     }
 
     /**
      * Execute all the turn actions on the specified game
-     * @param actionReceiver receiver of the action
+     * @param ar receiver of the action
      */
     @Override
-    public void execute(Game actionReceiver){
+    public void execute(Game ar){
+        this.actionReceiver = ar;
         Timer timer = new Timer();
         startTimer(timer);
-        backUp(actionReceiver);
+        backUp();
         List<Identifiable> options;
         Identifiable actionChosen;
         do {
+            drafted = false;
             reset = false;
             skip = false;
-            actionReceiver.getCommChannels()
-                    .stream()
-                    .filter(c -> c.getNickname().equals(player.getNickname()))
-                    .findFirst()
-                    .ifPresent(communicationChannel -> cc = communicationChannel);
+            cc = actionReceiver.getChannel(player.getNickname());
             options = new ArrayList<>();
             options.add(DRAFT);
             options.add(USE_TOOL);
 
             //choose first action
             actionChosen = cc.chooseFrom(options, Message.NEXT_MOVE.name(), true, false);
-            doActionChosen(actionChosen, actionReceiver);
+            doActionChosen(actionChosen);
         }while(reset);
-        backUp(actionReceiver);
+        backUp();
         do{
             reset = false;
             //choose second action
             if(!skip) {
                 options.remove(actionChosen);
                 actionChosen = cc.chooseFrom(options, Message.NEXT_MOVE.name(), true, true);
-                doActionChosen(actionChosen, actionReceiver);
+                doActionChosen(actionChosen);
             }
         }while(reset);
         timer.cancel();
@@ -100,30 +104,33 @@ public class TurnActionCommand implements ActionCommand{
         }, turnTime * 1000);
     }
 
-    private void doActionChosen(final Identifiable actionChosen, Game actionReceiver) throws DieNotAllowedException {
+    private void doActionChosen(final Identifiable actionChosen) throws DieNotAllowedException {
         if(actionChosen.getId().equals(USE_TOOL.getId())) {
-            doToolAction(actionReceiver);
+            doToolAction();
 
         }else if(actionChosen.getId().equals(DRAFT.getId())) {
             actionReceiver.getRules().getDraftAction("dieChosen", null, null).execute(actionReceiver);
-            if (!reset)
-                actionReceiver.getRules().getPlaceAction("dieChosen", true, true, true,false).execute(actionReceiver);
-
+            if (!reset) {
+                actionReceiver.getRules().getPlaceAction("dieChosen", true, true, true, false).execute(actionReceiver);
+                drafted = true;
+            }
         }else if(actionChosen.getId().equals(SKIP.getId())) {
             skip = true;
 
         }else if(actionChosen.getId().equals(UNDO.getId())) {
-            reset(actionReceiver);
+            reset();
         }
     }
 
-    private void doToolAction(Game actionReceiver) throws DieNotAllowedException {
+    private void doToolAction() {
         if(actionReceiver.getTable().getTools().isEmpty()){
             return;
         }
-        Identifiable toolChosen = cc.selectObject(new ArrayList<>(actionReceiver.getTable().getTools()), StdId.TABLE, false, true);
+        Identifiable toolChosen = cc.selectObject(new ArrayList<>(availableTools()), StdId.TABLE, false, true);
+
         if (toolChosen.getId().equals(UNDO.getId()))
-            this.reset(actionReceiver);
+            this.reset();
+
         if (!reset) {
             Optional<Tool> optTool = actionReceiver.getTable().getTools()
                     .stream()
@@ -136,8 +143,47 @@ public class TurnActionCommand implements ActionCommand{
                     if (!reset)
                         actionCommand.execute(actionReceiver);
                 }
+                if(!reset && optTool.get().getToolConditions().contains(ToolConditions.CANCEL_DRAFTING)){
+                    skip = true;
+                }
             }
         }
+
+    }
+
+    private Collection<Tool> availableTools(){
+        if(player.getTokens() == 0)
+            return new ArrayList<>();
+
+        Collection<Tool> tools = actionReceiver.getTable().getTools();
+
+        if(player.getTokens() == 1)
+            tools = tools
+                    .stream()
+                    .filter(t -> !t.isUsed())
+                    .collect(Collectors.toList());
+
+        if(drafted) {
+            tools = tools
+                    .stream()
+                    .filter(t -> !t.getToolConditions().contains(ToolConditions.BEFORE_DRAFTING))
+                    .filter(t -> !t.getToolConditions().contains(ToolConditions.CANCEL_DRAFTING))
+                    .collect(Collectors.toList());
+        }
+
+
+        if(secondTurn)
+            tools = tools
+                    .stream()
+                    .filter(t -> !t.getToolConditions().contains(ToolConditions.FIRST_TURN))
+                    .collect(Collectors.toList());
+        else
+            tools = tools
+                    .stream()
+                    .filter(t -> !t.getToolConditions().contains(ToolConditions.SECOND_TURN))
+                    .collect(Collectors.toList());
+
+        return tools;
     }
 
     /**
@@ -150,9 +196,8 @@ public class TurnActionCommand implements ActionCommand{
 
     /**
      * Resets the turn to the start or to the last checkpoint action (es. reRolling)
-     * @param actionReceiver to reset
      */
-    public void reset(Game actionReceiver) {
+    public void reset() {
         reset = true;
         actionReceiver.getTable().getRoundTrack().getMemento();
         actionReceiver.getTable().getDiceBag().getMemento();
@@ -165,9 +210,8 @@ public class TurnActionCommand implements ActionCommand{
 
     /**
      * create a checkpoint
-     * @param actionReceiver to backup
      */
-    private void backUp(Game actionReceiver)  {
+    private void backUp()  {
         player.addMemento();
         actionReceiver.getTable().getPool().addMemento();
         actionReceiver.getTable().getDiceBag().addMemento();

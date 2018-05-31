@@ -55,17 +55,17 @@ public class FakeSocketClient{
                     out.flush();
                 } else if (received.get("header").equals(SocketProtocol.SELECT_OBJECT.get())) {
                     System.out.println("Choose among these : " + received.get(SocketProtocol.OPTION.get()));
-                    logger.log(Level.FINE, "{\"header\": \"selectObject\",\"option\":\"skip\"}");
+                    logger.log(Level.FINE, "{\"header\": \"selectObject\",\"option\":\"SKIP\"}");
                     if(!real)
-                        out.println("{\"header\": \"selectObject\",\"option\":\"skip\"}");
+                        out.println("{\"header\": \"selectObject\",\"option\":\"SKIP\"}");
                     else
                         out.println("{\"header\": \"selectObject\",\"option\":\""+scanner.nextLine()+"\"}");
                     out.flush();
                 } else if (received.get("header").equals(SocketProtocol.SELECT_FROM.get())) {
                     System.out.println("Choose among these : " + received.get(SocketProtocol.OPTION.get()));
-                    logger.log(Level.FINE, "{\"header\": \"selectFrom\",\"option\":\"skip\"}");
+                    logger.log(Level.FINE, "{\"header\": \"selectFrom\",\"option\":\"SKIP\"}");
                     if(!real)
-                        out.println("{\"header\": \"selectFrom\",\"option\":\"skip\"}");
+                        out.println("{\"header\": \"selectFrom\",\"option\":\"SKIP\"}");
                     else
                         out.println("{\"header\": \"selectFrom\",\"option\":\""+scanner.nextLine()+"\"}");
                     out.flush();

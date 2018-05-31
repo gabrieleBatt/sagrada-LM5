@@ -1,6 +1,6 @@
 {
   "name": "RunningPliers",
-  "conditions":["FIRST_TURN" , "WITH_DRAFTING"],
+  "conditions":["FIRST_TURN"],
   "skipTurn" : true,
   "toolColor": "R",
   "actions":3,

@@ -114,7 +114,6 @@ public class CliGameScreen extends GameScreen{
                 try {
                     JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(GLASS_WINDOW_PATH + windowName + ".json"));
                     List<String> restrictions = new ArrayList<>((JSONArray) jsonObject.get(WINDOW_CELLS));
-                    System.out.println(restrictions);
                     for (int i = 0; i < CELL_NUM; i++) {
                         p.glassWindow.cells[i].restriction = restrictions.get(i);
                     }
