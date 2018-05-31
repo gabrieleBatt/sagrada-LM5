@@ -265,7 +265,7 @@ public class ToolActions {
     }
 
     /**
-     *enerates the action command used to move a die on the window.
+     *Generates the action command used to move a die on the window.
      * @param dieColor marker of die deciding the color.
      * @param dieNumber marker of die deciding the number.
      * @param ignoreColorRestriction Boolean, true if color restriction has to be ignored.
@@ -273,46 +273,67 @@ public class ToolActions {
      * @param ignoreSurroundingRestriction Boolean, true if surrounding restriction has to be ignored.
      * @return action command used to move a die on the window.
      */
-    public static ActionCommand moveActionCommand( String dieColor, String dieNumber, Boolean ignoreColorRestriction, Boolean ignoreNumberRestriction, Boolean ignoreSurroundingRestriction, Boolean canSkip){
+    public static ActionCommand moveActionCommand(String dieColor, String dieNumber, Boolean ignoreColorRestriction, Boolean ignoreNumberRestriction, Boolean ignoreSurroundingRestriction, Boolean canSkip){
         return actionReceiver -> {
             Player player = actionReceiver.getTurnPlayer();
             CommunicationChannel cc = actionReceiver.getChannel(player.getNickname());
-            List<Die> dieOptions = player.getGlassWindow().getCellList()
-                    .stream()
-                    .filter(Cell::isOccupied)
-                    .map(Cell::getDie)
-                    .collect(Collectors.toList());
-            dieOptions = filter(actionReceiver, dieColor,dieNumber,dieOptions);
-            Identifiable dieChosen = cc.selectObject(new ArrayList<>(dieOptions), StdId.GLASS_WINDOW, canSkip, true);
-            if (dieChosen.getId().equals(StdId.UNDO.getId())) {
-                actionReceiver.resetTurn();
-            }else if(!dieChosen.getId().equals(StdId.SKIP.getId())){
-                Die die = getDieChosen(dieOptions,dieChosen);
-                List<Cell> cellList = (List<Cell>)player.getGlassWindow().availableCells(die,ignoreSurroundingRestriction);
-                cellList.remove(player.getGlassWindow().getCellByDie(die.getId()));
-                player.getGlassWindow().getCellByDie(die.getId()).removeDie();
-                cellList = cellList.stream().filter(c -> !c.isAllowed(die.getColor()) || ignoreColorRestriction)
-                        .filter(c -> !c.isAllowed(die.getNumber()) || ignoreNumberRestriction).collect(Collectors.toList());
 
-                Identifiable cellChosen = cc.selectObject(new ArrayList<>(cellList), StdId.GLASS_WINDOW, false, true);
-                if(cellChosen.getId().equals(StdId.UNDO.getId())) {
+            //get available cells
+            List<Cell> cellOptions = availableCells(actionReceiver, dieColor, dieNumber, player.getGlassWindow().getCellList());
+
+            //choose cell
+            Identifiable cellDieChosen = cc.selectObject(new ArrayList<>(cellOptions), StdId.GLASS_WINDOW, canSkip, true);
+
+            if (cellDieChosen.getId().equals(StdId.UNDO.getId())) {
+                actionReceiver.resetTurn();
+            }else if(!cellDieChosen.getId().equals(StdId.SKIP.getId())){
+                Cell cellChosen = getCellChosen(cellOptions, cellDieChosen);
+                Die die = cellChosen.getDie();
+                cellChosen.removeDie();
+                List<Cell> cellList = (List<Cell>)player.getGlassWindow().availableCells(die,ignoreSurroundingRestriction);
+                cellList.remove(cellChosen);
+
+                cellList = cellList.stream()
+                        .filter(c -> c.isAllowed(die.getColor()) || ignoreColorRestriction)
+                        .filter(c -> c.isAllowed(die.getNumber()) || ignoreNumberRestriction)
+                        .collect(Collectors.toList());
+
+                Identifiable cellChosenId = cc.selectObject(new ArrayList<>(cellList), StdId.GLASS_WINDOW, false, true);
+                if(cellChosenId.getId().equals(StdId.UNDO.getId())) {
                     actionReceiver.resetTurn();
                 }else {
-                    Cell cell;
-                    Optional<Cell> cellOptional = player.getGlassWindow().getCellList()
-                            .stream()
-                            .filter(c -> c.getId().equals(cellChosen.getId()))
-                            .findFirst();
-                    if (cellOptional.isPresent()) {
-                        cell = cellOptional.get();
-                        cell.placeDie(die, true);
-                        Game.getLogger().log(Level.FINE, "Die moved");
-
-                    } else
-                        throw new NoSuchElementException();
+                    Cell cell = getCellChosen(cellList, cellChosenId);
+                    cell.placeDie(die, true);
+                    Game.getLogger().log(Level.FINE, "Die moved");
                 }
             }
         };
+    }
+
+    private static List<Cell> availableCells(Game actionReceiver, String dieColor, String dieNumber, List<Cell> cellOptions){
+        cellOptions = cellOptions
+                .stream()
+                .filter(Cell::isOccupied)
+                .collect(Collectors.toList());
+        if(actionReceiver.getMap().containsKey(dieColor))
+            cellOptions = cellOptions
+                    .stream()
+                    .filter(d -> d.getDie().getColor()
+                            .equals(actionReceiver
+                                    .getMap()
+                                    .get(dieColor)
+                                    .getColor()))
+                    .collect(Collectors.toList());
+        if(actionReceiver.getMap().containsKey(dieNumber))
+            cellOptions = cellOptions
+                    .stream()
+                    .filter(d -> d.getDie().getNumber() ==
+                            (actionReceiver
+                                    .getMap()
+                                    .get(dieNumber)
+                                    .getNumber()))
+                    .collect(Collectors.toList());
+        return cellOptions;
     }
 
     private static List<Die> filter(Game actionReceiver, String dieColor, String dieNumber, List<Die> dieOptions){
@@ -338,20 +359,36 @@ public class ToolActions {
     }
 
     /**
+     * Gets Cell having the same id as the one give.
+     * @param cellOptions List df cells.
+     * @param cellChosen Id cell given.
+     * @return Cell having the same id as the one given.
+     */
+    private static Cell getCellChosen(Collection<Cell> cellOptions, Identifiable cellChosen){
+        Optional<Cell> optionalCell = cellOptions
+                .stream()
+                .filter(c -> c.getId().equals(cellChosen.getId()))
+                .findFirst();
+        if(optionalCell.isPresent()){
+            return optionalCell.get();
+        }
+        else
+            throw new NoSuchElementException();
+    }
+
+    /**
      * Gets Die having the same id as the one give.
-     * @param dieOptions List df Die.
+     * @param dieOptions List of dice.
      * @param dieChosen Id die given.
-     * @return Die having the same id as the one give.
+     * @return Die having the same id as the one given.
      */
     private static Die getDieChosen(Collection<Die> dieOptions, Identifiable dieChosen){
-        Die die;
-        Optional<Die> optionalDie = dieOptions
+        Optional<Die> optionalCell = dieOptions
                 .stream()
-                .filter(d -> d.getId().equals(dieChosen.getId()))
+                .filter(c -> c.getId().equals(dieChosen.getId()))
                 .findFirst();
-        if(optionalDie.isPresent()){
-            die = optionalDie.get();
-            return die;
+        if(optionalCell.isPresent()){
+            return optionalCell.get();
         }
         else
             throw new NoSuchElementException();

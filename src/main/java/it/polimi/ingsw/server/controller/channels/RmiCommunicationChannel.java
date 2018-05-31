@@ -92,7 +92,10 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
         try {
             gameScreen.setPublicObjective(table.getPublicObjectives().stream().map(Identifiable::getId).collect(Collectors.toList()));
             gameScreen.setTools(table.getTools().stream().map(Identifiable::getId).collect(Collectors.toList()));
-            gameScreen.setPlayers(table.getPlayers().stream().map(Player::getNickname).collect(Collectors.toList()));
+            List<String> players = table.getPlayers().stream().map(Player::getNickname).collect(Collectors.toList());
+            players.remove(this.getNickname());
+            players.add(0, this.getNickname());
+            gameScreen.setPlayers(players);
             gameScreen.showAll();
         } catch (RemoteException e) {
         this.setOffline();

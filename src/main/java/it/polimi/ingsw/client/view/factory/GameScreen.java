@@ -32,5 +32,7 @@ public abstract class GameScreen implements RemoteGameScreen {
         OBJECTIVE_PATH = "resources/clientResources/lang/"+language+"/objectives/";
     }
 
-    private GameScreen(){}
+    protected GameScreen(){
+
+    }
 }
