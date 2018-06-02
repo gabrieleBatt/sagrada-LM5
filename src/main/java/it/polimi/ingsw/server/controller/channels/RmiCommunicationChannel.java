@@ -49,6 +49,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
     public void sendMessage(String message) {
         try {
             gameScreen.addMessage(message);
+            gameScreen.showAll();
         } catch (RemoteException e) {
             this.setOffline();
         }

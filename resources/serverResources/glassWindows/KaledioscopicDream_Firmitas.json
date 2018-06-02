@@ -1,8 +1,8 @@
 {	
 	"difficulty1":5,
-	"cells1":["M","6","W","W","3","5","M","3","W","W","W","2","M","1","W","W","1","5","M","4"],
+	"cells1":["MAGENTA","6","","","3","5","MAGENTA","3","","","","2","MAGENTA","1","","","1","5","MAGENTA","4"],
 	"name1":"firmitas",
 	"difficulty2":4,
-	"cells2":["Y","C","W","W","1","G","W","5","W","4","3","W","R","W","G","2","W","W","C","Y"],
+	"cells2":["YELLOW","CYAN","","","1","GREEN","","5","","4","3","","RED","","GREEN","2","","","CYAN","YELLOW"],
 	"name2":"kaledioscopicDream"
 }

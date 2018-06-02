@@ -45,6 +45,7 @@ public class Game implements Runnable {
         //setup rounds
         for (int i = 0; i < RoundTrack.ROUND_NUM; i++) {
             actionCommandList.add(rules.getSetupRoundAction());
+
             Player firstOfRound = players.next();
             Iterator<Player> roundIterator = getTable().getPlayersIterator(firstOfRound, false, false);
             while (roundIterator.hasNext()){

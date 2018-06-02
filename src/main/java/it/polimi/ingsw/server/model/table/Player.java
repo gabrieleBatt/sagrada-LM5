@@ -123,10 +123,7 @@ public class Player implements Memento {
      */
     @Override
     public String toString(){
-        String ret = "Player ";
-        ret = ret + this.nickname + "has:\n" + this.tokens + "number of tokens\n"+ this.glassWindow.toString() + "\n" +
-        "private objective:" + this.privateObjective.toString() + "\n";
-        return ret;
+        return nickname;
     }
 
     /**

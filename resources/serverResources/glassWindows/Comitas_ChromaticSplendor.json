@@ -1,8 +1,8 @@
 {
 	"difficulty1":5,
-	"cells1":["Y","W","2","W","6","W","4","W","5","G","W","W","W","G","5","1","2","Y","3","W"],
+	"cells1":["YELLOW","","2","","6","","4","","5","GREEN","","","","GREEN","5","1","2","YELLOW","3",""],
 	"name1":"comitas",
 	"difficulty2":4, 
-	"cells2":["W","W","G","W","W","2","Y","5","C","1","W","R","3","M","W","1","W","6","W","4"],
-	"name2":"chromatichSplendor"
+	"cells2":["","","GREEN","","","2","YELLOW","5","CYAN","1","","RED","3","MAGENTA","","1","","6","","4"],
+	"name2":"chromaticSplendor"
 }

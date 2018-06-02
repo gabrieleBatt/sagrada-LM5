@@ -1,8 +1,8 @@
 {
 	"difficulty1":3,
-	"cells1":["W","4","W","Y","6","R","W","2","W","W","W","W","R","M","1","C","Y","W","W","W"],
+	"cells1":["","4","","YELLOW","6","RED","","2","","","","","RED","MAGENTA","1","CYAN","YELLOW","","",""],
 	"name1":"facialDrop",
 	"difficulty2":5,
-	"cells2":["W","W","W","R","5","W","W","M","4","C","W","C","3","Y","6","Y","2","G","1","R"],
+	"cells2":["","","","RED","5","","","MAGENTA","4","CYAN","","CYAN","3","YELLOW","6","YELLOW","2","GREEN","1","RED"],
 	"name2":"ripplesOfLight"
 }

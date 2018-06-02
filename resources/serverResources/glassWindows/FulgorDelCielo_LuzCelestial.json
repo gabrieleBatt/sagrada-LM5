@@ -1,8 +1,8 @@
 {
 	"difficulty1":5,
-	"cells1":["W","C","R","W","W","W","4","5","W","C","C","2","W","R","5","6","R","3","1","W"],
+	"cells1":["","CYAN","RED","","","","4","5","","CYAN","CYAN","2","","RED","5","6","RED","3","1",""],
 	"name1":"flugorDelCielo",
 	"difficulty2":3,
-	"cells2":["W","W","R","5","W","M","4","W","G","3","6","W","W","C","W","W","Y","2","W","W"],
+	"cells2":["","","RED","5","","MAGENTA","4","","GREEN","3","6","","","CYAN","","","YELLOW","2","",""],
 	"name2":"luzCelestial"
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.controller.deck;
 
 import it.polimi.ingsw.LogMaker;
 import it.polimi.ingsw.server.exception.DeckTooSmallException;
+import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import it.polimi.ingsw.server.model.table.glasswindow.Cell;
 import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
@@ -20,6 +21,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -28,6 +30,7 @@ import java.util.stream.Stream;
 public class GlassWindowDeck extends Deck {
 
     private static final Logger logger = LogMaker.getLogger(GlassWindowDeck.class.getName(), Level.ALL);
+    private static final String EMPTY_CELL = "";
     private static GlassWindowDeck glassWindowDeck = new GlassWindowDeck(Paths.get("resources/serverResources/glassWindows"));
 
     private GlassWindowDeck(Path path){
@@ -85,20 +88,14 @@ public class GlassWindowDeck extends Deck {
                 if (iterator.hasNext()) {
                     String id = i+""+j+":"+name;
                     Cell cell;
-                    switch (iterator.next()){
-                        case "R": cell = new Cell(id, DieColor.RED); break;
-                        case "G": cell = new Cell(id, DieColor.GREEN); break;
-                        case "Y": cell = new Cell(id, DieColor.YELLOW); break;
-                        case "M": cell = new Cell(id, DieColor.MAGENTA); break;
-                        case "C": cell = new Cell(id, DieColor.CYAN); break;
-                        case "1": cell = new Cell(id, 1); break;
-                        case "2": cell = new Cell(id, 2); break;
-                        case "3": cell = new Cell(id, 3); break;
-                        case "4": cell = new Cell(id, 4); break;
-                        case "5": cell = new Cell(id, 5); break;
-                        case "6": cell = new Cell(id, 6); break;
-                        default: cell = new Cell(id); break;
-                    }
+                    String restriction = iterator.next();
+                    if (restriction.equalsIgnoreCase(EMPTY_CELL))
+                        cell = new Cell(id);
+                    else if(Arrays.stream(DieColor.values())
+                            .map(DieColor::name).collect(Collectors.toList()).contains(restriction))
+                        cell = new Cell(id, DieColor.RED);
+                    else
+                        cell = new Cell(id, Integer.parseInt(restriction));
                     cells.add(cell);
                 }
             }

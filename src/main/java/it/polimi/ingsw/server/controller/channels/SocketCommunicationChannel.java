@@ -308,7 +308,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
                     }
                     if (canSkip && response.get(SocketProtocol.OPTION.get())
                             .equals(StdId.SKIP.getId())) {
-                        return StdId.SKIP;
+                         return StdId.SKIP;
                     }
                     Optional<Identifiable> selection = options
                             .stream()

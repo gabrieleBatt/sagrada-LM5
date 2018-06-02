@@ -1,8 +1,8 @@
 {
 	"difficulty1" : 5,
-	"cells1":["5","G","C","M","2","M","W","W","W","Y","Y","W","6","W","M","1","W","W","G","4"],
+	"cells1":["5","GREEN","CYAN","MAGENTA","2","MAGENTA","","","","YELLOW","YELLOW","","6","","MAGENTA","1","","","GREEN","4"],
 	"name1":"auroraeMagnificus",
 	"difficulty2":4,
-	"cells2":["R","W","C","W","Y","4","M","3","G","2","W","1","W","5","W","W","W","6","W","W"],
+	"cells2":["RED","","CYAN","","YELLOW","4","MAGENTA","3","GREEN","2","","1","","5","","","","6","",""],
 	"name2":"auroraSagradis"
 }

@@ -64,10 +64,11 @@ public class TurnActionCommand implements ActionCommand{
         Timer timer = new Timer();
         startTimer(timer);
         backUp();
+
         List<Identifiable> options;
         Identifiable actionChosen;
-        actionReceiver.sendAll(Message.START_TURN.name());
         actionReceiver.sendAll(player.getNickname());
+        actionReceiver.sendAll(Message.START_TURN.name());
         do {
             drafted = false;
             reset = false;
@@ -85,6 +86,7 @@ public class TurnActionCommand implements ActionCommand{
         do{
             reset = false;
             //choose second action
+            System.out.println(skip);
             if(!skip) {
                 options.remove(actionChosen);
                 actionChosen = cc.chooseFrom(options, Message.NEXT_MOVE.name(), true, true);
@@ -92,9 +94,8 @@ public class TurnActionCommand implements ActionCommand{
             }
         }while(reset);
         timer.cancel();
-        actionReceiver.sendAll(Message.END_TURN.name());
         actionReceiver.sendAll(player.getNickname());
-
+        actionReceiver.sendAll(Message.END_TURN.name());
     }
 
     private void startTimer(Timer timer) {
@@ -119,10 +120,9 @@ public class TurnActionCommand implements ActionCommand{
                 actionReceiver.getRules().getPlaceAction("dieChosen", true, true, true, false).execute(actionReceiver);
                 drafted = true;
             }
-        }else if(actionChosen.getId().equals(SKIP.getId())) {
+        }else if(actionChosen.equals(SKIP)) {
             skip = true;
-
-        }else if(actionChosen.getId().equals(UNDO.getId())) {
+        }else if(actionChosen.equals(UNDO)) {
             reset();
         }
     }
