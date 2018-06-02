@@ -69,8 +69,16 @@ public enum Message {
             JSONObject translator = (JSONObject) new JSONParser().parse(new FileReader("resources/clientResources/lang/"+language+"/"+language+".json"));
             Optional.ofNullable((String)translator.get(this.name())).ifPresent(s -> this.value = s);
         } catch (IOException | ParseException e) {
-            this.value = this.name();
+            this.value = null;
         }
+    }
+
+    @Override
+    public String toString() {
+        if (value == null){
+            value = this.name();
+        }
+        return value;
     }
 
     public static String  convertMessage(String defaultMessage){
@@ -88,18 +96,13 @@ public enum Message {
     public static String decodeMessage(String choice) {
         Optional<Message> optional =  Arrays
                 .stream(Message.values())
-                .filter(m -> m.value.equals(choice))
+                .filter(m -> choice.equals(m.value))
                 .findFirst();
         if(optional.isPresent()){
             return optional.get().name();
         }else{
             return choice;
         }
-    }
-
-    @Override
-    public String toString() {
-        return value;
     }
 
     public static String convertName(String name){

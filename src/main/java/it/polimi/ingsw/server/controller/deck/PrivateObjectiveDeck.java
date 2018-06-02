@@ -21,20 +21,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
-public class PrivateObjectiveDeck implements Deck {
+public class PrivateObjectiveDeck extends Deck {
 
     private static final Logger logger = LogMaker.getLogger(PrivateObjectiveDeck.class.getName(), Level.ALL);
-    private static PrivateObjectiveDeck privateObjectiveDeck = new PrivateObjectiveDeck();
-    private List<File> privateObjectives;
+    private static PrivateObjectiveDeck privateObjectiveDeck = new PrivateObjectiveDeck(Paths.get("resources/serverResources/objectives/private"));
+    private static final String NAME = "name";
 
-    private PrivateObjectiveDeck(){
-        privateObjectives = new ArrayList<>();
-        Path path = Paths.get("resources/serverResources/objectives/private");
-        try (Stream<Path> files = Files.list(path)){
-            files.forEach(f -> privateObjectives.add(f.toFile()));
-        } catch (IOException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
+    private PrivateObjectiveDeck(Path path){
+        super(path);
     }
 
     public static PrivateObjectiveDeck getPrivateObjectiveDeck() {
@@ -46,7 +40,7 @@ public class PrivateObjectiveDeck implements Deck {
         JSONObject js = null;
         try {
             js = (JSONObject)parser.parse(new FileReader(file));
-            logger.log(Level.FINEST,  "This private objective "+ js.get("name") +" has been added to privateObjectives", this);
+            logger.log(Level.FINEST,  "This private objective "+ js.get(NAME) +" has been added to getPaths()", this);
 
         } catch (IOException | ParseException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
@@ -58,15 +52,15 @@ public class PrivateObjectiveDeck implements Deck {
     public List<PrivateObjective> draw(int num) {
         List<PrivateObjective> ret = new ArrayList<>();
 
-        if(privateObjectives.size() < num) throw new DeckTooSmallException(num + " cards requested, " + privateObjectives + " in deck");
+        if(getPaths().size() < num) throw new DeckTooSmallException(num + " cards requested, " + getPaths() + " in deck");
 
         Set<Integer> integerSet = new HashSet<>();
         while(integerSet.size() < num) {
-            integerSet.add(ThreadLocalRandom.current().nextInt(0, privateObjectives.size()));
+            integerSet.add(ThreadLocalRandom.current().nextInt(0, getPaths().size()));
         }
 
         for(Integer i: integerSet){
-            Optional<JSONObject> optional = parse(privateObjectives.get(i));
+            Optional<JSONObject> optional = parse(getPaths().get(i).toFile());
             optional.ifPresent(jsonObject -> ret.add(readCard(jsonObject)));
         }
         logger.log(Level.FINEST, num + " private objectives have been drawn ", this);
@@ -76,7 +70,7 @@ public class PrivateObjectiveDeck implements Deck {
     }
 
     private PrivateObjective readCard(JSONObject jsonObject){
-        return new ColorPrivateObjective((String)jsonObject.get("name"), DieColor.valueOf(((String)jsonObject.get("color"))));
+        return new ColorPrivateObjective((String)jsonObject.get(NAME), DieColor.valueOf(((String)jsonObject.get("color"))));
     }
 
 }

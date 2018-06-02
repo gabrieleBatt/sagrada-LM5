@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.model.objective.AreaPublicObjective;
 import it.polimi.ingsw.server.model.objective.Coordinate;
 import it.polimi.ingsw.server.model.objective.PublicObjective;
 import it.polimi.ingsw.server.model.objective.SetPublicObjective;
+import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -15,6 +16,7 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.DirectoryIteratorException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,22 +24,23 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PublicObjectiveDeck implements Deck {
+public class PublicObjectiveDeck extends Deck {
 
     private static final Logger logger = LogMaker.getLogger(PublicObjectiveDeck.class.getName(), Level.ALL);
-    private static PublicObjectiveDeck publicObjectiveDeck = new PublicObjectiveDeck();
-    private List<File> publicObjectives;
+    private static final String TYPE = "type";
+    private static final String NAME = "name";
+    private static final String AREA = "area";
+    private static final String MULTIPLICITY = "multiplicity";
+    private static final String OBJECTIVE = "obj";
+    private static final String SET = "set";
+    private static final String POINTS = "points";
+    private static PublicObjectiveDeck publicObjectiveDeck = new PublicObjectiveDeck(Paths.get("resources/serverResources/objectives/public"));
 
-    private PublicObjectiveDeck(){
-        publicObjectives = new ArrayList<>();
-        Path path = Paths.get("resources/serverResources/objectives/public");
-        try (Stream<Path> files = Files.list(path)){
-            files.forEach(f -> publicObjectives.add(f.toFile()));
-        } catch (IOException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
+    private PublicObjectiveDeck(Path path){
+        super(path);
     }
 
     public static PublicObjectiveDeck getPublicObjectiveDeck() {
@@ -48,15 +51,15 @@ public class PublicObjectiveDeck implements Deck {
     public List<PublicObjective> draw(int num){
         List<PublicObjective> ret = new ArrayList<>();
 
-        if(publicObjectives.size() < num) throw new DeckTooSmallException(num + " cards requested, " + publicObjectives + " in deck");
+        if(getPaths().size() < num) throw new DeckTooSmallException(num + " cards requested, " + getPaths() + " in deck");
 
         Set<Integer> integerSet = new HashSet<>();
         while(integerSet.size() < num) {
-            integerSet.add(ThreadLocalRandom.current().nextInt(0, publicObjectives.size()));
+            integerSet.add(ThreadLocalRandom.current().nextInt(0, getPaths().size()));
         }
 
         for(Integer i: integerSet){
-            Optional<JSONObject> optional = parse(publicObjectives.get(i));
+            Optional<JSONObject> optional = parse(getPaths().get(i).toFile());
             optional.ifPresent(jsonObject -> ret.add(readCard(jsonObject)));
         }
 
@@ -69,7 +72,7 @@ public class PublicObjectiveDeck implements Deck {
         JSONObject js = null;
         try {
             js = (JSONObject)parser.parse(new FileReader(f));
-            logger.log(Level.FINEST,  "This public objective "+ js.get("name") +" has been added to publicObjectives", this);
+            logger.log(Level.FINEST,  "This public objective "+ js.get(NAME) +" has been added to getPaths()", this);
         } catch (IOException | ParseException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
@@ -78,73 +81,63 @@ public class PublicObjectiveDeck implements Deck {
 
 
     private PublicObjective readCard(JSONObject jsonObject){
-        if ((jsonObject.get("type")).equals("area")) return readAreaCard(jsonObject);
+        if ((jsonObject.get(TYPE)).equals(AREA)) return readAreaCard(jsonObject);
         else return readSetCard(jsonObject);
     }
 
     private PublicObjective readSetCard(JSONObject jsonObject) {
 
-        Iterator<String> iterator = ((JSONArray)jsonObject.get("set")).iterator();
+        Iterator<String> iterator = ((JSONArray)jsonObject.get(SET)).iterator();
 
         List<Integer> numbers = new ArrayList<>();
         List<DieColor> colors = new ArrayList<>();
 
         while(iterator.hasNext()){
             String s = iterator.next();
-            switch (s){
-                case "R":colors.add(DieColor.RED); break;
-                case "G":colors.add(DieColor.GREEN); break;
-                case "M":colors.add(DieColor.MAGENTA); break;
-                case "Y":colors.add(DieColor.YELLOW); break;
-                case "C":colors.add(DieColor.CYAN); break;
-                default:numbers.add(Integer.decode(s));
-            }
+            if(Arrays.stream(DieColor.values()).map(DieColor::name).collect(Collectors.toList()).contains(s))
+                colors.add(DieColor.valueOf(s));
+            else
+                numbers.add(Integer.decode(s));
         }
 
-        return new SetPublicObjective((String)jsonObject.get("name"),  Math.toIntExact((long)jsonObject.get("points")),
+        return new SetPublicObjective((String)jsonObject.get(NAME),  Math.toIntExact((long)jsonObject.get(POINTS)),
                 numbers, colors);
     }
 
     private void addMult(String s, JSONObject multiplicity, List<List<Integer>> mult ){
         mult.add(new ArrayList<>());
-        Iterator<Long> iterator2 = ((JSONArray)multiplicity.get(s)).iterator();
-        while(iterator2.hasNext()){
-            mult.get(mult.size()-1).add(Math.toIntExact((long)iterator2.next()));
+        for (Long aLong : (Iterable<Long>) (multiplicity.get(s))) {
+            mult.get(mult.size() - 1).add(Math.toIntExact(aLong));
+        }
+    }
+
+    private void addAllMult(JSONObject multiplicity, List<List<Integer>> mult){
+        for (Integer i = 1; i <= 6; i++) {
+            addMult(i.toString(), multiplicity, mult);
+        }
+        for (DieColor dieColor : DieColor.values()) {
+            addMult(dieColor.name(), multiplicity, mult);
         }
     }
 
 
     private PublicObjective readAreaCard(JSONObject jsonPublicObjective) {
-        String name = (String) jsonPublicObjective.get("name");
-        int points = Math.toIntExact((long)jsonPublicObjective.get("points"));
+        String name = (String) jsonPublicObjective.get(NAME);
+        int points = Math.toIntExact((long)jsonPublicObjective.get(POINTS));
 
 
-        Iterator<JSONObject> iterator = ((JSONArray)jsonPublicObjective.get("obj")).iterator();
+        Iterator<JSONObject> iterator = ((JSONArray)jsonPublicObjective.get(OBJECTIVE)).iterator();
         JSONObject obj = iterator.next();
 
         List<Coordinate> area = new ArrayList<>();
-        Iterator<JSONArray> iterator1 = ((JSONArray) obj.get("area")).iterator();
-        while(iterator1.hasNext()){
-            JSONArray coordinate = iterator1.next();
-            area.add(new Coordinate((Math.toIntExact((long)coordinate.get(0))), Math.toIntExact((long)coordinate.get(1))));
+        for (JSONArray coordinate : (Iterable<JSONArray>) (obj.get(AREA))) {
+            area.add(new Coordinate((Math.toIntExact((long) coordinate.get(0))), Math.toIntExact((long) coordinate.get(1))));
         }
 
         List<List<Integer>> mult = new ArrayList<>();
-        JSONObject multiplicity = (JSONObject)obj.get("multiplicity");
+        JSONObject multiplicity = (JSONObject)obj.get(MULTIPLICITY);
 
-
-        addMult("One" , multiplicity, mult);
-        addMult("Two", multiplicity, mult);
-        addMult("Three" , multiplicity, mult);
-        addMult("Four" , multiplicity, mult);
-        addMult("Five" , multiplicity, mult);
-        addMult("Six" , multiplicity, mult);
-        addMult("Cyan" , multiplicity, mult);
-        addMult("Green", multiplicity, mult);
-        addMult("Magenta" , multiplicity, mult);
-        addMult("Red",  multiplicity, mult);
-        addMult("Yellow",  multiplicity, mult);
-
+        addAllMult(multiplicity, mult);
 
         AreaPublicObjective ret = null;
         ret = new AreaPublicObjective(name, points, area, mult);
@@ -153,26 +146,14 @@ public class PublicObjectiveDeck implements Deck {
         while(iterator.hasNext()){
             obj = iterator.next();
             area = new ArrayList<>();
-            iterator1 = ((JSONArray) obj.get("area")).iterator();
-            while(iterator1.hasNext()){
-                JSONArray coordinate = iterator1.next();
-                area.add(new Coordinate((Math.toIntExact((long)coordinate.get(0))), Math.toIntExact((long)coordinate.get(1))));
+            for (JSONArray coordinate : (Iterable<JSONArray>) ((JSONArray) obj.get(AREA))) {
+                area.add(new Coordinate((Math.toIntExact((long) coordinate.get(0))), Math.toIntExact((long) coordinate.get(1))));
             }
 
             mult = new ArrayList<>();
-            multiplicity = (JSONObject)obj.get("multiplicity");
+            multiplicity = (JSONObject)obj.get(MULTIPLICITY);
 
-            addMult("One" , multiplicity, mult);
-            addMult("Two", multiplicity, mult);
-            addMult("Three" , multiplicity, mult);
-            addMult("Four" , multiplicity, mult);
-            addMult("Five" , multiplicity, mult);
-            addMult("Six" , multiplicity, mult);
-            addMult("Cyan" , multiplicity, mult);
-            addMult("Green", multiplicity, mult);
-            addMult("Magenta" , multiplicity, mult);
-            addMult("Red",  multiplicity, mult);
-            addMult("Yellow",  multiplicity, mult);
+            addAllMult(multiplicity, mult);
 
             ret.addArea(area, mult);
         }

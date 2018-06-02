@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 /**
  * ToolDeck is a concrete class representing the deck of tool cards.
  */
-public class ToolDeck implements Deck {
+public class ToolDeck extends Deck {
 
     private static final Logger logger = LogMaker.getLogger(ToolDeck.class.getName(), Level.ALL);
     private static final String MOVE = "move";
@@ -60,21 +60,13 @@ public class ToolDeck implements Deck {
     private static final String WITH = "with";
     private static final String MARKER_CONTAINER = "markerInContainer";
     private static final String MARKER_MAP = "markerInMap";
-    private static ToolDeck toolDeck = new ToolDeck();
-    private static List<File> tools;
+    private static ToolDeck toolDeck = new ToolDeck(Paths.get("resources/serverResources/tools"));
 
     /**
      * ToolDeck builder. Tool cards are generated form resources.
      */
-    private ToolDeck(){
-        tools = new ArrayList<>();
-        Path path = Paths.get("resources/serverResources/tools");
-        try (Stream<Path> files = Files.list(path)){
-            files.forEach(f -> tools.add(f.toFile()));
-        } catch (IOException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
-
+    private ToolDeck(Path path){
+        super(path);
     }
 
     /**
@@ -102,14 +94,14 @@ public class ToolDeck implements Deck {
     public List<Tool> draw(int num){
         List<Tool> ret = new ArrayList<>();
 
-        if(tools.size() < num) throw new DeckTooSmallException(num + " tools requested, " + tools );
+        if(getPaths().size() < num) throw new DeckTooSmallException(num + " tools requested, " + getPaths());
         Set<Integer> integerSet = new HashSet<>();
         while(integerSet.size() < num) {
-            integerSet.add(ThreadLocalRandom.current().nextInt(0, tools.size()));
+            integerSet.add(ThreadLocalRandom.current().nextInt(0, getPaths().size()));
         }
 
         for(Integer i: integerSet){
-            Optional<JSONObject> optional = parse(tools.get(i));
+            Optional<JSONObject> optional = parse(getPaths().get(i).toFile());
             optional.ifPresent(jsonObject -> ret.add(readCard(jsonObject)));
         }
         logger.log(Level.FINEST, num + " tools have been drawn ", this);

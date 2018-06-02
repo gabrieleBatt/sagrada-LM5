@@ -2,5 +2,5 @@
   "type":"set",
   "name": "colorVariety",
   "points": 4,
-  "set": ["R","Y","G","M","C"]
+  "set": ["RED","YELLOW","GREEN","MAGENTA","CYAN"]
 }

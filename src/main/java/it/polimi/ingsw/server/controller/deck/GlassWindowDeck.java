@@ -25,21 +25,13 @@ import java.util.stream.Stream;
 /**
  * Contains always all possible GlassWindows, if GlassWindows are drawn they do not disappear from deck
  */
-public class GlassWindowDeck implements Deck {
+public class GlassWindowDeck extends Deck {
 
     private static final Logger logger = LogMaker.getLogger(GlassWindowDeck.class.getName(), Level.ALL);
-    private static GlassWindowDeck glassWindowDeck = new GlassWindowDeck();
-    private List<File> glassWindowCards;
+    private static GlassWindowDeck glassWindowDeck = new GlassWindowDeck(Paths.get("resources/serverResources/glassWindows"));
 
-    private GlassWindowDeck(){
-        glassWindowCards = new ArrayList<>();
-        Path path = Paths.get("resources/serverResources/glassWindows");
-        try (Stream<Path> files = Files.list(path)){
-            files.forEach(f -> glassWindowCards.add(f.toFile()));
-        } catch (IOException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
-
+    private GlassWindowDeck(Path path){
+        super(path);
     }
 
     /**
@@ -52,15 +44,15 @@ public class GlassWindowDeck implements Deck {
     public List<GlassWindow> draw(int num) {
         List<GlassWindow> ret = new ArrayList<>();
 
-        if(glassWindowCards.size() < num) throw new DeckTooSmallException(num + " cards requested, " + glassWindowCards + " in deck");
+        if(getPaths().size() < num) throw new DeckTooSmallException(num + " cards requested, " + getPaths() + " in deck");
 
         Set<Integer> integerSet = new HashSet<>();
         while(integerSet.size() < num) {
-            integerSet.add(ThreadLocalRandom.current().nextInt(0, glassWindowCards.size()));
+            integerSet.add(ThreadLocalRandom.current().nextInt(0, getPaths().size()));
         }
 
         for(Integer i: integerSet){
-            Optional<JSONObject> optional = parse(glassWindowCards.get(i));
+            Optional<JSONObject> optional = parse(getPaths().get(i).toFile());
             optional.ifPresent(jsonObject -> ret.add(readCard(jsonObject, 1)));
             optional.ifPresent(jsonObject -> ret.add(readCard(jsonObject, 2)));
         }
@@ -74,7 +66,7 @@ public class GlassWindowDeck implements Deck {
         JSONObject js = null;
         try {
             js = (JSONObject)parser.parse(new FileReader(file));
-            logger.log(Level.FINEST,  "GlassWindow "+ js.get("name1") + "/" + js.get("name2") +" has been added to glassWindowCards", this);
+            logger.log(Level.FINEST,  "GlassWindow "+ js.get("name1") + "/" + js.get("name2") +" has been added to getPaths()", this);
         } catch (IOException | ParseException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
