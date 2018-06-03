@@ -143,6 +143,10 @@ public class TurnActionCommand implements ActionCommand{
                     .findFirst();
             if(optTool.isPresent()) {
                 Tool tool = optTool.get();
+                if(tool.isUsed())
+                    player.setTokens(player.getTokens() - 2);
+                else
+                    player.setTokens(player.getTokens() - 1);
                 tool.setUsed(true);
                 for (ActionCommand actionCommand : tool.getActionCommandList()) {
                     if (!reset)

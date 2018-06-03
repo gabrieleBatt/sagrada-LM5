@@ -217,25 +217,38 @@ public class DefaultRules implements Rules {
         return actionReceiver -> {
             List<Pair<Player,Integer>> ranking = new ArrayList<>();
             for(Player player : actionReceiver.getTable().getPlayers()) {
-                Integer points = player.getPrivateObjective()
+                if(!actionReceiver.getChannel(player.getNickname()).isOffline()){
+                    ranking.add(getScore(player, actionReceiver));
+                }
+            }
+            if (ranking.isEmpty()){
+                actionReceiver.getTable().getPlayers()
                         .stream()
-                        .mapToInt(p -> p.scorePoints(player.getGlassWindow()))
-                        .sum();
-                points += actionReceiver.getTable().getPublicObjectives()
-                        .stream()
-                        .mapToInt(p -> p.scorePoints(player.getGlassWindow()))
-                        .sum();
-                points += player.getTokens();
-                points -= Math.toIntExact(player.getGlassWindow().getCellList()
-                        .stream()
-                        .filter(c -> !c.isOccupied())
-                        .count());
-                ranking.add(new Pair<>(player,points));
+                        .min(Comparator.comparingLong(p -> actionReceiver
+                                .getChannel(p.getNickname()).getOfflineTime().getDateTime()))
+                        .ifPresent(p -> ranking.add(getScore(p, actionReceiver)));
             }
             ranking.sort(this::scoreCompare);
             actionReceiver.endGame(ranking);
         };
 
+    }
+
+    private Pair<Player, Integer> getScore(Player player, Game actionReceiver){
+        Integer points = player.getPrivateObjective()
+                .stream()
+                .mapToInt(p -> p.scorePoints(player.getGlassWindow()))
+                .sum();
+        points += actionReceiver.getTable().getPublicObjectives()
+                .stream()
+                .mapToInt(p -> p.scorePoints(player.getGlassWindow()))
+                .sum();
+        points += player.getTokens();
+        points -= Math.toIntExact(player.getGlassWindow().getCellList()
+                .stream()
+                .filter(c -> !c.isOccupied())
+                .count());
+        return new Pair<>(player,points);
     }
 
     /*

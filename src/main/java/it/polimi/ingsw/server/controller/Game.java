@@ -57,7 +57,6 @@ public class Game implements Runnable {
             }
             actionCommandList.add(rules.getEndRoundAction());
         }
-        actionCommandList.add(rules.getEndGameAction());
     }
 
     /**
@@ -102,12 +101,13 @@ public class Game implements Runnable {
      */
     @Override
     public void run() {
-        while(!actionCommandList.isEmpty()){
+        while(!actionCommandList.isEmpty() || commChannels.stream().filter(cc -> !cc.isOffline()).count() > 1){
             this.updateAll();
             ActionCommand actionCommand = actionCommandList.get(0);
             actionCommand.execute(this);
             actionCommandList.remove(actionCommand);
         }
+        rules.getEndGameAction().execute(this);
     }
 
     private void updateAll(){

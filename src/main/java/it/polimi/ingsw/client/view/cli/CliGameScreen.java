@@ -23,11 +23,12 @@ public class CliGameScreen extends GameScreen{
     private static final Object CARD_DESCRIPTION = "description";
     private static final Object WINDOW_CELLS = "cells";
     private static final String JSON_EXTENSION = ".json";
+    private static final Object DIFFICULTY = "difficulty";
     private final Scanner scanner;
     private final PrintStream printStream;
     private Collection<String> privateObjectives;
     private Collection<String> publicObjectives;
-    private Collection<ToolClass> toolsList;
+    private List<ToolClass> toolsList;
     private List<PlayerClass> playersList;
     private Collection<Die> poolDice;
     private List<List<Die>> roundTrack;
@@ -124,6 +125,7 @@ public class CliGameScreen extends GameScreen{
             for (int i = 0; i < CELL_NUM; i++) {
                 ret.cells[i].restriction = restrictions.get(i);
             }
+            ret.difficulty = (long)jsonObject.get(DIFFICULTY);
         } catch (IOException | ParseException e) {
             printStream.println("Window not found");
         }
@@ -163,7 +165,9 @@ public class CliGameScreen extends GameScreen{
         List<String> convertedNames = o.stream().map(Message::convertName).collect(Collectors.toList());
         printStream.println(Message.CHOOSE_WINDOW+": "+ COLOR_ESC + convertedNames.toString() +  WHITE_ESC);
         printStream.flush();
-        showOthersWindows(o.stream().map(this::makeWindow).collect(Collectors.toList()));
+        o.stream().map(this::makeWindow).forEach(w -> printStream.print(w.windowName+":"+w.difficulty + "\t"));
+        printStream.println();
+        showMultipleWindows(o.stream().map(this::makeWindow).collect(Collectors.toList()));
         String choice = scanner.nextLine();
         while(!convertedNames.contains(choice)){
             printStream.println(Message.INVALID_CHOICE);
@@ -221,13 +225,17 @@ public class CliGameScreen extends GameScreen{
                 tool.active = true;
         }
 
-        String ret = getChoice(options.stream().map(Message::convertName).collect(Collectors.toList()));
+        List<String> numberOptions = new ArrayList<>();
+        for (Integer i = 0; i < toolsList.size(); i++) {
+            numberOptions.add(i.toString());
+        }
+
+        String ret = getChoice(numberOptions);
 
         for(ToolClass tool: toolsList)
             tool.active = false;
 
-
-        return Message.decodeName(ret);
+        return toolsList.get(Integer.parseInt(ret)).toolName;
     }
 
 
@@ -310,7 +318,7 @@ public class CliGameScreen extends GameScreen{
     public void showAll(){
         clear();
         showOthersNameAndTokens();
-        showOthersWindows(playersList.subList(1,playersList.size()).stream().map(p -> p.glassWindow).collect(Collectors.toList()));
+        showMultipleWindows(playersList.subList(1,playersList.size()).stream().map(p -> p.glassWindow).collect(Collectors.toList()));
         printStream.println(Message.MESSAGES + ": "+messageRecord+"\n");
         showNicknameAndTokensAndRound();
         showPrivateObjective();
@@ -400,13 +408,14 @@ public class CliGameScreen extends GameScreen{
         printStream.println(Message.TOOL + ": ");
          for(ToolClass tool: toolsList) {
              try {
+                 printActive(tool.active, toolsList.indexOf(tool)+". ");
                  if (tool.used) {
                      printStream.print("[2]  ");
                  }else
                      printStream.print("[1]  ");
                  JSONObject jsonObject = ((JSONObject) new JSONParser().parse(new FileReader(TOOL_PATH+tool.toolName+JSON_EXTENSION)));
-                 printActive(tool.active, jsonObject.get(CARD_NAME).toString());
-                 printStream.print("\t" + jsonObject.get(CARD_DESCRIPTION));
+                 printStream.print(jsonObject.get(CARD_NAME).toString());
+                 printStream.print(":\t" + jsonObject.get(CARD_DESCRIPTION));
              } catch (IOException | ParseException e) {
                  printStream.print("Tool not found");
              }
@@ -433,7 +442,7 @@ public class CliGameScreen extends GameScreen{
         printStream.print("\n");
     }
 
-    private void showOthersWindows(List<WindowClass> windowClasses) {
+    private void showMultipleWindows(List<WindowClass> windowClasses) {
         for (int x = 0; x < 4; x++) {
             for (WindowClass windowClass : windowClasses) {
                 for (int y = 0; y < 5; y++) {
@@ -481,6 +490,7 @@ public class CliGameScreen extends GameScreen{
         WindowClass glassWindow;
     }
     private class WindowClass{
+        long difficulty;
         String windowName;
         Cell[] cells;
 

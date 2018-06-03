@@ -181,7 +181,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
     private synchronized static void addToGame(CommunicationChannel ccToAdd, String nickname){
         Boolean alreadyInGame = false;
         //check if already in lobby
-        for (CommunicationChannel communicationChannel : lobby.getCommChannels()) {
+        for (CommunicationChannel communicationChannel : lobby.getCommChannelSet()) {
             if (communicationChannel.getNickname().equals(nickname)) {
                 alreadyInGame = true;
                 lobby.changeChannel(ccToAdd);

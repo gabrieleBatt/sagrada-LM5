@@ -52,10 +52,10 @@ class Lobby {
      * adds a channel, a client, to the lobby
      * @param communicationChannel to add
      */
-    void addChannel(CommunicationChannel communicationChannel){
+    synchronized void addChannel(CommunicationChannel communicationChannel){
         logger.log(Level.FINER, "Adding channel to lobby", communicationChannel);
         commChannelSet.add(communicationChannel);
-        if(commChannelSet.size() > 1){
+        if(commChannelSet.size() == 2){
             startTimer();
         }
         if(commChannelSet.size() == 4){
@@ -65,11 +65,12 @@ class Lobby {
         }
     }
 
+
     /**
      * Returns a copied set og the channels in the lobby
      * @return the collection of channels
      */
-    Collection<CommunicationChannel> getCommChannelSet() {
+    synchronized Collection<CommunicationChannel> getCommChannelSet() {
         return new HashSet<>(commChannelSet);
     }
 
@@ -86,26 +87,22 @@ class Lobby {
         }, timerSeconds * 1000);
     }
 
-    private void startGame(){
-        Game game = new Game(commChannelSet);
-        Server.addGame(game);
-        commChannelSet = new HashSet<>();
-    }
-
-    /**
-     * Gets the commChannels currently in the lobby
-     * @return the commChannels currently in the lobby
-     */
-    Collection<CommunicationChannel> getCommChannels() {
-        return new HashSet<>(commChannelSet);
+    private synchronized void startGame(){
+        if(commChannelSet.stream().filter(cc -> !cc.isOffline()).count() > 1) {
+            Game game = new Game(commChannelSet);
+            Server.addGame(game);
+            commChannelSet = new HashSet<>();
+        }else{
+            commChannelSet = commChannelSet.stream().filter(cc -> !cc.isOffline()).collect(Collectors.toSet());
+        }
     }
 
     /**
      * Add a new communicationChannel removing, if present, one with the same nickname
      * @param newCc communicationChannel to add
      */
-    void changeChannel(CommunicationChannel newCc){
-        commChannelSet = getCommChannels().stream()
+    synchronized void changeChannel(CommunicationChannel newCc){
+        commChannelSet = getCommChannelSet().stream()
                 .filter(cc -> !cc.getNickname().equals(newCc.getNickname()))
                 .collect(Collectors.toSet());
         commChannelSet.add(newCc);

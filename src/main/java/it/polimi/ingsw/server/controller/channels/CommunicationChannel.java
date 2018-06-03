@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.channels;
 
+import com.sun.jmx.snmp.Timestamp;
 import it.polimi.ingsw.net.identifiables.Identifiable;
 import it.polimi.ingsw.net.identifiables.StdId;
 import it.polimi.ingsw.server.controller.Game;
@@ -16,6 +17,7 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Time;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,6 +36,7 @@ public abstract class CommunicationChannel{
     private static final String TURN_TIME = "turnTime";
     private static final int STD_TURN_TIME = 60;
     private static final String CONFIG_PATH = "resources/ServerResources/config.json";
+    private Timestamp offlineTime;
 
     static {
         JSONObject config = null;
@@ -159,5 +162,11 @@ public abstract class CommunicationChannel{
     /**
      * Used to set a channel as it went offline
      */
-    public abstract void setOffline();
+    public void setOffline(){
+        this.offlineTime = new Timestamp();
+    }
+
+    public Timestamp getOfflineTime() {
+        return offlineTime;
+    }
 }

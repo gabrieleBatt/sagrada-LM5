@@ -347,6 +347,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      */
     @Override
     public void setOffline() {
+        super.setOffline();
         logger.log(Level.WARNING, getNickname() + " diconnected");
         connected = false;
         try {

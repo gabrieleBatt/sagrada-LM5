@@ -241,6 +241,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public void setOffline() {
+        super.setOffline();
         logger.log(Level.WARNING, getNickname() + " is offline");
         //TODO -- disconnect properly
         isOffline = true;
