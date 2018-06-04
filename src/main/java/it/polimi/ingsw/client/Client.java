@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.client.connection.ConnectionManager;
 import it.polimi.ingsw.client.connection.RmiManager;
 import it.polimi.ingsw.client.connection.SocketManager;

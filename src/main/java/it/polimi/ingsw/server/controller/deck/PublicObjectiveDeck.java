@@ -1,12 +1,11 @@
 package it.polimi.ingsw.server.controller.deck;
 
-import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.server.exception.DeckTooSmallException;
 import it.polimi.ingsw.server.model.objective.AreaPublicObjective;
 import it.polimi.ingsw.server.model.objective.Coordinate;
 import it.polimi.ingsw.server.model.objective.PublicObjective;
 import it.polimi.ingsw.server.model.objective.SetPublicObjective;
-import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -16,8 +15,6 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.DirectoryIteratorException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -25,7 +22,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class PublicObjectiveDeck extends Deck {
 

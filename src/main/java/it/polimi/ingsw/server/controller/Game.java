@@ -1,8 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
-import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.controller.rules.ActionCommand;
 import it.polimi.ingsw.server.controller.rules.DefaultRules;
 import it.polimi.ingsw.server.controller.rules.Rules;

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.table;
 
-import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.server.model.objective.PrivateObjective;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.glasswindow.Cell;
@@ -155,7 +155,7 @@ public class Player implements Memento {
         Optional<List<Optional<Die>>> optionalList = Optional.ofNullable(glassWindowMemento.peek());
         if(optionalList.isPresent()) {
             List<Optional<Die>> dieList = new ArrayList<>(optionalList.get());
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < GlassWindow.CELLS; i++) {
                 this.getGlassWindow().getCellList().get(i).placeOptionalDie(dieList.get(i));
             }
         }

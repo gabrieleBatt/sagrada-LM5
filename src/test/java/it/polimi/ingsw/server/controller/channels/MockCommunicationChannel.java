@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.controller.channels;
 
-import it.polimi.ingsw.net.identifiables.Identifiable;
-import it.polimi.ingsw.net.identifiables.StdId;
+import it.polimi.ingsw.shared.identifiables.Identifiable;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Pool;
 import it.polimi.ingsw.server.model.table.RoundTrack;

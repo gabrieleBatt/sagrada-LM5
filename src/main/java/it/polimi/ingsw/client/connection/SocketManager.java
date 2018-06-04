@@ -1,11 +1,11 @@
 package it.polimi.ingsw.client.connection;
 
-import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.client.view.EndGameInfo;
 import it.polimi.ingsw.client.view.LoginInfo;
 import it.polimi.ingsw.client.view.factory.GameScreen;
-import it.polimi.ingsw.net.socket.JSONBuilder;
-import it.polimi.ingsw.net.socket.SocketProtocol;
+import it.polimi.ingsw.shared.socket.JSONBuilder;
+import it.polimi.ingsw.shared.socket.SocketProtocol;
 import javafx.util.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -26,6 +26,9 @@ import java.util.stream.Collectors;
  */
 public class SocketManager implements ConnectionManager{
 
+    private static final String SUCCESS_LOGIN = "success";
+    private static final char RANKING_SEPARATOR = ':';
+    private static final char PLAYER_SEPARATOR = '-';
     private static Logger logger = LogMaker.getLogger(SocketManager.class.getName(), Level.ALL);
     private final String nickname;
     private final String password;
@@ -103,7 +106,7 @@ public class SocketManager implements ConnectionManager{
     private List<Pair<String, Integer>> convertRanking(List<String> strings){
         return strings
                 .stream()
-                .map(s -> new Pair<>(s.substring(0, s.indexOf(':')), Integer.parseInt(s.substring(s.indexOf(':')+1))))
+                .map(s -> new Pair<>(s.substring(0, s.indexOf(RANKING_SEPARATOR)), Integer.parseInt(s.substring(s.indexOf(':')+1))))
                 .collect(Collectors.toList());
 
     }
@@ -126,7 +129,7 @@ public class SocketManager implements ConnectionManager{
                 }
             }
         }
-        gameScreen.setPlayerConnection(player, received.get(SocketProtocol.CONNECTION.get()).equals("true"));
+        gameScreen.setPlayerConnection(player, received.get(SocketProtocol.CONNECTION.get()).equals(Boolean.toString(true)));
     }
 
 
@@ -142,7 +145,7 @@ public class SocketManager implements ConnectionManager{
             Collection<String> strings = getJsonList(received, SocketProtocol.TOOL);
             List<Pair<String, Boolean>> pairs = strings
                     .stream()
-                    .map(s -> new Pair<>(s.substring(0, s.indexOf('-')), s.contains("true")))
+                    .map(s -> new Pair<>(s.substring(0, s.indexOf(PLAYER_SEPARATOR)), s.contains(Boolean.toString(true))))
                     .collect(Collectors.toList());
             gameScreen.setTools(pairs.stream().map(Pair::getKey).collect(Collectors.toList()));
             for (Pair<String, Boolean> pair : pairs) {
@@ -194,7 +197,7 @@ public class SocketManager implements ConnectionManager{
         JSONObject received;
         if ((received = (JSONObject) (new JSONParser()).parse(in.readLine())) != null &&
             received.get(SocketProtocol.HEADER.get()).equals(SocketProtocol.LOGIN.get())) {
-            if (received.get(SocketProtocol.RESULT.get()).equals("success")) {
+            if (received.get(SocketProtocol.RESULT.get()).equals(SUCCESS_LOGIN)) {
                 logger.log(Level.FINE, "Login success");
                 return true;
             } else {

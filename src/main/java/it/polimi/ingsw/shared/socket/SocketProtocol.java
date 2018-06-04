@@ -1,4 +1,4 @@
-package it.polimi.ingsw.net.socket;
+package it.polimi.ingsw.shared.socket;
 
 /**
  * Enum of messages and flags used in socket communication

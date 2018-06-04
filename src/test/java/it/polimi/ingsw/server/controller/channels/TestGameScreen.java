@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server.controller.channels;
 
-import it.polimi.ingsw.net.interfaces.RemoteGameScreen;
-import it.polimi.ingsw.server.model.table.Player;
-import javafx.util.Pair;
+import it.polimi.ingsw.shared.interfaces.RemoteGameScreen;
 
 import java.util.Collection;
 import java.util.List;

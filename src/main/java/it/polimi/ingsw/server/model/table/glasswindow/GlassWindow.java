@@ -1,7 +1,7 @@
 
 package it.polimi.ingsw.server.model.table.glasswindow;
 
-import it.polimi.ingsw.net.identifiables.Identifiable;
+import it.polimi.ingsw.shared.identifiables.Identifiable;
 import it.polimi.ingsw.server.model.table.dice.Die;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,12 +12,15 @@ import java.util.stream.Collectors;
 
 public class GlassWindow implements Identifiable {
 
+    public static final int ROWS = 4;
+    public static final int COLUMNS = 5;
+    public static final int CELLS = 20;
     private String name;
     private int difficulty;
     private List<Cell> cellList;
 
     public GlassWindow(String name, int difficulty, List<Cell> cells) {
-        if (cells.size() != 20){
+        if (cells.size() != CELLS){
             throw new IllegalArgumentException("GlassWindow size can't be"+cells.size());
         }
         this.name = name;
@@ -49,8 +52,8 @@ public class GlassWindow implements Identifiable {
      * @throws IndexOutOfBoundsException Exception thrown whether column or row are not valid inputs
      */
     public Cell getCell(int x, int y){
-        if (x>=0 && x<4 && y>=0 && y<5)
-            return cellList.get(x*5+y);
+        if (x>=0 && x<ROWS && y>=0 && y<COLUMNS)
+            return cellList.get(x*COLUMNS+y);
         else throw new IndexOutOfBoundsException("Can't find cell at (" +x+", "+y+")");
     }
 
@@ -77,7 +80,7 @@ public class GlassWindow implements Identifiable {
     public int getRow(Cell cell) {
         for (int i = 0; i < cellList.size(); i++) {
             if(cellList.get(i).equals(cell)){
-                return i/5;
+                return i/COLUMNS;
             }
         }
         throw new NoSuchElementException("The cell"+ cell.toString() +"is not in your glasswindow");
@@ -92,7 +95,7 @@ public class GlassWindow implements Identifiable {
     public int getColumn(Cell cell){
         for (int i = 0; i < cellList.size(); i++) {
             if(cellList.get(i).equals(cell)){
-                return i%5;
+                return i%COLUMNS;
             }
         }
         throw new NoSuchElementException("The cell"+ cell.toString() +"is not in your glasswindow");
@@ -115,9 +118,9 @@ public class GlassWindow implements Identifiable {
 
     private Collection<Cell> getSurrounding(int x, int y){
         Set<Cell> ret = new HashSet<>(this.getAdjacent(x, y));
-        if(x<3 && y<4)ret.add(this.getCell(x+1,y+1));
-        if(x<3 && y>0)ret.add(this.getCell(x+1,y-1));
-        if(x>0 && y<4)ret.add(this.getCell(x-1,y+1));
+        if(x<ROWS-1 && y<COLUMNS-1)ret.add(this.getCell(x+1,y+1));
+        if(x<ROWS-1 && y>0)ret.add(this.getCell(x+1,y-1));
+        if(x>0 && y<COLUMNS-1)ret.add(this.getCell(x-1,y+1));
         if(x>0 && y>0)ret.add(this.getCell(x-1,y-1));
         return ret;
     }
@@ -125,9 +128,9 @@ public class GlassWindow implements Identifiable {
     private Collection<Cell> getAdjacent(int x, int y){
         Set<Cell> ret = new HashSet<>();
         if(x>0)ret.add(this.getCell(x-1,y));
-        if(x<3)ret.add(this.getCell(x+1,y));
+        if(x<ROWS-1)ret.add(this.getCell(x+1,y));
         if(y>0)ret.add(this.getCell(x,y-1));
-        if(y<4)ret.add(this.getCell(x,y+1));
+        if(y<COLUMNS-1)ret.add(this.getCell(x,y+1));
         return ret;
     }
 
@@ -154,7 +157,7 @@ public class GlassWindow implements Identifiable {
      */
     private Collection<Cell> borderCells(){
         return (new ArrayList<>(cellList)).stream()
-                .filter(c -> ((this.getColumn(c) == 0) || (this.getColumn(c) == 4)
+                .filter(c -> ((this.getColumn(c) == 0) || (this.getColumn(c) == COLUMNS-1)
                 || (this.getRow(c) == 0) || (this.getRow(c) == 3)))
                 .collect(Collectors.toList());
     }
@@ -196,8 +199,8 @@ public class GlassWindow implements Identifiable {
     @Override
     public String toString(){
         StringBuilder ret = new StringBuilder("This glasswindow contains\n");
-            for(int i = 0; i<4;i++) {
-                for (int j = 0; j < 5; j++) {
+            for(int i = 0; i<ROWS;i++) {
+                for (int j = 0; j < COLUMNS; j++) {
                     if (this.getCell(i, j).isOccupied())
                         ret.append(this.getCell(i, j).getDie().toString()).append("  ");
                     else

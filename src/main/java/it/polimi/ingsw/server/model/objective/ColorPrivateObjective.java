@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.objective;
 
-import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.server.exception.EmptyCellException;
 import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
@@ -31,8 +31,8 @@ public final class ColorPrivateObjective extends PrivateObjective {
     @Override
     public int scorePoints(GlassWindow glassWindow) {
         int ret = 0;
-        for (int i = 0; i < 4; i++) {
-            for (int j= 0; j < 5; j++) {
+        for (int i = 0; i < GlassWindow.ROWS; i++) {
+            for (int j= 0; j < GlassWindow.COLUMNS; j++) {
                 try {
                     if (glassWindow.getCell(i, j).isOccupied()
                             && glassWindow.getCell(i, j).getDie().getColor().equals(color))

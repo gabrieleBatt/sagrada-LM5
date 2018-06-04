@@ -1,4 +1,4 @@
-package it.polimi.ingsw.net;
+package it.polimi.ingsw.shared;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

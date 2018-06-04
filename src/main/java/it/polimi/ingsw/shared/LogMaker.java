@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.shared;
 
 import java.io.IOException;
 import java.util.Arrays;

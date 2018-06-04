@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.controller.rules;
 
-import it.polimi.ingsw.net.Message;
-import it.polimi.ingsw.net.identifiables.Identifiable;
-import it.polimi.ingsw.net.identifiables.StdId;
+import it.polimi.ingsw.shared.Message;
+import it.polimi.ingsw.shared.identifiables.Identifiable;
+import it.polimi.ingsw.shared.identifiables.StdId;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
 import it.polimi.ingsw.server.model.table.Player;
@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 public class ToolActions {
 
-        private static final String INCREASE_DECREASE = "IncreaseDecrease";
 
     /**
      * Generates the action command used to let the player choose how to modify a die.

@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.controller.rules;
 
-import it.polimi.ingsw.net.Message;
-import it.polimi.ingsw.net.identifiables.Identifiable;
-import it.polimi.ingsw.net.identifiables.StdId;
+import it.polimi.ingsw.shared.Message;
+import it.polimi.ingsw.shared.identifiables.Identifiable;
+import it.polimi.ingsw.shared.identifiables.StdId;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
 import it.polimi.ingsw.server.controller.deck.ToolDeck;
@@ -15,7 +15,6 @@ import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.glasswindow.Cell;
 import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import it.polimi.ingsw.server.controller.deck.GlassWindowDeck;
-import it.polimi.ingsw.server.model.tool.Tool;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -24,7 +23,10 @@ import java.util.stream.Collectors;
 
 public class DefaultRules implements Rules {
 
-    private static final String PUBLIC_OBJECTIVE_MESSAGE = "PublicObjectiveDealt";
+    private static final int OBJ_PER_PLAYER = 1;
+    private static final int WINDOW_PER_PLAYER = 2;
+    private static final int OBJ_PER_GAME = 3;
+    private static final int TOOL_PER_GAME = 3;
     private static DefaultRules defaultRules = new DefaultRules();
 
     private DefaultRules(){}
@@ -40,11 +42,11 @@ public class DefaultRules implements Rules {
     @Override
     public List<ActionCommand> getSetupGameActions() {
         List<ActionCommand> ret = new ArrayList<>();
-        ret.add(dealPrivateObjective(1));
-        ret.add(dealGlassWindow(2));
+        ret.add(dealPrivateObjective(OBJ_PER_PLAYER));
+        ret.add(dealGlassWindow(WINDOW_PER_PLAYER));
         ret.add(giveTokens());
-        ret.add(dealPublicObjective(3));
-        ret.add(dealTool(3));
+        ret.add(dealPublicObjective(OBJ_PER_GAME));
+        ret.add(dealTool(TOOL_PER_GAME));
         return ret;
     }
 

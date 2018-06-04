@@ -1,10 +1,10 @@
 package it.polimi.ingsw.server.controller.rules;
 
-import it.polimi.ingsw.net.Message;
+import it.polimi.ingsw.shared.Message;
 import it.polimi.ingsw.server.controller.Game;
-import it.polimi.ingsw.net.identifiables.StdId;
+import it.polimi.ingsw.shared.identifiables.StdId;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
-import it.polimi.ingsw.net.identifiables.Identifiable;
+import it.polimi.ingsw.shared.identifiables.Identifiable;
 import it.polimi.ingsw.server.exception.*;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.tool.Tool;
@@ -20,10 +20,12 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.net.identifiables.StdId.*;
+import static it.polimi.ingsw.shared.identifiables.StdId.*;
 
 public class TurnActionCommand implements ActionCommand{
 
+    private static final int UNUSED_TOOL_PRICE = 1;
+    private static final int USED_TOOL_PRICE = 2;
     private boolean reset;
     private boolean skip;
     private final boolean secondTurn;
@@ -144,9 +146,9 @@ public class TurnActionCommand implements ActionCommand{
             if(optTool.isPresent()) {
                 Tool tool = optTool.get();
                 if(tool.isUsed())
-                    player.setTokens(player.getTokens() - 2);
+                    player.setTokens(player.getTokens() - USED_TOOL_PRICE);
                 else
-                    player.setTokens(player.getTokens() - 1);
+                    player.setTokens(player.getTokens() - UNUSED_TOOL_PRICE);
                 tool.setUsed(true);
                 for (ActionCommand actionCommand : tool.getActionCommandList()) {
                     if (!reset)

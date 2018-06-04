@@ -1,7 +1,4 @@
-package it.polimi.ingsw.net.interfaces;
-
-import it.polimi.ingsw.server.model.table.Player;
-import javafx.util.Pair;
+package it.polimi.ingsw.shared.interfaces;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

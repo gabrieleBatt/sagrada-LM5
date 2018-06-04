@@ -1,8 +1,7 @@
 package it.polimi.ingsw.server.controller.deck;
 
-import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.server.exception.DeckTooSmallException;
-import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import it.polimi.ingsw.server.model.table.glasswindow.Cell;
 import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
@@ -14,7 +13,6 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -22,7 +20,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Contains always all possible GlassWindows, if GlassWindows are drawn they do not disappear from deck
@@ -83,8 +80,8 @@ public class GlassWindowDeck extends Deck {
 
         Iterator<String> iterator = ((JSONArray)jsonGlassWindow.get("cells"+x)).iterator();
 
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < GlassWindow.ROWS; i++) {
+            for (int j = 0; j < GlassWindow.COLUMNS; j++) {
                 if (iterator.hasNext()) {
                     String id = i+""+j+":"+name;
                     Cell cell;

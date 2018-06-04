@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.table;
 
-import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.server.model.table.dice.Die;
 
 import java.util.*;

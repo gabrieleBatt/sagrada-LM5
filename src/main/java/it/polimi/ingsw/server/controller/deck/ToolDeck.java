@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.controller.deck;
 
-import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.net.identifiables.Identifiable;
-import it.polimi.ingsw.net.identifiables.StdId;
+import it.polimi.ingsw.shared.LogMaker;
+import it.polimi.ingsw.shared.identifiables.Identifiable;
+import it.polimi.ingsw.shared.identifiables.StdId;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.exception.DeckTooSmallException;
 import it.polimi.ingsw.server.controller.rules.ActionCommand;
@@ -18,7 +18,6 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -27,7 +26,6 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * ToolDeck is a concrete class representing the deck of tool cards.

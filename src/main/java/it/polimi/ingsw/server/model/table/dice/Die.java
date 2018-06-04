@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.table.dice;
-import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.net.identifiables.Identifiable;
+import it.polimi.ingsw.shared.LogMaker;
+import it.polimi.ingsw.shared.identifiables.Identifiable;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;

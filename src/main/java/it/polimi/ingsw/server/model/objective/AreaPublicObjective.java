@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.objective;
 
-import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.server.exception.EmptyCellException;
 import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 
@@ -49,8 +49,8 @@ public final class AreaPublicObjective extends PublicObjective {
     @Override
     public int scorePoints(GlassWindow glassWindow) {
         int ret = 0;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < GlassWindow.ROWS; i++) {
+            for (int j = 0; j < GlassWindow.COLUMNS; j++) {
                 for(Target a: targetList) {
                     if (checkMultiplicityInArea(glassWindow, i, j, a.cells, a.multiplicity)) {
                         ret += points;
@@ -79,7 +79,7 @@ public final class AreaPublicObjective extends PublicObjective {
         }
         try {
             for (Coordinate c : area) {
-                if(row + c.x >= 4 || row + c.x < 0 || column + c.y >= 5 || column + c.y < 0) return false;
+                if(row + c.x >= GlassWindow.ROWS || row + c.x < 0 || column + c.y >= GlassWindow.COLUMNS || column + c.y < 0) return false;
                 if(!glassWindow.getCell(row+c.x, column+c.y).isOccupied()) return false;
                 actualMultiplicity[glassWindow.getCell(row+c.x, column+c.y).getDie().getNumber()-1]++;
                 switch (glassWindow.getCell(row+c.x, column+c.y).getDie().getColor()){

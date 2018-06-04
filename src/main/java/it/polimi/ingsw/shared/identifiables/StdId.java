@@ -1,7 +1,6 @@
-package it.polimi.ingsw.net.identifiables;
+package it.polimi.ingsw.shared.identifiables;
 
-import it.polimi.ingsw.net.Message;
-import it.polimi.ingsw.net.identifiables.Identifiable;
+import it.polimi.ingsw.shared.Message;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.net.socket.SocketProtocol;
+import it.polimi.ingsw.shared.LogMaker;
+import it.polimi.ingsw.shared.socket.SocketProtocol;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

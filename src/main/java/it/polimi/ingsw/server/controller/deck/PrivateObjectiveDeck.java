@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.controller.deck;
 
-import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.server.exception.DeckTooSmallException;
 import it.polimi.ingsw.server.model.objective.ColorPrivateObjective;
 import it.polimi.ingsw.server.model.objective.PrivateObjective;
@@ -12,14 +12,12 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 public class PrivateObjectiveDeck extends Deck {
 

@@ -1,11 +1,11 @@
 package it.polimi.ingsw.client.connection;
 
-import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.client.view.EndGameInfo;
 import it.polimi.ingsw.client.view.LoginInfo;
-import it.polimi.ingsw.net.interfaces.RemoteChannel;
-import it.polimi.ingsw.net.interfaces.RemoteGameScreen;
-import it.polimi.ingsw.net.interfaces.RemoteServer;
+import it.polimi.ingsw.shared.interfaces.RemoteChannel;
+import it.polimi.ingsw.shared.interfaces.RemoteGameScreen;
+import it.polimi.ingsw.shared.interfaces.RemoteServer;
 import javafx.util.Pair;
 
 import java.io.IOException;

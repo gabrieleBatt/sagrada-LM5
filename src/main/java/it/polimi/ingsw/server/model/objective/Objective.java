@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.objective;
 
-import it.polimi.ingsw.net.identifiables.Identifiable;
+import it.polimi.ingsw.shared.identifiables.Identifiable;
 import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 
 /**

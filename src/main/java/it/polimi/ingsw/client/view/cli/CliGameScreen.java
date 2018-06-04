@@ -1,8 +1,8 @@
 package it.polimi.ingsw.client.view.cli;
 
-import it.polimi.ingsw.net.Message;
+import it.polimi.ingsw.shared.Message;
 import it.polimi.ingsw.client.view.factory.GameScreen;
-import it.polimi.ingsw.net.identifiables.StdId;
+import it.polimi.ingsw.shared.identifiables.StdId;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -24,6 +24,8 @@ public class CliGameScreen extends GameScreen{
     private static final Object WINDOW_CELLS = "cells";
     private static final String JSON_EXTENSION = ".json";
     private static final Object DIFFICULTY = "difficulty";
+    private static final int COLUMNS = 5;
+    private static final int ROWS = 4;
     private final Scanner scanner;
     private final PrintStream printStream;
     private Collection<String> privateObjectives;
@@ -351,8 +353,8 @@ public class CliGameScreen extends GameScreen{
     }
 
     private void showWindow() {
-        for (int x = 0; x <4 ; x++){
-            for (int y = 0; y < 5 ; y++){
+        for (int x = 0; x < ROWS; x++){
+            for (int y = 0; y < COLUMNS ; y++){
                 Cell c = playersList.get(0).glassWindow.cells[x*5+y];
                 if(c.content.equals(" ")) {
                     printActive(c.active, "[" + c.restriction + "]");
@@ -443,9 +445,9 @@ public class CliGameScreen extends GameScreen{
     }
 
     private void showMultipleWindows(List<WindowClass> windowClasses) {
-        for (int x = 0; x < 4; x++) {
+        for (int x = 0; x < ROWS; x++) {
             for (WindowClass windowClass : windowClasses) {
-                for (int y = 0; y < 5; y++) {
+                for (int y = 0; y < COLUMNS; y++) {
                     Cell c = windowClass.cells[x * 5 + y];
                     if(c.content.equals(" ")) {
                         printActive(c.active, "[" + c.restriction + "]");

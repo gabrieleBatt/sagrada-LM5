@@ -2,9 +2,9 @@ package it.polimi.ingsw.server.controller.rules;
 
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
-import it.polimi.ingsw.net.identifiables.Identifiable;
+import it.polimi.ingsw.shared.identifiables.Identifiable;
 import it.polimi.ingsw.server.controller.channels.MockCommunicationChannel;
-import it.polimi.ingsw.net.identifiables.StdId;
+import it.polimi.ingsw.shared.identifiables.StdId;
 import it.polimi.ingsw.server.exception.BagEmptyException;
 import it.polimi.ingsw.server.exception.DieNotAllowedException;
 import it.polimi.ingsw.server.model.table.Player;

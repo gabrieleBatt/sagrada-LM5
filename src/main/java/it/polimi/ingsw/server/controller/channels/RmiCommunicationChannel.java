@@ -1,16 +1,16 @@
 package it.polimi.ingsw.server.controller.channels;
 
-import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.net.identifiables.Identifiable;
-import it.polimi.ingsw.net.identifiables.StdId;
-import it.polimi.ingsw.net.interfaces.RemoteChannel;
+import it.polimi.ingsw.shared.LogMaker;
+import it.polimi.ingsw.shared.identifiables.Identifiable;
+import it.polimi.ingsw.shared.identifiables.StdId;
+import it.polimi.ingsw.shared.interfaces.RemoteChannel;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Pool;
 import it.polimi.ingsw.server.model.table.RoundTrack;
 import it.polimi.ingsw.server.model.table.Table;
 import it.polimi.ingsw.server.model.table.glasswindow.Cell;
 import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
-import it.polimi.ingsw.net.interfaces.RemoteGameScreen;
+import it.polimi.ingsw.shared.interfaces.RemoteGameScreen;
 import javafx.util.Pair;
 
 import java.rmi.RemoteException;
@@ -117,8 +117,8 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
             }
             if (player.hasGlassWindow()) {
                 gameScreen.setPlayerWindow(player.getNickname(), player.getGlassWindow().getId());
-                for (int i = 0; i < 4; i++) {
-                    for (int j = 0; j < 5; j++) {
+                for (int i = 0; i < GlassWindow.ROWS; i++) {
+                    for (int j = 0; j < GlassWindow.COLUMNS; j++) {
                         Cell c = player.getGlassWindow().getCell(i, j);
                         if (c.isOccupied())
                             gameScreen.setCellContent(player.getNickname(), i, j, c.getDie().getId());

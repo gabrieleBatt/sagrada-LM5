@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.controller.channels;
 
 import com.sun.jmx.snmp.Timestamp;
-import it.polimi.ingsw.net.identifiables.Identifiable;
-import it.polimi.ingsw.net.identifiables.StdId;
+import it.polimi.ingsw.shared.identifiables.Identifiable;
+import it.polimi.ingsw.shared.identifiables.StdId;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.Pool;
@@ -17,7 +17,6 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Time;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;

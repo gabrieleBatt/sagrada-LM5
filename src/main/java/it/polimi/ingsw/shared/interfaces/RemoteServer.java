@@ -1,6 +1,5 @@
-package it.polimi.ingsw.net.interfaces;
+package it.polimi.ingsw.shared.interfaces;
 
-import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 

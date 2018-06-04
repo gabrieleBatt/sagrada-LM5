@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.table;
 
-import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.server.model.objective.PublicObjective;
 import it.polimi.ingsw.server.model.table.dice.DiceBag;
 import it.polimi.ingsw.server.model.tool.Tool;

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 class Lobby {
 
     private static final Logger logger = LogMaker.getLogger(Lobby.class.getName(), Level.ALL);
+    private static final int MAX_PLAYERS = 4;
     private static long timerSeconds;
     private Set<CommunicationChannel> commChannelSet;
     private Timer timer;
@@ -58,8 +59,8 @@ class Lobby {
         if(commChannelSet.size() == 2){
             startTimer();
         }
-        if(commChannelSet.size() == 4){
-            logger.log(Level.FINER, "4 players, game starts");
+        if(commChannelSet.size() == MAX_PLAYERS){
+            logger.log(Level.FINER, MAX_PLAYERS + " players, game starts");
             timer.cancel();
             startGame();
         }

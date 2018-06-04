@@ -1,6 +1,6 @@
-package it.polimi.ingsw.net.socket;
+package it.polimi.ingsw.shared.socket;
 
-import it.polimi.ingsw.LogMaker;
+import it.polimi.ingsw.shared.LogMaker;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 

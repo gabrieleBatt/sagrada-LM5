@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.client.view.LoginInfo;
-import it.polimi.ingsw.net.Message;
+import it.polimi.ingsw.shared.Message;
 import it.polimi.ingsw.client.view.factory.ConnectionScreen;
 
 import java.io.InputStream;

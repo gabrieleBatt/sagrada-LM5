@@ -1,14 +1,14 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.LogMaker;
-import it.polimi.ingsw.net.interfaces.RemoteChannel;
-import it.polimi.ingsw.net.socket.JSONBuilder;
+import it.polimi.ingsw.shared.LogMaker;
+import it.polimi.ingsw.shared.interfaces.RemoteChannel;
+import it.polimi.ingsw.shared.socket.JSONBuilder;
 import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
 import it.polimi.ingsw.server.controller.channels.RmiCommunicationChannel;
-import it.polimi.ingsw.net.socket.SocketProtocol;
+import it.polimi.ingsw.shared.socket.SocketProtocol;
 import it.polimi.ingsw.server.controller.channels.SocketCommunicationChannel;
-import it.polimi.ingsw.net.interfaces.RemoteGameScreen;
-import it.polimi.ingsw.net.interfaces.RemoteServer;
+import it.polimi.ingsw.shared.interfaces.RemoteGameScreen;
+import it.polimi.ingsw.shared.interfaces.RemoteServer;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;

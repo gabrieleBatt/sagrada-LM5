@@ -31,7 +31,7 @@ public final class SetPublicObjective extends PublicObjective {
      */
     @Override
     public int scorePoints(GlassWindow glassWindow) {
-        int ret = 20;
+        int ret = GlassWindow.CELLS;
         for(Integer n: numbers){
             int newRet = 0;
             for (Cell cell : glassWindow.getCellList()) {
