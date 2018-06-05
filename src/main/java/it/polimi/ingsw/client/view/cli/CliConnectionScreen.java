@@ -33,14 +33,8 @@ public class CliConnectionScreen extends ConnectionScreen {
 
         if(loginInfo.isPresent()){
             return loginInfo.get();
-        }else if (getConnectionChoiceFromUser().equalsIgnoreCase(RMI)){
-            loginInfo = Optional.of(new LoginInfo(RMI,
-                    getNicknameChoiceFromUser(),
-                    getPortNumberChoiceFromUser(),
-                    null,
-                    getPasswordFromUser()));
         }else {
-            loginInfo = Optional.of(new LoginInfo(SOCKET,
+            loginInfo = Optional.of(new LoginInfo(getConnectionChoiceFromUser(),
                     getNicknameChoiceFromUser(),
                     getPortNumberChoiceFromUser(),
                     getIpFromUser(),

@@ -94,7 +94,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
         try {
             LocateRegistry.createRegistry(rmiPortNumber)
                     .rebind("Server", server);
-            logger.log(Level.CONFIG, "Rmi server ready");
+            logger.log(Level.CONFIG, "Rmi server ready on port: " + rmiPortNumber);
         } catch (RemoteException e) {
             logger.log(Level.WARNING, "Rmi server failed", e);
             return;

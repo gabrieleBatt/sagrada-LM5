@@ -64,7 +64,7 @@ public class RmiManager implements ConnectionManager{
 
     @Override
     public boolean login() throws IOException, NotBoundException {
-        RemoteServer server = (RemoteServer) LocateRegistry.getRegistry(loginInfo.portNumber).lookup("Server");
+        RemoteServer server = (RemoteServer) LocateRegistry.getRegistry(loginInfo.ip, loginInfo.portNumber).lookup("Server");
         UnicastRemoteObject.exportObject(gameScreen, 0);
         remoteChannel = server.rmiLogin(gameScreen, loginInfo.nickname, loginInfo.password);
         return remoteChannel != null;
