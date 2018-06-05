@@ -1,13 +1,16 @@
 package it.polimi.ingsw.shared;
 
+import it.polimi.ingsw.client.Client;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,11 +67,12 @@ public enum Message {
 
     Message() {
         try {
-            JSONObject config = (JSONObject) new JSONParser().parse(new FileReader("resources/clientResources/config.json"));
+            JSONObject config = (JSONObject) new JSONParser().parse(new InputStreamReader(Message.class.getClassLoader().getResourceAsStream("clientResources/config.json")));
             String language = ((String) config.get("language")).toLowerCase();
-            JSONObject translator = (JSONObject) new JSONParser().parse(new FileReader("resources/clientResources/lang/"+language+"/"+language+".json"));
+            JSONObject translator = (JSONObject) new JSONParser().parse(new InputStreamReader(Message.class.getClassLoader().getResourceAsStream("clientResources/lang/"+language+"/"+language+".json")));
             Optional.ofNullable((String)translator.get(this.name())).ifPresent(s -> this.value = s);
         } catch (IOException | ParseException e) {
+            Client.getLogger().log(Level.WARNING, "Config file not found", e);
             this.value = null;
         }
     }

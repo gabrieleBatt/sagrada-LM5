@@ -122,7 +122,7 @@ public class CliGameScreen extends GameScreen{
         WindowClass ret = new WindowClass();
         ret.windowName = windowName;
         try {
-            JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(GLASS_WINDOW_PATH + windowName + JSON_EXTENSION));
+            JSONObject jsonObject = (JSONObject) new JSONParser().parse(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(GLASS_WINDOW_PATH + windowName + JSON_EXTENSION)));
             List<String> restrictions = new ArrayList<>((JSONArray) jsonObject.get(WINDOW_CELLS));
             for (int i = 0; i < CELL_NUM; i++) {
                 ret.cells[i].restriction = restrictions.get(i);
@@ -390,7 +390,7 @@ public class CliGameScreen extends GameScreen{
 
     private void showObjective(String name){
         try {
-            JSONObject jsonObject = ((JSONObject) new JSONParser().parse(new FileReader(OBJECTIVE_PATH+name+JSON_EXTENSION)));
+            JSONObject jsonObject = ((JSONObject) new JSONParser().parse(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(OBJECTIVE_PATH+name+JSON_EXTENSION))));
             printStream.print(jsonObject.get(CARD_NAME).toString() + ",\t"+Message.POINTS+":" + jsonObject.get(CARD_POINTS));
             printStream.println(",\t" + jsonObject.get(CARD_DESCRIPTION));
         } catch (IOException | ParseException e) {
@@ -415,7 +415,7 @@ public class CliGameScreen extends GameScreen{
                      printStream.print("[2]  ");
                  }else
                      printStream.print("[1]  ");
-                 JSONObject jsonObject = ((JSONObject) new JSONParser().parse(new FileReader(TOOL_PATH+tool.toolName+JSON_EXTENSION)));
+                 JSONObject jsonObject = ((JSONObject) new JSONParser().parse(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(TOOL_PATH+tool.toolName+JSON_EXTENSION))));
                  printStream.print(jsonObject.get(CARD_NAME).toString());
                  printStream.print(":\t" + jsonObject.get(CARD_DESCRIPTION));
              } catch (IOException | ParseException e) {
