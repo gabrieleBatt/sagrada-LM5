@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.view.cli;
 import it.polimi.ingsw.shared.Message;
 import it.polimi.ingsw.client.view.factory.GameScreen;
 import it.polimi.ingsw.shared.identifiables.StdId;
+import jdk.nashorn.internal.objects.NativeUint16Array;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -128,7 +129,7 @@ public class CliGameScreen extends GameScreen{
                 ret.cells[i].restriction = restrictions.get(i);
             }
             ret.difficulty = (long)jsonObject.get(DIFFICULTY);
-        } catch (IOException | ParseException e) {
+        } catch (NullPointerException | IOException | ParseException e) {
             printStream.println("Window not found");
         }
         return ret;
@@ -236,6 +237,9 @@ public class CliGameScreen extends GameScreen{
 
         for(ToolClass tool: toolsList)
             tool.active = false;
+
+        if(ret.equals(StdId.UNDO.getId()))
+            return ret;
 
         return toolsList.get(Integer.parseInt(ret)).toolName;
     }

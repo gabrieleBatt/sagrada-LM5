@@ -100,7 +100,7 @@ public class Game implements Runnable {
      */
     @Override
     public void run() {
-        while(!actionCommandList.isEmpty() || commChannels.stream().filter(cc -> !cc.isOffline()).count() > 1){
+        while(!actionCommandList.isEmpty() && commChannels.stream().filter(cc -> !cc.isOffline()).count() > 1){
             this.updateAll();
             ActionCommand actionCommand = actionCommandList.get(0);
             actionCommand.execute(this);
