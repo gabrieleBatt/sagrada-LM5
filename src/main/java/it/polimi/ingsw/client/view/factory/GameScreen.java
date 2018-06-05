@@ -22,7 +22,7 @@ public abstract class GameScreen implements RemoteGameScreen {
             JSONObject config = (JSONObject) new JSONParser().parse(new FileReader("resources/clientResources/config.json"));
             language = ((String) config.get("language")).toLowerCase();
         } catch (IOException | ParseException e) {
-            Client.getLogger().log(Level.WARNING, "Language directory not found");
+            Client.getLogger().log(Level.WARNING, "Config directory not found");
         }
         OBJECTIVE_PATH = "resources/clientResources/lang/"+language+"/objectives/";
         TOOL_PATH = "resources/clientResources/lang/"+language+"/tools/";

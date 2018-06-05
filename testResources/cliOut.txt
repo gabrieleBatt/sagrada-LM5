@@ -1,5 +1,10 @@
 Scegli la vetrata: [34m[W1, W2, W3, W4][37m
 Window not found
+w1:0	Window not found
+w2:0	Window not found
+w3:0	Window not found
+w4:0	
+Window not found
 Window not found
 Window not found
 Window not found
@@ -48,9 +53,9 @@ Obbiettivi pubblici:
 Objective not found
 Objective not found
 Utensili: 
-[1]  Tool not found
-[2]  Tool not found
-[1]  Tool not found
+ 0.   [1]  Tool not found
+ 1.   [2]  Tool not found
+ 2.   [1]  Tool not found
 
 Riserva: 
 Tracciato dei Round: 	
@@ -94,9 +99,9 @@ Obbiettivi pubblici:
 Objective not found
 Objective not found
 Utensili: 
-[1]  Tool not found
-[2]  Tool not found
-[1]  Tool not found
+ 0.   [1]  Tool not found
+ 1.   [2]  Tool not found
+ 2.   [1]  Tool not found
 
 Riserva: 
 Tracciato dei Round: 	

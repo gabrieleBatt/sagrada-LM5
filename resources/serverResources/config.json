@@ -5,13 +5,5 @@
   "timerSeconds": 5,
   "turnTime": 180,
   "responseTime": 25,
-  "pingTimeout": 1,
-
-  "rounds": 10,
-  "diceBagSize": 90,
-  "windowRows": 4,
-  "windowColumns": 5,
-  "publicObjectives": 3,
-  "privateObjectives": 1,
-  "tools": 3
+  "pingTimeout": 1
 }
