@@ -23,7 +23,6 @@ public class PrivateObjectiveDeck extends Deck {
 
     private static final Logger logger = LogMaker.getLogger(PrivateObjectiveDeck.class.getName(), Level.ALL);
     private static PrivateObjectiveDeck privateObjectiveDeck = new PrivateObjectiveDeck(Paths.get("resources/serverResources/objectives/private"));
-    private static final String NAME = "name";
 
     private PrivateObjectiveDeck(Path path){
         super(path);

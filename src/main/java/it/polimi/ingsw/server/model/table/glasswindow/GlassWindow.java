@@ -1,4 +1,3 @@
-
 package it.polimi.ingsw.server.model.table.glasswindow;
 
 import it.polimi.ingsw.shared.identifiables.Identifiable;
@@ -7,7 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * GlassWindow is a concrete class representing a player's glasswindow. It's implemented as a collection of cells.
+ * GlassWindow is a concrete class representing a player's glassWindow. It's implemented as a collection of cells.
  */
 
 public class GlassWindow implements Identifiable {
@@ -29,16 +28,16 @@ public class GlassWindow implements Identifiable {
     }
 
     /**
-     * Gets the glasswindow difficulty
-     * @return int, glasswindow difficulty
+     * Gets the glassWindow difficulty
+     * @return int, glassWindow difficulty
      */
     public int getDifficulty(){
         return this.difficulty;
     }
 
     /**
-     * Gets the glasswindow name
-     * @return String, glasswindow name
+     * Gets the glassWindow name
+     * @return String, glassWindow name
      */
     public String getName(){
         return this.name;
@@ -48,7 +47,7 @@ public class GlassWindow implements Identifiable {
      * Gets the cell at the x,y coordinates, the top left is the (0, 0)
      * @param x column
      * @param y row
-     * @return Cell in x,y on the glasswindow
+     * @return Cell in x,y on the glassWindow
      * @throws IndexOutOfBoundsException Exception thrown whether column or row are not valid inputs
      */
     public Cell getCell(int x, int y){
@@ -63,42 +62,30 @@ public class GlassWindow implements Identifiable {
      * @return cell containing the die having dieId Id
      * @throws NoSuchElementException Exception thrown if dieId is not found
      */
-    public Cell getCellByDie(String dieId){
+    Cell getCellByDie(String dieId){
         for(Cell c: cellList){
             if (c.isOccupied() && c.getDie().getId().equals(dieId))
                 return c;
         }
-        throw new NoSuchElementException("There's no die whit the id "+ dieId +"in your glasswindow");
+        throw new NoSuchElementException("There's no die whit the id "+ dieId +"in your glassWindow");
     }
 
     /**
      * gets the row of the cell
-     * @param cell
+     * @param cell to find the row of
      * @return the row
-     * @throws NoSuchElementException if the cell is not in this glasswindow
      */
-    public int getRow(Cell cell) {
-        for (int i = 0; i < cellList.size(); i++) {
-            if(cellList.get(i).equals(cell)){
-                return i/COLUMNS;
-            }
-        }
-        throw new NoSuchElementException("The cell"+ cell.toString() +"is not in your glasswindow");
+    int getRow(Cell cell) {
+        return cellList.indexOf(cell)/COLUMNS;
     }
 
     /**
      * gets the column of the cell
-     * @param cell
+     * @param cell to find the column of
      * @return the column
-     * @throws NoSuchElementException if the cell is not in this glasswindow
      */
-    public int getColumn(Cell cell){
-        for (int i = 0; i < cellList.size(); i++) {
-            if(cellList.get(i).equals(cell)){
-                return i%COLUMNS;
-            }
-        }
-        throw new NoSuchElementException("The cell"+ cell.toString() +"is not in your glasswindow");
+    int getColumn(Cell cell){
+        return cellList.indexOf(cell)%COLUMNS;
     }
 
     /**
@@ -107,7 +94,7 @@ public class GlassWindow implements Identifiable {
      * @param y column
      * @return Boolean, true if there are surrounding dice
      */
-    public boolean hasSurroundingDice (int x, int y) {
+    boolean hasSurroundingDice(int x, int y) {
         for(Cell c: this.getSurrounding(x, y)){
             if(c.isOccupied()){
                 return true;
@@ -118,10 +105,10 @@ public class GlassWindow implements Identifiable {
 
     private Collection<Cell> getSurrounding(int x, int y){
         Set<Cell> ret = new HashSet<>(this.getAdjacent(x, y));
-        if(x<ROWS-1 && y<COLUMNS-1)ret.add(this.getCell(x+1,y+1));
-        if(x<ROWS-1 && y>0)ret.add(this.getCell(x+1,y-1));
-        if(x>0 && y<COLUMNS-1)ret.add(this.getCell(x-1,y+1));
-        if(x>0 && y>0)ret.add(this.getCell(x-1,y-1));
+        if(x<ROWS-1 && y<COLUMNS-1) ret.add(this.getCell(x+1,y+1));
+        if(x<ROWS-1 && y>0) ret.add(this.getCell(x+1,y-1));
+        if(x>0 && y<COLUMNS-1) ret.add(this.getCell(x-1,y+1));
+        if(x>0 && y>0) ret.add(this.getCell(x-1,y-1));
         return ret;
     }
 
@@ -141,7 +128,7 @@ public class GlassWindow implements Identifiable {
      * @param die Die considered for placing
      * @return boolean, true if there's conflict
      */
-    public boolean hasAdjacentSimilar(int x, int y, Die die){
+    boolean hasAdjacentSimilar(int x, int y, Die die){
         for(Cell c: this.getAdjacent(x, y)){
             if(c.isOccupied() &&
                     (c.getDie().getColor().equals(die.getColor()) || c.getDie().getNumber() == die.getNumber())){
@@ -181,7 +168,7 @@ public class GlassWindow implements Identifiable {
     }
 
     /**
-     * Checks if glasswindow is empty
+     * Checks if glassWindow is empty
      * @return true if there's no die placed
      */
     private boolean isEmpty(){
@@ -194,17 +181,17 @@ public class GlassWindow implements Identifiable {
 
     /**
      * Method used for testing
-     * @return String representing a glasswindow
+     * @return String representing a glassWindow
      */
     @Override
     public String toString(){
-        StringBuilder ret = new StringBuilder("This glasswindow contains\n");
+        StringBuilder ret = new StringBuilder("This glassWindow contains\n");
             for(int i = 0; i<ROWS;i++) {
                 for (int j = 0; j < COLUMNS; j++) {
                     if (this.getCell(i, j).isOccupied())
                         ret.append(this.getCell(i, j).getDie().toString()).append("  ");
                     else
-                        ret.append("empty  ");
+                        ret.append("[ ]  ");
                 }
                 ret.append("\n");
             }

@@ -91,24 +91,6 @@ public class Die implements Identifiable {
     }
 
     /**
-     * Compares dices id to check if they're the same
-     * @return true if dice match
-     * @param die: object to match with this die
-     */
-    @Override
-    public boolean equals(Object die){
-        if (die instanceof Die){
-            return ((Die)die).getId().equals(this.getId());
-        }else
-            return false;
-    }
-
-    @Override
-    public int hashCode(){
-        return this.getId().hashCode();
-    }
-
-    /**
      * Method used for testing
      * @return String representing a die
      */
@@ -117,10 +99,4 @@ public class Die implements Identifiable {
         return getId();
     }
 
-    /**
-     * Prints the override toString of an object Die
-     */
-    public void dump(){
-        System.console().writer().println(this);
-    }
 }

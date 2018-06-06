@@ -53,7 +53,9 @@ public class CliGameScreen extends GameScreen{
 
     @Override
     public void addMessage(String message) {
-        messageRecord.add(0, Message.convertMessage(message));
+        messageRecord.add(0, Message.convertMessage(message)+"\n");
+        if(messageRecord.size() > MAX_LEN_RECORD)
+            messageRecord = messageRecord.subList(0, MAX_LEN_RECORD);
     }
 
     public void setPlayers(List<String> nicknames){
@@ -325,7 +327,7 @@ public class CliGameScreen extends GameScreen{
         clear();
         showOthersNameAndTokens();
         showMultipleWindows(playersList.subList(1,playersList.size()).stream().map(p -> p.glassWindow).collect(Collectors.toList()));
-        printStream.println(Message.MESSAGES + ": "+messageRecord+"\n");
+        printStream.println(Message.MESSAGES + ":\n"+messageRecord+"\n");
         showNicknameAndTokensAndRound();
         showPrivateObjective();
         showWindow();

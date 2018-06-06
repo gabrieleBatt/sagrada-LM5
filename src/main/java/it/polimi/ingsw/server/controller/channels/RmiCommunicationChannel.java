@@ -13,7 +13,9 @@ import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import it.polimi.ingsw.shared.interfaces.RemoteGameScreen;
 import javafx.util.Pair;
 
+import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
@@ -200,17 +202,17 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
     }
 
 
-    private Identifiable askClient(List<Identifiable> options, boolean canSkip,
-                                   boolean undoEnabled,
-                                   BiFunctionRemExc<List, String, String> function,
-                                   String string){
-        if(isOffline)
-            return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
-        List<String> use= options.stream().map(Identifiable::getId).collect(Collectors.toList());
+    private Identifiable askClient(List<Identifiable> options, boolean canSkip, boolean undoEnabled, BiFunctionRemExc<List, String, String> function, String string){
+        if(isOffline) return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
+
+        //Builds options
+        List<String> use = options.stream().map(Identifiable::getId).collect(Collectors.toList());
         if(canSkip)
             use.add(StdId.SKIP.getId());
         if(undoEnabled)
             use.add(StdId.UNDO.getId());
+
+        //Ask input
         Timer timer = new Timer();
         startTimer(timer, this);
         String ret;
@@ -221,10 +223,13 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
             return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
         }
         endTimer(timer);
+
+        //Act on response
         if(canSkip && ret.equals(StdId.SKIP.getId()))
             return StdId.SKIP;
         if(undoEnabled&& ret.equals((StdId.UNDO.getId())))
             return StdId.UNDO;
+
         Optional<Identifiable> selection = options
                 .stream()
                 .filter(op -> op.getId().equals(ret))
@@ -232,6 +237,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
         if (selection.isPresent()) {
             return selection.get();
         }
+
         setOffline();
         return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
     }
@@ -241,10 +247,14 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public void setOffline() {
-        super.setOffline();
-        logger.log(Level.WARNING, getNickname() + " is offline");
-        //TODO -- disconnect properly
-        isOffline = true;
+        try {
+            UnicastRemoteObject.unexportObject(this, true);
+            logger.log(Level.FINE, getNickname() + " is offline");
+            super.setOffline();
+            isOffline = true;
+        } catch (NoSuchObjectException e) {
+            logger.log(Level.WARNING, "UnExport failed");
+        }
     }
 
     @FunctionalInterface

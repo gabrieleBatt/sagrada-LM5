@@ -125,25 +125,6 @@ public class Cell implements Identifiable {
     }
 
     /**
-     * checks if two cells are the same by id
-     * @param cell to confront
-     * @return true if cells has the same id
-     */
-    @Override
-    public boolean equals(Object cell) {
-        if (cell instanceof Cell){
-            return ((Cell) cell).getId().equals(this.getId());
-        }else
-            return false;
-    }
-
-    @Override
-    public int hashCode(){
-        return this.getId().hashCode();
-    }
-
-
-    /**
      * Method used for testing
      * @return String representing a cell
      */
@@ -162,6 +143,6 @@ public class Cell implements Identifiable {
     }
 
     public void placeOptionalDie(Optional<Die> die){
-        this.die=die;
+        this.die = die;
     }
 }

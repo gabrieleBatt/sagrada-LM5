@@ -5,7 +5,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
@@ -49,8 +48,6 @@ public enum Message {
     DRAFT(),
     DRAFT_DONE(),
     PLACE_DONE(),
-    DEALT_TOOLS(),
-    DEALT_PUB_OBJ(),
     RECEIVED_GLASS_WINDOW(),
     NEW_POOL(),
     END_ROUND(),
@@ -61,10 +58,14 @@ public enum Message {
     SWAPPED(),
     MOVED(),
     BEEN_SET(),
-    SET_DIE();
+    SET_DIE(),
+    FORCED_IN_POOL();
 
     private String value;
 
+    /**
+     * For each message gets its translation according to the language field in config
+     */
     Message() {
         try {
             JSONObject config = (JSONObject) new JSONParser().parse(new InputStreamReader(Message.class.getClassLoader().getResourceAsStream("clientResources/config.json")));
@@ -77,6 +78,10 @@ public enum Message {
         }
     }
 
+    /**
+     * Returns the translated message if present
+     * @return the translated message if present
+     */
     @Override
     public String toString() {
         if (value == null){
@@ -85,6 +90,11 @@ public enum Message {
         return value;
     }
 
+    /**
+     * Returns the translation if present, if not returns the defaultMessage unchanged
+     * @param defaultMessage to convert
+     * @return the translation if present, if not returns the defaultMessage unchanged
+     */
     public static String  convertMessage(String defaultMessage){
         Optional<Message> optional =  Arrays
                 .stream(Message.values())
@@ -97,18 +107,28 @@ public enum Message {
         }
     }
 
-    public static String decodeMessage(String choice) {
+    /**
+     * Returns the standard message if present, if not returns the message unchanged
+     * @param message to decode
+     * @return the standard message if present, if not returns the message unchanged
+     */
+    public static String decodeMessage(String message) {
         Optional<Message> optional =  Arrays
                 .stream(Message.values())
-                .filter(m -> choice.equals(m.value))
+                .filter(m -> message.equals(m.value))
                 .findFirst();
         if(optional.isPresent()){
             return optional.get().name();
         }else{
-            return choice;
+            return message;
         }
     }
 
+    /**
+     * Convert a name, placing a space before each upper case letter
+     * @param name to convert
+     * @return the converted name
+     */
     public static String convertName(String name){
         Matcher matcher = Pattern.compile("[A-Z]").matcher(name);
         StringBuffer buff = new StringBuffer();
@@ -118,6 +138,11 @@ public enum Message {
         return new String(matcher.appendTail(buff).replace(0,1, ""+Character.toUpperCase(buff.charAt(0))));
     }
 
+    /**
+     * Decode a name, removing the space before each upper case letter
+     * @param name to decode
+     * @return the decoded name
+     */
     public static String decodeName(String name){
         Matcher matcher = Pattern.compile("\\s").matcher(name);
         StringBuffer buff = new StringBuffer();

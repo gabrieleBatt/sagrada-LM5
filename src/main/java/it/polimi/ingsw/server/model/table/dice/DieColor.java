@@ -6,7 +6,7 @@ package it.polimi.ingsw.server.model.table.dice;
  */
 public enum DieColor{
 
-    RED("R"), GREEN("G"), YELLOW("Y"), CYAN("C"), MAGENTA("M");
+    CYAN("C"), GREEN("G"), MAGENTA("M"), RED("R"),  YELLOW("Y");
 
     private String toString;
 

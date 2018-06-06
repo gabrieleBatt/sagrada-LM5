@@ -30,10 +30,8 @@
   "REPLAY":"Vuoi rigiocare",
   "WINS":"vince",
   "LEADER_BOARD":"Classifica",
-  "DRAFT_DONE": "Drafted",
-  "PLACE_DONE": "Placed",
-  "DEALT_TOOLS": "Tool scelti",
-  "DEALT_PUB_OBJ": "Obiettivi pubblici scelti",
+  "DRAFT_DONE": "Pescato",
+  "PLACE_DONE": "Piazzato",
   "RECEIVED_GLASS_WINDOW": "Vetrata scelta",
   "NEW_POOL": "Pool tirata",
   "END_ROUND": "Fine round",
@@ -44,5 +42,6 @@
   "SWAPPED": "Scambiato con",
   "MOVED":"Spostato",
   "BEEN_SET":"Numero del dado scelto",
-  "SET_DIE": "Scegli il numero del dado"
+  "SET_DIE": "Scegli il numero del dado",
+  "FORCED_IN_POOL": "è stato rimesso nella riserva"
 }

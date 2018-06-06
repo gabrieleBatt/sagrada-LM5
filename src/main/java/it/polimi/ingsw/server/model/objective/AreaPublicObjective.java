@@ -1,13 +1,17 @@
 package it.polimi.ingsw.server.model.objective;
 
+import it.polimi.ingsw.server.model.table.dice.Die;
+import it.polimi.ingsw.server.model.table.dice.DieColor;
 import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.server.exception.EmptyCellException;
 import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * A public objective that awards points for each time the glass window
@@ -21,6 +25,7 @@ import java.util.logging.Logger;
 public final class AreaPublicObjective extends PublicObjective {
 
     private static final Logger logger = LogMaker.getLogger(AreaPublicObjective.class.getName(), Level.ALL);
+    private static final int DIE_MAX = 6;
     private List<Target> targetList;
     private int points;
 
@@ -72,24 +77,21 @@ public final class AreaPublicObjective extends PublicObjective {
         logger.log(Level.FINEST, "This area: " + area + " has been added to targetList", this);
     }
 
+
     private static boolean checkMultiplicityInArea(GlassWindow glassWindow, int row, int column, List<Coordinate> area, List<List<Integer>> multiplicity){
-        Integer[] actualMultiplicity = new Integer[11];
-        for (int i = 0; i < 11; i++) {
+        Integer[] actualMultiplicity = new Integer[DIE_MAX + DieColor.values().length];
+        for (int i = 0; i < DIE_MAX + DieColor.values().length; i++) {
             actualMultiplicity[i] = 0;
         }
         try {
             for (Coordinate c : area) {
                 if(row + c.x >= GlassWindow.ROWS || row + c.x < 0 || column + c.y >= GlassWindow.COLUMNS || column + c.y < 0) return false;
                 if(!glassWindow.getCell(row+c.x, column+c.y).isOccupied()) return false;
+                //Number multiplicity
                 actualMultiplicity[glassWindow.getCell(row+c.x, column+c.y).getDie().getNumber()-1]++;
-                switch (glassWindow.getCell(row+c.x, column+c.y).getDie().getColor()){
-                    case CYAN: actualMultiplicity[6]++; break;
-                    case GREEN: actualMultiplicity[7]++; break;
-                    case MAGENTA: actualMultiplicity[8]++; break;
-                    case RED: actualMultiplicity[9]++; break;
-                    case YELLOW: actualMultiplicity[10]++; break;
-                    default: break;
-                }
+                //Color multiplicity
+                DieColor color = glassWindow.getCell(row+c.x, column+c.y).getDie().getColor();
+                actualMultiplicity[Arrays.stream(DieColor.values()).collect(Collectors.toList()).indexOf(color) + DIE_MAX]++;
             }
         }catch (EmptyCellException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
@@ -109,8 +111,8 @@ public final class AreaPublicObjective extends PublicObjective {
         List<List<Integer>> multiplicity;
 
         Target(List<Coordinate> area, List<List<Integer>> multiplicity) {
-            if( multiplicity.size() != 11){
-                throw new IllegalArgumentException("Can't make objective\nmultiplicity expected 11, found:"+multiplicity.size());
+            if( multiplicity.size() != DIE_MAX + DieColor.values().length){
+                throw new IllegalArgumentException("Can't make objective\nmultiplicity expected "+DIE_MAX + DieColor.values().length+", found:"+multiplicity.size());
             }
             this.multiplicity = new ArrayList<>();
             for(List<Integer> il: multiplicity){

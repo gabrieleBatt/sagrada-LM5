@@ -136,9 +136,9 @@ public class Player implements Memento {
         tokensMemento.push(this.tokens);
         for(Cell cell : this.getGlassWindow().getCellList())
             if (cell.isOccupied()){
-            newMemento.add(Optional.of(cell.getDie()));
+                newMemento.add(Optional.of(cell.getDie()));
             }else{
-            newMemento.add(Optional.empty());
+                newMemento.add(Optional.empty());
         }
         glassWindowMemento.push(newMemento);
     }

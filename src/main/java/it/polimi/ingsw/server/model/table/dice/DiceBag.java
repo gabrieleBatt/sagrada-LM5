@@ -14,6 +14,7 @@ import java.util.logging.Logger;
  * randomly extracted from it.
  */
 public class DiceBag implements Memento{
+    private static final int BAG_SIZE = 90;
     private Set<Die> bag;
     private static final Logger logger = LogMaker.getLogger(DiceBag.class.getName(), Level.ALL);
     private Deque<List<Die>> diceBagMemento;
@@ -25,12 +26,9 @@ public class DiceBag implements Memento{
     public DiceBag(){
        bag = new HashSet<>();
        diceBagMemento = new ArrayDeque<>();
-       for(int i=0; i<18; i++){
-           bag.add(new Die(DieColor.RED, i));
-           bag.add(new Die(DieColor.GREEN, 18 + i));
-           bag.add(new Die(DieColor.YELLOW, 36+i));
-           bag.add(new Die(DieColor.MAGENTA, 54+i));
-           bag.add(new Die(DieColor.CYAN, 72+i));
+       for(int i=0; i<BAG_SIZE/DieColor.values().length; i++){
+           int id = i;
+           Arrays.stream(DieColor.values()).forEach(c -> bag.add(new Die(c, id)));
        }
     }
 
@@ -102,14 +100,6 @@ public class DiceBag implements Memento{
         }
         return ret.toString();
     }
-
-    /**
-     * Prints the override toString of an object DiceBag
-     */
-    public void dump(){
-        System.console().writer().println(this);
-    }
-
 
     /**
      * Adds the current dice bag state at the stack.

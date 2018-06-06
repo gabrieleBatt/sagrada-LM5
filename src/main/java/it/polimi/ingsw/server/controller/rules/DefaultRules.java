@@ -60,8 +60,6 @@ public class DefaultRules implements Rules {
             actionReceiver.getTable()
                     .setTools(ToolDeck.getToolDeck()
                             .draw(toolPerGame));
-            actionReceiver.sendAll(actionReceiver.getTable().getTools().toString());
-            actionReceiver.sendAll(Message.DEALT_TOOLS.name());
         };
     }
 
@@ -76,9 +74,7 @@ public class DefaultRules implements Rules {
             publicObjectives = PublicObjectiveDeck.getPublicObjectiveDeck().draw(pubObjPerGame);
             actionReceiver.getTable().setPublicObjective(publicObjectives);
             actionReceiver.getCommChannels().forEach(cc -> cc.updateView(actionReceiver.getTable()));
-            actionReceiver.sendAll(actionReceiver.getTable().getPublicObjectives().toString());
-            actionReceiver.sendAll(Message.DEALT_PUB_OBJ.name());
-            Game.getLogger().log(Level.FINE, publicObjectives.toString(), actionReceiver);
+            actionReceiver.sendAll(actionReceiver.getTable().getPublicObjectives().stream().map(Object::toString).toString());
         };
     }
 
@@ -370,9 +366,11 @@ public class DefaultRules implements Rules {
                     .filter(c -> c.isAllowed(die.getNumber()) || !numberRestriction)
                     .collect(Collectors.toList());
 
-            if(forced && cells.isEmpty())
+            if(forced && cells.isEmpty()) {
                 actionReceiver.getTable().getPool().addDie(die);
-            else {
+                actionReceiver.sendAll(Message.FORCED_IN_POOL.toString());
+                actionReceiver.sendAll(die + " ");
+            }else {
                 //act on answer
                 Identifiable positionChosen = cc.selectObject(new ArrayList<>(cells), StdId.GLASS_WINDOW, false, !forced);
                 if (positionChosen.getId().equals(StdId.UNDO.getId())) {

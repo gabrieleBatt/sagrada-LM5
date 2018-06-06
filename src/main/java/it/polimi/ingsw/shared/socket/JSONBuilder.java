@@ -67,6 +67,10 @@ public final class JSONBuilder{
         return this;
     }
 
+    /**
+     * Prints the message built in out
+     * @param out output to print on
+     */
     public void send(PrintWriter out){
         out.println(this.get().toString());
         logger.log(Level.FINE, "SentJson", this.get());

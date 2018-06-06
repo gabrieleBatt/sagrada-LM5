@@ -27,7 +27,6 @@ public class PublicObjectiveDeck extends Deck {
 
     private static final Logger logger = LogMaker.getLogger(PublicObjectiveDeck.class.getName(), Level.ALL);
     private static final String TYPE = "type";
-    private static final String NAME = "name";
     private static final String AREA = "area";
     private static final String MULTIPLICITY = "multiplicity";
     private static final String OBJECTIVE = "obj";

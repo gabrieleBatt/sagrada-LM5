@@ -28,6 +28,8 @@ public class GlassWindowDeck extends Deck {
 
     private static final Logger logger = LogMaker.getLogger(GlassWindowDeck.class.getName(), Level.ALL);
     private static final String EMPTY_CELL = "";
+    private static final String DIFFICULTY = "difficulty";
+    private static final String CELLS = "cells";
     private static GlassWindowDeck glassWindowDeck = new GlassWindowDeck(Paths.get("resources/serverResources/glassWindows"));
 
     private GlassWindowDeck(Path path){
@@ -74,11 +76,11 @@ public class GlassWindowDeck extends Deck {
     }
 
     private GlassWindow readCard(JSONObject jsonGlassWindow, int x) {
-        String name = (String) jsonGlassWindow.get("name"+x);
-        int difficulty = Math.toIntExact((long)jsonGlassWindow.get("difficulty"+x));
+        String name = (String) jsonGlassWindow.get(NAME+x);
+        int difficulty = Math.toIntExact((long)jsonGlassWindow.get(DIFFICULTY+x));
         List<Cell> cells = new ArrayList<>();
 
-        Iterator<String> iterator = ((JSONArray)jsonGlassWindow.get("cells"+x)).iterator();
+        Iterator<String> iterator = ((JSONArray)jsonGlassWindow.get(CELLS+x)).iterator();
 
         for (int i = 0; i < GlassWindow.ROWS; i++) {
             for (int j = 0; j < GlassWindow.COLUMNS; j++) {

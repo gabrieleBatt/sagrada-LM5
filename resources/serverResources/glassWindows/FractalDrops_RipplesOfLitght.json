@@ -1,7 +1,7 @@
 {
 	"difficulty1":3,
 	"cells1":["","4","","YELLOW","6","RED","","2","","","","","RED","MAGENTA","1","CYAN","YELLOW","","",""],
-	"name1":"fractalDrop",
+	"name1":"fractalDrops",
 	"difficulty2":5,
 	"cells2":["","","","RED","5","","","MAGENTA","4","CYAN","","CYAN","3","YELLOW","6","YELLOW","2","GREEN","1","RED"],
 	"name2":"ripplesOfLight"

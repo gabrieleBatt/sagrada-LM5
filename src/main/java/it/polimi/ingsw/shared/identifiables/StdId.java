@@ -26,6 +26,11 @@ public enum  StdId implements Identifiable {
         return id;
     }
 
+    /**
+     * Gets the standard identifiable from its id
+     * @param id the id of the standard identifiable to get
+     * @return the standard identifiable with the specified id as id
+     */
     public static StdId getStdId(String id){
         Optional<StdId> optionalIdentifiable = Arrays
                 .stream(StdId.values())

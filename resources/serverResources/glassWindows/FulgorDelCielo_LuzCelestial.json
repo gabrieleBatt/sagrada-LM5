@@ -1,7 +1,7 @@
 {
 	"difficulty1":5,
 	"cells1":["","CYAN","RED","","","","4","5","","CYAN","CYAN","2","","RED","5","6","RED","3","1",""],
-	"name1":"flugorDelCielo",
+	"name1":"fulgorDelCielo",
 	"difficulty2":3,
 	"cells2":["","","RED","5","","MAGENTA","4","","GREEN","3","6","","","CYAN","","","YELLOW","2","",""],
 	"name2":"luzCelestial"

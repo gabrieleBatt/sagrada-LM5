@@ -20,8 +20,9 @@ abstract class Deck {
 
     private static final Logger logger = LogMaker.getLogger(Deck.class.getName(), Level.ALL);
     private List<Path> paths;
+    static final String NAME = "name";
 
-    protected Deck(Path path){
+    Deck(Path path){
         paths = new ArrayList<>();
         try (Stream<Path> files = Files.list(path)){
             files.forEach(f -> paths.add(f));
@@ -31,7 +32,7 @@ abstract class Deck {
 
     }
 
-    protected List<Path> getPaths() {
+    List<Path> getPaths() {
         return paths;
     }
 

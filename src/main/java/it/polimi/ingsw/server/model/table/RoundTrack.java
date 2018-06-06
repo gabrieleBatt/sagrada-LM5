@@ -99,13 +99,6 @@ public class RoundTrack implements Memento {
     }
 
     /**
-     * Prints the override toString of an object RoundTrack
-     */
-    public void dump(){
-        System.console().writer().println(this);
-    }
-
-    /**
      * Adds the current round track state at the stack.
      */
     @Override

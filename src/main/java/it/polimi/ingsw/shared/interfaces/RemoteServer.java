@@ -11,7 +11,7 @@ public interface RemoteServer extends Remote {
      * @param nickname the player nickname
      * @param password the player password
      * @return the coupled remote channel
-     * @throws RemoteException
+     * @throws RemoteException if export fails
      */
     RemoteChannel rmiLogin(RemoteGameScreen gameScreen, String nickname, String password) throws RemoteException;
 

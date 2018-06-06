@@ -17,6 +17,7 @@ public abstract class GameScreen implements RemoteGameScreen {
     protected static final String TOOL_PATH;
     protected static final String GLASS_WINDOW_PATH = "clientResources/glassWindows/";
     protected static final String OBJECTIVE_PATH;
+    protected static int MAX_LEN_RECORD;
 
     static {
         String language = "ita";
@@ -24,6 +25,7 @@ public abstract class GameScreen implements RemoteGameScreen {
             InputStreamReader in = new InputStreamReader(Message.class.getClassLoader().getResourceAsStream("clientResources/config.json"));
             JSONObject config = (JSONObject) new JSONParser().parse(in);
             language = ((String) config.get("language")).toLowerCase();
+            MAX_LEN_RECORD = Math.toIntExact((long)config.get("recordLength"));
             in.close();
         } catch (IOException | ParseException e) {
             Client.getLogger().log(Level.WARNING, "Config directory not found");
@@ -33,6 +35,5 @@ public abstract class GameScreen implements RemoteGameScreen {
     }
 
     protected GameScreen(){
-
     }
 }

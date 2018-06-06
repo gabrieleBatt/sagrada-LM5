@@ -1,5 +1,5 @@
-{"pool":[],"header":"update"}
-{"header":"updatePlayer","connection":"true","player":"test","token":"0"}
-{"header":"updatePlayer","connection":"true","player":"test1","token":"0"}
-{"header":"update","roundTrack":[]}
-{"header":"update","player":["test","test1"]}
+{"POOL":[],"HEADER":"UPDATE"}
+{"PLAYER":"test","CONNECTION":"true","HEADER":"UPDATE_PLAYER","TOKEN":"0"}
+{"PLAYER":"test1","CONNECTION":"true","HEADER":"UPDATE_PLAYER","TOKEN":"0"}
+{"ROUND_TRACK":[],"HEADER":"UPDATE"}
+{"PLAYER":["test","test1"],"HEADER":"UPDATE"}
