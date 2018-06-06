@@ -1,7 +1,7 @@
 {
   "name": "copperFoilBurnisher",
   "conditions": [],
-  "toolColor": "R",
+  "toolColor": "RED",
   "actions":1,
   "action1": {
     "type": "move",

@@ -1,4 +1,5 @@
 {
   "name": "Pennello per Pasta Salda",
+  "toolColor": "MAGENTA",
   "description": "Dopo aver scelto un dado, tira nuovamente quel dado"
 }

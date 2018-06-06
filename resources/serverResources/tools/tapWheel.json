@@ -1,7 +1,7 @@
 {
   "name": "tapWheel",
   "conditions":[],
-  "toolColor": "R",
+  "toolColor": "RED",
   "actions":3,
   "action1": {
     "type": "select",

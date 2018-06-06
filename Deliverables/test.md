@@ -1,10 +1,4 @@
 ### Test
-- client
-    - view
-        - cli
-            - CliGameScreenTest
-                - Testing end game cli view :heavy_check_mark:
-                - Set and show test :heavy_check_mark: 
 - server
     - model
         - objective
@@ -14,34 +8,9 @@
                 - Illegal creation of objective :heavy_check_mark:   
             - ColorPrivateObjectiveTest
                 - Scoring cyan private objective :heavy_check_mark:
-            - PrivateObjectiveDeckTest 
-                - Draw 4 PrivateObjective :heavy_check_mark:
-                - Draw too many PrivateObjective :heavy_check_mark:
-            - PublicObjectiveDeckTest 
-                - Draw 4 PublicObjective :heavy_check_mark:
-                - Draw too many PublicObjective :heavy_check_mark:
-                - Area parsing control :heavy_check_mark:
-                - Set parsing control :heavy_check_mark:
             - SetPublicObjectiveTest
                 - Scoring set of 3 and 5 :heavy_check_mark:
                 - Scoring color set objective :heavy_check_mark:
-        - rules
-            - DefaultRulesTest 
-                    - Give window and token test :heavy_check_mark:
-                    - Give private objective :heavy_check_mark:
-                    - Give public objectives :heavy_check_mark:
-                    - Testing round actions :heavy_check_mark:
-                    - Testing end game action :heavy_check_mark:
-            - TurnActionCommandTest
-                    - Testing Turn :heavy_check_mark:
-            - ToolRules
-                    - Test set :heavy_check_mark:
-                    - Test random :heavy_check_mark:
-                    - Test select :heavy_check_mark:
-                    - Test move :heavy_check_mark:
-                    - Testing swap from DiceBag :heavy_check_mark:
-                    - Testing swap from Pool :heavy_check_mark:
-                    - Testing swap from RoundTrack :heavy_check_mark:
         - table
             - dice
                 - DiceBagTest 
@@ -53,16 +22,12 @@
                     - Set die numeric value :heavy_check_mark:
                     - Get die id :heavy_check_mark:
                     - Confront dice :heavy_check_mark:
-            -glassWindow
+            - glassWindow
                 - CellTest 
                     - Place die in cell, various restrictions :heavy_check_mark:
                     - Check empty and full cell :heavy_check_mark:
                     - Place and get die :heavy_check_mark:
                     - Check allowed dice considering several restrictions :heavy_check_mark:
-                - GlassWindowDeckTest
-                    - Draw 4 glassWindows :heavy_check_mark:
-                    - Draw too many glassWindows :heavy_check_mark:
-                    - Parsing control :heavy_check_mark:
                 - GlassWindowTest
                     - Find cell by die inside :heavy_check_mark:
                     - Get row in which a die is :heavy_check_mark:
@@ -94,15 +59,44 @@
                 - Get tool name :heavy_check_mark:
                 - Get tool action :heavy_check_mark:
                 - Use tool :heavy_check_mark:
+    - controller
+        - rules
+            - DefaultRulesTest 
+                    - Give window and token test :heavy_check_mark:
+                    - Give private objective :heavy_check_mark:
+                    - Give public objectives :heavy_check_mark:
+                    - Testing round actions :heavy_check_mark:
+                    - Testing end game action :heavy_check_mark:
+            - TurnActionCommandTest
+                    - Testing Turn :heavy_check_mark:
+            - ToolRules
+                    - Test set :heavy_check_mark:
+                    - Test random :heavy_check_mark:
+                    - Test select :heavy_check_mark:
+                    - Test move :heavy_check_mark:
+                    - Testing swap from DiceBag :heavy_check_mark:
+                    - Testing swap from Pool :heavy_check_mark:
+                    - Testing swap from RoundTrack :heavy_check_mark:
+        - deck 
+            - PrivateObjectiveDeckTest 
+                - Draw 4 PrivateObjective :heavy_check_mark:
+                - Draw too many PrivateObjective :heavy_check_mark:
+            - PublicObjectiveDeckTest 
+                - Draw 4 PublicObjective :heavy_check_mark:
+                - Draw too many PublicObjective :heavy_check_mark:
+                - Area parsing control :heavy_check_mark:
+                - Set parsing control :heavy_check_mark:
+            - GlassWindowDeckTest
+                - Draw 4 glassWindows :heavy_check_mark:
+                - Draw too many glassWindows :heavy_check_mark:
+                - Parsing control :heavy_check_mark:
             - ToolDeckTest
                 - Draw tool card :heavy_check_mark:
-    
-    - controller
+                                        
         - UserDatabaseTest
             - New user and authentication :heavy_check_mark:
         - LobbyTest
             - Add commChannel to lobby and make game start :heavy_check_mark:
-        - commChannel
-            - socket
-                - SocketCommunicationChannelTest
-                    - Update test :heavy_check_mark:
+        - channel
+            - SocketCommunicationChannelTest
+                - Update test :heavy_check_mark:

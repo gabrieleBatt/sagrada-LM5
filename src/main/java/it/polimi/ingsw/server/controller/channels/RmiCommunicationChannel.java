@@ -76,7 +76,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
     @Override
     public void updateView(RoundTrack roundTrack) {
         List<List<String>> completeRoundTrack = new ArrayList<>();
-        for(int i= 1;  i<roundTrack.getRound()-1; i++){
+        for(int i= 1;  i<roundTrack.getRound(); i++){
             completeRoundTrack.add(roundTrack.getDice(i).stream().map(Identifiable::getId).collect(Collectors.toList()));
         }
         try{

@@ -1,7 +1,7 @@
 {
   "name": "eglomiseBrush",
   "conditions":[],
-  "toolColor": "C",
+  "toolColor": "CYAN",
   "actions":1,
   "action1": {
     "type": "move",

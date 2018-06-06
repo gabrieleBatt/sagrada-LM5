@@ -314,13 +314,14 @@ public class ToolActions {
                 Cell cellChosen = getCellChosen(cellOptions, cellDieChosen);
                 Die die = cellChosen.getDie();
                 cellChosen.removeDie();
-                List<Cell> cellList = (List<Cell>)player.getGlassWindow().availableCells(die,ignoreSurroundingRestriction);
+                List<Cell> cellList = (List<Cell>)player.getGlassWindow().availableCells(die, ignoreSurroundingRestriction);
                 cellList.remove(cellChosen);
 
                 cellList = cellList.stream()
                         .filter(c -> c.isAllowed(die.getColor()) || ignoreColorRestriction)
                         .filter(c -> c.isAllowed(die.getNumber()) || ignoreNumberRestriction)
                         .collect(Collectors.toList());
+
 
                 Identifiable cellChosenId = cc.selectObject(new ArrayList<>(cellList), StdId.GLASS_WINDOW, false, true);
                 if(cellChosenId.getId().equals(StdId.UNDO.getId())) {
@@ -329,6 +330,7 @@ public class ToolActions {
                     Cell cell = getCellChosen(cellList, cellChosenId);
                     cell.placeDie(die, true);
 
+                    actionReceiver.getCommChannels().forEach(c -> c.updateView(player, !cc.isOffline()));
                     actionReceiver.sendAll(cell.getId());
                     actionReceiver.sendAll(Message.MOVED.name());
                     actionReceiver.sendAll(die.getId().substring(0, 2));

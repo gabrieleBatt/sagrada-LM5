@@ -1,4 +1,5 @@
 {
   "name": "Alesatore per lamina di rame",
+  "toolColor": "RED",
   "description": "Muovi un qualsiasi dado nella tua vetrata ignorando le restrizioni di valore"
 }

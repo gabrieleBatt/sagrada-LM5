@@ -1,7 +1,7 @@
 {
   "name": "grozingPliers",
   "conditions":["CANCEL_DRAFTING"],
-  "toolColor": "M",
+  "toolColor": "MAGENTA",
   "actions":3,
   "action1": {
     "type": "draft",

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.controller.deck;
+package it.polimi.ingsw.server.model.objective;
 
 import it.polimi.ingsw.server.exception.DieNotAllowedException;
 import it.polimi.ingsw.server.model.objective.ColorPrivateObjective;

@@ -1,4 +1,5 @@
 {
   "name": "Lathekin",
+  "toolColor": "YELLOW",
   "description": "Muovi esattamente due dadi, rispettando tutte le restrizioni di piazzamento"
 }

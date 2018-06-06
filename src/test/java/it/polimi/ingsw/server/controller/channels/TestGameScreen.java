@@ -11,12 +11,12 @@ import java.util.List;
 public class TestGameScreen implements RemoteGameScreen {
     @Override
     public void addMessage(String message) {
-        throw new UnsupportedOperationException();
+        return;
     }
 
     @Override
     public void setPlayers(List<String> nicknames) {
-        throw new UnsupportedOperationException();
+        return;
     }
 
     @Override
@@ -35,43 +35,43 @@ public class TestGameScreen implements RemoteGameScreen {
     }
     @Override
     public void setToolUsed(String tool, boolean used) {
-        throw new UnsupportedOperationException();
+        return;
     }
 
     @Override
     public void setPlayerToken(String nickname, int tokens) {
-        throw new UnsupportedOperationException();
+        return;
     }
 
     @Override
     public void setPlayerConnection(String nickname, boolean isConnected) {
-        throw new UnsupportedOperationException();
+        return;
     }
 
 
     @Override
     public void setPlayerWindow(String nickname, String windowName) {
-        throw new UnsupportedOperationException();
+        return;
     }
 
     @Override
     public void setCellContent(String nickname, int x, int y, String Die) {
-        throw new UnsupportedOperationException();
+        return;
     }
 
     @Override
     public void setPool(Collection<String> dice) {
-        throw new UnsupportedOperationException();
+        return;
     }
 
     @Override
     public void setRoundTrack(List<List<String>> dice) {
-        throw new UnsupportedOperationException();
+        return;
     }
 
     @Override
     public String getWindow(Collection<String> o) {
-        throw new UnsupportedOperationException();
+        return "test";
     }
 
     @Override
@@ -86,6 +86,6 @@ public class TestGameScreen implements RemoteGameScreen {
 
     @Override
     public void showAll() {
-        throw new UnsupportedOperationException();
+        return;
     }
 }

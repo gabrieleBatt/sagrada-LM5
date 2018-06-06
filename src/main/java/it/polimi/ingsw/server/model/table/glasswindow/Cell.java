@@ -103,7 +103,7 @@ public class Cell implements Identifiable {
      * @return: true if the value can be placed in the cell
      */
     public boolean isAllowed(Integer number){
-        return !(numberRestriction.isPresent() && number != numberRestriction.get());
+        return !(numberRestriction.isPresent() && !number.equals(numberRestriction.get()));
     }
 
     /**
@@ -112,7 +112,7 @@ public class Cell implements Identifiable {
      * @return: true if the value can be placed in the cell
      */
     public boolean isAllowed(DieColor color){
-        return !(colorRestriction.isPresent() && color != colorRestriction.get());
+        return !(colorRestriction.isPresent() && !color.equals(colorRestriction.get()));
     }
 
     /**

@@ -45,10 +45,10 @@ public class ToolDeck extends Deck {
     private static final String ACTION = "action";
     private static final String SKIP_TURN = "skipNextTurn";
     private static final String NAME = "name";
-    private static final String NUMBER = "number";
+    private static final String NUMBER = "NUMBER";
     private static final String TYPE = "type";
-    private static final String COLOR = "color";
-    private static final String CLOSE = "close";
+    private static final String COLOR = "COLOR";
+    private static final String CLOSE = "CLOSE";
     private static final String CONDITIONS = "conditions";
     private static final String RESTRICTION = "restriction";
     private static final String FORCED = "forced";
@@ -191,9 +191,9 @@ public class ToolDeck extends Deck {
         List<String> restrictions = new ArrayList<>((JSONArray)jsonObject.get(RESTRICTION));
         return DefaultRules.getDefaultRules().getPlaceAction(
                         getMarker(jsonObject),
-                        !restrictions.contains(CLOSE),
-                        !restrictions.contains(COLOR),
-                        !restrictions.contains(NUMBER),
+                        restrictions.contains(CLOSE),
+                        restrictions.contains(COLOR),
+                        restrictions.contains(NUMBER),
                         jsonObject.containsKey(FORCED) && (Boolean)jsonObject.get(FORCED)
 
                 );
@@ -241,9 +241,9 @@ public class ToolDeck extends Deck {
                 .moveActionCommand(
                         getColor(jsonObject),
                         getNumber(jsonObject),
-                        restrictions.contains(COLOR),
-                        restrictions.contains(NUMBER),
-                        restrictions.contains(CLOSE),
+                        !restrictions.contains(COLOR),
+                        !restrictions.contains(NUMBER),
+                        !restrictions.contains(CLOSE),
                         jsonObject.containsKey(CAN_SKIP) && (Boolean)jsonObject.get(CAN_SKIP)
 
                 );

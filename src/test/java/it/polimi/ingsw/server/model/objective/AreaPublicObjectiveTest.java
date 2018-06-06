@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-class TargetPublicObjectiveTest {
+class AreaPublicObjectiveTest {
 
     @DisplayName("Scoring column color objective")
     @Test

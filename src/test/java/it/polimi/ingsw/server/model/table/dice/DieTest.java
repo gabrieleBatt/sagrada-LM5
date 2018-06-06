@@ -12,7 +12,7 @@ class DieTest {
     void setNumber() {
         Die die = new Die(DieColor.CYAN,9);
         for (int i=1; i<=6; i++){
-        Assertions.assertTrue(die.setNumber(i).getNumber() == i);
+            Assertions.assertEquals(die.setNumber(i).getNumber(), i);
         }
         Assertions.assertThrows(IllegalArgumentException.class, () -> die.setNumber(0));
     }

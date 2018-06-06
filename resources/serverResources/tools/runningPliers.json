@@ -2,7 +2,7 @@
   "name": "runningPliers",
   "conditions":["FIRST_TURN"],
   "skipTurn" : true,
-  "toolColor": "R",
+  "toolColor": "RED",
   "actions":3,
   "action1": {
     "type": "draft",

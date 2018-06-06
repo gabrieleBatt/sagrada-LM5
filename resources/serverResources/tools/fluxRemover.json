@@ -2,7 +2,7 @@
   "name": "fluxRemover",
   "conditions":["CANCEL_DRAFTING"],
   "actions":4,
-  "toolColor": "M",
+  "toolColor": "MAGENTA",
   "action1": {
     "type": "draft",
     "marker": "d1"
