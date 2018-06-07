@@ -23,7 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Main server class, handles new connection and re-connections
+ * GuiConnectionScreen server class, handles new connection and re-connections
  */
 public class Server extends UnicastRemoteObject implements RemoteServer {
 
@@ -87,7 +87,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
     }
 
     /**
-     * Main server
+     * GuiConnectionScreen server
      */
     public static void main(String[] args) {
         //Rmi connection
@@ -206,7 +206,7 @@ public class Server extends UnicastRemoteObject implements RemoteServer {
         }
     }
 
-    public synchronized static void endGame(Game game){
+    synchronized static void endGame(Game game){
         games.remove(game);
     }
 }

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class CliGameScreen extends GameScreen{
 
-    private static final String COLOR_ESC = (char)27+ "[34m";
+    private static final String CHOICE_ESC = (char)27+ "[34m";
     private static final String WHITE_ESC = (char)27+ "[37m";
     private static final int CELL_NUM = 20;
     private static final int CLEAR_SPACE = 15;
@@ -168,7 +168,7 @@ public class CliGameScreen extends GameScreen{
     @Override
     public String getWindow(Collection<String> o) {
         List<String> convertedNames = o.stream().map(Message::convertName).collect(Collectors.toList());
-        printStream.println(Message.CHOOSE_WINDOW+": "+ COLOR_ESC + convertedNames.toString() +  WHITE_ESC);
+        printStream.println(Message.CHOOSE_WINDOW+": "+ CHOICE_ESC + convertedNames.toString() +  WHITE_ESC);
         printStream.flush();
         o.stream().map(this::makeWindow).forEach(w -> printStream.print(w.windowName+":"+w.difficulty + "\t"));
         printStream.println();
@@ -311,7 +311,7 @@ public class CliGameScreen extends GameScreen{
                 .stream()
                 .map(Message::convertMessage)
                 .collect(Collectors.toList());
-        printStream.println(convertMessage +  COLOR_ESC+" " + convertStrings + WHITE_ESC);
+        printStream.println(convertMessage +  CHOICE_ESC+" " + convertStrings + WHITE_ESC);
         printStream.flush();
         choice = scanner.nextLine();
         while(!convertStrings.contains(choice)) {
@@ -376,12 +376,12 @@ public class CliGameScreen extends GameScreen{
 
     private void printActive(boolean active, String s){
         if(active)
-            printStream.print( COLOR_ESC+"{");
+            printStream.print( CHOICE_ESC+"{");
         else
             printStream.print(" ");
         printStream.print(s);
         if(active)
-            printStream.print( COLOR_ESC+"} " + WHITE_ESC);
+            printStream.print( CHOICE_ESC+"} " + WHITE_ESC);
         else
             printStream.print("  ");
     }
@@ -474,7 +474,6 @@ public class CliGameScreen extends GameScreen{
             for (Die die: dieList) {
                 printActive(die.active, die.id);
             }
-
         }
         printStream.print("\n");
     }

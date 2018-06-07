@@ -51,7 +51,6 @@ public enum Message {
     RECEIVED_GLASS_WINDOW(),
     NEW_POOL(),
     END_ROUND(),
-    END_TURN(),
     START_TURN(),
     RANDOM_NUMBER(),
     SELECT_DIE(),

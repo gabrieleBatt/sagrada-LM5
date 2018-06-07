@@ -25,7 +25,7 @@ public enum SocketProtocol {
      * @return the message name
      */
     public String get() {
-        return this.name();
+        return name();
     }
 }
 

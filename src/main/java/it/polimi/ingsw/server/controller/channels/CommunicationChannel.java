@@ -48,7 +48,6 @@ public abstract class CommunicationChannel{
     }
 
     public CommunicationChannel(String nickname){
-        System.out.println(nickname);
         this.nickname = nickname;
     }
 

@@ -4,7 +4,7 @@ import it.polimi.ingsw.client.view.cli.CliConnectionScreen;
 import it.polimi.ingsw.client.view.cli.CliEndScreen;
 import it.polimi.ingsw.client.view.cli.CliGameScreen;
 
-public class CliViewFactory implements ViewAbstractFactory {
+public class CliView implements ViewAbstractFactory {
 
     @Override
     public CliGameScreen makeGameScreen() {

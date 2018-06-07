@@ -92,7 +92,7 @@ public class GlassWindowDeck extends Deck {
                         cell = new Cell(id);
                     else if(Arrays.stream(DieColor.values())
                             .map(DieColor::name).collect(Collectors.toList()).contains(restriction))
-                        cell = new Cell(id, DieColor.RED);
+                        cell = new Cell(id, DieColor.valueOf(restriction));
                     else
                         cell = new Cell(id, Integer.parseInt(restriction));
                     cells.add(cell);

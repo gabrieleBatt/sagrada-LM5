@@ -1,5 +1,5 @@
 {
-  "name": "cork-BakedStraightedge",
+  "name": "corkBakedStraightedge",
   "conditions":["CANCEL_DRAFTING"],
   "toolColor": "YELLOW",
   "actions":2,

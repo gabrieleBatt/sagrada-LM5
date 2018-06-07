@@ -16,7 +16,7 @@ class ToolDeckTest {
         List<Tool> toolList = ToolDeck.getToolDeck().draw(12);
         Tool tool1 = toolList.stream().filter(t -> t.getName().equals("copperFoilBurnisher")).findFirst().get();
         Assertions.assertEquals(1,tool1.getActionCommandList().size());
-        Tool tool2 = toolList.stream().filter(t -> t.getName().equals("cork-BakedStraightedge")).findFirst().get();
+        Tool tool2 = toolList.stream().filter(t -> t.getName().equals("corkBakedStraightedge")).findFirst().get();
         Assertions.assertEquals(2,tool2.getActionCommandList().size());
         Tool tool3 = toolList.stream().filter(t -> t.getName().equals("eglomiseBrush")).findFirst().get();
         Assertions.assertEquals(1,tool3.getActionCommandList().size());

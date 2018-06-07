@@ -96,8 +96,6 @@ public class TurnActionCommand implements ActionCommand{
             }
         }while(reset);
         timer.cancel();
-        actionReceiver.sendAll(player.getNickname());
-        actionReceiver.sendAll(Message.END_TURN.name());
     }
 
     private void startTimer(Timer timer) {
