@@ -1,0 +1,5 @@
+{
+  "name": "Flux Brush",
+  "toolColor": "MAGENTA",
+  "description": "After drafting, re-roll the drafted die. If it cannot be placed, return it to the Draft Pool."
+}

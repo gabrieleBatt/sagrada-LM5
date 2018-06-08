@@ -1,0 +1,5 @@
+{
+  "name":"Color Diagonals",
+  "description": "Count of diagonally adjacent same color dice.",
+  "points": "#"
+}
