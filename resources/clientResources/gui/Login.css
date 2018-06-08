@@ -1,0 +1,42 @@
+.root{
+     -fx-background-image: url("/clientResources/gui/pic.jpg");
+    -fx-background-repeat: stretch;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+    -fx-background-color: transparent grey;
+}
+#welcome-text {
+   -fx-font-size: 32px;
+    -fx-font-family: "Arial Black";
+    -fx-border-image-width: inherit;
+    -fx-border-width: 2 px;
+    -fx-border-color: gainsboro;
+    -fx-border-radius: 2 px;
+    -fx-underline: true;
+}
+#actiontarget {
+  -fx-font-weight: bold;
+  -fx-font-size: 15px;
+  -fx-fill: #000000;
+  -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+  -fx-background-color: linear-gradient(#a9a9a9, #dcdcdc);
+
+
+}
+
+.button {
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-color: linear-gradient(#808080, #000000);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+.button:hover {
+    -fx-background-color: linear-gradient(#a9a9a9, #dcdcdc);
+}
+
+.button.color-picker{
+    -fx-background-color: linear-gradient(#a9a9a9, #dcdcdc);
+}
+
