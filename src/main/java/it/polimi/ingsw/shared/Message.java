@@ -58,7 +58,12 @@ public enum Message {
     MOVED(),
     BEEN_SET(),
     SET_DIE(),
-    FORCED_IN_POOL();
+    FORCED_IN_POOL(),
+    INCOMPLETE_FIELDS(),
+    WAITING_OTHER_PLAYERS(),
+    WELCOME(),
+    START_GAME(),
+    PLAY();
 
     private String value;
 
