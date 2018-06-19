@@ -44,13 +44,11 @@ public class Client extends Application {
     }
 
     public static void main(String[] args) {
-        //launch();
-        //true in or to force GuiView launch.
         if(args.length == 1 &&
                 (args[0].equalsIgnoreCase("-gui") ||
-                        args[0].equalsIgnoreCase("-g"))||true){
+                        args[0].equalsIgnoreCase("-g"))){
             view = new GuiView();
-            new Thread(() -> launch()).start();
+            new Thread(Application::launch).start();
         }else{
             view = new CliView();
         }

@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.view.cli;
 import it.polimi.ingsw.shared.Message;
 import it.polimi.ingsw.client.view.factory.GameScreen;
 import it.polimi.ingsw.shared.identifiables.StdId;
-import jdk.nashorn.internal.objects.NativeUint16Array;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

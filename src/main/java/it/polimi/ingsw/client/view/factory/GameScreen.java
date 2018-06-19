@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,7 +23,7 @@ public abstract class GameScreen implements RemoteGameScreen {
     static {
         String language = "ita";
         try {
-            InputStreamReader in = new InputStreamReader(Message.class.getClassLoader().getResourceAsStream("clientResources/config.json"));
+            InputStreamReader in = new InputStreamReader(new FileInputStream("resources/clientResources/config.json"));
             JSONObject config = (JSONObject) new JSONParser().parse(in);
             language = ((String) config.get("language")).toLowerCase();
             MAX_LEN_RECORD = Math.toIntExact((long)config.get("recordLength"));

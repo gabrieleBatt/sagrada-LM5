@@ -30,7 +30,6 @@ public class CliConnectionScreen extends ConnectionScreen {
 
     @Override
     public LoginInfo getConnectionInfo () {
-
         if(loginInfo.isPresent()){
             return loginInfo.get();
         }else {

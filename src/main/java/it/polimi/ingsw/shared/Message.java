@@ -5,8 +5,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -72,13 +72,15 @@ public enum Message {
      */
     Message() {
         try {
-            JSONObject config = (JSONObject) new JSONParser().parse(new InputStreamReader(Message.class.getClassLoader().getResourceAsStream("clientResources/config.json")));
+            JSONObject config = (JSONObject) new JSONParser().parse(new InputStreamReader(new FileInputStream("resources/clientResources/config.json")));
             String language = ((String) config.get("language")).toLowerCase();
-            JSONObject translator = (JSONObject) new JSONParser().parse(new InputStreamReader(Message.class.getClassLoader().getResourceAsStream("clientResources/lang/"+language+"/"+language+".json")));
+            JSONObject translator = (JSONObject) new JSONParser().parse(new InputStreamReader(new FileInputStream("resources/clientResources/lang/"+language+"/"+language+".json")));
             Optional.ofNullable((String)translator.get(this.name())).ifPresent(s -> this.value = s);
-        } catch (IOException | ParseException e) {
+        } catch (ParseException e) {
             Client.getLogger().log(Level.WARNING, "Config file not found", e);
             this.value = null;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
