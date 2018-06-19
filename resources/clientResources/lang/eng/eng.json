@@ -47,5 +47,6 @@
   "MOVED":"Moved",
   "BEEN_SET":"Dice number chosen",
   "SET_DIE": "Choose the dice number",
+  "TIMER": "seconds left",
   "FORCED_IN_POOL": "has been placed back in the pool"
 }

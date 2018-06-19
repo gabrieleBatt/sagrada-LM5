@@ -94,7 +94,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      * Sends a message to visualize
      */
     @Override
-    public void sendMessage(String message) {
+    public synchronized void sendMessage(String message) {
         new JSONBuilder()
                 .build(SocketProtocol.SEND)
                 .build(SocketProtocol.MESSAGE, message)
@@ -105,7 +105,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      * Updates any change in the pool.
      */
     @Override
-    public void updateView(Pool pool) {
+    public synchronized void updateView(Pool pool) {
         List<String> param = new ArrayList<>();
         for (Die die : pool.getDice()) {
             param.add(die.getId());
@@ -120,7 +120,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      * Updates any change in the roundTrack.
      */
     @Override
-    public void updateView(RoundTrack roundTrack) {
+    public synchronized void updateView(RoundTrack roundTrack) {
         List<String> param = new ArrayList<>();
         for (int i = 1; i < roundTrack.getRound(); i++) {
             for (Die die : roundTrack.getDice(i)) {
@@ -138,7 +138,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      * Updates any change in the public cards(objectives and tools) and the name of the players.
      */
     @Override
-    public void updateView(Table table) {
+    public synchronized void updateView(Table table) {
 
         JSONBuilder jsonBuilder = new JSONBuilder()
                 .build(SocketProtocol.UPDATE);
@@ -172,7 +172,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      * @param player player to update
      */
     @Override
-    public void updateView(Player player, boolean connected) {
+    public synchronized void updateView(Player player, boolean connected) {
         JSONBuilder jsonBuilder = new JSONBuilder()
                 .build(SocketProtocol.UPDATE_PLAYER)
                 .build(SocketProtocol.PLAYER, player.getNickname())
@@ -211,7 +211,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      * @param scores - list of players and their scores
      */
     @Override
-    public void endGame(List<Pair<Player, Integer>> scores) {
+    public synchronized void endGame(List<Pair<Player, Integer>> scores) {
         List<String> param = new ArrayList<>();
 
         scores.forEach(p -> param.add(p.getKey().getNickname()+":"+p.getValue()));
@@ -228,7 +228,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      * @return Object glassWindow, the one chosen.
      */
     @Override
-    public GlassWindow chooseWindow(List<GlassWindow> glassWindows) {
+    public synchronized GlassWindow chooseWindow(List<GlassWindow> glassWindows) {
         Timer timer = new Timer();
         startTimer(timer, this);
 
@@ -275,7 +275,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      * @return The option chosen.
      */
     @Override
-    public Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled) {
+    public synchronized Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled) {
         if(isOffline()) return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
         JSONBuilder jsonBuilder = new JSONBuilder()
                 .build(SocketProtocol.SELECT_OBJECT)
@@ -333,7 +333,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      * @return The option chosen.
      */
     @Override
-    public Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled) {
+    public synchronized Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled) {
         if(isOffline()) return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
         JSONBuilder jsonBuilder = new JSONBuilder()
                 .build(SocketProtocol.SELECT_FROM)
@@ -346,7 +346,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      * Used to set a channel as it went offline
      */
     @Override
-    public void setOffline() {
+    public synchronized void setOffline() {
         super.setOffline();
         logger.log(Level.WARNING, getNickname() + " diconnected");
         connected = false;

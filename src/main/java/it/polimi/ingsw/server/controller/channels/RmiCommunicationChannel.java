@@ -48,7 +48,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      * Sends a message to visualize
      */
     @Override
-    public void sendMessage(String message) {
+    public synchronized void sendMessage(String message) {
         try {
             gameScreen.addMessage(message);
             gameScreen.showAll();
@@ -61,7 +61,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      * Updates any change in the pool.
      */
     @Override
-    public void updateView(Pool pool) {
+    public synchronized void updateView(Pool pool) {
         try{
             gameScreen.setPool(pool.getDice().stream().map(Identifiable::getId).collect(Collectors.toList()));
             gameScreen.showAll();
@@ -74,7 +74,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      * Updates any change in the roundTrack.
      */
     @Override
-    public void updateView(RoundTrack roundTrack) {
+    public synchronized void updateView(RoundTrack roundTrack) {
         List<List<String>> completeRoundTrack = new ArrayList<>();
         for(int i= 1;  i<roundTrack.getRound(); i++){
             completeRoundTrack.add(roundTrack.getDice(i).stream().map(Identifiable::getId).collect(Collectors.toList()));
@@ -91,7 +91,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      * Updates any change in the public cards(objectives and tools) and the name of the players.
      */
     @Override
-    public void updateView(Table table) {
+    public synchronized void updateView(Table table) {
         try {
             gameScreen.setPublicObjective(table.getPublicObjectives().stream().map(Identifiable::getId).collect(Collectors.toList()));
             gameScreen.setTools(table.getTools().stream().map(Identifiable::getId).collect(Collectors.toList()));
@@ -111,7 +111,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      * @param player player to update
      */
     @Override
-    public void updateView(Player player, boolean connected) {
+    public synchronized void updateView(Player player, boolean connected) {
         try {
             gameScreen.setPlayerConnection(player.getNickname(), connected);
             if (player.getNickname().equals(this.getNickname())) {
@@ -139,7 +139,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      * @param scores - list of players and their scores
      */
     @Override
-    public void endGame(List<Pair<Player, Integer>> scores) {
+    public synchronized void endGame(List<Pair<Player, Integer>> scores) {
         this.scores = scores;
     }
 
@@ -161,7 +161,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      * @return Object glassWindow, the one chosen.
      */
     @Override
-    public GlassWindow chooseWindow(List<GlassWindow> glassWindows) {
+    public synchronized GlassWindow chooseWindow(List<GlassWindow> glassWindows) {
         try {
             Timer timer = new Timer();
             startTimer(timer, this);
@@ -187,7 +187,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      * @return The option chosen.
      */
     @Override
-    public Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled) {
+    public synchronized Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled) {
         return askClient(options, canSkip, undoEnabled, gameScreen::getInput, container.getId());
     }
 
@@ -197,7 +197,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      * @return The option chosen.
      */
     @Override
-    public Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled) {
+    public synchronized Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled) {
         return askClient(options, canSkip, undoEnabled, gameScreen::getInputFrom, message);
     }
 
@@ -246,7 +246,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      * Used to set a channel as it went offline
      */
     @Override
-    public void setOffline() {
+    public synchronized void setOffline() {
         try {
             UnicastRemoteObject.unexportObject(this, true);
             logger.log(Level.FINE, getNickname() + " is offline");

@@ -63,6 +63,7 @@ public enum Message {
     WAITING_OTHER_PLAYERS(),
     WELCOME(),
     START_GAME(),
+    TIMER(),
     PLAY();
 
     private String value;
