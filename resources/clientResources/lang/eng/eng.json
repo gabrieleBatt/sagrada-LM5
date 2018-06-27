@@ -1,5 +1,5 @@
 {
-  "START_GAME" : "Start playing!",
+  "START_GAME" : "Sagrada",
   "PLAY" : "Play",
   "WELCOME" : "Welcome in Sagrada!",
   "WAITING_OTHER_PLAYERS" : "Waiting your opponents...",
@@ -9,7 +9,7 @@
   "END_GAME_MESSAGE": "Press enter to continue",
   "RE_CONNECT": "Connect again",
   "MESSAGES": "Messages",
-  "CHOOSE_WINDOW":"Choose your glass window",
+  "CHOOSE_WINDOW":"Choose your glass window, pay attention at your private objective",
   "PRIVATE_OBJ":"Private objective",
   "PUBLIC_OBJ":"Public objective",
   "TOOL":"Tools",
