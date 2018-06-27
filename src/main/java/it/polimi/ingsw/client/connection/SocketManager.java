@@ -174,7 +174,7 @@ public class SocketManager implements ConnectionManager{
                 lists.add(new ArrayList<>());
                 strings.stream()
                         .filter(s -> Character.getNumericValue(s.charAt(1)) == x+1 )
-                        .forEach(s -> lists.get(x).add(s.substring(2)));
+                        .forEach(s -> lists.get(x).add(s.substring(3)));
             }
         }
         gameScreen.setRoundTrack(lists);

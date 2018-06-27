@@ -58,7 +58,7 @@ public abstract class CommunicationChannel{
      * @param canSkip if the action choice can be skipped
      * @param undoEnabled if its still possible to undo the turn
      * @param op list of options
-     * @return the identifiable ch osen
+     * @return the identifiable chosen
      */
     static Identifiable fakeResponse(boolean canSkip, boolean undoEnabled, List<Identifiable> op){
         if(canSkip)

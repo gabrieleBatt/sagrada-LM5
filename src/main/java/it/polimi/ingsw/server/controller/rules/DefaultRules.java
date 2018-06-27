@@ -119,6 +119,7 @@ public class DefaultRules implements Rules {
                 }
                 actionReceiver.getTable().getPlayer(communicationChannel.getNickname()).setGlassWindow(communicationChannel.chooseWindow(glassWindowsOptions));
             }
+
             for (Player player : actionReceiver.getTable().getPlayers()) {
                 actionReceiver
                         .getCommChannels()

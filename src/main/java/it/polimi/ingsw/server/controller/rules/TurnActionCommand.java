@@ -90,7 +90,6 @@ public class TurnActionCommand implements ActionCommand{
         do{
             reset = false;
             //choose second action
-            System.out.println(skip);
             if(!skip) {
                 options.remove(actionChosen);
                 actionChosen = cc.chooseFrom(options, Message.NEXT_MOVE.name(), true, true);

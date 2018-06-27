@@ -58,12 +58,14 @@ public class CliGameScreen extends GameScreen{
     }
 
     public void setPlayers(List<String> nicknames){
-        playersList = new ArrayList<>();
-        for(String s: nicknames){
-            PlayerClass newPlayer = new PlayerClass();
-            newPlayer.nickname = s;
-            newPlayer.glassWindow = new WindowClass();
-            playersList.add(newPlayer);
+        if (!playersList.stream().map(p -> p.nickname).collect(Collectors.toList()).equals(nicknames)) {
+            playersList = new ArrayList<>();
+            for (String s : nicknames) {
+                PlayerClass newPlayer = new PlayerClass();
+                newPlayer.nickname = s;
+                newPlayer.glassWindow = new WindowClass();
+                playersList.add(newPlayer);
+            }
         }
     }
 
@@ -154,6 +156,7 @@ public class CliGameScreen extends GameScreen{
 
     @Override
     public void setRoundTrack(List<List<String>> dice){
+        System.out.println(dice);
         roundTrack = new ArrayList<>();
         for (List<String> list : dice) {
             List<Die> ld = new ArrayList<>();
@@ -304,6 +307,7 @@ public class CliGameScreen extends GameScreen{
 
     @Override
     public String getInputFrom(Collection<String> strings, String message) {
+
         String choice;
         String convertMessage = Message.convertMessage(message);
         List<String> convertStrings = strings

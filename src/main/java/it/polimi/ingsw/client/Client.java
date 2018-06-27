@@ -68,7 +68,7 @@ public class Client extends Application {
                     }else{
                         break;
                     }
-                } catch (InterruptedException | NotBoundException | IOException | ParseException | NullPointerException e) {
+                } catch (InterruptedException | NotBoundException | IOException | ParseException e) {
                     logger.log(Level.WARNING, e.getMessage());
                 }
             }while ((!endGameInfo.isPresent() && connectionScreen.reConnect()));

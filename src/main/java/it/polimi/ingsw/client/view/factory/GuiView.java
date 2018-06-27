@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.factory;
 
+import it.polimi.ingsw.client.view.cli.CliEndScreen;
 import it.polimi.ingsw.client.view.cli.CliGameScreen;
 import it.polimi.ingsw.client.view.gui.GuiConnectionScreen;
 import it.polimi.ingsw.client.view.gui.GuiEndScreen;
@@ -10,7 +11,7 @@ public class GuiView implements ViewAbstractFactory {
 
     @Override
     public GameScreen makeGameScreen() {
-        return new CliGameScreen(System.in, System.out);
+        return new GuiGameScreen();
     }
 
     @Override
@@ -19,8 +20,7 @@ public class GuiView implements ViewAbstractFactory {
     }
 
     @Override
-    public EndScreen makeEndScreen() {
-        return new GuiEndScreen();
+    public EndScreen makeEndScreen() { return new CliEndScreen(System.in, System.out);
     }
 
 }

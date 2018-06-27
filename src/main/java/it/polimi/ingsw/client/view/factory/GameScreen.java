@@ -18,7 +18,7 @@ public abstract class GameScreen implements RemoteGameScreen {
     protected static final String TOOL_PATH;
     protected static final String GLASS_WINDOW_PATH = "clientResources/glassWindows/";
     protected static final String OBJECTIVE_PATH;
-    protected static int MAX_LEN_RECORD;
+    protected static int MAX_LEN_RECORD = 10;
 
     static {
         String language = "ita";

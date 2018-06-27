@@ -3,9 +3,7 @@ package it.polimi.ingsw.client.view.gui;
 import it.polimi.ingsw.client.view.LoginInfo;
 import it.polimi.ingsw.client.view.factory.ConnectionScreen;
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.view.factory.GuiView;
 import it.polimi.ingsw.shared.Message;
-import it.polimi.ingsw.shared.identifiables.StdId;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,17 +17,21 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.ThreadLocalRandom;
+
 
 
 public class GuiConnectionScreen extends ConnectionScreen {
 
     private LoginInfo loginInfo = null;
     private GridPane grid;
+    private String RMI = "RMI";
+    private String SOCKET = "SOCKET";
 
     /**
      * Sets the login scene, catches login info.
      */
+
     public void setScene(){
         while (!Client.getStage().isPresent()){
             try {
@@ -42,6 +44,9 @@ public class GuiConnectionScreen extends ConnectionScreen {
         Platform.runLater(() -> {
             Stage stage = Client.getStage().get();
             stage.setTitle(Message.START_GAME.toString());
+
+            Integer number = ThreadLocalRandom.current().nextInt(1, 10000);
+
 
             grid = new GridPane();
             grid.setAlignment(Pos.BOTTOM_CENTER);
@@ -56,8 +61,9 @@ public class GuiConnectionScreen extends ConnectionScreen {
             hbBtn.getChildren().add(btn);
             grid.add(hbBtn, 1, 12);
 
+
             ChoiceBox box = new ChoiceBox();
-            box.getItems().addAll("RMI", "SOCKET");
+            box.getItems().addAll(RMI, SOCKET);
             grid.add(box,1,4);
             final Text actiontarget = new Text();
 
@@ -67,9 +73,6 @@ public class GuiConnectionScreen extends ConnectionScreen {
             stage.setScene(scene);
             scene.getStylesheets().add
                     (GuiConnectionScreen.class.getResource("/clientResources/gui/Login.css").toExternalForm());
-
-
-            stage.show();
 
             List<TextField> textFieldArray = new ArrayList<>();
             Text scenetitle = new Text(Message.WELCOME.toString());
@@ -115,6 +118,9 @@ public class GuiConnectionScreen extends ConnectionScreen {
 
             btn.setOnAction(e -> {
                 actiontarget.setId("actiontarget");
+
+                loginInfo = new LoginInfo("SOCKET", "Player"+number,50004,"127.0.0.1","Password"+number);
+
                 if(box.getValue() == null || !isFilledOut(pwBox) || !isFilledOut(textFieldArray) || !isFilledOut(pwBox))
                     actiontarget.setText(Message.INCOMPLETE_FIELDS.toString());
                 else{
