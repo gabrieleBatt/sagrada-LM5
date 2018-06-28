@@ -115,7 +115,7 @@ public class RoundTrack implements Memento {
      */
     @Override
     public void getMemento() {
-        List<ArrayList<Die>> old = new ArrayList<>(roundTrackMemento.peek());
+        List<ArrayList<Die>> old = new ArrayList<>();
         for(ArrayList<Die> ar : roundTrackMemento.peek()) {
             old.add(new ArrayList<>(ar));
         }
