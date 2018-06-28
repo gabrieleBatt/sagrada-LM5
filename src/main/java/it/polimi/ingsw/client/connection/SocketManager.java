@@ -170,11 +170,11 @@ public class SocketManager implements ConnectionManager{
         for (int i = 0; i < 10; i++) {
             final int x = i;
             if(strings.stream()
-                    .anyMatch(s -> Integer.getInteger(s.split(SEPARATOR+"")[0].substring(1)) == x+1 )){
+                    .anyMatch(s -> Integer.parseInt(s.split(Character.toString(SEPARATOR))[0].substring(1)) == x+1 )){
                 lists.add(new ArrayList<>());
                 strings.stream()
-                        .filter(s -> Integer.getInteger(s.split(SEPARATOR+"")[0].substring(1)) == x+1 )
-                        .forEach(s -> lists.get(x).add(s.split(SEPARATOR +"")[1]));
+                        .filter(s -> Integer.parseInt(s.split(Character.toString(SEPARATOR))[0].substring(1)) == x+1 )
+                        .forEach(s -> lists.get(x).add(s.split(Character.toString(SEPARATOR))[1]));
             }
         }
         gameScreen.setRoundTrack(lists);

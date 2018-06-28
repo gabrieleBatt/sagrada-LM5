@@ -211,6 +211,7 @@ public class Game implements Runnable {
      */
     public void skipNextTurn() {
         Optional<TurnActionCommand> optionalTurnActionCommand= actionCommandList
+                .subList(1, actionCommandList.size())
                 .stream()
                 .filter(a-> actionCommandList.isTurn(a))
                 .map(a -> (TurnActionCommand)a)
