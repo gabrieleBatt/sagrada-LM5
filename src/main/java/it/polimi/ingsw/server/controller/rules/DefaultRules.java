@@ -215,17 +215,20 @@ public class DefaultRules implements Rules {
     public ActionCommand getEndGameAction() {
         return actionReceiver -> {
             List<Pair<Player,Integer>> ranking = new ArrayList<>();
-            for(Player player : actionReceiver.getTable().getPlayers()) {
-                if(!actionReceiver.getChannel(player.getNickname()).isOffline()){
-                    ranking.add(getScore(player, actionReceiver));
-                }
-            }
-            if (ranking.isEmpty()){
+            if(actionReceiver.getCommChannels().stream().allMatch(CommunicationChannel::isOffline)) {
                 actionReceiver.getTable().getPlayers()
                         .stream()
                         .min(Comparator.comparingLong(p -> actionReceiver
                                 .getChannel(p.getNickname()).getOfflineTime().getDateTime()))
                         .ifPresent(p -> ranking.add(getScore(p, actionReceiver)));
+            }else if(actionReceiver.getCommChannels().stream().filter(cc -> !cc.isOffline()).count() == 1){
+                Optional<CommunicationChannel> optionalPlayer = actionReceiver.getCommChannels()
+                        .stream().filter(cc -> !cc.isOffline()).findFirst();
+                optionalPlayer.ifPresent(cc -> ranking.add(getScore(actionReceiver.getTable().getPlayer(cc.getNickname()), actionReceiver)));
+            }else{
+                for(Player player : actionReceiver.getTable().getPlayers()) {
+                    ranking.add(getScore(player, actionReceiver));
+                }
             }
             ranking.sort(this::scoreCompare);
             actionReceiver.endGame(ranking);

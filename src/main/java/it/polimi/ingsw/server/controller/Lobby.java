@@ -94,6 +94,7 @@ class Lobby {
             Server.addGame(game);
             commChannelSet = new HashSet<>();
         }else{
+            timer.cancel();
             commChannelSet = commChannelSet.stream().filter(cc -> !cc.isOffline()).collect(Collectors.toSet());
         }
     }
