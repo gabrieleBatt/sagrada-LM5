@@ -33,10 +33,11 @@ public class Client extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
+        stage.setOnCloseRequest(event -> System.exit(0));
     }
 
-    public static Optional<Stage> getStage() {
-        return Optional.ofNullable(stage);
+    public static Stage getStage() {
+        return stage;
     }
 
     public static Logger getLogger() {
@@ -46,9 +47,16 @@ public class Client extends Application {
     public static void main(String[] args) {
         if(args.length == 1 &&
                 (args[0].equalsIgnoreCase("-gui") ||
-                        args[0].equalsIgnoreCase("-g"))){
+                        args[0].equalsIgnoreCase("-g"))||true){
             view = new GuiView();
             new Thread(Application::launch).start();
+            while (stage == null){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }else{
             view = new CliView();
         }

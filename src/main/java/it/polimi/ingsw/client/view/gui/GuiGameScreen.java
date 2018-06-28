@@ -2,19 +2,18 @@ package it.polimi.ingsw.client.view.gui;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.view.factory.GameScreen;
+import it.polimi.ingsw.client.view.factory.GuiView;
 import it.polimi.ingsw.shared.Message;
 import it.polimi.ingsw.shared.identifiables.StdId;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image ;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -24,7 +23,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javax.swing.text.html.HTMLWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
@@ -33,7 +31,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static javafx.scene.paint.Color.WHITE;
-import static javafx.scene.paint.Color.color;
 
 
 public class GuiGameScreen extends GameScreen {
@@ -51,15 +48,11 @@ public class GuiGameScreen extends GameScreen {
     private Stage gameStage;
     private final String resource = "/clientResources/gui";
     private final String PNG = ".png";
-    private static double WIDTH;
-    private static double HEIGHT;
     private StackPane tableStackPane;
     private String input;
     private static final Image NO_RESTRICTION = new Image("/clientResources/gui/restrictions/noRestr.png");
     private static final String FONT = "Algerian";
     private static final String NO_MESSAGES = "";
-    private static final double DEFAULT_HEIGHT = 680;
-    private static final double DEFAULT_WIDTH  = 1280;
     private static final double CELL_WIDTH_MULT  = 0.041322314;
     private static final double CELL_HEIGHT_MULT  = 0.07518797;
     private static final double BUTTON_WIDTH_MULT  = 0.049322314;
@@ -80,30 +73,11 @@ public class GuiGameScreen extends GameScreen {
     private static final int COLUMNS = 5;
     private static final String OK = "OK";
     private static final String SHOW_MESSAGES = "Show messages";
-    private static final double BIG_SPACING;
-    private static final double SMALL_SPACING;
-    private static final double MEDIUM_SPACING;
-    private static final double BIGGER_SPACING;
     private static final double BIGGER_MULT = 1.05;
     private static final double SMALLER_MULT = 0.8;
     private static final int MAX_MSGS_LENGHT = 15;
-    private static final double MESSAGES_MIN_WIDTH;
 
-    static {
-        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        WIDTH = primaryScreenBounds.getWidth();
-        HEIGHT = primaryScreenBounds.getHeight();
 
-        if(DEFAULT_WIDTH/DEFAULT_HEIGHT < WIDTH/HEIGHT)
-            WIDTH = DEFAULT_WIDTH*HEIGHT/DEFAULT_HEIGHT;
-        else
-            HEIGHT = DEFAULT_HEIGHT*WIDTH/DEFAULT_WIDTH;
-        MESSAGES_MIN_WIDTH = 350/DEFAULT_WIDTH*WIDTH;
-        BIGGER_SPACING = 130/DEFAULT_WIDTH*WIDTH;
-        BIG_SPACING = 50/DEFAULT_WIDTH*WIDTH;
-        SMALL_SPACING = 5/DEFAULT_WIDTH*WIDTH;
-        MEDIUM_SPACING = 15/DEFAULT_WIDTH*WIDTH;
-    }
 
     private Scene selectWindowScene;
     private Scene gameScene;
@@ -133,22 +107,22 @@ public class GuiGameScreen extends GameScreen {
         playersList = new ArrayList<>();
         poolDice = new ArrayList<>();
         roundTrack = new ArrayList<>();
-        gameStage = Client.getStage().get();
+        gameStage = Client.getStage();
         mainPlayerWindow = new WindowClass();
         gameGridPane = new GridPane();
         diceOnTableVBox = new VBox();
         messagesVBox = new VBox();
         dialogText = new Text(NO_MESSAGES);
         messagesVBox.setAlignment(Pos.CENTER);
-        diceOnTableVBox.setSpacing(MEDIUM_SPACING);
+        diceOnTableVBox.setSpacing(GuiView.MEDIUM_SPACING);
 
-        gameGridPane.setVgap(SMALL_SPACING);
-        gameGridPane.setHgap(BIG_SPACING);
+        gameGridPane.setVgap(GuiView.SMALL_SPACING);
+        gameGridPane.setHgap(GuiView.BIG_SPACING);
         mainPlayerStackPane = new StackPane();
         objectiveGridPane = new GridPane();
-        objectiveGridPane.setHgap(MEDIUM_SPACING);
+        objectiveGridPane.setHgap(GuiView.MEDIUM_SPACING);
         toolsGridPane = new GridPane();
-        toolsGridPane.setHgap(MEDIUM_SPACING);
+        toolsGridPane.setHgap(GuiView.MEDIUM_SPACING);
         opponentsWindowPane = new GridPane();
         setButton(skipButton, StdId.SKIP);
         setButton(undoButton, StdId.UNDO);
@@ -177,7 +151,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     private void setButton(Button button, StdId stdId) {
-        button.setMinSize(WIDTH*BUTTON_WIDTH_MULT,HEIGHT*BUTTON_HEIGHT_MULT);
+        button.setMinSize(GuiView.WIDTH*BUTTON_WIDTH_MULT,GuiView.HEIGHT*BUTTON_HEIGHT_MULT);
         button.setText(Message.convertMessage(stdId.getId()));
         button.setFont(Font.font(FONT));
         button.setOnAction(event ->
@@ -196,7 +170,7 @@ public class GuiGameScreen extends GameScreen {
             messages = new Text();
             messageStackPane = new StackPane();
             messageStackPane.setStyle("-fx-background-color: #e7bb77");
-            messageStackPane.setMinWidth(MESSAGES_MIN_WIDTH);
+            messageStackPane.setMinWidth(GuiView.MESSAGES_MIN_WIDTH);
             messageStackPane.getChildren().add(messages);
             messageStackPane.setAlignment(Pos.CENTER_LEFT);
             messageScene = new Scene(messageStackPane);
@@ -211,7 +185,7 @@ public class GuiGameScreen extends GameScreen {
             messages.setFont(Font.font(FONT,20));
             dialogText.setFont(Font.font(FONT,20));
             dialogText.setFill(WHITE);
-            messagesVBox.setSpacing(MEDIUM_SPACING);
+            messagesVBox.setSpacing(GuiView.MEDIUM_SPACING);
             messagesVBox.getChildren().add(messageButton);
             messagesVBox.getChildren().add(dialogText);
         });
@@ -237,8 +211,8 @@ public class GuiGameScreen extends GameScreen {
         this.privateObjectives = new ArrayList<>();
         for (String privateObjective : privateObjectivesStrings) {
             ImageView privateObView = new ImageView(new Image(resource + "/PrivateOb/" + privateObjective + PNG));
-            privateObView.fitHeightProperty().setValue(HEIGHT*CARD_HEIGHT_MULT);
-            privateObView.fitWidthProperty().setValue(WIDTH*CARD_WIDTH_MULT);
+            privateObView.fitHeightProperty().setValue(GuiView.HEIGHT*CARD_HEIGHT_MULT);
+            privateObView.fitWidthProperty().setValue(GuiView.WIDTH*CARD_WIDTH_MULT);
             privateObjectives.add(privateObView);
         }
         updateObjectives();
@@ -250,8 +224,8 @@ public class GuiGameScreen extends GameScreen {
         this.publicObjectives = new ArrayList<>();
         for (String publicObjective : publicObjectivesStrings) {
             ImageView publicObView = new ImageView(new Image(resource + "/PublicOb/" + publicObjective + PNG));
-            publicObView.fitHeightProperty().setValue(HEIGHT*CARD_HEIGHT_MULT);
-            publicObView.fitWidthProperty().setValue(WIDTH*CARD_WIDTH_MULT);
+            publicObView.fitHeightProperty().setValue(GuiView.HEIGHT*CARD_HEIGHT_MULT);
+            publicObView.fitWidthProperty().setValue(GuiView.WIDTH*CARD_WIDTH_MULT);
             publicObjectives.add(publicObView);
         }
         updateObjectives();
@@ -280,10 +254,10 @@ public class GuiGameScreen extends GameScreen {
             ToolButton newTool = new ToolButton();
             newTool.toolName = t;
             ImageView toolImageView = new ImageView(new Image(resource + "/Tools/" + t + PNG));
-            toolImageView.fitHeightProperty().setValue(HEIGHT*CARD_HEIGHT_MULT*SMALLER_MULT);
-            toolImageView.fitWidthProperty().setValue(WIDTH*CARD_WIDTH_MULT*SMALLER_MULT);
+            toolImageView.fitHeightProperty().setValue(GuiView.HEIGHT*CARD_HEIGHT_MULT*SMALLER_MULT);
+            toolImageView.fitWidthProperty().setValue(GuiView.WIDTH*CARD_WIDTH_MULT*SMALLER_MULT);
             newTool.setDisable(true);
-            newTool.setMinSize(WIDTH*CARD_WIDTH_MULT*SMALLER_MULT,HEIGHT*CARD_HEIGHT_MULT*SMALLER_MULT);
+            newTool.setMinSize(GuiView.WIDTH*CARD_WIDTH_MULT*SMALLER_MULT,GuiView.HEIGHT*CARD_HEIGHT_MULT*SMALLER_MULT);
             newTool.setGraphic(toolImageView);
             toolsList.add(newTool);
         }
@@ -291,7 +265,7 @@ public class GuiGameScreen extends GameScreen {
             //setting buttons
             toolsGridPane.getChildren().removeAll(toolsGridPane.getChildren());
             VBox buttonVBox = new VBox();
-            buttonVBox.setSpacing(SMALL_SPACING);
+            buttonVBox.setSpacing(GuiView.SMALL_SPACING);
             buttonVBox.getChildren().add(undoButton);
             buttonVBox.getChildren().add(skipButton);
             buttonVBox.getChildren().add(toolButton);
@@ -411,12 +385,12 @@ public class GuiGameScreen extends GameScreen {
             diceOnTableVBox.getChildren().remove(0, diceOnTableVBox.getChildren().size());
             diceOnTableVBox.setAlignment(Pos.CENTER);
             HBox roundTrackHBox = new HBox();
-            roundTrackHBox.setSpacing(SMALL_SPACING);
+            roundTrackHBox.setSpacing(GuiView.SMALL_SPACING);
             roundTrackHBox.setAlignment(Pos.CENTER);
 
             for (int i = 0; i<roundTrack.size();i++) {
                     Button roundButton = new Button();
-                    roundButton.setMinSize(WIDTH*CELL_OPPONET_WIDTH_MULT*BIGGER_MULT,HEIGHT*CELL_OPPONET_HEIGHT_MULT*BIGGER_MULT);
+                    roundButton.setMinSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT*BIGGER_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT*BIGGER_MULT);
                     roundButton.setStyle("-fx-background-color: #a5814c");
                     Integer j = i+1;
                     roundButton.setText(j.toString());
@@ -443,7 +417,7 @@ public class GuiGameScreen extends GameScreen {
             for (int i = roundTrack.size(); i < ROUND_TRACK_SIZE; i++) {
                 Button roundButton = new Button();
 
-                roundButton.setMinSize(WIDTH*CELL_OPPONET_WIDTH_MULT*BIGGER_MULT,HEIGHT*CELL_OPPONET_HEIGHT_MULT*BIGGER_MULT);
+                roundButton.setMinSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT*BIGGER_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT*BIGGER_MULT);
 
                 roundButton.setDisable(true);
                 roundButton.setStyle("-fx-background-color: #a5814c");
@@ -484,7 +458,7 @@ public class GuiGameScreen extends GameScreen {
 
             chooseText.setFont(Font.font(FONT,25));
             chooseText.setFill(WHITE);
-            chooseText.setWrappingWidth(WIDTH/4);
+            chooseText.setWrappingWidth(GuiView.WIDTH/4);
 
             GridPane windowsGridPane = new GridPane();
             List<Button> buttons = new ArrayList<>();
@@ -502,7 +476,7 @@ public class GuiGameScreen extends GameScreen {
                 windowsGridPane.add(windowVBox, index / 2, index % 2);
                 Button windowButton = new Button();
                 windowButton.setOpacity(0);
-                windowButton.setMinSize(WIDTH*WINDOW_BUTTON_WIDTH_MULT, HEIGHT*WINDOW_BUTTON_HEIGHT_MULT);;
+                windowButton.setMinSize(GuiView.WIDTH*WINDOW_BUTTON_WIDTH_MULT, GuiView.HEIGHT*WINDOW_BUTTON_HEIGHT_MULT);;
                 windowsGridPane.add(windowButton, index / 2, index % 2);
                 windowsGridPane.setAlignment(Pos.TOP_CENTER);
                 buttons.add(windowButton);
@@ -520,11 +494,11 @@ public class GuiGameScreen extends GameScreen {
             }
 
             GridPane windowChoiceGridPane = new GridPane();
-            windowChoiceGridPane.setPadding(new Insets(HEIGHT/30));
-            windowChoiceGridPane.setHgap(HEIGHT/20);
+            windowChoiceGridPane.setPadding(new Insets(GuiView.HEIGHT/30));
+            windowChoiceGridPane.setHgap(GuiView.HEIGHT/20);
             windowChoiceGridPane.add(chooseText,0,0);
-            windowsGridPane.setHgap(HEIGHT/30);
-            windowsGridPane.setVgap(HEIGHT/30);
+            windowsGridPane.setHgap(GuiView.HEIGHT/30);
+            windowsGridPane.setVgap(GuiView.HEIGHT/30);
             windowChoiceGridPane.add(windowsGridPane,1,0);
 
             privateObjectives.forEach(po -> {
@@ -532,7 +506,7 @@ public class GuiGameScreen extends GameScreen {
             });
             StackPane windowChoiceSP = new StackPane();
             windowChoiceSP.getChildren().add(windowChoiceGridPane);
-            selectWindowScene = new Scene(windowChoiceSP, WIDTH, HEIGHT);
+            selectWindowScene = new Scene(windowChoiceSP, GuiView.WIDTH, GuiView.HEIGHT);
             selectWindowScene.getStylesheets().addAll(this.getClass().getResource("/clientResources/gui/guiGameScreen.css").toExternalForm());
 
             windowChoiceSP.setId("table");
@@ -601,6 +575,7 @@ public class GuiGameScreen extends GameScreen {
             for(CellButton cellButton: mainPlayerWindow.cells){
                 if(options.contains(cellButton.idCell)){
                     cellButton.setDisable(false);
+                    cellButton.setOpacity(1);//miao3
                     activeCells.add(cellButton);
                 }
             }
@@ -622,6 +597,7 @@ public class GuiGameScreen extends GameScreen {
 
         activeDie.forEach(d->d.setDisable(true));
         activeCells.forEach(c->c.setDisable(true));
+        activeCells.forEach(c->c.setOpacity(0.8));//miao2
         activeTools.forEach(t->t.setDisable(true));
         skipButton.setDisable(true);
         undoButton.setDisable(true);
@@ -688,14 +664,14 @@ public class GuiGameScreen extends GameScreen {
             showWindows();
 
             if(playersList.size() > 2)
-                gameGridPane.setPadding(new Insets(SMALL_SPACING,BIGGER_SPACING,SMALL_SPACING,BIGGER_SPACING));
+                gameGridPane.setPadding(new Insets(GuiView.SMALL_SPACING,GuiView.BIGGER_SPACING,GuiView.SMALL_SPACING,GuiView.BIGGER_SPACING));
             else
-                gameGridPane.setPadding(new Insets(BIG_SPACING,BIGGER_SPACING,BIG_SPACING,BIGGER_SPACING));
+                gameGridPane.setPadding(new Insets(GuiView.BIG_SPACING,GuiView.BIGGER_SPACING,GuiView.BIG_SPACING,GuiView.BIGGER_SPACING));
 
             gameStage.setX(Screen.getPrimary().getBounds().getMinX());
             gameStage.setY(Screen.getPrimary().getBounds().getMinY());
-            gameStage.setWidth(WIDTH);
-            gameStage.setHeight(HEIGHT);
+            gameStage.setWidth(GuiView.WIDTH);
+            gameStage.setHeight(GuiView.HEIGHT);
 
             gameStage.setMaximized(true);
 
@@ -740,6 +716,7 @@ public class GuiGameScreen extends GameScreen {
                     this.cells[i].showingImage = this.cells[i].restriction;
                     this.cells[i].setOnAction(event -> input = x + "" + y + ":" + this.windowName);
                     this.cells[i].setDisable(true);
+                    this.cells[i].setOpacity(0.8);//miao1
                     this.cells[i].idCell = x + "" + y + ":" + this.windowName;
                     this.add(this.cells[i],y,x);
                 }
@@ -753,21 +730,21 @@ public class GuiGameScreen extends GameScreen {
         void setPlayerWindow(Boolean isOpponent){
             for (CellButton cellButton : this.cells) {
                     if(isOpponent){
-                        cellButton.restriction.fitWidthProperty().setValue(WIDTH*CELL_OPPONET_WIDTH_MULT);
-                        cellButton.restriction.fitHeightProperty().setValue(HEIGHT*CELL_OPPONET_HEIGHT_MULT);
-                        cellButton.showingImage.fitWidthProperty().setValue(WIDTH*CELL_OPPONET_WIDTH_MULT);
-                        cellButton.showingImage.fitHeightProperty().setValue(HEIGHT*CELL_OPPONET_HEIGHT_MULT);
-                        cellButton.setMinSize(WIDTH*CELL_OPPONET_WIDTH_MULT,HEIGHT*CELL_OPPONET_HEIGHT_MULT);
-                        cellButton.setMaxSize(WIDTH*CELL_OPPONET_WIDTH_MULT,HEIGHT*CELL_OPPONET_HEIGHT_MULT);
+                        cellButton.restriction.fitWidthProperty().setValue(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT);
+                        cellButton.restriction.fitHeightProperty().setValue(GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT);
+                        cellButton.showingImage.fitWidthProperty().setValue(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT);
+                        cellButton.showingImage.fitHeightProperty().setValue(GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT);
+                        cellButton.setMinSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT);
+                        cellButton.setMaxSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT);
                         this.setGridLinesVisible(true);
                     }
                     else{
-                        cellButton.restriction.fitWidthProperty().setValue(WIDTH*CELL_WIDTH_MULT);
-                        cellButton.restriction.fitHeightProperty().setValue(HEIGHT*CELL_HEIGHT_MULT);
-                        cellButton.showingImage.fitWidthProperty().setValue(WIDTH*CELL_WIDTH_MULT);
-                        cellButton.showingImage.fitHeightProperty().setValue(HEIGHT*CELL_HEIGHT_MULT);
-                        cellButton.setMinSize(WIDTH*CELL_WIDTH_MULT*BIGGER_MULT,HEIGHT*CELL_HEIGHT_MULT*BIGGER_MULT);
-                        cellButton.setMaxSize(WIDTH*CELL_WIDTH_MULT*BIGGER_MULT,HEIGHT*CELL_HEIGHT_MULT*BIGGER_MULT);
+                        cellButton.restriction.fitWidthProperty().setValue(GuiView.WIDTH*CELL_WIDTH_MULT);
+                        cellButton.restriction.fitHeightProperty().setValue(GuiView.HEIGHT*CELL_HEIGHT_MULT);
+                        cellButton.showingImage.fitWidthProperty().setValue(GuiView.WIDTH*CELL_WIDTH_MULT);
+                        cellButton.showingImage.fitHeightProperty().setValue(GuiView.HEIGHT*CELL_HEIGHT_MULT);
+                        cellButton.setMinSize(GuiView.WIDTH*CELL_WIDTH_MULT*BIGGER_MULT,GuiView.HEIGHT*CELL_HEIGHT_MULT*BIGGER_MULT);
+                        cellButton.setMaxSize(GuiView.WIDTH*CELL_WIDTH_MULT*BIGGER_MULT,GuiView.HEIGHT*CELL_HEIGHT_MULT*BIGGER_MULT);
 
                         this.setStyle("-fx-background-color: black");
                         this.setVgap(1);
@@ -820,10 +797,10 @@ public class GuiGameScreen extends GameScreen {
         DieButton(String die,double cellWithMult, double cellHeightMult) {
             dieId = die;
             ImageView buttonImage = new ImageView(new Image(resource+"/dice/"+die.charAt(0)+die.charAt(1)+PNG));
-            buttonImage.fitWidthProperty().setValue(WIDTH*cellWithMult);
-            buttonImage.fitHeightProperty().setValue(HEIGHT*cellHeightMult);
-            this.setMinSize(WIDTH*cellWithMult*BIGGER_MULT,HEIGHT*cellHeightMult*BIGGER_MULT);
-            this.setMaxSize(WIDTH*cellWithMult*BIGGER_MULT,HEIGHT*cellHeightMult*BIGGER_MULT);
+            buttonImage.fitWidthProperty().setValue(GuiView.WIDTH*cellWithMult);
+            buttonImage.fitHeightProperty().setValue(GuiView.HEIGHT*cellHeightMult);
+            this.setMinSize(GuiView.WIDTH*cellWithMult*BIGGER_MULT,GuiView.HEIGHT*cellHeightMult*BIGGER_MULT);
+            this.setMaxSize(GuiView.WIDTH*cellWithMult*BIGGER_MULT,GuiView.HEIGHT*cellHeightMult*BIGGER_MULT);
 
             this.setDisable(true);
             this.setGraphic(buttonImage);

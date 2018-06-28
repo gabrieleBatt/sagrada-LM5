@@ -33,16 +33,8 @@ public class GuiConnectionScreen extends ConnectionScreen {
      */
 
     public void setScene(){
-        while (!Client.getStage().isPresent()){
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
         Platform.runLater(() -> {
-            Stage stage = Client.getStage().get();
+            Stage stage = Client.getStage();
             stage.setTitle(Message.START_GAME.toString());
 
             Integer number = ThreadLocalRandom.current().nextInt(1, 10000);
