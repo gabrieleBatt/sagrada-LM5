@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image ;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -23,15 +24,16 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.swing.text.html.HTMLWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
-import java.time.format.TextStyle;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static javafx.scene.paint.Color.WHITE;
+import static javafx.scene.paint.Color.color;
 
 
 public class GuiGameScreen extends GameScreen {
@@ -42,11 +44,9 @@ public class GuiGameScreen extends GameScreen {
     private Collection<ImageView> publicObjectives;
     private List<ToolButton> toolsList;
     private List<PlayerClass> playersList;
-    private Collection<DieButton> poolDice;
+    private List<DieButton> poolDice;
     private List<List<DieButton>> roundTrack;
     private WindowClass mainPlayerWindow;
-    private boolean skip;
-    private boolean undo;
     private List<String> messageRecord;
     private Stage gameStage;
     private final String resource = "/clientResources/gui";
@@ -57,7 +57,7 @@ public class GuiGameScreen extends GameScreen {
     private String input;
     private static final Image NO_RESTRICTION = new Image("/clientResources/gui/restrictions/noRestr.png");
     private static final String FONT = "Algerian";
-    private static final String NO_MESSAGES = "No messages to show";
+    private static final String NO_MESSAGES = "";
     private static final double DEFAULT_HEIGHT = 680;
     private static final double DEFAULT_WIDTH  = 1280;
     private static final double CELL_WIDTH_MULT  = 0.041322314;
@@ -78,15 +78,16 @@ public class GuiGameScreen extends GameScreen {
     private static final String JSON_EXTENSION = ".json";
     private static final Object DIFFICULTY = "difficulty";
     private static final int COLUMNS = 5;
-    private static final int ROWS = 4;
     private static final String OK = "OK";
     private static final String SHOW_MESSAGES = "Show messages";
     private static final double BIG_SPACING;
     private static final double SMALL_SPACING;
     private static final double MEDIUM_SPACING;
+    private static final double BIGGER_SPACING;
     private static final double BIGGER_MULT = 1.05;
     private static final double SMALLER_MULT = 0.8;
-
+    private static final int MAX_MSGS_LENGHT = 15;
+    private static final double MESSAGES_MIN_WIDTH;
 
     static {
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
@@ -97,6 +98,8 @@ public class GuiGameScreen extends GameScreen {
             WIDTH = DEFAULT_WIDTH*HEIGHT/DEFAULT_HEIGHT;
         else
             HEIGHT = DEFAULT_HEIGHT*WIDTH/DEFAULT_WIDTH;
+        MESSAGES_MIN_WIDTH = 350/DEFAULT_WIDTH*WIDTH;
+        BIGGER_SPACING = 130/DEFAULT_WIDTH*WIDTH;
         BIG_SPACING = 50/DEFAULT_WIDTH*WIDTH;
         SMALL_SPACING = 5/DEFAULT_WIDTH*WIDTH;
         MEDIUM_SPACING = 15/DEFAULT_WIDTH*WIDTH;
@@ -153,7 +156,7 @@ public class GuiGameScreen extends GameScreen {
         setButton(drawButton, StdId.DRAFT);
 
         messageButton.setText(SHOW_MESSAGES);
-        messageButton.setFont(Font.font(FONT));
+        messageButton.setFont(Font.font(FONT,20));
         messageButton.setOnAction(event -> {
             if(!messageStage.isShowing())
                 messageStage.show();
@@ -167,11 +170,8 @@ public class GuiGameScreen extends GameScreen {
         gameGridPane.add(toolsGridPane,2,1);
 
         tableStackPane = new StackPane();
-
-        tableStackPane.setMinSize(WIDTH,HEIGHT);
         tableStackPane.getChildren().add(gameGridPane);
-        tableStackPane.setAlignment(Pos.CENTER);
-        gameScene = new Scene(tableStackPane, WIDTH, HEIGHT);
+        gameScene = new Scene(tableStackPane);
         gameScene.getStylesheets().addAll(this.getClass().getResource("/clientResources/gui/guiGameScreen.css").toExternalForm());
         tableStackPane.setId("table");
     }
@@ -189,31 +189,31 @@ public class GuiGameScreen extends GameScreen {
 
     @Override
     public void addMessage(String message) throws RemoteException {
-        messageRecord.add(Message.convertMessage(message)+"\n");
-        if(messageRecord.size() > MAX_LEN_RECORD)
-            messageRecord = messageRecord.subList(0, MAX_LEN_RECORD);
+        messageRecord.add(0,Message.convertMessage(message)+"\n");
+        if(messageRecord.size() > MAX_MSGS_LENGHT)
+            messageRecord = messageRecord.subList(0, MAX_MSGS_LENGHT);
         Platform.runLater(()-> {
             messages = new Text();
             messageStackPane = new StackPane();
+            messageStackPane.setStyle("-fx-background-color: #e7bb77");
+            messageStackPane.setMinWidth(MESSAGES_MIN_WIDTH);
             messageStackPane.getChildren().add(messages);
-            messageStackPane.setAlignment(Pos.CENTER);
+            messageStackPane.setAlignment(Pos.CENTER_LEFT);
             messageScene = new Scene(messageStackPane);
             messageStage = new Stage();
             messageStage.setScene(messageScene);
             String msgs = new String();
             messagesVBox.getChildren().remove(0, messagesVBox.getChildren().size());
-            for (String msg : messageRecord) {
-                msgs = msgs + msg;
+            for (int i = messageRecord.size()-1; i>=0; i--) {
+                msgs = msgs + messageRecord.get(i);
             }
             messages.setText(msgs);
             messages.setFont(Font.font(FONT,20));
-            dialogText.setFont(Font.font(FONT));
+            dialogText.setFont(Font.font(FONT,20));
             dialogText.setFill(WHITE);
             messagesVBox.setSpacing(MEDIUM_SPACING);
             messagesVBox.getChildren().add(messageButton);
             messagesVBox.getChildren().add(dialogText);
-
-            //todo: add message record
         });
     }
 
@@ -362,11 +362,11 @@ public class GuiGameScreen extends GameScreen {
         playerClassOptional.ifPresent(playerClass -> Platform.runLater(() -> {
             ImageView image;
             if (die.equals(" "))
-                image = playerClass.glassWindow.cells[x * 5 + y].restriction;
+                image = playerClass.glassWindow.cells[x * COLUMNS + y].restriction;
             else
                 image = new ImageView(new Image(resource + "/dice/" + die.charAt(0) + die.charAt(1) + PNG));
 
-            playerClass.glassWindow.cells[x * 5 + y].showingImage = image;
+            playerClass.glassWindow.cells[x * COLUMNS + y].showingImage = image;
 
             playerClass.glassWindow.setPlayerWindow(!playersList.get(0).equals(playerClass));
         }));
@@ -374,8 +374,10 @@ public class GuiGameScreen extends GameScreen {
 
     @Override
     public void setPool(Collection<String> dice) throws RemoteException {
-        poolDice = new HashSet<>();
-        for (String die : dice) {
+        List<String> sortedDice = new ArrayList<>(dice);
+        sortedDice.sort(String::compareTo);
+        poolDice = new ArrayList<>();
+        for (String die : sortedDice) {
             DieButton dieButton = new DieButton(die,CELL_WIDTH_MULT,CELL_HEIGHT_MULT);
             poolDice.add(dieButton);
         }
@@ -391,7 +393,7 @@ public class GuiGameScreen extends GameScreen {
             for (List<String> list : dice) {
                 List<DieButton> ld = new ArrayList<>();
                 for (String s : list) {
-                    DieButton dieButton = new DieButton(s,CELL_OPPONET_WIDTH_MULT,CELL_OPPONET_HEIGHT_MULT);
+                    DieButton dieButton = new DieButton(s,CELL_WIDTH_MULT,CELL_HEIGHT_MULT);
                     ld.add(dieButton);
                 }
                 roundTrack.add(ld);
@@ -409,24 +411,51 @@ public class GuiGameScreen extends GameScreen {
             diceOnTableVBox.getChildren().remove(0, diceOnTableVBox.getChildren().size());
             diceOnTableVBox.setAlignment(Pos.CENTER);
             HBox roundTrackHBox = new HBox();
+            roundTrackHBox.setSpacing(SMALL_SPACING);
             roundTrackHBox.setAlignment(Pos.CENTER);
 
-            for (List<DieButton> aRoundTrack : roundTrack) {
-                VBox roundTrackCell = new VBox();
-                VBox.setVgrow(roundTrackCell, Priority.NEVER);
-                for (DieButton dieButton : aRoundTrack) {
-                    roundTrackCell.getChildren().add(dieButton);
-                }
-                roundTrackHBox.getChildren().add(roundTrackCell);
+            for (int i = 0; i<roundTrack.size();i++) {
+                    Button roundButton = new Button();
+                    roundButton.setMinSize(WIDTH*CELL_OPPONET_WIDTH_MULT*BIGGER_MULT,HEIGHT*CELL_OPPONET_HEIGHT_MULT*BIGGER_MULT);
+                    roundButton.setStyle("-fx-background-color: #a5814c");
+                    Integer j = i+1;
+                    roundButton.setText(j.toString());
+                    roundButton.setFont(Font.font(FONT,10));
+
+                    VBox roundTrackVBox = new VBox();
+                    Stage roundTrackStage = new Stage();
+                    Scene roundTrackCellScene = new Scene(roundTrackVBox);
+                    roundTrackStage.setScene(roundTrackCellScene);
+                    roundTrackVBox.setStyle("-fx-background-color: #c7a96e");
+                    for(DieButton dieButton: roundTrack.get(i)){
+                        roundTrackVBox.getChildren().add(dieButton);
+                    }
+
+                    roundButton.setOnAction(event->{
+                        if(!roundTrackStage.isShowing())
+                            roundTrackStage.show();
+                        else
+                            roundTrackStage.close();
+                    });
+                    roundTrackHBox.getChildren().add(roundButton);
             }
 
             for (int i = roundTrack.size(); i < ROUND_TRACK_SIZE; i++) {
-                ImageView emptyCell = new ImageView(NO_RESTRICTION);
-                emptyCell.fitWidthProperty().setValue(WIDTH * CELL_OPPONET_WIDTH_MULT);
-                emptyCell.fitHeightProperty().setValue(HEIGHT * CELL_OPPONET_HEIGHT_MULT);
-                roundTrackHBox.getChildren().add(emptyCell);
+                Button roundButton = new Button();
+
+                roundButton.setMinSize(WIDTH*CELL_OPPONET_WIDTH_MULT*BIGGER_MULT,HEIGHT*CELL_OPPONET_HEIGHT_MULT*BIGGER_MULT);
+
+                roundButton.setDisable(true);
+                roundButton.setStyle("-fx-background-color: #a5814c");
+
+                Integer j = i+1;
+                roundButton.setText(j.toString());
+                roundButton.setFont(Font.font(FONT,10));
+                roundTrackHBox.getChildren().add(roundButton);
             }
+
             diceOnTableVBox.getChildren().add(roundTrackHBox);
+
             int i = 0;
             VBox poolVBox = new VBox();
             poolVBox.setAlignment(Pos.CENTER);
@@ -602,7 +631,8 @@ public class GuiGameScreen extends GameScreen {
 
     @Override
     public String getInputFrom(Collection<String> options, String message) throws RemoteException {
-        dialogText.setText(message);
+        dialogText.setText(Message.convertMessage(message));
+
         if(options.contains(StdId.SKIP.getId())){
             options.remove(StdId.SKIP.getId());
             skipButton.setDisable(false);
@@ -654,12 +684,21 @@ public class GuiGameScreen extends GameScreen {
 
     private void showGameStage(){
         Platform.runLater(() -> {
+
             showWindows();
+
+            if(playersList.size() > 2)
+                gameGridPane.setPadding(new Insets(SMALL_SPACING,BIGGER_SPACING,SMALL_SPACING,BIGGER_SPACING));
+            else
+                gameGridPane.setPadding(new Insets(BIG_SPACING,BIGGER_SPACING,BIG_SPACING,BIGGER_SPACING));
 
             gameStage.setX(Screen.getPrimary().getBounds().getMinX());
             gameStage.setY(Screen.getPrimary().getBounds().getMinY());
             gameStage.setWidth(WIDTH);
             gameStage.setHeight(HEIGHT);
+
+            gameStage.setMaximized(true);
+
             gameStage.show();
         });
     }
@@ -696,8 +735,8 @@ public class GuiGameScreen extends GameScreen {
                         this.cells[i].restriction = new ImageView(new Image(resource + "/restrictions/restr" + restrictions.get(i).charAt(0) + PNG));
                     }
 
-                    final int x = i/5;
-                    final int y = i%5;
+                    final int x = i/COLUMNS;
+                    final int y = i%COLUMNS;
                     this.cells[i].showingImage = this.cells[i].restriction;
                     this.cells[i].setOnAction(event -> input = x + "" + y + ":" + this.windowName);
                     this.cells[i].setDisable(true);
@@ -818,6 +857,7 @@ public class GuiGameScreen extends GameScreen {
                             mainPlayerStackPane.getChildren().add(playerVBox);
                             player.playerText.setFont(Font.font(FONT,25));
                             mainPlayerWindow = player.glassWindow;
+
                         } else {
                             opponentsWindowPane.add(playerVBox, i / 2, i % 2);
                             player.playerText.setFont(Font.font(FONT,10));
@@ -825,7 +865,8 @@ public class GuiGameScreen extends GameScreen {
                         mainPlayerStackPane.setAlignment(Pos.CENTER);
                         opponentsWindowPane.setAlignment(Pos.CENTER);
                     }
-                }
+
+        }
         );
     }
 
