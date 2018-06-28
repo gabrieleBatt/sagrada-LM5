@@ -12,13 +12,11 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -117,14 +115,13 @@ public class GuiConnectionScreen extends ConnectionScreen {
 
             Scene scene = new Scene(connectionScreenVBox,WIDTH, HEIGHT);
             stage.setScene(scene);
-            scene.getStylesheets().add
-                    (GuiConnectionScreen.class.getResource("/clientResources/gui/Login.css").toExternalForm());
+            scene.getStylesheets().add(GuiConnectionScreen.class.getResource("/clientResources/gui/Login.css").toExternalForm());
             List<TextField> textFieldArray = new ArrayList<>();
+
 
             Text userName = new Text(Message.CHOOSE_NICKNAME.toString());
             setAlgerian(userName);
             grid.add(userName, 0, 1);
-
             TextField userTextField = new TextField();
             grid.add(userTextField, 1, 1);
             textFieldArray.add(userTextField);

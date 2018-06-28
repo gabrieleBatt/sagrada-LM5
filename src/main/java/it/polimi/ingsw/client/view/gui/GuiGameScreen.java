@@ -50,7 +50,7 @@ public class GuiGameScreen extends GameScreen {
     private final String PNG = ".png";
     private StackPane tableStackPane;
     private String input;
-    private static final Image NO_RESTRICTION = new Image("/clientResources/gui/restrictions/noRestr.png");
+    private static final Image NO_RESTRICTION = new Image("clientResources/gui/restrictions/noRestr.png");
     private static final String FONT = "Algerian";
     private static final String NO_MESSAGES = "";
     private static final double CELL_WIDTH_MULT  = 0.041322314;

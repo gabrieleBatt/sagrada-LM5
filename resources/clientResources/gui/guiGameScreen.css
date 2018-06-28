@@ -1,6 +1,6 @@
 
 #table{
-    -fx-background-image: url("/clientResources/gui/tavolo.png");
+    -fx-background-image: url("/src/tavolo.png");
 }
 #windowPane{
     -fx-background-image: url("/clientResources/gui/Gwindow.png");

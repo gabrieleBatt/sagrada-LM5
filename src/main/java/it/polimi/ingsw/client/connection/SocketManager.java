@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class SocketManager implements ConnectionManager{
 
     private static final String SUCCESS_LOGIN = "success";
-    private static final char RANKING_SEPARATOR = ':';
+    private static final char SEPARATOR = ':';
     private static final char PLAYER_SEPARATOR = '-';
     private static Logger logger = LogMaker.getLogger(SocketManager.class.getName(), Level.ALL);
     private final String nickname;
@@ -106,7 +106,7 @@ public class SocketManager implements ConnectionManager{
     private List<Pair<String, Integer>> convertRanking(List<String> strings){
         return strings
                 .stream()
-                .map(s -> new Pair<>(s.substring(0, s.indexOf(RANKING_SEPARATOR)), Integer.parseInt(s.substring(s.indexOf(':')+1))))
+                .map(s -> new Pair<>(s.substring(0, s.indexOf(SEPARATOR)), Integer.parseInt(s.substring(s.indexOf(':')+1))))
                 .collect(Collectors.toList());
 
     }
@@ -170,11 +170,11 @@ public class SocketManager implements ConnectionManager{
         for (int i = 0; i < 10; i++) {
             final int x = i;
             if(strings.stream()
-                    .anyMatch(s -> Integer.parseInt(s.split(RANKING_SEPARATOR+"")[0].substring(1)) == x+1 )){
+                    .anyMatch(s -> Integer.getInteger(s.split(SEPARATOR+"")[0].substring(1)) == x+1 )){
                 lists.add(new ArrayList<>());
                 strings.stream()
-                        .filter(s -> Integer.parseInt(s.split(RANKING_SEPARATOR+"")[0].substring(1)) == x+1 )
-                        .forEach(s -> lists.get(x).add(s.split(RANKING_SEPARATOR+"")[1]));
+                        .filter(s -> Integer.getInteger(s.split(SEPARATOR+"")[0].substring(1)) == x+1 )
+                        .forEach(s -> lists.get(x).add(s.split(SEPARATOR +"")[1]));
             }
         }
         gameScreen.setRoundTrack(lists);

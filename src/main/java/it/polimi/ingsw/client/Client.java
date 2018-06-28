@@ -45,9 +45,9 @@ public class Client extends Application {
     }
 
     public static void main(String[] args) {
-        if(args.length == 1 &&
+        if((args.length == 1 &&
                 (args[0].equalsIgnoreCase("-gui") ||
-                        args[0].equalsIgnoreCase("-g"))||true){
+                        args[0].equalsIgnoreCase("-g")))){
             view = new GuiView();
             new Thread(Application::launch).start();
             while (stage == null){

@@ -116,9 +116,9 @@ public class TurnActionCommand implements ActionCommand{
             doToolAction();
 
         }else if(actionChosen.getId().equals(DRAFT.getId())) {
-            actionReceiver.getRules().getDraftAction("dieChosen", null, null).execute(actionReceiver);
+            actionReceiver.getRules().getDraftAction("dieChosen"+actionChosen, null, null).execute(actionReceiver);
             if (!reset) {
-                actionReceiver.getRules().getPlaceAction("dieChosen", true, true, true, false).execute(actionReceiver);
+                actionReceiver.getRules().getPlaceAction("dieChosen"+actionChosen, true, true, true, false).execute(actionReceiver);
                 drafted = true;
             }
         }else if(actionChosen.equals(SKIP)) {

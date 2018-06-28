@@ -40,9 +40,10 @@ public class RoundTrack implements Memento {
      * @throws EndGameException exception thrown if the game is over
      */
     public void endRound (Collection<Die> d) {
+        logger.log(Level.FINE, "This round: " + (getRound()+(-1)) + " just ended, these dice remained on the table: "+ d, this);
+        logger.log(Level.FINE, "Round Track: "+dice.toString());
         if (dice.size() < ROUND_NUM) {
             dice.add(new ArrayList<>(d));
-            logger.log(Level.FINEST, "This round: " + (getRound()+(-1)) + " just ended, these dice remained on the table: "+ d, this);
         }else
             throw new EndGameException("Game over, can't add\n"+d.toString());
 
