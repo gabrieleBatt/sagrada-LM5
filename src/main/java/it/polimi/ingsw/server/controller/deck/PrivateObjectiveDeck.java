@@ -32,18 +32,6 @@ public class PrivateObjectiveDeck extends Deck {
         return privateObjectiveDeck;
     }
 
-    private Optional<JSONObject> parse(File file) {
-        JSONParser parser = new JSONParser();
-        JSONObject js = null;
-        try {
-            js = (JSONObject)parser.parse(new FileReader(file));
-            logger.log(Level.FINEST,  "This private objective "+ js.get(NAME) +" has been added to getPaths()", this);
-
-        } catch (IOException | ParseException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
-        return Optional.ofNullable(js);
-    }
 
     @Override
     public List<PrivateObjective> draw(int num) {

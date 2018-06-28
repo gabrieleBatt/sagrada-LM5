@@ -111,7 +111,7 @@ public class TurnActionCommand implements ActionCommand{
         }, turnTime * 1000);
     }
 
-    private void doActionChosen(final Identifiable actionChosen) throws DieNotAllowedException {
+    private void doActionChosen(final Identifiable actionChosen){
         if(actionChosen.getId().equals(USE_TOOL.getId())) {
             doToolAction();
 

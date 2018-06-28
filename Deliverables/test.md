@@ -100,3 +100,20 @@
         - channel
             - SocketCommunicationChannelTest
                 - Update test :heavy_check_mark:
+ 
+
+- shared
+    - identifiables
+        - StdIdTest
+            - Finding StdId :heavy_check_mark:
+    - MessageTest
+        - Convert message
+        - Convert name
+  
+- client
+    - view
+        - EndGameInfoTest
+            - End game info creation :heavy_check_mark:
+        - LoginInfoTest
+            - Login info creation :heavy_check_mark:   
+            

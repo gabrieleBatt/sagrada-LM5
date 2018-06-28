@@ -47,14 +47,14 @@ public class Client extends Application {
     public static void main(String[] args) {
         if((args.length == 1 &&
                 (args[0].equalsIgnoreCase("-gui") ||
-                        args[0].equalsIgnoreCase("-g")))||true){
+                        args[0].equalsIgnoreCase("-g")))){
             view = new GuiView();
             new Thread(Application::launch).start();
             while (stage == null){
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
         }else{
@@ -78,6 +78,7 @@ public class Client extends Application {
                     }
                 } catch (InterruptedException | NotBoundException | IOException | ParseException e) {
                     logger.log(Level.WARNING, e.getMessage());
+                    Thread.currentThread().interrupt();
                 }
             }while ((!endGameInfo.isPresent() && connectionScreen.reConnect()));
             endGameInfo.ifPresent(endScreen::showRanking);

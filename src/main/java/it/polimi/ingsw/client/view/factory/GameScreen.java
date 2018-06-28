@@ -1,14 +1,12 @@
 package it.polimi.ingsw.client.view.factory;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.shared.Message;
 import it.polimi.ingsw.shared.interfaces.RemoteGameScreen;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Level;

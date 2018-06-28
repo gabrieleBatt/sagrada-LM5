@@ -104,5 +104,9 @@ class DefaultRulesTest {
                     break;
             }
         }
+        game.getChannel("player1").setOffline();
+        DefaultRules.getDefaultRules().getEndGameAction().execute(game);
+        ranking = game.getRanking();
+        Assertions.assertEquals(1, ranking.size());
     }
 }

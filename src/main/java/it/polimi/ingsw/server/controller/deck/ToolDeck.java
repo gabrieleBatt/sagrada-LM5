@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.deck;
 
+import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
 import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.shared.identifiables.Identifiable;
 import it.polimi.ingsw.shared.identifiables.StdId;
@@ -75,19 +76,6 @@ public class ToolDeck extends Deck {
         return toolDeck;
     }
 
-    private Optional<JSONObject> parse(File file) {
-        JSONParser parser = new JSONParser();
-        JSONObject js = null;
-        try {
-            js = (JSONObject) parser.parse(new FileReader(file));
-            logger.log(Level.FINEST, "This tool " + js.get(NAME) + " has been added to tools", this);
-        } catch (IOException | ParseException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
-        return Optional.ofNullable(js);
-    }
-
-
     @Override
     public List<Tool> draw(int num){
         List<Tool> ret = new ArrayList<>();
@@ -125,7 +113,10 @@ public class ToolDeck extends Deck {
             operations.put(SWAP, ToolDeck::getSwap);
             operations.put(DRAFT, ToolDeck::getDraft);
             operations.put(PLACE, ToolDeck::getPlace);
-            operations.put(ROLL_POOL, j -> ar -> ar.getTable().getPool().roll());
+            operations.put(ROLL_POOL, j -> ar -> {
+                ar.getTable().getPool().roll();
+                ar.getCommChannels().forEach(cc -> cc.updateView(ar.getTable().getPool()));
+            });
             operations.put(SKIP_TURN, j -> Game::skipNextTurn);
 
             actionCommands.add(operations.get(jo.get(TYPE).toString()).apply(jo));

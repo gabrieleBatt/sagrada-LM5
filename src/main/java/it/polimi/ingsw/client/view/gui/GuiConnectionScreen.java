@@ -1,14 +1,12 @@
 package it.polimi.ingsw.client.view.gui;
 
-import com.sun.prism.paint.Color;
 import it.polimi.ingsw.client.view.LoginInfo;
 import it.polimi.ingsw.client.view.factory.ConnectionScreen;
 import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.client.view.factory.GuiView;
 import it.polimi.ingsw.shared.Message;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -31,10 +29,6 @@ public class GuiConnectionScreen extends ConnectionScreen {
     private static final int MIN_PORT = 1023;
     private static final int MAX_PORT = 65536;
     private static final int MAX_LENGHT = 12;
-    public static double WIDTH;
-    public static double HEIGHT;
-    private static final double DEFAULT_HEIGHT = 680;
-    private static final double DEFAULT_WIDTH  = 1280;
     private static final double SMALL_SPACING;
     private static final double BIG_SPACING;
     private static final double VBOX_SPACING;
@@ -42,20 +36,11 @@ public class GuiConnectionScreen extends ConnectionScreen {
     private static final double BUTTON_HEIGHT_SIZE;
 
     static {
-        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        WIDTH = primaryScreenBounds.getWidth();
-        HEIGHT = primaryScreenBounds.getHeight();
-
-        if (DEFAULT_WIDTH / DEFAULT_HEIGHT < WIDTH / HEIGHT)
-            WIDTH = DEFAULT_WIDTH * HEIGHT / DEFAULT_HEIGHT;
-        else
-            HEIGHT = DEFAULT_HEIGHT * WIDTH / DEFAULT_WIDTH;
-        VBOX_SPACING = 25/DEFAULT_WIDTH*WIDTH;
-        BIG_SPACING = 50/DEFAULT_WIDTH*WIDTH;
-        SMALL_SPACING = 5/DEFAULT_WIDTH*WIDTH;
-        BUTTON_WIDTH_SIZE = 75/DEFAULT_WIDTH*WIDTH;
-        BUTTON_HEIGHT_SIZE = 35/DEFAULT_WIDTH*WIDTH;
-
+        VBOX_SPACING = 25/GuiView.DEFAULT_WIDTH*GuiView.WIDTH;
+        BIG_SPACING = 50/GuiView.DEFAULT_WIDTH*GuiView.WIDTH;
+        SMALL_SPACING = 5/GuiView.DEFAULT_WIDTH*GuiView.WIDTH;
+        BUTTON_WIDTH_SIZE = 75/GuiView.DEFAULT_WIDTH*GuiView.WIDTH;
+        BUTTON_HEIGHT_SIZE = 35/GuiView.DEFAULT_WIDTH*GuiView.WIDTH;
     }
 
     private LoginInfo loginInfo = null;
@@ -72,8 +57,8 @@ public class GuiConnectionScreen extends ConnectionScreen {
         Platform.runLater(() -> {
             connectionScreenVBox = new VBox();
             Stage stage = Client.getStage();
-            stage.setHeight(HEIGHT);
-            stage.setWidth(WIDTH);
+            stage.setHeight(GuiView.HEIGHT);
+            stage.setWidth(GuiView.WIDTH);
             stage.setTitle(Message.START_GAME.toString());
             stage.setX(Screen.getPrimary().getBounds().getMinX());
             stage.setY(Screen.getPrimary().getBounds().getMinY());
@@ -113,7 +98,7 @@ public class GuiConnectionScreen extends ConnectionScreen {
             connectionScreenVBox.setAlignment(Pos.BOTTOM_CENTER);
             connectionScreenVBox.setSpacing(VBOX_SPACING);
 
-            Scene scene = new Scene(connectionScreenVBox,WIDTH, HEIGHT);
+            Scene scene = new Scene(connectionScreenVBox,GuiView.WIDTH, GuiView.HEIGHT);
             stage.setScene(scene);
             scene.getStylesheets().add(GuiConnectionScreen.class.getResource("/clientResources/gui/Login.css").toExternalForm());
             List<TextField> textFieldArray = new ArrayList<>();
@@ -159,7 +144,7 @@ public class GuiConnectionScreen extends ConnectionScreen {
             btn.setOnAction(e -> {
 
 
-                if(box.getValue() == null || !isFilledOut(pwBox) || !isFilledOut(textFieldArray) || !isFilledOut(pwBox))
+                if(box.getValue() == null || !isFilledOut(pwBox) || !isFilledOut(textFieldArray))
                     actiontarget.setText(Message.INCOMPLETE_FIELDS.toString());
                 else{
                     if (!validNickname(userTextField) || !validPassword(pwBox) ||
@@ -191,7 +176,7 @@ public class GuiConnectionScreen extends ConnectionScreen {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
         });
@@ -199,7 +184,7 @@ public class GuiConnectionScreen extends ConnectionScreen {
         try {
             t.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
         return loginInfo;
     }

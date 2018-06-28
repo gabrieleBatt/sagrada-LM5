@@ -18,6 +18,6 @@ public final class LoginInfo{
 
     @Override
     public String toString() {
-        return connectionType+nickname+portNumber+ip;
+        return connectionType+" "+nickname+" "+portNumber+" "+ip;
     }
 }

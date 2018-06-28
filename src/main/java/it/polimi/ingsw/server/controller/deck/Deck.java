@@ -2,12 +2,18 @@ package it.polimi.ingsw.server.controller.deck;
 
 import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.server.exception.DeckTooSmallException;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -30,6 +36,17 @@ abstract class Deck {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
 
+    }
+
+    protected Optional<JSONObject> parse(File file){
+        JSONParser parser = new JSONParser();
+        JSONObject js = null;
+        try {
+            js = (JSONObject)parser.parse(new FileReader(file));
+        } catch (IOException | ParseException e) {
+            logger.log(Level.WARNING, e.getMessage(), e);
+        }
+        return Optional.ofNullable(js);
     }
 
     List<Path> getPaths() {

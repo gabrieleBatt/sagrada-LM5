@@ -64,13 +64,11 @@ public class RoundTrack implements Memento {
      * @param toRemove object die to be removed
      */
     public void switchDie(Die toPlace, Die toRemove){
-        for(ArrayList<Die> ar: dice){
-            if(ar.contains(toRemove)){
-                ar.remove(toRemove);
-                ar.add(toPlace);
-                logger.log(Level.FINEST, "This die: " + toRemove + " has been changed with this other die: "+ toPlace, this);
-                return;
-            }
+        Optional<ArrayList<Die>> ar = dice.stream().filter(l -> l.contains(toRemove)).findFirst();
+        if (ar.isPresent()){
+            ar.get().remove(toRemove);
+            ar.get().add(toPlace);
+            logger.log(Level.FINEST, "This die: " + toRemove + " has been changed with this other die: "+ toPlace, this);
         }
     }
 

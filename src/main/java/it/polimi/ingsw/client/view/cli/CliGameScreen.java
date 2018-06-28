@@ -156,7 +156,6 @@ public class CliGameScreen extends GameScreen{
 
     @Override
     public void setRoundTrack(List<List<String>> dice){
-        System.out.println(dice);
         roundTrack = new ArrayList<>();
         for (List<String> list : dice) {
             List<Die> ld = new ArrayList<>();

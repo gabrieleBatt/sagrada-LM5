@@ -37,6 +37,7 @@ public class GuiGameScreen extends GameScreen {
 
     private static final double CELL_OPPONET_WIDTH_MULT = 0.0171875;
     private static final double CELL_OPPONET_HEIGHT_MULT = 0.0323529;
+    private static final String BACKGROUND_COLOR_NONE = "-fx-background-color: none";
     private Collection<ImageView> privateObjectives;
     private Collection<ImageView> publicObjectives;
     private List<ToolButton> toolsList;
@@ -46,8 +47,8 @@ public class GuiGameScreen extends GameScreen {
     private WindowClass mainPlayerWindow;
     private List<String> messageRecord;
     private Stage gameStage;
-    private final String resource = "/clientResources/gui";
-    private final String PNG = ".png";
+    private static final String RESOURCE = "/clientResources/gui";
+    private static final String PNG = ".png";
     private StackPane tableStackPane;
     private String input;
     private static final Image NO_RESTRICTION = new Image("clientResources/gui/restrictions/noRestr.png");
@@ -63,9 +64,6 @@ public class GuiGameScreen extends GameScreen {
     private static final double WINDOW_BUTTON_HEIGHT_MULT = 0.3100751;
     private static final int ROUND_TRACK_SIZE = 10;
     private static final int CELL_NUM = 20;
-    private static final Object CARD_NAME = "name";
-    private static final Object CARD_POINTS = "points";
-    private static final Object CARD_DESCRIPTION = "description";
     private static final String NO_WINDOW = "NoWindow";
     private static final Object WINDOW_CELLS = "cells";
     private static final String JSON_EXTENSION = ".json";
@@ -176,12 +174,12 @@ public class GuiGameScreen extends GameScreen {
             messageScene = new Scene(messageStackPane);
             messageStage = new Stage();
             messageStage.setScene(messageScene);
-            String msgs = new String();
+            StringBuilder msgs = new StringBuilder();
             messagesVBox.getChildren().remove(0, messagesVBox.getChildren().size());
             for (int i = messageRecord.size()-1; i>=0; i--) {
-                msgs = msgs + messageRecord.get(i);
+                msgs.append(messageRecord.get(i));
             }
-            messages.setText(msgs);
+            messages.setText(msgs.toString());
             messages.setFont(Font.font(FONT,20));
             dialogText.setFont(Font.font(FONT,20));
             dialogText.setFill(WHITE);
@@ -210,7 +208,7 @@ public class GuiGameScreen extends GameScreen {
     public void setPrivateObjectives(Collection<String> privateObjectivesStrings) throws RemoteException {
         this.privateObjectives = new ArrayList<>();
         for (String privateObjective : privateObjectivesStrings) {
-            ImageView privateObView = new ImageView(new Image(resource + "/PrivateOb/" + privateObjective + PNG));
+            ImageView privateObView = new ImageView(new Image(RESOURCE + "/PrivateOb/" + privateObjective + PNG));
             privateObView.fitHeightProperty().setValue(GuiView.HEIGHT*CARD_HEIGHT_MULT);
             privateObView.fitWidthProperty().setValue(GuiView.WIDTH*CARD_WIDTH_MULT);
             privateObjectives.add(privateObView);
@@ -223,7 +221,7 @@ public class GuiGameScreen extends GameScreen {
     public void setPublicObjective(Collection<String> publicObjectivesStrings){
         this.publicObjectives = new ArrayList<>();
         for (String publicObjective : publicObjectivesStrings) {
-            ImageView publicObView = new ImageView(new Image(resource + "/PublicOb/" + publicObjective + PNG));
+            ImageView publicObView = new ImageView(new Image(RESOURCE + "/PublicOb/" + publicObjective + PNG));
             publicObView.fitHeightProperty().setValue(GuiView.HEIGHT*CARD_HEIGHT_MULT);
             publicObView.fitWidthProperty().setValue(GuiView.WIDTH*CARD_WIDTH_MULT);
             publicObjectives.add(publicObView);
@@ -253,7 +251,7 @@ public class GuiGameScreen extends GameScreen {
         for(String t: tools){
             ToolButton newTool = new ToolButton();
             newTool.toolName = t;
-            ImageView toolImageView = new ImageView(new Image(resource + "/Tools/" + t + PNG));
+            ImageView toolImageView = new ImageView(new Image(RESOURCE + "/Tools/" + t + PNG));
             toolImageView.fitHeightProperty().setValue(GuiView.HEIGHT*CARD_HEIGHT_MULT*SMALLER_MULT);
             toolImageView.fitWidthProperty().setValue(GuiView.WIDTH*CARD_WIDTH_MULT*SMALLER_MULT);
             newTool.setDisable(true);
@@ -338,7 +336,7 @@ public class GuiGameScreen extends GameScreen {
             if (die.equals(" "))
                 image = playerClass.glassWindow.cells[x * COLUMNS + y].restriction;
             else
-                image = new ImageView(new Image(resource + "/dice/" + die.charAt(0) + die.charAt(1) + PNG));
+                image = new ImageView(new Image(RESOURCE + "/dice/" + die.charAt(0) + die.charAt(1) + PNG));
 
             playerClass.glassWindow.cells[x * COLUMNS + y].showingImage = image;
 
@@ -476,7 +474,7 @@ public class GuiGameScreen extends GameScreen {
                 windowsGridPane.add(windowVBox, index / 2, index % 2);
                 Button windowButton = new Button();
                 windowButton.setOpacity(0);
-                windowButton.setMinSize(GuiView.WIDTH*WINDOW_BUTTON_WIDTH_MULT, GuiView.HEIGHT*WINDOW_BUTTON_HEIGHT_MULT);;
+                windowButton.setMinSize(GuiView.WIDTH*WINDOW_BUTTON_WIDTH_MULT, GuiView.HEIGHT*WINDOW_BUTTON_HEIGHT_MULT);
                 windowsGridPane.add(windowButton, index / 2, index % 2);
                 windowsGridPane.setAlignment(Pos.TOP_CENTER);
                 buttons.add(windowButton);
@@ -501,9 +499,7 @@ public class GuiGameScreen extends GameScreen {
             windowsGridPane.setVgap(GuiView.HEIGHT/30);
             windowChoiceGridPane.add(windowsGridPane,1,0);
 
-            privateObjectives.forEach(po -> {
-                windowChoiceGridPane.add(po,2,0);
-            });
+            privateObjectives.forEach(po -> windowChoiceGridPane.add(po,2,0));
             StackPane windowChoiceSP = new StackPane();
             windowChoiceSP.getChildren().add(windowChoiceGridPane);
             selectWindowScene = new Scene(windowChoiceSP, GuiView.WIDTH, GuiView.HEIGHT);
@@ -535,7 +531,7 @@ public class GuiGameScreen extends GameScreen {
         windowName.setFont(Font.font(FONT,20));
         windowName.setTextFill(WHITE);
 
-        windowDifficulty.setText(Message.TOKENS + " " + String.valueOf(windowPane.tokens));
+        windowDifficulty.setText(Message.TOKENS + " " + windowPane.tokens);
         windowDifficulty.setFont(Font.font(FONT,15));
         windowDifficulty.setTextFill(WHITE);
 
@@ -708,7 +704,7 @@ public class GuiGameScreen extends GameScreen {
                     if(restrictions.get(i).charAt(0) == ' ') {
                         this.cells[i].restriction = new ImageView(NO_RESTRICTION);
                     }else {
-                        this.cells[i].restriction = new ImageView(new Image(resource + "/restrictions/restr" + restrictions.get(i).charAt(0) + PNG));
+                        this.cells[i].restriction = new ImageView(new Image(RESOURCE + "/restrictions/restr" + restrictions.get(i).charAt(0) + PNG));
                     }
 
                     final int x = i/COLUMNS;
@@ -752,11 +748,11 @@ public class GuiGameScreen extends GameScreen {
                     }
 
                     cellButton.setGraphic(cellButton.showingImage);
-                    cellButton.setStyle("-fx-background-color: none");
+                    cellButton.setStyle(BACKGROUND_COLOR_NONE);
                     cellButton.setOnMouseEntered(event -> {
                         if(!cellButton.isDisable()) cellButton.setStyle("-fx-background-color: lightgray");});
                     cellButton.setOnMouseExited(event -> {
-                        if(!cellButton.isDisable()) cellButton.setStyle("-fx-background-color: none");});
+                        if(!cellButton.isDisable()) cellButton.setStyle(BACKGROUND_COLOR_NONE);});
                 }
             }
     }
@@ -796,7 +792,7 @@ public class GuiGameScreen extends GameScreen {
 
         DieButton(String die,double cellWithMult, double cellHeightMult) {
             dieId = die;
-            ImageView buttonImage = new ImageView(new Image(resource+"/dice/"+die.charAt(0)+die.charAt(1)+PNG));
+            ImageView buttonImage = new ImageView(new Image(RESOURCE +"/dice/"+die.charAt(0)+die.charAt(1)+PNG));
             buttonImage.fitWidthProperty().setValue(GuiView.WIDTH*cellWithMult);
             buttonImage.fitHeightProperty().setValue(GuiView.HEIGHT*cellHeightMult);
             this.setMinSize(GuiView.WIDTH*cellWithMult*BIGGER_MULT,GuiView.HEIGHT*cellHeightMult*BIGGER_MULT);
@@ -804,11 +800,11 @@ public class GuiGameScreen extends GameScreen {
 
             this.setDisable(true);
             this.setGraphic(buttonImage);
-            this.setStyle("-fx-background-color: none");
+            this.setStyle(BACKGROUND_COLOR_NONE);
             this.setOnMouseEntered(event -> {if(!this.isDisable())
                 this.setStyle("-fx-background-color: lightgray");});
             this.setOnMouseExited(event -> {if(!this.isDisable())
-                this.setStyle("-fx-background-color: none");});
+                this.setStyle(BACKGROUND_COLOR_NONE);});
             this.setOnAction(event ->
                     Platform.runLater(() -> input = dieId)
             );
@@ -854,7 +850,7 @@ public class GuiGameScreen extends GameScreen {
                 try {
                     Thread.sleep(2);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
         });
@@ -862,7 +858,7 @@ public class GuiGameScreen extends GameScreen {
         try {
             t.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 

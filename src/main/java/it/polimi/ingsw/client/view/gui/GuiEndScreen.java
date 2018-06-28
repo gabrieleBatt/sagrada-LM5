@@ -20,11 +20,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.awt.*;
-
 public class GuiEndScreen extends EndScreen {
 
-    private static final double FONT_SCALE = 0.05;
     private static final double WIDTH_SCALE = 0.9;
     private static final double HEIGHT_SCALE = 1;
     private static final String FONT = "Forte";
@@ -122,7 +119,7 @@ public class GuiEndScreen extends EndScreen {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
         });
@@ -130,7 +127,7 @@ public class GuiEndScreen extends EndScreen {
         try {
             t.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
 
         return input;

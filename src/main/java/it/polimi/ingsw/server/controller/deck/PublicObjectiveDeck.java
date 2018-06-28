@@ -62,18 +62,6 @@ public class PublicObjectiveDeck extends Deck {
         return ret;
     }
 
-    private Optional<JSONObject> parse(File f){
-        JSONParser parser = new JSONParser();
-        JSONObject js = null;
-        try {
-            js = (JSONObject)parser.parse(new FileReader(f));
-            logger.log(Level.FINEST,  "This public objective "+ js.get(NAME) +" has been added to getPaths()", this);
-        } catch (IOException | ParseException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
-        return Optional.ofNullable(js);
-    }
-
 
     private PublicObjective readCard(JSONObject jsonObject){
         if ((jsonObject.get(TYPE)).equals(AREA)) return readAreaCard(jsonObject);

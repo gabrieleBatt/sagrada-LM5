@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 public class ToolActions {
 
+    private ToolActions(){}
 
     /**
      * Generates the action command used to let the player choose how to modify a die.
@@ -23,22 +24,23 @@ public class ToolActions {
      * @param options List of List of Identifiable to chose from.
      * @return ActionCommand used to et the player choose how to modify a die.
      */
-        public static ActionCommand setActionCommand(String marker, List<List<Identifiable>> options){
-            return actionReceiver -> {
-                Player player = actionReceiver.getTurnPlayer();
-                CommunicationChannel cc = actionReceiver.getChannel(player.getNickname());
-                Die die = actionReceiver.getMap().get(marker);
-                List<Identifiable> optionList = options.get(die.getNumber()-1);
-                Identifiable actionChosen = cc.chooseFrom(optionList, Message.SET_DIE.toString(),false,false);
-                die.setNumber(Integer.parseInt(actionChosen.getId()));
+    public static ActionCommand setActionCommand(String marker, List<List<Identifiable>> options) {
+        return actionReceiver -> {
+            Player player = actionReceiver.getTurnPlayer();
+            CommunicationChannel cc = actionReceiver.getChannel(player.getNickname());
+            Die die = actionReceiver.getMap().get(marker);
+            List<Identifiable> optionList = options.get(die.getNumber() - 1);
+            Identifiable actionChosen = cc.chooseFrom(optionList, Message.SET_DIE.toString(), false, false);
+            die.setNumber(Integer.parseInt(actionChosen.getId()));
 
-                Game.getLogger().log(Level.FINE,"New die value: "+ die.getNumber(),die);
+            Game.getLogger().log(Level.FINE, "New die value: " + die.getNumber(), die);
 
-                actionReceiver.sendAll(die.getId().substring(0, 2));
-                actionReceiver.sendAll(Message.BEEN_SET.name());
+            actionReceiver.sendAll(die.getId().substring(0, 2));
+            actionReceiver.sendAll(Message.BEEN_SET.name());
 
-            };
-        }
+        };
+    }
+
 
     /**
      * Generates the action command used to let the player roll a die.

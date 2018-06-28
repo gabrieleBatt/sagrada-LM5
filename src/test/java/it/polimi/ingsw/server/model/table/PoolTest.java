@@ -24,6 +24,9 @@ class PoolTest {
         diceToBe.add(d3);
         p.setDice(diceToBe);
         Assertions.assertEquals(p.getDice(),diceToBe);
+        Die d4 = new Die(DieColor.RED, 50);
+        p.addDie(d4);
+        Assertions.assertTrue(p.getDice().contains(d4));
     }
 
     @DisplayName("Remove die from pool")

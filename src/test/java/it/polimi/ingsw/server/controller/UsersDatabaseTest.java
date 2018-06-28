@@ -16,6 +16,8 @@ class UsersDatabaseTest {
         Assertions.assertFalse(UsersDatabase.userExists("test2"));
         Assertions.assertTrue(UsersDatabase.authentication("test1", "password"));
         Assertions.assertFalse(UsersDatabase.authentication("test1", "wrongPass"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> UsersDatabase.newUser("test1", "test"));
+        Assertions.assertTrue(UsersDatabase.createOrAuthenticate("test2", "pass"));
+        Assertions.assertFalse(UsersDatabase.createOrAuthenticate("test2", "noPass"));
     }
-
 }

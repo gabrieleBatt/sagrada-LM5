@@ -63,18 +63,6 @@ public class GlassWindowDeck extends Deck {
         return ret;
     }
 
-    private Optional<JSONObject> parse(File file){
-        JSONParser parser = new JSONParser();
-        JSONObject js = null;
-        try {
-            js = (JSONObject)parser.parse(new FileReader(file));
-            logger.log(Level.FINEST,  "GlassWindow "+ js.get("name1") + "/" + js.get("name2") +" has been added to getPaths()", this);
-        } catch (IOException | ParseException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
-        return Optional.ofNullable(js);
-    }
-
     private GlassWindow readCard(JSONObject jsonGlassWindow, int x) {
         String name = (String) jsonGlassWindow.get(NAME+x);
         int difficulty = Math.toIntExact((long)jsonGlassWindow.get(DIFFICULTY+x));

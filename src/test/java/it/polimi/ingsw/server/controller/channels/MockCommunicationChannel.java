@@ -18,6 +18,8 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class MockCommunicationChannel extends CommunicationChannel {
 
+    private boolean connected=true;
+
     /**
      * Creates a communication channel setting the player's nickname.
      * @param nickName String, player's nickname.
@@ -32,7 +34,7 @@ public class MockCommunicationChannel extends CommunicationChannel {
      */
     @Override
     public boolean isOffline() {
-        return false;
+        return !connected;
     }
 
     @Override
@@ -100,6 +102,6 @@ public class MockCommunicationChannel extends CommunicationChannel {
 
     @Override
     public void setOffline() {
-
+        this.connected = false;
     }
 }

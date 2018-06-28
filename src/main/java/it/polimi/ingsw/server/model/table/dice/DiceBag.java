@@ -53,9 +53,6 @@ public class DiceBag implements Memento{
      * @return the die drown once rolled.
      */
     private Die drawDie() {
-        if (bag.isEmpty()){
-            throw new BagEmptyException("Dice in bag: " + bag.size()+"\nDice requested 0");
-        }
         int randomNum = ThreadLocalRandom.current().nextInt(0, bag.size() );
         Die ret = new ArrayList<>(bag).get(randomNum);
         bag.remove(ret);

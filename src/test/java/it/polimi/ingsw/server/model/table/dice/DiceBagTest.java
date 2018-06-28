@@ -14,12 +14,12 @@ class DiceBagTest {
     void drawDie() {
         DiceBag db = new DiceBag();
         Set<String> sd = new HashSet<>();
-        Assertions.assertTrue(db.bagSize() == 90);
+        Assertions.assertEquals(90, db.bagSize());
         for (int i = 0; i < 90; i++) {
             sd.add(new ArrayList<>(db.drawDice(1)).get(0).getId().substring(1));
         }
-        Assertions.assertTrue(db.bagSize() == 0);
-        Assertions.assertTrue(sd.size() == 90);
+        Assertions.assertEquals(0, db.bagSize());
+        Assertions.assertEquals(90, sd.size());
     }
 
     @DisplayName("Draw multiple times multiple dice")
@@ -32,10 +32,9 @@ class DiceBagTest {
             diceDrown = db.drawDice(i);
             for (Die d : diceDrown){Assertions.assertFalse(db.bagContains(d));}
             n -= i;
-            Assertions.assertTrue(db.bagSize() == n);
+            Assertions.assertEquals(db.bagSize(), n);
         }
         Assertions.assertThrows(BagEmptyException.class, () -> db.drawDice(5));
-
     }
 
     @DisplayName("Place one extra die in the bag")

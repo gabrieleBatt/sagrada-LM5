@@ -231,6 +231,7 @@ public class Game implements Runnable {
         getCommChannels().forEach(c -> c.sendMessage(message));
     }
 
+
     private class ActionList extends ArrayList<ActionCommand>{
         transient private List<ActionCommand> turnCommands = new ArrayList<>();
 

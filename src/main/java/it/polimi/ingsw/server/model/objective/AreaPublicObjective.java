@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.model.objective;
 
-import it.polimi.ingsw.server.model.table.dice.Die;
 import it.polimi.ingsw.server.model.table.dice.DieColor;
 import it.polimi.ingsw.shared.LogMaker;
 import it.polimi.ingsw.server.exception.EmptyCellException;

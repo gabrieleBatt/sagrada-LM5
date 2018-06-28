@@ -39,7 +39,7 @@ public abstract class Objective implements Identifiable {
      */
     @Override
     public String getId(){
-        return name;
+        return getName();
     }
 
 }

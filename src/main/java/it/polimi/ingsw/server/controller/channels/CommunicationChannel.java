@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.controller.channels;
 
-import com.sun.jmx.snmp.Timestamp;
 import it.polimi.ingsw.shared.identifiables.Identifiable;
 import it.polimi.ingsw.shared.identifiables.StdId;
 import it.polimi.ingsw.server.controller.Game;
@@ -17,6 +16,8 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -161,7 +162,7 @@ public abstract class CommunicationChannel{
      * Used to set a channel as it went offline
      */
     public void setOffline(){
-        this.offlineTime = new Timestamp();
+        this.offlineTime = new Timestamp(LocalTime.now().getNano());
     }
 
     public Timestamp getOfflineTime() {

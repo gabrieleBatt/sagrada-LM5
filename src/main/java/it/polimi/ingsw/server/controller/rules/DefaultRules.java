@@ -219,7 +219,7 @@ public class DefaultRules implements Rules {
                 actionReceiver.getTable().getPlayers()
                         .stream()
                         .min(Comparator.comparingLong(p -> actionReceiver
-                                .getChannel(p.getNickname()).getOfflineTime().getDateTime()))
+                                .getChannel(p.getNickname()).getOfflineTime().getTime()))
                         .ifPresent(p -> ranking.add(getScore(p, actionReceiver)));
             }else if(actionReceiver.getCommChannels().stream().filter(cc -> !cc.isOffline()).count() == 1){
                 Optional<CommunicationChannel> optionalPlayer = actionReceiver.getCommChannels()
