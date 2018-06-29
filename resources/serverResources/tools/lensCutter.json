@@ -1,0 +1,21 @@
+{
+  "name": "lensCutter",
+  "conditions":["CANCEL_DRAFTING"],
+  "toolColor": "GREEN",
+  "actions":3,
+  "action1": {
+    "type": "draft",
+    "marker": "d1"
+  },
+  "action2": {
+    "type": "swap",
+    "markerInContainer": "d1",
+    "markerInMap": "d1",
+    "with": "roundTrack"
+  },
+  "action3": {
+    "type": "place",
+    "marker": "d1",
+    "restriction":["CLOSE", "COLOR", "NUMBER"]
+  }
+}

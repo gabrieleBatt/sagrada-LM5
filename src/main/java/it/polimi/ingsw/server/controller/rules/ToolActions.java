@@ -189,7 +189,7 @@ public class ToolActions {
                 Die dieToTake = actionReceiver.getTable().getDiceBag().drawDice(1).iterator().next();
                 actionReceiver.getMap().put(markerDieToTake,dieToTake);
 
-                actionReceiver.sendAll(dieToTake.getId().substring(0, 2), Message.SWAPPED.name(), dieToSet.getId().substring(0, 2));
+                actionReceiver.sendAll(dieToSet.getId().substring(0, 2),Message.SWAPPED.name(), dieToTake.getId().substring(0, 2));
             };
     }
 
