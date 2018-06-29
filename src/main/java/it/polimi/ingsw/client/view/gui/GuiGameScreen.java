@@ -15,6 +15,7 @@ import javafx.scene.image.Image ;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -30,6 +31,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static javafx.scene.paint.Color.LIGHTGRAY;
 import static javafx.scene.paint.Color.WHITE;
 
 
@@ -74,6 +76,7 @@ public class GuiGameScreen extends GameScreen {
     private static final double BIGGER_MULT = 1.05;
     private static final double SMALLER_MULT = 0.8;
     private static final int MAX_MSGS_LENGHT = 15;
+    public static final double ROUND_TRACK_HEIGHT = 37/GuiView.DEFAULT_HEIGHT*GuiView.HEIGHT;
 
 
 
@@ -383,22 +386,21 @@ public class GuiGameScreen extends GameScreen {
             diceOnTableVBox.getChildren().remove(0, diceOnTableVBox.getChildren().size());
             diceOnTableVBox.setAlignment(Pos.CENTER);
             HBox roundTrackHBox = new HBox();
-            roundTrackHBox.setSpacing(GuiView.SMALL_SPACING);
+            roundTrackHBox.setId("roundTrack");
+            roundTrackHBox.setSpacing(GuiView.SMALL_SPACING*SMALLER_MULT);
+            roundTrackHBox.setMinHeight(ROUND_TRACK_HEIGHT);
+            HBox.setMargin(roundTrackHBox,new Insets(GuiView.SMALL_SPACING*SMALLER_MULT));
             roundTrackHBox.setAlignment(Pos.CENTER);
 
             for (int i = 0; i<roundTrack.size();i++) {
                     Button roundButton = new Button();
-                    roundButton.setMinSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT*BIGGER_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT*BIGGER_MULT);
-                    roundButton.setStyle("-fx-background-color: #a5814c");
-                    Integer j = i+1;
-                    roundButton.setText(j.toString());
-                    roundButton.setFont(Font.font(FONT,10));
-
+                    roundButton.setMinSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT*BIGGER_MULT*BIGGER_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT*SMALLER_MULT);
+                    roundButton.setOpacity(0.5);
                     VBox roundTrackVBox = new VBox();
                     Stage roundTrackStage = new Stage();
                     Scene roundTrackCellScene = new Scene(roundTrackVBox);
                     roundTrackStage.setScene(roundTrackCellScene);
-                    roundTrackVBox.setStyle("-fx-background-color: #c7a96e");
+                    roundTrackVBox.setStyle("-fx-background-color: #c7bfb8");
                     for(DieButton dieButton: roundTrack.get(i)){
                         roundTrackVBox.getChildren().add(dieButton);
                     }
@@ -414,15 +416,9 @@ public class GuiGameScreen extends GameScreen {
 
             for (int i = roundTrack.size(); i < ROUND_TRACK_SIZE; i++) {
                 Button roundButton = new Button();
-
-                roundButton.setMinSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT*BIGGER_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT*BIGGER_MULT);
-
+                roundButton.setMinSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT*BIGGER_MULT*BIGGER_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT*SMALLER_MULT);
                 roundButton.setDisable(true);
-                roundButton.setStyle("-fx-background-color: #a5814c");
-
-                Integer j = i+1;
-                roundButton.setText(j.toString());
-                roundButton.setFont(Font.font(FONT,10));
+                roundButton.setOpacity(0);
                 roundTrackHBox.getChildren().add(roundButton);
             }
 
@@ -827,9 +823,11 @@ public class GuiGameScreen extends GameScreen {
                         playerVBox.getChildren().add(player.playerText);
                         playerVBox.getChildren().add(player.glassWindow);
                         if (i == 0) {
+                            playerVBox.setAlignment(Pos.BOTTOM_CENTER);
                             mainPlayerStackPane.getChildren().add(playerVBox);
-                            player.playerText.setFont(Font.font(FONT,25));
+                            player.playerText.setFont(Font.font(FONT, FontWeight.EXTRA_BOLD, 28));
                             mainPlayerWindow = player.glassWindow;
+                            playerVBox.setId("windowPane");
 
                         } else {
                             opponentsWindowPane.add(playerVBox, i / 2, i % 2);

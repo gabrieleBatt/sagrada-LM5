@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 
 public class GuiEndScreen extends EndScreen {
 
-    private static final double WIDTH_SCALE = 0.9;
+    private static final double WIDTH_SCALE = 0.99;
     private static final double HEIGHT_SCALE = 1;
     private static final String FONT = "Forte";
     private static final String CSS_PATH = "/clientResources/gui/endGame/endGame.css";

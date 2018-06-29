@@ -1,0 +1,11 @@
+{
+  "name": "eglomiseBrush",
+  "conditions":[],
+  "toolColor": "CYAN",
+  "actions":1,
+  "action1": {
+    "type": "move",
+    "marker": "d1",
+    "restriction":["CLOSE", "NUMBER"]
+  }
+}

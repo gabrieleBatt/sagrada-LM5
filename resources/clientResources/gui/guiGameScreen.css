@@ -4,5 +4,11 @@
 }
 #windowPane{
     -fx-background-image: url("/clientResources/gui/Gwindow.png");
+    -fx-background-size: stretch;
+}
+
+#roundTrack{
+    -fx-background-image: url("/clientResources/gui/roundtrack.png");
+    -fx-background-size: stretch;
 }
 

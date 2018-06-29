@@ -28,15 +28,16 @@ public class GuiConnectionScreen extends ConnectionScreen {
 
     private static final int MIN_PORT = 1023;
     private static final int MAX_PORT = 65536;
-    private static final int MAX_LENGHT = 12;
+    private static final int MAX_LENGTH = 12;
     private static final double SMALL_SPACING;
     private static final double BIG_SPACING;
-    private static final double VBOX_SPACING;
+    private static final double VERTICAL_SPACING;
     private static final double BUTTON_WIDTH_SIZE;
     private static final double BUTTON_HEIGHT_SIZE;
+    private static final String RECONNECT = "Reconnect";
 
     static {
-        VBOX_SPACING = 25/GuiView.DEFAULT_WIDTH*GuiView.WIDTH;
+        VERTICAL_SPACING = 25/GuiView.DEFAULT_WIDTH*GuiView.WIDTH;
         BIG_SPACING = 50/GuiView.DEFAULT_WIDTH*GuiView.WIDTH;
         SMALL_SPACING = 5/GuiView.DEFAULT_WIDTH*GuiView.WIDTH;
         BUTTON_WIDTH_SIZE = 75/GuiView.DEFAULT_WIDTH*GuiView.WIDTH;
@@ -48,12 +49,14 @@ public class GuiConnectionScreen extends ConnectionScreen {
     private VBox connectionScreenVBox;
     private String RMI = "RMI";
     private String SOCKET = "SOCKET";
+    private boolean isReadyToConnect;
 
     /**
      * Sets the login scene, catches login info.
      */
 
     public void setScene(){
+        isReadyToConnect = false;
         Platform.runLater(() -> {
             connectionScreenVBox = new VBox();
             Stage stage = Client.getStage();
@@ -67,16 +70,22 @@ public class GuiConnectionScreen extends ConnectionScreen {
             grid = new GridPane();
             grid.setAlignment(Pos.BOTTOM_CENTER);
             grid.setHgap(BIG_SPACING);
-            grid.setVgap(SMALL_SPACING);
+            grid.setVgap(VERTICAL_SPACING);
             grid.getHgap();
-            Button btn = new Button(Message.PLAY.toString());
+            Button btn = new Button();
+            if(loginInfo == null)
+                btn.setText(Message.PLAY.toString());
+            else
+                btn.setText(RECONNECT);
             btn.setMinSize(BUTTON_WIDTH_SIZE,BUTTON_HEIGHT_SIZE);
 
 
 
 
-            ChoiceBox box = new ChoiceBox();
+            ChoiceBox<String> box = new ChoiceBox<>();
             box.getItems().addAll(RMI, SOCKET);
+            if(loginInfo != null)
+                box.setValue(loginInfo.connectionType);
             grid.add(box,1,4);
             final Text actiontarget = new Text();
             setAlgerian(actiontarget);
@@ -88,7 +97,8 @@ public class GuiConnectionScreen extends ConnectionScreen {
             //invisible button to speed up connection
             Button button = new Button();
             button.setOnAction(event -> {
-                loginInfo = new LoginInfo(SOCKET, "Player"+number,50004,"127.0.0.1","Password"+number);
+                loginInfo = new LoginInfo(SOCKET, "Player"+number,50003,"127.0.0.1","Password"+number);
+                isReadyToConnect = true;
                 btn.setDisable(true);
             });
             button.setOpacity(0);
@@ -96,7 +106,7 @@ public class GuiConnectionScreen extends ConnectionScreen {
             button.setMinSize(SMALL_SPACING,SMALL_SPACING);
             connectionScreenVBox.getChildren().add(button);
             connectionScreenVBox.setAlignment(Pos.BOTTOM_CENTER);
-            connectionScreenVBox.setSpacing(VBOX_SPACING);
+            connectionScreenVBox.setSpacing(VERTICAL_SPACING);
 
             Scene scene = new Scene(connectionScreenVBox,GuiView.WIDTH, GuiView.HEIGHT);
             stage.setScene(scene);
@@ -109,6 +119,8 @@ public class GuiConnectionScreen extends ConnectionScreen {
             grid.add(userName, 0, 1);
             TextField userTextField = new TextField();
             grid.add(userTextField, 1, 1);
+            if(loginInfo != null)
+                userTextField.setText(loginInfo.nickname);
             textFieldArray.add(userTextField);
 
             Text pw = new Text(Message.INSERT_PASSWORD.toString());
@@ -118,14 +130,16 @@ public class GuiConnectionScreen extends ConnectionScreen {
             Text ip = new Text(Message.IP_NUMBER.toString());
             setAlgerian(ip);
             setAlgerian(ip);
-            grid.add(ip, 0, 6);
+            grid.add(ip, 0, 3);
 
             Text cnn = new Text(Message.CHOOSE_CONNECTION.toString());
             setAlgerian(cnn);
             grid.add(cnn, 0, 4);
 
             TextField ipTextField = new TextField();
-            grid.add(ipTextField, 1, 6);
+            if(loginInfo != null)
+                ipTextField.setText(loginInfo.ip);
+            grid.add(ipTextField, 1, 3);
             textFieldArray.add(ipTextField);
 
             Text port = new Text(Message.PORT_NUMBER.toString());
@@ -133,11 +147,15 @@ public class GuiConnectionScreen extends ConnectionScreen {
             grid.add(port, 0, 5);
 
             TextField portTextField = new TextField();
+            if(loginInfo != null)
+                portTextField.setText(Integer.toString(loginInfo.portNumber));
             grid.add(portTextField, 1, 5);
             textFieldArray.add(portTextField);
             textFieldArray.add(userTextField);
             grid.setGridLinesVisible(false);
             PasswordField pwBox = new PasswordField();
+            if(loginInfo != null)
+                pwBox.setText(loginInfo.password);
             grid.add(pwBox, 1, 2);
 
 
@@ -151,8 +169,9 @@ public class GuiConnectionScreen extends ConnectionScreen {
                             !validPort(portTextField) || !validIp(ipTextField))
                         actiontarget.setText(Message.INVALID_CHOICE.toString());
                     else{
+                        isReadyToConnect = true;
                         loginInfo = new LoginInfo(
-                                box.getValue().toString(),
+                                box.getValue(),
                                 userTextField.getCharacters().toString(),
                                 Integer.parseInt(portTextField.getCharacters().toString()),
                                 ipTextField.getCharacters().toString(),
@@ -163,6 +182,7 @@ public class GuiConnectionScreen extends ConnectionScreen {
                 }
             });
             stage.setScene(scene);
+            stage.setMaximized(true);
             stage.show();
         });
 
@@ -171,8 +191,22 @@ public class GuiConnectionScreen extends ConnectionScreen {
     @Override
     public LoginInfo getConnectionInfo() {
         setScene();
+        waitInput();
+        return loginInfo;
+    }
+
+    @Override
+    public boolean reConnect() {
+        if (loginInfo == null)
+            return false;
+        setScene();
+        waitInput();
+        return true;
+    }
+
+    private  void waitInput(){
         Thread t = new Thread(() -> {
-            while(loginInfo == null) {
+            while(!isReadyToConnect) {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
@@ -186,12 +220,6 @@ public class GuiConnectionScreen extends ConnectionScreen {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        return loginInfo;
-    }
-
-    @Override
-    public boolean reConnect() {
-        return false;
     }
 
     /**
@@ -221,7 +249,7 @@ public class GuiConnectionScreen extends ConnectionScreen {
      * @return boolean, true if nickname insert is valid.
      */
     private boolean validNickname(TextField userTextField){
-        return (!userTextField.getCharacters().toString().contains(" ")&& userTextField.getCharacters().length()<MAX_LENGHT);
+        return (!userTextField.getCharacters().toString().contains(" ")&& userTextField.getCharacters().length()<MAX_LENGTH);
     }
 
 
@@ -246,7 +274,7 @@ public class GuiConnectionScreen extends ConnectionScreen {
      * @return boolean, true if password insert is valid.
      */
     private boolean validPassword(PasswordField pf){
-        return (!pf.getCharacters().toString().contains(" ") && pf.getCharacters().length()<MAX_LENGHT);
+        return (!pf.getCharacters().toString().contains(" ") && pf.getCharacters().length()<MAX_LENGTH);
     }
 
     /**
