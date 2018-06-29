@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.controller.deck;
 
-import it.polimi.ingsw.server.controller.channels.CommunicationChannel;
 import it.polimi.ingsw.shared.LogMaker;
+import it.polimi.ingsw.shared.Message;
 import it.polimi.ingsw.shared.identifiables.Identifiable;
 import it.polimi.ingsw.shared.identifiables.StdId;
 import it.polimi.ingsw.server.controller.Game;
@@ -11,14 +11,10 @@ import it.polimi.ingsw.server.controller.rules.DefaultRules;
 import it.polimi.ingsw.server.controller.rules.ToolActions;
 import it.polimi.ingsw.server.model.tool.Tool;
 import it.polimi.ingsw.server.model.tool.ToolConditions;
+import javafx.scene.shape.Mesh;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -46,10 +42,12 @@ public class ToolDeck extends Deck {
     private static final String ACTION = "action";
     private static final String SKIP_TURN = "skipNextTurn";
     private static final String NAME = "name";
-    private static final String NUMBER = "NUMBER";
     private static final String TYPE = "type";
-    private static final String COLOR = "COLOR";
-    private static final String CLOSE = "CLOSE";
+    private static final String NUMBER_RESTRICTION = "NUMBER";
+    private static final String COLOR_RESTRICTION = "COLOR";
+    private static final String CLOSE_RESTRICTION = "CLOSE";
+    private static final String COLOR = "color";
+    private static final String NUMBER = "number";
     private static final String CONDITIONS = "conditions";
     private static final String RESTRICTION = "restriction";
     private static final String FORCED = "forced";
@@ -116,6 +114,7 @@ public class ToolDeck extends Deck {
             operations.put(ROLL_POOL, j -> ar -> {
                 ar.getTable().getPool().roll();
                 ar.getCommChannels().forEach(cc -> cc.updateView(ar.getTable().getPool()));
+                ar.sendAll(Message.NEW_POOL.name());
             });
             operations.put(SKIP_TURN, j -> Game::skipNextTurn);
 
@@ -141,7 +140,7 @@ public class ToolDeck extends Deck {
         return DefaultRules.getDefaultRules().getDraftAction(
                 getMarker(jsonObject),
                 getColor(jsonObject),
-                (String)jsonObject.get(NUMBER)
+                getNumber(jsonObject)
         );
     }
 
@@ -182,9 +181,9 @@ public class ToolDeck extends Deck {
         List<String> restrictions = new ArrayList<>((JSONArray)jsonObject.get(RESTRICTION));
         return DefaultRules.getDefaultRules().getPlaceAction(
                         getMarker(jsonObject),
-                        restrictions.contains(CLOSE),
-                        restrictions.contains(COLOR),
-                        restrictions.contains(NUMBER),
+                        restrictions.contains(CLOSE_RESTRICTION),
+                        restrictions.contains(COLOR_RESTRICTION),
+                        restrictions.contains(NUMBER_RESTRICTION),
                         jsonObject.containsKey(FORCED) && (Boolean)jsonObject.get(FORCED)
 
                 );
@@ -232,9 +231,9 @@ public class ToolDeck extends Deck {
                 .moveActionCommand(
                         getColor(jsonObject),
                         getNumber(jsonObject),
-                        !restrictions.contains(COLOR),
-                        !restrictions.contains(NUMBER),
-                        !restrictions.contains(CLOSE),
+                        !restrictions.contains(COLOR_RESTRICTION),
+                        !restrictions.contains(NUMBER_RESTRICTION),
+                        !restrictions.contains(CLOSE_RESTRICTION),
                         jsonObject.containsKey(CAN_SKIP) && (Boolean)jsonObject.get(CAN_SKIP)
 
                 );

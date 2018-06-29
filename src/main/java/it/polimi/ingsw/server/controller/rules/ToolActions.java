@@ -35,8 +35,7 @@ public class ToolActions {
 
             Game.getLogger().log(Level.FINE, "New die value: " + die.getNumber(), die);
 
-            actionReceiver.sendAll(die.getId().substring(0, 2));
-            actionReceiver.sendAll(Message.BEEN_SET.name());
+            actionReceiver.sendAll(die.getId().substring(0, 2), Message.BEEN_SET.name());
 
         };
     }
@@ -53,8 +52,7 @@ public class ToolActions {
             Die die = actionReceiver.getMap().get(marker);
             int index = ThreadLocalRandom.current().nextInt(0, optionList.get(die.getNumber()-1).size());
             die.setNumber(Integer.parseInt(optionList.get(die.getNumber()-1).get(index).getId()));
-            actionReceiver.sendAll(die.getId().substring(0, 2));
-            actionReceiver.sendAll(Message.RANDOM_NUMBER.name());
+            actionReceiver.sendAll(die.getId().substring(0, 2), Message.RANDOM_NUMBER.name());
             Game.getLogger().log(Level.FINE,"Dice rolled: " + die.toString(),die);
         };
     }
@@ -97,8 +95,7 @@ public class ToolActions {
 
                     actionReceiver.getMap().put(marker, die);
 
-                    actionReceiver.sendAll(die.getId().substring(0, 2));
-                    actionReceiver.sendAll(Message.SELECT_DIE.name());
+                    actionReceiver.sendAll(die.getId().substring(0, 2), Message.SELECT_DIE.name());
 
                     Game.getLogger().log(Level.FINE,"Added die in cell " + cellChosen + " to HashMap", player.getGlassWindow()
                         .getCell(Character.getNumericValue(cellChosen.getId().charAt(0)),Character.getNumericValue(cellChosen.getId().charAt(1))).getDie());
@@ -122,8 +119,7 @@ public class ToolActions {
                 }else {
                     Die die = getDieChosen(dieOptions,dieChosen);
                     actionReceiver.getMap().put(marker, die);
-                    actionReceiver.sendAll(die.getId().substring(0, 2));
-                    actionReceiver.sendAll(Message.SELECT_DIE.name());
+                    actionReceiver.sendAll(die.getId().substring(0, 2), Message.SELECT_DIE.name());
 
                     Game.getLogger().log(Level.FINE,"Added die form Pool" + dieChosen + " to HashMap",dieChosen);
 
@@ -148,8 +144,7 @@ public class ToolActions {
                 } else {
                     Die die = getDieChosen(dieOptions,dieChosen);
                     actionReceiver.getMap().put(marker, die);
-                    actionReceiver.sendAll(die.getId().substring(0, 2));
-                    actionReceiver.sendAll(Message.SELECT_DIE.name());
+                    actionReceiver.sendAll(die.getId().substring(0, 2), Message.SELECT_DIE.name());
 
                     Game.getLogger().log(Level.FINE, "Added die form RoundTrack" + dieChosen + " to HashMap", dieChosen);
                 }
@@ -194,9 +189,7 @@ public class ToolActions {
                 Die dieToTake = actionReceiver.getTable().getDiceBag().drawDice(1).iterator().next();
                 actionReceiver.getMap().put(markerDieToTake,dieToTake);
 
-                actionReceiver.sendAll(dieToSet.getId().substring(0, 2));
-                actionReceiver.sendAll(Message.SWAPPED.name());
-                actionReceiver.sendAll(dieToTake.getId().substring(0, 2));
+                actionReceiver.sendAll(dieToTake.getId().substring(0, 2), Message.SWAPPED.name(), dieToSet.getId().substring(0, 2));
             };
     }
 
@@ -257,9 +250,7 @@ public class ToolActions {
                 Game.getLogger().log(Level.FINE,
                         "Switched die "+ die +" with die "+dieToSwap+" from Window");
 
-                actionReceiver.sendAll(die.getId().substring(0, 2));
-                actionReceiver.sendAll(Message.SWAPPED.name());
-                actionReceiver.sendAll(dieToSwap.getId().substring(0, 2));
+                actionReceiver.sendAll(die.getId().substring(0, 2), Message.SWAPPED.name(), dieToSwap.getId().substring(0, 2));
 
             }
         };
@@ -333,9 +324,7 @@ public class ToolActions {
                     cell.placeDie(die, true);
 
                     actionReceiver.getCommChannels().forEach(c -> c.updateView(player, !cc.isOffline()));
-                    actionReceiver.sendAll(cell.getId());
-                    actionReceiver.sendAll(Message.MOVED.name());
-                    actionReceiver.sendAll(die.getId().substring(0, 2));
+                    actionReceiver.sendAll(cell.getId(), Message.MOVED.name(), die.getId().substring(0, 2));
                     Game.getLogger().log(Level.FINE, "Die moved");
                 }
             }

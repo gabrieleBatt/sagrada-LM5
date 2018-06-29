@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.rules;
 
+import it.polimi.ingsw.server.model.objective.Objective;
 import it.polimi.ingsw.shared.Message;
 import it.polimi.ingsw.shared.identifiables.Identifiable;
 import it.polimi.ingsw.shared.identifiables.StdId;
@@ -74,7 +75,12 @@ public class DefaultRules implements Rules {
             publicObjectives = PublicObjectiveDeck.getPublicObjectiveDeck().draw(pubObjPerGame);
             actionReceiver.getTable().setPublicObjective(publicObjectives);
             actionReceiver.getCommChannels().forEach(cc -> cc.updateView(actionReceiver.getTable()));
-            actionReceiver.sendAll(actionReceiver.getTable().getPublicObjectives().stream().map(Object::toString).toString());
+
+            actionReceiver.sendAll(actionReceiver.getTable()
+                    .getPublicObjectives()
+                    .stream()
+                    .map(Objective::getName).collect(Collectors.toList()),
+                    Message.PUBLIC_OBJ.name());
         };
     }
 
@@ -126,8 +132,7 @@ public class DefaultRules implements Rules {
                         .forEach(cc -> cc.updateView(player, !actionReceiver
                                                                     .getChannel(player.getNickname())
                                                                     .isOffline()));
-                actionReceiver.sendAll(player.getGlassWindow().getId());
-                actionReceiver.sendAll(Message.RECEIVED_GLASS_WINDOW.name());
+                actionReceiver.sendAll(player.getGlassWindow().getId(), Message.RECEIVED_GLASS_WINDOW.name(), player.getNickname());
             }
             Game.getLogger().log(Level.FINE, "Glass windows dealt", actionReceiver);
         };
@@ -322,8 +327,7 @@ public class DefaultRules implements Rules {
                 if(optionalDie.isPresent()) {
                     actionReceiver.getTable().getPool().takeDie(optionalDie.get());
                     actionReceiver.getMap().put(marker, optionalDie.get());
-                    actionReceiver.sendAll(optionalDie.get().toString().substring(0, 2));
-                    actionReceiver.sendAll(Message.DRAFT_DONE.name());
+                    actionReceiver.sendAll(optionalDie.get().toString().substring(0, 2), Message.DRAFT_DONE.name());
                 }
             }
 
@@ -372,8 +376,7 @@ public class DefaultRules implements Rules {
 
             if(forced && cells.isEmpty()) {
                 actionReceiver.getTable().getPool().addDie(die);
-                actionReceiver.sendAll(Message.FORCED_IN_POOL.toString());
-                actionReceiver.sendAll(die + " ");
+                actionReceiver.sendAll(die.getId().substring(0,2), Message.FORCED_IN_POOL.toString());
             }else {
                 //act on answer
                 Identifiable positionChosen = cc.selectObject(new ArrayList<>(cells), StdId.GLASS_WINDOW, false, !forced);
@@ -384,8 +387,7 @@ public class DefaultRules implements Rules {
                             .filter(c -> c.getId().equals(positionChosen.getId())).findFirst().get()
                             .placeDie(die, (colorRestriction || numberRestriction));
                 }
-                actionReceiver.sendAll(positionChosen.getId());
-                actionReceiver.sendAll(Message.PLACE_DONE.name());
+                actionReceiver.sendAll(positionChosen.getId(), Message.PLACE_DONE.name());
                 actionReceiver
                         .getCommChannels()
                         .forEach(c -> c

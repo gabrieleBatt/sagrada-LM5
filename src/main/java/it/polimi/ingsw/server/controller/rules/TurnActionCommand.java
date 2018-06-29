@@ -69,9 +69,7 @@ public class TurnActionCommand implements ActionCommand{
 
         List<Identifiable> options;
         Identifiable actionChosen;
-        actionReceiver.sendAll(player.getNickname());
-        actionReceiver.sendAll(Message.START_TURN.name());
-        actionReceiver.sendAll(turnTime+" "+Message.TIMER.name());
+        actionReceiver.sendAll(Message.START_TURN.name(), player.getNickname(), Message.SEPARATOR.name(), Long.toString(turnTime), Message.TIMER.name());
 
         do {
             drafted = false;

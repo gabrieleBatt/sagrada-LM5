@@ -10,6 +10,7 @@ import it.polimi.ingsw.server.model.table.Player;
 import it.polimi.ingsw.server.model.table.RoundTrack;
 import it.polimi.ingsw.server.model.table.Table;
 import it.polimi.ingsw.server.model.table.dice.Die;
+import it.polimi.ingsw.shared.Message;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -225,11 +226,24 @@ public class Game implements Runnable {
 
     /**
      * Sends a message to all clients
-     * @param message message to send
+     * @param messages messages to send
      */
-    public void sendAll(String message){
-        getCommChannels().forEach(c -> c.sendMessage(message));
+    public void sendAll(String... messages){
+        Arrays.stream(messages).forEach(s -> getCommChannels().forEach(c -> c.sendMessage(s)));
+        getCommChannels().forEach(c -> c.sendMessage(Message.SEPARATOR.name()));
     }
+
+    /**
+     * Sends a message to all clients
+     * @param messagesList list of messages to send
+     * @param messages messages to send
+     */
+    public void sendAll(List<String> messagesList, String... messages){
+        messagesList.forEach(s -> getCommChannels().forEach(c -> c.sendMessage(s)));
+        sendAll(messages);
+    }
+
+    public void sendAll(){}
 
 
     private class ActionList extends ArrayList<ActionCommand>{
