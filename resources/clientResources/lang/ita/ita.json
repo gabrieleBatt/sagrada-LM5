@@ -43,5 +43,6 @@
   "BEEN_SET":"Numero del dado scelto",
   "SET_DIE": "Scegli il numero del dado",
   "TIMER": "secondi rimasti",
-  "FORCED_IN_POOL": "è stato rimesso nella riserva"
+  "FORCED_IN_POOL": "è stato rimesso nella riserva",
+  "SEPARATOR": "----------"
 }
