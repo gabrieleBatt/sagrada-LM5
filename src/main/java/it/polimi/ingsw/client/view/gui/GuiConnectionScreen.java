@@ -60,7 +60,7 @@ public class GuiConnectionScreen extends ConnectionScreen {
         Platform.runLater(() -> {
 
             connectionScreenVBox = new VBox();
-            setStageSize();
+
             stage.setTitle(Message.START_GAME.toString());
             Integer number = ThreadLocalRandom.current().nextInt(1, 10000);
 
@@ -104,9 +104,9 @@ public class GuiConnectionScreen extends ConnectionScreen {
             connectionScreenVBox.setAlignment(Pos.BOTTOM_CENTER);
             connectionScreenVBox.setSpacing(VERTICAL_SPACING);
 
-            Scene scene = new Scene(connectionScreenVBox,GuiView.WIDTH, GuiView.HEIGHT);
+            Scene scene = new Scene(connectionScreenVBox,GuiView.WIDTH*0.99, GuiView.HEIGHT*0.99);
             stage.setScene(scene);
-            setStageSize();
+
             scene.getStylesheets().add(GuiConnectionScreen.class.getResource("/clientResources/gui/Login.css").toExternalForm());
             List<TextField> textFieldArray = new ArrayList<>();
 
@@ -181,20 +181,11 @@ public class GuiConnectionScreen extends ConnectionScreen {
 
     }
 
-    private void setStageSize() {
-        stage.setMinWidth(GuiView.WIDTH);
-        stage.setMaxWidth(GuiView.WIDTH);
-        stage.setMinHeight(GuiView.HEIGHT);
-        stage.setMaxHeight(GuiView.HEIGHT);
-        stage.setX(Screen.getPrimary().getBounds().getMinX());
-        stage.setY(Screen.getPrimary().getBounds().getMinY());
-        System.out.println("ciao");
-    }
 
     @Override
     public LoginInfo getConnectionInfo() {
         setScene();
-        setStageSize();
+
         waitInput();
         return loginInfo;
     }
@@ -202,13 +193,15 @@ public class GuiConnectionScreen extends ConnectionScreen {
     @Override
     public boolean reConnect() {
         setScene();
+
         waitInput();
-        setStageSize();
+        stage.setFullScreen(true);
         return isReadyToConnect;
     }
 
     private void waitInput() {
         isReadyToConnect = false;
+
         Thread t = new Thread(() -> {
             while (!isReadyToConnect) {
                 try {
@@ -227,7 +220,7 @@ public class GuiConnectionScreen extends ConnectionScreen {
                 Thread.currentThread().interrupt();
             }
         }
-        setStageSize();
+
     }
 
     /**
@@ -307,7 +300,7 @@ public class GuiConnectionScreen extends ConnectionScreen {
         return pf.getCharacters().length()>0;
     }
 
-    public void setAlgerian(Text algerian) {
+    private void setAlgerian(Text algerian) {
         algerian.setFill(WHITE);
         algerian.setFont(Font.font(GuiView.FONT,GuiView.MEDIUM_FONT));
     }

@@ -145,6 +145,8 @@ public class GuiGameScreen extends GameScreen {
         gameScene = new Scene(tableStackPane);
         gameScene.getStylesheets().addAll(this.getClass().getResource("/clientResources/gui/guiGameScreen.css").toExternalForm());
         tableStackPane.setId("table");
+        gameGridPane.setMinSize(GuiView.WIDTH,GuiView.HEIGHT);
+
     }
 
     private void setButton(Button button, StdId stdId) {
@@ -159,7 +161,7 @@ public class GuiGameScreen extends GameScreen {
 
 
     @Override
-    public void addMessage(String message){
+    public void addMessage(String message) throws RemoteException {
         messageRecord.add(0,Message.convertMessage(message)+"\n");
         if(messageRecord.size() > MAX_MSGS_LENGHT)
             messageRecord = messageRecord.subList(0, MAX_MSGS_LENGHT);
@@ -189,7 +191,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPlayers(List<String> nicknames){
+    public void setPlayers(List<String> nicknames) throws RemoteException{
         if (!playersList.stream().map(p -> p.nickname).collect(Collectors.toList()).equals(nicknames)) {
             playersList = new ArrayList<>();
             for (String s : nicknames) {
@@ -204,7 +206,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPrivateObjectives(Collection<String> privateObjectivesStrings){
+    public void setPrivateObjectives(Collection<String> privateObjectivesStrings) throws RemoteException{
         this.privateObjectives = new ArrayList<>();
         for (String privateObjective : privateObjectivesStrings) {
             ImageView privateObView = new ImageView(new Image(RESOURCE + "/PrivateOb/" + privateObjective + PNG));
@@ -216,7 +218,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPublicObjective(Collection<String> publicObjectivesStrings){
+    public void setPublicObjective(Collection<String> publicObjectivesStrings) throws RemoteException{
         this.publicObjectives = new ArrayList<>();
         for (String publicObjective : publicObjectivesStrings) {
             ImageView publicObView = new ImageView(new Image(RESOURCE + "/PublicOb/" + publicObjective + PNG));
@@ -243,7 +245,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setTools(Collection<String> tools){
+    public void setTools(Collection<String> tools) throws RemoteException{
         toolsList = new ArrayList<>();
         for(String t: tools){
             ToolButton newTool = new ToolButton();
@@ -282,7 +284,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setToolUsed(String tool, boolean used){
+    public void setToolUsed(String tool, boolean used) throws RemoteException{
         for(ToolButton t: toolsList)
             if (t.toolName.equals(tool)) {
                 Platform.runLater(() -> {
@@ -295,7 +297,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPlayerConnection(String nickname, boolean isConnected){
+    public void setPlayerConnection(String nickname, boolean isConnected) throws RemoteException{
         for(PlayerClass p: playersList ){
             if(p.nickname.equals(nickname))
                 p.connected = isConnected;
@@ -303,7 +305,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPlayerToken(String nickname, int tokens){
+    public void setPlayerToken(String nickname, int tokens) throws RemoteException{
         for(PlayerClass p: playersList ){
             if(p.nickname.equals(nickname))
                 p.tokens = tokens;
@@ -311,7 +313,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPlayerWindow(String nickname, String windowName){
+    public void setPlayerWindow(String nickname, String windowName) throws RemoteException{
         for(int i = 0; i<this.playersList.size(); i++ ){
             if(playersList.get(i).nickname.equals(nickname) && !playersList.get(i).glassWindow.windowName.equals(windowName)) {
                 playersList.get(i).glassWindow = new WindowClass(windowName);
@@ -322,7 +324,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setCellContent(String nickname, int x, int y, String die){
+    public void setCellContent(String nickname, int x, int y, String die) throws RemoteException{
 
         Optional<PlayerClass> playerClassOptional = playersList.stream()
                 .filter(p -> p.nickname.equals(nickname))
@@ -341,7 +343,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPool(Collection<String> dice){
+    public void setPool(Collection<String> dice) throws RemoteException{
         List<String> sortedDice = new ArrayList<>(dice);
         sortedDice.sort(String::compareTo);
         poolDice = new ArrayList<>();
@@ -354,7 +356,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setRoundTrack(List<List<String>> dice){
+    public void setRoundTrack(List<List<String>> dice) throws RemoteException{
         Platform.runLater(() -> {
             roundTrack = new ArrayList<>();
 
@@ -438,7 +440,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public String getWindow(Collection<String> windows){
+    public String getWindow(Collection<String> windows) throws RemoteException{
         Platform.runLater(() -> {
             Text chooseText = new Text(Message.CHOOSE_WINDOW.toString());
 
@@ -526,7 +528,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public String getInput(Collection<String> options, String container) {
+    public String getInput(Collection<String> options, String container)  throws RemoteException{
         if(options.contains(StdId.SKIP.getId())){
             options.remove(StdId.SKIP.getId());
             skipButton.setDisable(false);
@@ -590,7 +592,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public String getInputFrom(Collection<String> options, String message){
+    public String getInputFrom(Collection<String> options, String message) throws RemoteException{
         dialogText.setText(Message.convertMessage(message));
 
         if(options.contains(StdId.SKIP.getId())){
@@ -638,7 +640,7 @@ public class GuiGameScreen extends GameScreen {
 
 
     @Override
-    public void showAll( ){
+    public void showAll( ) throws RemoteException{
         showGameStage();
     }
 
@@ -651,13 +653,6 @@ public class GuiGameScreen extends GameScreen {
                 gameGridPane.setPadding(new Insets(GuiView.SMALL_SPACING,GuiView.WIDTH_SPACING,GuiView.SMALL_SPACING,GuiView.WIDTH_SPACING));
             else
                 gameGridPane.setPadding(new Insets(GuiView.BIG_SPACING,GuiView.WIDTH_SPACING,GuiView.BIG_SPACING,GuiView.WIDTH_SPACING));
-
-            gameStage.setX(Screen.getPrimary().getBounds().getMinX());
-            gameStage.setY(Screen.getPrimary().getBounds().getMinY());
-            gameStage.setWidth(GuiView.WIDTH);
-            gameStage.setHeight(GuiView.HEIGHT);
-
-            //gameStage.setMaximized(true);
 
             gameStage.show();
         });
