@@ -50,21 +50,18 @@ public class GuiConnectionScreen extends ConnectionScreen {
     private String RMI = "RMI";
     private String SOCKET = "SOCKET";
     private boolean isReadyToConnect;
+    private Stage stage = Client.getStage();
 
     /**
      * Sets the login scene, catches login info.
      */
 
     public void setScene(){
-        isReadyToConnect = false;
         Platform.runLater(() -> {
+
             connectionScreenVBox = new VBox();
-            Stage stage = Client.getStage();
-            stage.setHeight(GuiView.HEIGHT);
-            stage.setWidth(GuiView.WIDTH);
+            setStageSize();
             stage.setTitle(Message.START_GAME.toString());
-            stage.setX(Screen.getPrimary().getBounds().getMinX());
-            stage.setY(Screen.getPrimary().getBounds().getMinY());
             Integer number = ThreadLocalRandom.current().nextInt(1, 10000);
 
             grid = new GridPane();
@@ -87,10 +84,9 @@ public class GuiConnectionScreen extends ConnectionScreen {
             if(loginInfo != null)
                 box.setValue(loginInfo.connectionType);
             grid.add(box,1,4);
-            final Text actiontarget = new Text();
+            final Text actiontarget = new Text("");
             setAlgerian(actiontarget);
             actiontarget.setFill(YELLOW);
-
             connectionScreenVBox.getChildren().add(grid);
             connectionScreenVBox.getChildren().add(actiontarget);
             connectionScreenVBox.getChildren().add(btn);
@@ -110,6 +106,7 @@ public class GuiConnectionScreen extends ConnectionScreen {
 
             Scene scene = new Scene(connectionScreenVBox,GuiView.WIDTH, GuiView.HEIGHT);
             stage.setScene(scene);
+            setStageSize();
             scene.getStylesheets().add(GuiConnectionScreen.class.getResource("/clientResources/gui/Login.css").toExternalForm());
             List<TextField> textFieldArray = new ArrayList<>();
 
@@ -154,8 +151,6 @@ public class GuiConnectionScreen extends ConnectionScreen {
             textFieldArray.add(userTextField);
             grid.setGridLinesVisible(false);
             PasswordField pwBox = new PasswordField();
-            if(loginInfo != null)
-                pwBox.setText(loginInfo.password);
             grid.add(pwBox, 1, 2);
 
 
@@ -181,46 +176,58 @@ public class GuiConnectionScreen extends ConnectionScreen {
                     }
                 }
             });
-            stage.setScene(scene);
-            //stage.setMaximized(true);
             stage.show();
         });
 
     }
 
+    private void setStageSize() {
+        stage.setMinWidth(GuiView.WIDTH);
+        stage.setMaxWidth(GuiView.WIDTH);
+        stage.setMinHeight(GuiView.HEIGHT);
+        stage.setMaxHeight(GuiView.HEIGHT);
+        stage.setX(Screen.getPrimary().getBounds().getMinX());
+        stage.setY(Screen.getPrimary().getBounds().getMinY());
+        System.out.println("ciao");
+    }
+
     @Override
     public LoginInfo getConnectionInfo() {
         setScene();
+        setStageSize();
         waitInput();
         return loginInfo;
     }
 
     @Override
     public boolean reConnect() {
-        if (loginInfo == null)
-            return false;
         setScene();
         waitInput();
-        return true;
+        setStageSize();
+        return isReadyToConnect;
     }
 
-    private  void waitInput(){
+    private void waitInput() {
         isReadyToConnect = false;
         Thread t = new Thread(() -> {
-            while(!isReadyToConnect) {
+            while (!isReadyToConnect) {
                 try {
-                    Thread.sleep(1);
+                    Thread.sleep(4);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             }
         });
         t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+        while (true) {
+            try {
+                t.join();
+                break;
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
+        setStageSize();
     }
 
     /**
