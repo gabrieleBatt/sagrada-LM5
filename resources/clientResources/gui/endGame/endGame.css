@@ -1,7 +1,7 @@
 .root {
-    -fx-background-image: url("/clientResources/gui/endGame/sagradaBlank.PNG");
+    -fx-background-image: url("/clientResources/gui/endBackground.jpg");
     -fx-background-repeat: stretch;
     -fx-background-size: cover;
-    -fx-text-fill: url("/clientResources/gui/endGame/endGame.png");
+    -fx-text-fill: url("/clientResources/gui/endGame/fillOption2.PNG");
 }
 
