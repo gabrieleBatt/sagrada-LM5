@@ -38,7 +38,6 @@ public class RmiManager implements ConnectionManager{
 
     @Override
     public Optional<EndGameInfo> run() throws InterruptedException {
-
         Thread thread = new Thread(() -> {
             do{
                 try {
