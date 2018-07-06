@@ -1,5 +1,5 @@
 .root{
-    -fx-background-image: url("/clientResources/gui/pic.jpg");
+    -fx-background-image: url("/clientResources/gui/loginBackground.jpg");
     -fx-background-size: cover;
 }
 
