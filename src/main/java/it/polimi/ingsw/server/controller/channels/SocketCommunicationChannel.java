@@ -346,7 +346,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      * Used to set a channel as it went offline
      */
     @Override
-    public synchronized void setOffline() {
+    public void setOffline() {
         super.setOffline();
         logger.log(Level.WARNING, getNickname() + " diconnected");
         connected = false;
