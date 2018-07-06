@@ -4,10 +4,18 @@
         - objective
             - AreaPublicObjectiveTest
                 - Scoring column color objective :heavy_check_mark:
+                
+                    *Checks if the score (achieved every time a column is filled with 4 different colours) is set correctly and at the right time*
                 - Scoring diagonal color objective :heavy_check_mark:
+                    
+                    *Checks if the score (due to the count of diagonally adjacent dice with the same colour) is set correctly and at the right time*
                 - Illegal creation of objective :heavy_check_mark:   
+                
+                    *Checks if the exception (to throw every time the multiplicity doesn't match with the area condition in class Target) is thrown only under those conditions and at the right time*
             - ColorPrivateObjectiveTest
                 - Scoring cyan private objective :heavy_check_mark:
+                
+                    *Checks if the score due to the sum of dice value  *
             - SetPublicObjectiveTest
                 - Scoring set of 3 and 5 :heavy_check_mark:
                 - Scoring color set objective :heavy_check_mark:
