@@ -65,6 +65,7 @@ public enum Message {
     START_GAME(),
     TIMER(),
     PLAY(),
+    SHOW_MESSAGES(),
     SEPARATOR();
 
     private String value;

@@ -97,7 +97,7 @@ public class GuiConnectionScreen extends ConnectionScreen {
             //invisible button to speed up connection
             Button button = new Button();
             button.setOnAction(event -> {
-                loginInfo = new LoginInfo(SOCKET, "Player"+number,50003,"127.0.0.1","Password"+number);
+                loginInfo = new LoginInfo(RMI, "Player"+number,50002,"127.0.0.1","Password"+number);
                 isReadyToConnect = true;
                 btn.setDisable(true);
             });
@@ -169,7 +169,6 @@ public class GuiConnectionScreen extends ConnectionScreen {
                             !validPort(portTextField) || !validIp(ipTextField))
                         actiontarget.setText(Message.INVALID_CHOICE.toString());
                     else{
-                        isReadyToConnect = true;
                         loginInfo = new LoginInfo(
                                 box.getValue(),
                                 userTextField.getCharacters().toString(),
@@ -178,11 +177,12 @@ public class GuiConnectionScreen extends ConnectionScreen {
                                 pwBox.getCharacters().toString());
                         actiontarget.setText(Message.WAITING_OTHER_PLAYERS.toString());
                         btn.setDisable(true);
+                        isReadyToConnect = true;
                     }
                 }
             });
             stage.setScene(scene);
-            stage.setMaximized(true);
+            //stage.setMaximized(true);
             stage.show();
         });
 
@@ -205,6 +205,7 @@ public class GuiConnectionScreen extends ConnectionScreen {
     }
 
     private  void waitInput(){
+        isReadyToConnect = false;
         Thread t = new Thread(() -> {
             while(!isReadyToConnect) {
                 try {
@@ -301,6 +302,6 @@ public class GuiConnectionScreen extends ConnectionScreen {
 
     public void setAlgerian(Text algerian) {
         algerian.setFill(WHITE);
-        algerian.setFont(Font.font("Algerian",20));
+        algerian.setFont(Font.font(GuiView.FONT,GuiView.MEDIUM_FONT));
     }
 }

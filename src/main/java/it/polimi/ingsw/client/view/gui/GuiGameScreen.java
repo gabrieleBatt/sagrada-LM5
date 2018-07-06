@@ -23,7 +23,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
+import java.rmi.RemoteException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
@@ -31,7 +31,6 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static javafx.scene.paint.Color.LIGHTGRAY;
 import static javafx.scene.paint.Color.WHITE;
 
 
@@ -54,7 +53,6 @@ public class GuiGameScreen extends GameScreen {
     private StackPane tableStackPane;
     private String input;
     private static final Image NO_RESTRICTION = new Image("clientResources/gui/restrictions/noRestr.png");
-    private static final String FONT = "Algerian";
     private static final String NO_MESSAGES = "";
     private static final double CELL_WIDTH_MULT  = 0.041322314;
     private static final double CELL_HEIGHT_MULT  = 0.07518797;
@@ -72,11 +70,10 @@ public class GuiGameScreen extends GameScreen {
     private static final Object DIFFICULTY = "difficulty";
     private static final int COLUMNS = 5;
     private static final String OK = "OK";
-    private static final String SHOW_MESSAGES = "Show messages";
     private static final double BIGGER_MULT = 1.05;
     private static final double SMALLER_MULT = 0.8;
-    private static final int MAX_MSGS_LENGHT = 15;
-    public static final double ROUND_TRACK_HEIGHT = 37/GuiView.DEFAULT_HEIGHT*GuiView.HEIGHT;
+    private static final int MAX_MSGS_LENGHT = 20;
+    private static final double ROUND_TRACK_HEIGHT = 37/GuiView.DEFAULT_HEIGHT*GuiView.HEIGHT;
 
 
 
@@ -116,9 +113,8 @@ public class GuiGameScreen extends GameScreen {
         dialogText = new Text(NO_MESSAGES);
         messagesVBox.setAlignment(Pos.CENTER);
         diceOnTableVBox.setSpacing(GuiView.MEDIUM_SPACING);
-
         gameGridPane.setVgap(GuiView.SMALL_SPACING);
-        gameGridPane.setHgap(GuiView.BIG_SPACING);
+        gameGridPane.setHgap(GuiView.BIGGER_SPACING);
         mainPlayerStackPane = new StackPane();
         objectiveGridPane = new GridPane();
         objectiveGridPane.setHgap(GuiView.MEDIUM_SPACING);
@@ -130,8 +126,8 @@ public class GuiGameScreen extends GameScreen {
         setButton(toolButton, StdId.USE_TOOL);
         setButton(drawButton, StdId.DRAFT);
 
-        messageButton.setText(SHOW_MESSAGES);
-        messageButton.setFont(Font.font(FONT,20));
+        messageButton.setText(Message.SHOW_MESSAGES.toString());
+        messageButton.setFont(Font.font(GuiView.FONT,GuiView.MEDIUM_FONT));
         messageButton.setOnAction(event -> {
             if(!messageStage.isShowing())
                 messageStage.show();
@@ -154,7 +150,7 @@ public class GuiGameScreen extends GameScreen {
     private void setButton(Button button, StdId stdId) {
         button.setMinSize(GuiView.WIDTH*BUTTON_WIDTH_MULT,GuiView.HEIGHT*BUTTON_HEIGHT_MULT);
         button.setText(Message.convertMessage(stdId.getId()));
-        button.setFont(Font.font(FONT));
+        button.setFont(Font.font(GuiView.FONT));
         button.setOnAction(event ->
                 Platform.runLater(() -> input = stdId.getId()
                 ));
@@ -163,7 +159,7 @@ public class GuiGameScreen extends GameScreen {
 
 
     @Override
-    public void addMessage(String message) throws RemoteException {
+    public void addMessage(String message){
         messageRecord.add(0,Message.convertMessage(message)+"\n");
         if(messageRecord.size() > MAX_MSGS_LENGHT)
             messageRecord = messageRecord.subList(0, MAX_MSGS_LENGHT);
@@ -183,8 +179,8 @@ public class GuiGameScreen extends GameScreen {
                 msgs.append(messageRecord.get(i));
             }
             messages.setText(msgs.toString());
-            messages.setFont(Font.font(FONT,20));
-            dialogText.setFont(Font.font(FONT,20));
+            messages.setFont(Font.font(GuiView.FONT,GuiView.MEDIUM_FONT));
+            dialogText.setFont(Font.font(GuiView.FONT,GuiView.MEDIUM_FONT));
             dialogText.setFill(WHITE);
             messagesVBox.setSpacing(GuiView.MEDIUM_SPACING);
             messagesVBox.getChildren().add(messageButton);
@@ -193,7 +189,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPlayers(List<String> nicknames) throws RemoteException {
+    public void setPlayers(List<String> nicknames){
         if (!playersList.stream().map(p -> p.nickname).collect(Collectors.toList()).equals(nicknames)) {
             playersList = new ArrayList<>();
             for (String s : nicknames) {
@@ -208,7 +204,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPrivateObjectives(Collection<String> privateObjectivesStrings) throws RemoteException {
+    public void setPrivateObjectives(Collection<String> privateObjectivesStrings){
         this.privateObjectives = new ArrayList<>();
         for (String privateObjective : privateObjectivesStrings) {
             ImageView privateObView = new ImageView(new Image(RESOURCE + "/PrivateOb/" + privateObjective + PNG));
@@ -217,7 +213,6 @@ public class GuiGameScreen extends GameScreen {
             privateObjectives.add(privateObView);
         }
         updateObjectives();
-        //todo manage more than 1 objective case
     }
 
     @Override
@@ -230,7 +225,6 @@ public class GuiGameScreen extends GameScreen {
             publicObjectives.add(publicObView);
         }
         updateObjectives();
-        //todo manage more than three objective case
     }
 
     private void updateObjectives(){
@@ -285,11 +279,10 @@ public class GuiGameScreen extends GameScreen {
                         ));
             }
         });
-        //todo manage four or more tools case
     }
 
     @Override
-    public void setToolUsed(String tool, boolean used) throws RemoteException {
+    public void setToolUsed(String tool, boolean used){
         for(ToolButton t: toolsList)
             if (t.toolName.equals(tool)) {
                 Platform.runLater(() -> {
@@ -318,7 +311,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPlayerWindow(String nickname, String windowName) throws RemoteException {
+    public void setPlayerWindow(String nickname, String windowName){
         for(int i = 0; i<this.playersList.size(); i++ ){
             if(playersList.get(i).nickname.equals(nickname) && !playersList.get(i).glassWindow.windowName.equals(windowName)) {
                 playersList.get(i).glassWindow = new WindowClass(windowName);
@@ -329,7 +322,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setCellContent(String nickname, int x, int y, String die) throws RemoteException {
+    public void setCellContent(String nickname, int x, int y, String die){
 
         Optional<PlayerClass> playerClassOptional = playersList.stream()
                 .filter(p -> p.nickname.equals(nickname))
@@ -348,7 +341,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPool(Collection<String> dice) throws RemoteException {
+    public void setPool(Collection<String> dice){
         List<String> sortedDice = new ArrayList<>(dice);
         sortedDice.sort(String::compareTo);
         poolDice = new ArrayList<>();
@@ -361,7 +354,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setRoundTrack(List<List<String>> dice) throws RemoteException {
+    public void setRoundTrack(List<List<String>> dice){
         Platform.runLater(() -> {
             roundTrack = new ArrayList<>();
 
@@ -445,12 +438,12 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public String getWindow(Collection<String> windows) throws RemoteException {
+    public String getWindow(Collection<String> windows){
         Platform.runLater(() -> {
             Text chooseText = new Text(Message.CHOOSE_WINDOW.toString());
 
 
-            chooseText.setFont(Font.font(FONT,25));
+            chooseText.setFont(Font.font(GuiView.FONT,GuiView.BIG_FONT));
             chooseText.setFill(WHITE);
             chooseText.setWrappingWidth(GuiView.WIDTH/4);
 
@@ -512,7 +505,6 @@ public class GuiGameScreen extends GameScreen {
 
     private void setGWInWindSelection(String window,VBox windowBox) {
 
-
         WindowClass windowPane = new WindowClass(window);
         windowPane.setPlayerWindow(false);
 
@@ -524,17 +516,17 @@ public class GuiGameScreen extends GameScreen {
         windowBox.getChildren().add(windowDifficulty);
 
         windowName.setText(Message.convertName(windowPane.windowName));
-        windowName.setFont(Font.font(FONT,20));
+        windowName.setFont(Font.font(GuiView.FONT,GuiView.MEDIUM_FONT));
         windowName.setTextFill(WHITE);
 
         windowDifficulty.setText(Message.TOKENS + " " + windowPane.tokens);
-        windowDifficulty.setFont(Font.font(FONT,15));
+        windowDifficulty.setFont(Font.font(GuiView.FONT,GuiView.SMALL_FONT));
         windowDifficulty.setTextFill(WHITE);
 
     }
 
     @Override
-    public String getInput(Collection<String> options, String container) throws RemoteException {
+    public String getInput(Collection<String> options, String container) {
         if(options.contains(StdId.SKIP.getId())){
             options.remove(StdId.SKIP.getId());
             skipButton.setDisable(false);
@@ -567,7 +559,7 @@ public class GuiGameScreen extends GameScreen {
             for(CellButton cellButton: mainPlayerWindow.cells){
                 if(options.contains(cellButton.idCell)){
                     cellButton.setDisable(false);
-                    cellButton.setOpacity(1);//miao3
+                    cellButton.setOpacity(1);
                     activeCells.add(cellButton);
                 }
             }
@@ -589,7 +581,7 @@ public class GuiGameScreen extends GameScreen {
 
         activeDie.forEach(d->d.setDisable(true));
         activeCells.forEach(c->c.setDisable(true));
-        activeCells.forEach(c->c.setOpacity(0.8));//miao2
+        activeCells.forEach(c->c.setOpacity(0.8));
         activeTools.forEach(t->t.setDisable(true));
         skipButton.setDisable(true);
         undoButton.setDisable(true);
@@ -598,7 +590,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public String getInputFrom(Collection<String> options, String message) throws RemoteException {
+    public String getInputFrom(Collection<String> options, String message){
         dialogText.setText(Message.convertMessage(message));
 
         if(options.contains(StdId.SKIP.getId())){
@@ -623,7 +615,7 @@ public class GuiGameScreen extends GameScreen {
                 comboBox.setItems(FXCollections.observableArrayList(options));
                 Button button = new Button();
                 button.setText(OK);
-                button.setFont(Font.font(FONT));
+                button.setFont(Font.font(GuiView.FONT));
                 messagesVBox.getChildren().add(comboBox);
                 messagesVBox.getChildren().add(button);
                 button.setOnAction(event -> {
@@ -646,7 +638,7 @@ public class GuiGameScreen extends GameScreen {
 
 
     @Override
-    public void showAll( ) throws RemoteException {
+    public void showAll( ){
         showGameStage();
     }
 
@@ -656,16 +648,16 @@ public class GuiGameScreen extends GameScreen {
             showWindows();
 
             if(playersList.size() > 2)
-                gameGridPane.setPadding(new Insets(GuiView.SMALL_SPACING,GuiView.BIGGER_SPACING,GuiView.SMALL_SPACING,GuiView.BIGGER_SPACING));
+                gameGridPane.setPadding(new Insets(GuiView.SMALL_SPACING,GuiView.WIDTH_SPACING,GuiView.SMALL_SPACING,GuiView.WIDTH_SPACING));
             else
-                gameGridPane.setPadding(new Insets(GuiView.BIG_SPACING,GuiView.BIGGER_SPACING,GuiView.BIG_SPACING,GuiView.BIGGER_SPACING));
+                gameGridPane.setPadding(new Insets(GuiView.BIG_SPACING,GuiView.WIDTH_SPACING,GuiView.BIG_SPACING,GuiView.WIDTH_SPACING));
 
             gameStage.setX(Screen.getPrimary().getBounds().getMinX());
             gameStage.setY(Screen.getPrimary().getBounds().getMinY());
             gameStage.setWidth(GuiView.WIDTH);
             gameStage.setHeight(GuiView.HEIGHT);
 
-            gameStage.setMaximized(true);
+            //gameStage.setMaximized(true);
 
             gameStage.show();
         });
@@ -708,14 +700,14 @@ public class GuiGameScreen extends GameScreen {
                     this.cells[i].showingImage = this.cells[i].restriction;
                     this.cells[i].setOnAction(event -> input = x + "" + y + ":" + this.windowName);
                     this.cells[i].setDisable(true);
-                    this.cells[i].setOpacity(0.8);//miao1
+                    this.cells[i].setOpacity(0.8);
                     this.cells[i].idCell = x + "" + y + ":" + this.windowName;
                     this.add(this.cells[i],y,x);
                 }
 
                 this.tokens = (long)jsonObject.get(DIFFICULTY);
             } catch (IOException | ParseException e) {
-                //WINDOW NOT FOUND MESSAGE
+                e.printStackTrace();
             }
         }
 
@@ -767,7 +759,7 @@ public class GuiGameScreen extends GameScreen {
         ToolButton(){
             toolVBox = new VBox();
             toolDescription = new Text();
-            toolDescription.setFont(Font.font(FONT));
+            toolDescription.setFont(Font.font(GuiView.FONT));
             toolDescription.setFill(WHITE);
             toolVBox.getChildren().add(this);
             toolVBox.getChildren().add(toolDescription);
@@ -825,13 +817,13 @@ public class GuiGameScreen extends GameScreen {
                         if (i == 0) {
                             playerVBox.setAlignment(Pos.BOTTOM_CENTER);
                             mainPlayerStackPane.getChildren().add(playerVBox);
-                            player.playerText.setFont(Font.font(FONT, FontWeight.EXTRA_BOLD, 28));
+                            player.playerText.setFont(Font.font(GuiView.FONT, FontWeight.EXTRA_BOLD, GuiView.BIGGEST_FONT));
                             mainPlayerWindow = player.glassWindow;
                             playerVBox.setId("windowPane");
 
                         } else {
                             opponentsWindowPane.add(playerVBox, i / 2, i % 2);
-                            player.playerText.setFont(Font.font(FONT,10));
+                            player.playerText.setFont(Font.font(GuiView.FONT,GuiView.SMALLEST_FONT));
                         }
                         mainPlayerStackPane.setAlignment(Pos.CENTER);
                         opponentsWindowPane.setAlignment(Pos.CENTER);
