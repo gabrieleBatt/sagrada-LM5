@@ -28,7 +28,6 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
     private RemoteGameScreen gameScreen;
     private boolean isOffline;
     private List<Pair<Player,Integer>> scores;
-    private Thread askingThread;
 
     public RmiCommunicationChannel(RemoteGameScreen gameScreen, String nickname) {
         super(nickname);
@@ -227,7 +226,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
         Timer timer = new Timer();
         startTimer(timer, this);
         final StringBuilder ret = new StringBuilder();
-        askingThread = new Thread(() -> {
+        Thread askingThread = new Thread(() -> {
             try {
                 ret.append(function.apply(use, string));
             } catch (RemoteException e) {
@@ -236,10 +235,12 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
             }
         });
         askingThread.start();
-        try {
-            askingThread.join();
-        } catch (InterruptedException e) {
-            return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
+        while(!isOffline()) {
+            try {
+                askingThread.join(5);
+            } catch (InterruptedException e) {
+                return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
+            }
         }
         endTimer(timer);
 
@@ -268,7 +269,6 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
     public void setOffline() {
             super.setOffline();
             isOffline = true;
-            askingThread.interrupt();
             logger.log(Level.FINE, getNickname() + " is offline");
     }
 
