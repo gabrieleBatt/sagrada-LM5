@@ -14,7 +14,7 @@ import java.util.logging.Level;
 public abstract class GameScreen implements RemoteGameScreen {
 
     protected static final String TOOL_PATH;
-    protected static final String GLASS_WINDOW_PATH = "clientResources/glassWindows/";
+    protected static final String GLASS_WINDOW_PATH = "resources/clientResources/glassWindows/";
     protected static final String OBJECTIVE_PATH;
     protected static int MAX_LEN_RECORD = 10;
 
@@ -29,8 +29,8 @@ public abstract class GameScreen implements RemoteGameScreen {
         } catch (IOException | ParseException e) {
             Client.getLogger().log(Level.WARNING, "Config directory not found");
         }
-        OBJECTIVE_PATH = "clientResources/lang/"+language+"/objectives/";
-        TOOL_PATH = "clientResources/lang/"+language+"/tools/";
+        OBJECTIVE_PATH = "resources/clientResources/lang/"+language+"/objectives/";
+        TOOL_PATH = "resources/clientResources/lang/"+language+"/tools/";
     }
 
     protected GameScreen(){

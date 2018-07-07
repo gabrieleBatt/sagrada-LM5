@@ -238,6 +238,8 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
         while(!isOffline()) {
             try {
                 askingThread.join(5);
+                if(!askingThread.isAlive())
+                    break;
             } catch (InterruptedException e) {
                 return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
             }

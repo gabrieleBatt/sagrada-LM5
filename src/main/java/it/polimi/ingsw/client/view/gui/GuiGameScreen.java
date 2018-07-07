@@ -17,16 +17,15 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import java.io.FileReader;
 import java.rmi.RemoteException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.rmi.RemoteException;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,8 +35,8 @@ import static javafx.scene.paint.Color.WHITE;
 
 public class GuiGameScreen extends GameScreen {
 
-    private static final double CELL_OPPONET_WIDTH_MULT = 0.0171875;
-    private static final double CELL_OPPONET_HEIGHT_MULT = 0.0323529;
+    private static final double CELL_OPPONENT_WIDTH_MULT = 0.0171875;
+    private static final double CELL_OPPONENT_HEIGHT_MULT = 0.0323529;
     private static final String BACKGROUND_COLOR_NONE = "-fx-background-color: none";
     private Collection<ImageView> privateObjectives;
     private Collection<ImageView> publicObjectives;
@@ -389,7 +388,7 @@ public class GuiGameScreen extends GameScreen {
 
             for (int i = 0; i<roundTrack.size();i++) {
                     Button roundButton = new Button();
-                    roundButton.setMinSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT*BIGGER_MULT*BIGGER_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT*SMALLER_MULT);
+                    roundButton.setMinSize(GuiView.WIDTH* CELL_OPPONENT_WIDTH_MULT *BIGGER_MULT*BIGGER_MULT,GuiView.HEIGHT* CELL_OPPONENT_HEIGHT_MULT *SMALLER_MULT);
                     roundButton.setOpacity(0.5);
                     VBox roundTrackVBox = new VBox();
                     Stage roundTrackStage = new Stage();
@@ -411,7 +410,7 @@ public class GuiGameScreen extends GameScreen {
 
             for (int i = roundTrack.size(); i < ROUND_TRACK_SIZE; i++) {
                 Button roundButton = new Button();
-                roundButton.setMinSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT*BIGGER_MULT*BIGGER_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT*SMALLER_MULT);
+                roundButton.setMinSize(GuiView.WIDTH* CELL_OPPONENT_WIDTH_MULT *BIGGER_MULT*BIGGER_MULT,GuiView.HEIGHT* CELL_OPPONENT_HEIGHT_MULT *SMALLER_MULT);
                 roundButton.setDisable(true);
                 roundButton.setOpacity(0);
                 roundTrackHBox.getChildren().add(roundButton);
@@ -680,7 +679,7 @@ public class GuiGameScreen extends GameScreen {
             cells = new CellButton[CELL_NUM];
 
             try {
-                JSONObject jsonObject = (JSONObject) new JSONParser().parse(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(GLASS_WINDOW_PATH + windowName + JSON_EXTENSION)));
+                JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(GLASS_WINDOW_PATH + windowName + JSON_EXTENSION));
                 List<String> restrictions = new ArrayList<>((JSONArray) jsonObject.get(WINDOW_CELLS));
                 for (int i = 0; i < CELL_NUM; i++) {
                     this.cells[i] = new CellButton();
@@ -709,12 +708,12 @@ public class GuiGameScreen extends GameScreen {
         void setPlayerWindow(Boolean isOpponent){
             for (CellButton cellButton : this.cells) {
                     if(isOpponent){
-                        cellButton.restriction.fitWidthProperty().setValue(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT);
-                        cellButton.restriction.fitHeightProperty().setValue(GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT);
-                        cellButton.showingImage.fitWidthProperty().setValue(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT);
-                        cellButton.showingImage.fitHeightProperty().setValue(GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT);
-                        cellButton.setMinSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT);
-                        cellButton.setMaxSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT);
+                        cellButton.restriction.fitWidthProperty().setValue(GuiView.WIDTH* CELL_OPPONENT_WIDTH_MULT);
+                        cellButton.restriction.fitHeightProperty().setValue(GuiView.HEIGHT* CELL_OPPONENT_HEIGHT_MULT);
+                        cellButton.showingImage.fitWidthProperty().setValue(GuiView.WIDTH* CELL_OPPONENT_WIDTH_MULT);
+                        cellButton.showingImage.fitHeightProperty().setValue(GuiView.HEIGHT* CELL_OPPONENT_HEIGHT_MULT);
+                        cellButton.setMinSize(GuiView.WIDTH* CELL_OPPONENT_WIDTH_MULT,GuiView.HEIGHT* CELL_OPPONENT_HEIGHT_MULT);
+                        cellButton.setMaxSize(GuiView.WIDTH* CELL_OPPONENT_WIDTH_MULT,GuiView.HEIGHT* CELL_OPPONENT_HEIGHT_MULT);
                         this.setGridLinesVisible(true);
                     }
                     else{
