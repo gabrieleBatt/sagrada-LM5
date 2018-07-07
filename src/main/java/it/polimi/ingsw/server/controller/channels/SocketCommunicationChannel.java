@@ -69,13 +69,11 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
 
     private void pingUntilConnected(long timeout){
         new Thread(() -> {
-            while (connected) {
+            while (!isOffline()) {
                 try {
-                    if (!socket.getInetAddress().isReachable(Math.toIntExact(timeout))) {
-                        setOffline();
-                    }
-                } catch (Exception e) {
-                    setOffline();
+                    Thread.sleep(timeout);
+                } catch (InterruptedException e) {
+                    logger.log(Level.WARNING, e.getMessage());
                 }
             }
         }).start();
@@ -87,6 +85,12 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      */
     @Override
     public boolean isOffline() {
+        try {
+            if(!socket.getInetAddress().isReachable(Math.toIntExact(pingTimeout)))
+                setOffline();
+        } catch (IOException e) {
+            setOffline();
+        }
         return !connected;
     }
 

@@ -13,9 +13,7 @@ import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import it.polimi.ingsw.shared.interfaces.RemoteGameScreen;
 import javafx.util.Pair;
 
-import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
@@ -41,6 +39,11 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public boolean isOffline() {
+        try {
+            gameScreen.showAll();
+        } catch (RemoteException e) {
+            setOffline();
+        }
         return isOffline;
     }
 
@@ -49,7 +52,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized void sendMessage(String message) {
-        if(isOffline)
+        if(isOffline())
             return;
         try {
             gameScreen.addMessage(message);
@@ -64,7 +67,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized void updateView(Pool pool) {
-        if(isOffline)
+        if(isOffline())
             return;
         try{
             gameScreen.setPool(pool.getDice().stream().map(Identifiable::getId).collect(Collectors.toList()));
@@ -79,7 +82,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized void updateView(RoundTrack roundTrack) {
-        if(isOffline)
+        if(isOffline())
             return;
         List<List<String>> completeRoundTrack = new ArrayList<>();
         for(int i= 1;  i<roundTrack.getRound(); i++){
@@ -98,7 +101,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized void updateView(Table table) {
-        if(isOffline)
+        if(isOffline())
             return;
         try {
             gameScreen.setPublicObjective(table.getPublicObjectives().stream().map(Identifiable::getId).collect(Collectors.toList()));
@@ -120,7 +123,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized void updateView(Player player, boolean connected) {
-        if(isOffline)
+        if(isOffline())
             return;
         try {
             gameScreen.setPlayerConnection(player.getNickname(), connected);
@@ -172,6 +175,8 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized GlassWindow chooseWindow(List<GlassWindow> glassWindows) {
+        if(isOffline())
+            return glassWindows.get(ThreadLocalRandom.current().nextInt(0, glassWindows.size()));
         try {
             Timer timer = new Timer();
             startTimer(timer, this);
@@ -198,7 +203,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled) {
-        if(isOffline) return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
+        if(isOffline()) return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
         return askClient(options, canSkip, undoEnabled, gameScreen::getInput, container.getId());
     }
 
@@ -209,7 +214,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled) {
-        if(isOffline) return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
+        if(isOffline()) return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
         return askClient(options, canSkip, undoEnabled, gameScreen::getInputFrom, message);
     }
 

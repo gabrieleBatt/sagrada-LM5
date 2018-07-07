@@ -2,7 +2,7 @@
   "loginTime": 1,
   "rmiPortNumber" : 50002,
   "socketPortNumber": 50003,
-  "timerSeconds": 5,
+  "timerSeconds": 10,
   "turnTime": 180,
   "responseTime": 25,
   "pingTimeout": 1
