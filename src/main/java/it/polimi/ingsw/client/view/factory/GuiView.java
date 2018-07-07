@@ -6,6 +6,10 @@ import it.polimi.ingsw.client.view.gui.GuiGameScreen;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 
+
+/**
+ * Gui screens factory
+ */
 public class GuiView implements ViewAbstractFactory {
 
 

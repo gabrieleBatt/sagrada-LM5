@@ -18,6 +18,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * The handler of a single game, using the class
+ * Rules gets the actions it has to perform
+ */
 public class Game implements Runnable {
 
     private static final Logger logger = LogMaker.getLogger(Game.class.getName(), Level.ALL);
@@ -242,9 +246,6 @@ public class Game implements Runnable {
         messagesList.forEach(s -> getCommChannels().forEach(c -> c.sendMessage(s)));
         sendAll(messages);
     }
-
-    public void sendAll(){}
-
 
     private class ActionList extends ArrayList<ActionCommand>{
         transient private List<ActionCommand> turnCommands = new ArrayList<>();

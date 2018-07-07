@@ -78,7 +78,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
                     setOffline();
                 }
             }
-        });
+        }).start();
     }
 
     /**

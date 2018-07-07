@@ -22,6 +22,9 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
+/**
+ * Single player mode rules for the actions
+ */
 public class DefaultRules implements Rules {
 
     private static final int OBJ_PER_PLAYER = 1;

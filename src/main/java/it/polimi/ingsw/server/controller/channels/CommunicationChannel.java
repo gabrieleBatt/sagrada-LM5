@@ -61,7 +61,7 @@ public abstract class CommunicationChannel{
      * @param op list of options
      * @return the identifiable chosen
      */
-    static Identifiable fakeResponse(boolean canSkip, boolean undoEnabled, List<Identifiable> op){
+    protected static Identifiable fakeResponse(boolean canSkip, boolean undoEnabled, List<Identifiable> op){
         if(canSkip)
             return StdId.SKIP;
         else if(undoEnabled)

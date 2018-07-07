@@ -11,6 +11,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 
+
+/**
+ * Handles getting from the user all server requested inputs
+ */
 public abstract class GameScreen implements RemoteGameScreen {
 
     protected static final String TOOL_PATH;

@@ -14,6 +14,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
+/**
+ * Rules for tools actions
+ */
 public class ToolActions {
 
     private ToolActions(){}
