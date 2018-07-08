@@ -5,6 +5,9 @@ import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Handles getting from the user all server requested inputs
+ */
 public interface RemoteGameScreen extends Remote {
 
     /**

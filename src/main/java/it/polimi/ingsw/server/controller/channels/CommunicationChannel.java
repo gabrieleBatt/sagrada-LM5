@@ -61,7 +61,7 @@ public abstract class CommunicationChannel{
      * @param op list of options
      * @return the identifiable chosen
      */
-    static Identifiable fakeResponse(boolean canSkip, boolean undoEnabled, List<Identifiable> op){
+    protected static Identifiable fakeResponse(boolean canSkip, boolean undoEnabled, List<Identifiable> op){
         if(canSkip)
             return StdId.SKIP;
         else if(undoEnabled)
@@ -70,7 +70,7 @@ public abstract class CommunicationChannel{
             return op.get(ThreadLocalRandom.current().nextInt(0, op.size()));
     }
 
-    static void startTimer(Timer timer, CommunicationChannel channel) {
+    protected static void startTimer(Timer timer, CommunicationChannel channel) {
         Game.getLogger().log(Level.FINER, "Starting response timer");
         timer.schedule(new TimerTask() {
             @Override
@@ -82,7 +82,8 @@ public abstract class CommunicationChannel{
         }, responseTime * 1000);
     }
 
-    static void endTimer(Timer timer){
+    protected static void endTimer(Timer timer){
+
         timer.cancel();
     }
 

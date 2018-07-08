@@ -12,8 +12,22 @@ import java.util.Optional;
  */
 public interface ConnectionManager {
 
+    /**
+     * Handles the connection until the game ends
+     * @return info representing the result of the game
+     * @throws IOException communication failed
+     * @throws ParseException communication failed
+     * @throws InterruptedException communication failed
+     */
     Optional<EndGameInfo> run() throws IOException, ParseException, InterruptedException;
 
+    /**
+     * performs the login and returns the result
+     * @return true if the login was successful
+     * @throws IOException communication failed
+     * @throws ParseException communication failed
+     * @throws NotBoundException communication failed
+     */
     boolean login() throws IOException, ParseException, NotBoundException;
 
 }

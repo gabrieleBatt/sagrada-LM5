@@ -69,16 +69,15 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
 
     private void pingUntilConnected(long timeout){
         new Thread(() -> {
-            while (connected) {
+            while (!isOffline()) {
                 try {
-                    if (!socket.getInetAddress().isReachable(Math.toIntExact(timeout))) {
-                        setOffline();
-                    }
-                } catch (Exception e) {
-                    setOffline();
+                    Thread.sleep(timeout);
+                } catch (InterruptedException e) {
+                    logger.log(Level.WARNING, e.getMessage());
                 }
             }
-        });
+            logger.log(Level.WARNING, PING_TIMEOUT);
+        }).start();
     }
 
     /**
@@ -87,9 +86,10 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      */
     @Override
     public boolean isOffline() {
+        if (out.checkError())
+            setOffline();
         return !connected;
     }
-
     /**
      * Sends a message to visualize
      */
@@ -346,7 +346,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      * Used to set a channel as it went offline
      */
     @Override
-    public synchronized void setOffline() {
+    public void setOffline() {
         super.setOffline();
         logger.log(Level.WARNING, getNickname() + " diconnected");
         connected = false;

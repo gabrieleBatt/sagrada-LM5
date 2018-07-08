@@ -8,6 +8,7 @@ import it.polimi.ingsw.client.connection.SocketManager;
 import it.polimi.ingsw.client.view.EndGameInfo;
 import it.polimi.ingsw.client.view.LoginInfo;
 import javafx.application.Application;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 
@@ -32,8 +33,16 @@ public class Client extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        primaryStage.setMinWidth(GuiView.WIDTH);
+        primaryStage.setMaxWidth(GuiView.WIDTH);
+        primaryStage.setMinHeight(GuiView.HEIGHT);
+        primaryStage.setMaxHeight(GuiView.HEIGHT);
+        primaryStage.setX(Screen.getPrimary().getBounds().getMinX());
+        primaryStage.setY(Screen.getPrimary().getBounds().getMinY());
+        primaryStage.setResizable(false);
+        primaryStage.setOnCloseRequest(event -> System.exit(0));
         stage = primaryStage;
-        stage.setOnCloseRequest(event -> System.exit(0));
     }
 
     public static Stage getStage() {
@@ -73,10 +82,8 @@ public class Client extends Application {
                 try {
                     if (connectionManager.login()) {
                         endGameInfo = connectionManager.run();
-                    }else{
-                        break;
                     }
-                } catch (InterruptedException | NotBoundException | IOException | ParseException e) {
+                } catch (InterruptedException | NotBoundException | IOException | ParseException | NullPointerException e ) {
                     logger.log(Level.WARNING, e.getMessage());
                     Thread.currentThread().interrupt();
                 }

@@ -22,8 +22,6 @@ import javafx.stage.Stage;
 
 public class GuiEndScreen extends EndScreen {
 
-    private static final double WIDTH_SCALE = 0.999;
-    private static final double HEIGHT_SCALE = 1;
     private static final String CSS_PATH = "/clientResources/gui/endGame/endGame.css";
     private static final double BUTTON_HEIGHT = 100/GuiView.DEFAULT_HEIGHT*GuiView.HEIGHT;
     private static final double BUTTON_WIDTH = 250/GuiView.DEFAULT_WIDTH*GuiView.WIDTH;
@@ -50,18 +48,18 @@ public class GuiEndScreen extends EndScreen {
         Text player;
 
         Image image2 = new Image("/clientResources/gui/endGame/fillOption2.PNG", REQUEST_SIZE, REQUEST_SIZE, false, false);
-
+        //if(endGameInfo != null)
         for (int i = 0; i < endGameInfo.getRanking().size(); i++) {
-            player = new Text(10, 0, endGameInfo.getRanking().get(i).getKey() + "\t" + endGameInfo.getRanking().get(i).getValue());
-            player.setFont(Font.font(GuiView.FONT, FontWeight.EXTRA_BOLD, GuiView.MEDIUM_END_SCREEN_FONT));
-            player.setFill(new ImagePattern(image2,
-                    0, 0, image.getWidth(), image.getHeight(), false));
+                player = new Text(10, 0, endGameInfo.getRanking().get(i).getKey() + "\t" + endGameInfo.getRanking().get(i).getValue());
+                player.setFont(Font.font(GuiView.FONT, FontWeight.EXTRA_BOLD, GuiView.MEDIUM_END_SCREEN_FONT));
+                player.setFill(new ImagePattern(image2,
+                        0, 0, image.getWidth(), image.getHeight(), false));
 
-            vbox.alignmentProperty().setValue(Pos.CENTER);
-            vbox.getChildren().add(player);
-            vbox.setSpacing(GuiView.MEDIUM_SPACING);
+                vbox.alignmentProperty().setValue(Pos.CENTER);
+                vbox.getChildren().add(player);
+                vbox.setSpacing(GuiView.MEDIUM_SPACING);
 
-        }
+            }
 
         Button button = new Button();
         button.setText("Play Again");
@@ -86,16 +84,11 @@ public class GuiEndScreen extends EndScreen {
         BorderPane.setMargin(vbox, new Insets(GuiView.END_SCREEN_SPACING));
         borderPane.setCenter(vbox);
 
-        Scene scene = new Scene(borderPane, GuiView.WIDTH * WIDTH_SCALE, GuiView.HEIGHT * HEIGHT_SCALE);
+        Scene scene = new Scene(borderPane, GuiView.WIDTH , GuiView.HEIGHT );
         scene.getStylesheets().add
                 (getClass().getResource(CSS_PATH).toExternalForm());
 
         stage.setScene(scene);
-        stage.setMinWidth(GuiView.WIDTH * WIDTH_SCALE);
-        stage.setMaxWidth(GuiView.WIDTH * WIDTH_SCALE);
-        stage.setMinHeight(GuiView.HEIGHT * HEIGHT_SCALE);
-        stage.setMaxHeight(GuiView.HEIGHT * HEIGHT_SCALE);
-
         stage.show();
     }
 

@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public final class RmiCommunicationChannel extends CommunicationChannel implements RemoteChannel {
     private static final Logger logger = LogMaker.getLogger(RmiCommunicationChannel.class.getName(), Level.ALL);
 
-    private final RemoteGameScreen gameScreen;
+    private RemoteGameScreen gameScreen;
     private boolean isOffline;
     private List<Pair<Player,Integer>> scores;
 
@@ -49,6 +49,8 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized void sendMessage(String message) {
+        if(isOffline())
+            return;
         try {
             gameScreen.addMessage(message);
             gameScreen.showAll();
@@ -62,6 +64,8 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized void updateView(Pool pool) {
+        if(isOffline())
+            return;
         try{
             gameScreen.setPool(pool.getDice().stream().map(Identifiable::getId).collect(Collectors.toList()));
             gameScreen.showAll();
@@ -75,6 +79,8 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized void updateView(RoundTrack roundTrack) {
+        if(isOffline())
+            return;
         List<List<String>> completeRoundTrack = new ArrayList<>();
         for(int i= 1;  i<roundTrack.getRound(); i++){
             completeRoundTrack.add(roundTrack.getDice(i).stream().map(Identifiable::getId).collect(Collectors.toList()));
@@ -92,6 +98,8 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized void updateView(Table table) {
+        if(isOffline())
+            return;
         try {
             gameScreen.setPublicObjective(table.getPublicObjectives().stream().map(Identifiable::getId).collect(Collectors.toList()));
             gameScreen.setTools(table.getTools().stream().map(Identifiable::getId).collect(Collectors.toList()));
@@ -112,6 +120,8 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized void updateView(Player player, boolean connected) {
+        if(isOffline())
+            return;
         try {
             gameScreen.setPlayerConnection(player.getNickname(), connected);
             if (player.getNickname().equals(this.getNickname())) {
@@ -124,6 +134,8 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
                         Cell c = player.getGlassWindow().getCell(i, j);
                         if (c.isOccupied())
                             gameScreen.setCellContent(player.getNickname(), i, j, c.getDie().getId());
+                        else
+                            gameScreen.setCellContent(player.getNickname(), i, j, " ");
                     }
                 }
             }
@@ -162,6 +174,8 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized GlassWindow chooseWindow(List<GlassWindow> glassWindows) {
+        if(isOffline())
+            return glassWindows.get(ThreadLocalRandom.current().nextInt(0, glassWindows.size()));
         try {
             Timer timer = new Timer();
             startTimer(timer, this);
@@ -188,6 +202,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized Identifiable selectObject(List<Identifiable> options, Identifiable container, boolean canSkip, boolean undoEnabled) {
+        if(isOffline()) return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
         return askClient(options, canSkip, undoEnabled, gameScreen::getInput, container.getId());
     }
 
@@ -198,13 +213,12 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public synchronized Identifiable chooseFrom(List<Identifiable> options, String message, boolean canSkip, boolean undoEnabled) {
+        if(isOffline()) return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
         return askClient(options, canSkip, undoEnabled, gameScreen::getInputFrom, message);
     }
 
 
     private Identifiable askClient(List<Identifiable> options, boolean canSkip, boolean undoEnabled, BiFunctionRemExc<List, String, String> function, String string){
-        if(isOffline) return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
-
         //Builds options
         List<String> use = options.stream().map(Identifiable::getId).collect(Collectors.toList());
         if(canSkip)
@@ -215,24 +229,36 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
         //Ask input
         Timer timer = new Timer();
         startTimer(timer, this);
-        String ret;
-        try {
-            ret = function.apply(use, string);
-        } catch (RemoteException e) {
-            setOffline();
-            return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
+        final StringBuilder ret = new StringBuilder();
+        Thread askingThread = new Thread(() -> {
+            try {
+                ret.append(function.apply(use, string));
+            } catch (RemoteException e) {
+                setOffline();
+                ret.append(CommunicationChannel.fakeResponse(canSkip, undoEnabled, options));
+            }
+        });
+        askingThread.start();
+        while(!isOffline()) {
+            try {
+                askingThread.join(5);
+                if(!askingThread.isAlive())
+                    break;
+            } catch (InterruptedException e) {
+                return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
+            }
         }
         endTimer(timer);
 
         //Act on response
-        if(canSkip && ret.equals(StdId.SKIP.getId()))
+        if(canSkip && StdId.SKIP.getId().contentEquals(ret))
             return StdId.SKIP;
-        if(undoEnabled&& ret.equals((StdId.UNDO.getId())))
+        if(undoEnabled&& StdId.UNDO.getId().contentEquals(ret))
             return StdId.UNDO;
 
         Optional<Identifiable> selection = options
                 .stream()
-                .filter(op -> op.getId().equals(ret))
+                .filter(op -> op.getId().contentEquals(ret))
                 .findFirst();
         if (selection.isPresent()) {
             return selection.get();
@@ -246,15 +272,15 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      * Used to set a channel as it went offline
      */
     @Override
-    public synchronized void setOffline() {
-        try {
-            UnicastRemoteObject.unexportObject(this, true);
-            logger.log(Level.FINE, getNickname() + " is offline");
+    public void setOffline() {
             super.setOffline();
-            isOffline = true;
+        try {
+            UnicastRemoteObject.unexportObject(this,true);
         } catch (NoSuchObjectException e) {
-            logger.log(Level.WARNING, "UnExport failed");
+            logger.log(Level.FINE,e.getMessage());
         }
+        isOffline = true;
+            logger.log(Level.FINE, getNickname() + " is offline");
     }
 
     @FunctionalInterface

@@ -17,27 +17,27 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import java.io.FileReader;
 import java.rmi.RemoteException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.rmi.RemoteException;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static javafx.scene.paint.Color.RED;
 import static javafx.scene.paint.Color.WHITE;
 
 
 public class GuiGameScreen extends GameScreen {
 
-    private static final double CELL_OPPONET_WIDTH_MULT = 0.0171875;
-    private static final double CELL_OPPONET_HEIGHT_MULT = 0.0323529;
+    private static final double CELL_OPPONENT_WIDTH_MULT = 0.0171875;
+    private static final double CELL_OPPONENT_HEIGHT_MULT = 0.0323529;
     private static final String BACKGROUND_COLOR_NONE = "-fx-background-color: none";
     private Collection<ImageView> privateObjectives;
     private Collection<ImageView> publicObjectives;
@@ -145,6 +145,7 @@ public class GuiGameScreen extends GameScreen {
         gameScene = new Scene(tableStackPane);
         gameScene.getStylesheets().addAll(this.getClass().getResource("/clientResources/gui/guiGameScreen.css").toExternalForm());
         tableStackPane.setId("table");
+        gameGridPane.setMinSize(GuiView.WIDTH,GuiView.HEIGHT);
     }
 
     private void setButton(Button button, StdId stdId) {
@@ -159,7 +160,7 @@ public class GuiGameScreen extends GameScreen {
 
 
     @Override
-    public void addMessage(String message){
+    public void addMessage(String message) throws RemoteException {
         messageRecord.add(0,Message.convertMessage(message)+"\n");
         if(messageRecord.size() > MAX_MSGS_LENGHT)
             messageRecord = messageRecord.subList(0, MAX_MSGS_LENGHT);
@@ -189,7 +190,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPlayers(List<String> nicknames){
+    public void setPlayers(List<String> nicknames) throws RemoteException{
         if (!playersList.stream().map(p -> p.nickname).collect(Collectors.toList()).equals(nicknames)) {
             playersList = new ArrayList<>();
             for (String s : nicknames) {
@@ -204,7 +205,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPrivateObjectives(Collection<String> privateObjectivesStrings){
+    public void setPrivateObjectives(Collection<String> privateObjectivesStrings) throws RemoteException{
         this.privateObjectives = new ArrayList<>();
         for (String privateObjective : privateObjectivesStrings) {
             ImageView privateObView = new ImageView(new Image(RESOURCE + "/PrivateOb/" + privateObjective + PNG));
@@ -216,7 +217,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPublicObjective(Collection<String> publicObjectivesStrings){
+    public void setPublicObjective(Collection<String> publicObjectivesStrings) throws RemoteException{
         this.publicObjectives = new ArrayList<>();
         for (String publicObjective : publicObjectivesStrings) {
             ImageView publicObView = new ImageView(new Image(RESOURCE + "/PublicOb/" + publicObjective + PNG));
@@ -243,7 +244,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setTools(Collection<String> tools){
+    public void setTools(Collection<String> tools) throws RemoteException{
         toolsList = new ArrayList<>();
         for(String t: tools){
             ToolButton newTool = new ToolButton();
@@ -282,7 +283,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setToolUsed(String tool, boolean used){
+    public void setToolUsed(String tool, boolean used) throws RemoteException{
         for(ToolButton t: toolsList)
             if (t.toolName.equals(tool)) {
                 Platform.runLater(() -> {
@@ -295,7 +296,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPlayerConnection(String nickname, boolean isConnected){
+    public void setPlayerConnection(String nickname, boolean isConnected) throws RemoteException{
         for(PlayerClass p: playersList ){
             if(p.nickname.equals(nickname))
                 p.connected = isConnected;
@@ -303,7 +304,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPlayerToken(String nickname, int tokens){
+    public void setPlayerToken(String nickname, int tokens) throws RemoteException{
         for(PlayerClass p: playersList ){
             if(p.nickname.equals(nickname))
                 p.tokens = tokens;
@@ -311,7 +312,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPlayerWindow(String nickname, String windowName){
+    public void setPlayerWindow(String nickname, String windowName) throws RemoteException{
         for(int i = 0; i<this.playersList.size(); i++ ){
             if(playersList.get(i).nickname.equals(nickname) && !playersList.get(i).glassWindow.windowName.equals(windowName)) {
                 playersList.get(i).glassWindow = new WindowClass(windowName);
@@ -322,8 +323,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setCellContent(String nickname, int x, int y, String die){
-
+    public void setCellContent(String nickname, int x, int y, String die) throws RemoteException{
         Optional<PlayerClass> playerClassOptional = playersList.stream()
                 .filter(p -> p.nickname.equals(nickname))
                 .findFirst();
@@ -341,7 +341,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setPool(Collection<String> dice){
+    public void setPool(Collection<String> dice) throws RemoteException{
         List<String> sortedDice = new ArrayList<>(dice);
         sortedDice.sort(String::compareTo);
         poolDice = new ArrayList<>();
@@ -354,7 +354,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public void setRoundTrack(List<List<String>> dice){
+    public void setRoundTrack(List<List<String>> dice) throws RemoteException{
         Platform.runLater(() -> {
             roundTrack = new ArrayList<>();
 
@@ -387,7 +387,7 @@ public class GuiGameScreen extends GameScreen {
 
             for (int i = 0; i<roundTrack.size();i++) {
                     Button roundButton = new Button();
-                    roundButton.setMinSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT*BIGGER_MULT*BIGGER_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT*SMALLER_MULT);
+                    roundButton.setMinSize(GuiView.WIDTH* CELL_OPPONENT_WIDTH_MULT *BIGGER_MULT*BIGGER_MULT,GuiView.HEIGHT* CELL_OPPONENT_HEIGHT_MULT *SMALLER_MULT);
                     roundButton.setOpacity(0.5);
                     VBox roundTrackVBox = new VBox();
                     Stage roundTrackStage = new Stage();
@@ -409,7 +409,7 @@ public class GuiGameScreen extends GameScreen {
 
             for (int i = roundTrack.size(); i < ROUND_TRACK_SIZE; i++) {
                 Button roundButton = new Button();
-                roundButton.setMinSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT*BIGGER_MULT*BIGGER_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT*SMALLER_MULT);
+                roundButton.setMinSize(GuiView.WIDTH* CELL_OPPONENT_WIDTH_MULT *BIGGER_MULT*BIGGER_MULT,GuiView.HEIGHT* CELL_OPPONENT_HEIGHT_MULT *SMALLER_MULT);
                 roundButton.setDisable(true);
                 roundButton.setOpacity(0);
                 roundTrackHBox.getChildren().add(roundButton);
@@ -438,7 +438,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public String getWindow(Collection<String> windows){
+    public String getWindow(Collection<String> windows) throws RemoteException{
         Platform.runLater(() -> {
             Text chooseText = new Text(Message.CHOOSE_WINDOW.toString());
 
@@ -526,7 +526,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public String getInput(Collection<String> options, String container) {
+    public String getInput(Collection<String> options, String container)  throws RemoteException{
         if(options.contains(StdId.SKIP.getId())){
             options.remove(StdId.SKIP.getId());
             skipButton.setDisable(false);
@@ -590,7 +590,7 @@ public class GuiGameScreen extends GameScreen {
     }
 
     @Override
-    public String getInputFrom(Collection<String> options, String message){
+    public String getInputFrom(Collection<String> options, String message) throws RemoteException{
         dialogText.setText(Message.convertMessage(message));
 
         if(options.contains(StdId.SKIP.getId())){
@@ -638,26 +638,15 @@ public class GuiGameScreen extends GameScreen {
 
 
     @Override
-    public void showAll( ){
-        showGameStage();
-    }
-
-    private void showGameStage(){
+    public void showAll( ) throws RemoteException{
         Platform.runLater(() -> {
-
+            gameStage.setScene(gameScene);
             showWindows();
 
             if(playersList.size() > 2)
                 gameGridPane.setPadding(new Insets(GuiView.SMALL_SPACING,GuiView.WIDTH_SPACING,GuiView.SMALL_SPACING,GuiView.WIDTH_SPACING));
             else
                 gameGridPane.setPadding(new Insets(GuiView.BIG_SPACING,GuiView.WIDTH_SPACING,GuiView.BIG_SPACING,GuiView.WIDTH_SPACING));
-
-            gameStage.setX(Screen.getPrimary().getBounds().getMinX());
-            gameStage.setY(Screen.getPrimary().getBounds().getMinY());
-            gameStage.setWidth(GuiView.WIDTH);
-            gameStage.setHeight(GuiView.HEIGHT);
-
-            //gameStage.setMaximized(true);
 
             gameStage.show();
         });
@@ -673,8 +662,7 @@ public class GuiGameScreen extends GameScreen {
             this.cells = new CellButton[CELL_NUM];
 
             for (int i = 0; i < CELL_NUM; i++) {
-                this.cells[i] = new CellButton();
-                this.cells[i].restriction = new ImageView(NO_RESTRICTION);
+                this.cells[i] = new CellButton(new ImageView(NO_RESTRICTION));
                 this.cells[i].setGraphic(this.cells[i].restriction);
             }
         }
@@ -685,16 +673,14 @@ public class GuiGameScreen extends GameScreen {
             cells = new CellButton[CELL_NUM];
 
             try {
-                JSONObject jsonObject = (JSONObject) new JSONParser().parse(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(GLASS_WINDOW_PATH + windowName + JSON_EXTENSION)));
+                JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(GLASS_WINDOW_PATH + windowName + JSON_EXTENSION));
                 List<String> restrictions = new ArrayList<>((JSONArray) jsonObject.get(WINDOW_CELLS));
                 for (int i = 0; i < CELL_NUM; i++) {
-                    this.cells[i] = new CellButton();
                     if(restrictions.get(i).charAt(0) == ' ') {
-                        this.cells[i].restriction = new ImageView(NO_RESTRICTION);
+                        this.cells[i] = new CellButton(new ImageView(NO_RESTRICTION));
                     }else {
-                        this.cells[i].restriction = new ImageView(new Image(RESOURCE + "/restrictions/restr" + restrictions.get(i).charAt(0) + PNG));
+                        this.cells[i] = new CellButton(new ImageView(new Image(RESOURCE + "/restrictions/restr" + restrictions.get(i).charAt(0) + PNG)));
                     }
-
                     final int x = i/COLUMNS;
                     final int y = i%COLUMNS;
                     this.cells[i].showingImage = this.cells[i].restriction;
@@ -714,12 +700,12 @@ public class GuiGameScreen extends GameScreen {
         void setPlayerWindow(Boolean isOpponent){
             for (CellButton cellButton : this.cells) {
                     if(isOpponent){
-                        cellButton.restriction.fitWidthProperty().setValue(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT);
-                        cellButton.restriction.fitHeightProperty().setValue(GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT);
-                        cellButton.showingImage.fitWidthProperty().setValue(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT);
-                        cellButton.showingImage.fitHeightProperty().setValue(GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT);
-                        cellButton.setMinSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT);
-                        cellButton.setMaxSize(GuiView.WIDTH*CELL_OPPONET_WIDTH_MULT,GuiView.HEIGHT*CELL_OPPONET_HEIGHT_MULT);
+                        cellButton.restriction.fitWidthProperty().setValue(GuiView.WIDTH* CELL_OPPONENT_WIDTH_MULT);
+                        cellButton.restriction.fitHeightProperty().setValue(GuiView.HEIGHT* CELL_OPPONENT_HEIGHT_MULT);
+                        cellButton.showingImage.fitWidthProperty().setValue(GuiView.WIDTH* CELL_OPPONENT_WIDTH_MULT);
+                        cellButton.showingImage.fitHeightProperty().setValue(GuiView.HEIGHT* CELL_OPPONENT_HEIGHT_MULT);
+                        cellButton.setMinSize(GuiView.WIDTH* CELL_OPPONENT_WIDTH_MULT,GuiView.HEIGHT* CELL_OPPONENT_HEIGHT_MULT);
+                        cellButton.setMaxSize(GuiView.WIDTH* CELL_OPPONENT_WIDTH_MULT,GuiView.HEIGHT* CELL_OPPONENT_HEIGHT_MULT);
                         this.setGridLinesVisible(true);
                     }
                     else{
@@ -747,8 +733,12 @@ public class GuiGameScreen extends GameScreen {
 
     private class CellButton extends Button {
         String idCell;
-        ImageView restriction;
+        private final ImageView restriction;
         ImageView showingImage;
+
+        CellButton(ImageView restriction){
+            this.restriction = restriction;
+        }
     }
 
     private class ToolButton extends Button{
@@ -807,8 +797,15 @@ public class GuiGameScreen extends GameScreen {
                     opponentsWindowPane.setHgap(10);
                     for (int i = 0; i < playersList.size(); i++) {
                         PlayerClass player = playersList.get(i);
-                        player.playerText.setText(player.nickname + "\n" + Message.TOKENS + ": " + player.tokens);
-                        player.playerText.setFill(WHITE);
+                        String playerString = player.nickname;
+                        if (!player.connected){
+                            playerString = playerString + "\n" + Message.convertMessage(Message.OFFLINE.toString());
+                            player.playerText.setFill(RED);
+                        }else {
+                            playerString = playerString + "\n" + Message.TOKENS + ": " + player.tokens;
+                            player.playerText.setFill(WHITE);
+                        }
+                        player.playerText.setText(playerString);
                         VBox playerVBox = new VBox();
                         playerVBox.setAlignment(Pos.CENTER);
                         playerVBox.setSpacing(15);
