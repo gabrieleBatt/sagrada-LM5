@@ -13,7 +13,9 @@ import it.polimi.ingsw.server.model.table.glasswindow.GlassWindow;
 import it.polimi.ingsw.shared.interfaces.RemoteGameScreen;
 import javafx.util.Pair;
 
+import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
@@ -272,7 +274,12 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
     @Override
     public void setOffline() {
             super.setOffline();
-            isOffline = true;
+        try {
+            UnicastRemoteObject.unexportObject(this,true);
+        } catch (NoSuchObjectException e) {
+            logger.log(Level.FINE,e.getMessage());
+        }
+        isOffline = true;
             logger.log(Level.FINE, getNickname() + " is offline");
     }
 

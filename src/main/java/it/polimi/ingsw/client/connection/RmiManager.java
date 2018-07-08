@@ -9,6 +9,7 @@ import it.polimi.ingsw.shared.interfaces.RemoteServer;
 import javafx.util.Pair;
 
 import java.io.IOException;
+import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -63,6 +64,11 @@ public class RmiManager implements ConnectionManager{
 
     @Override
     public boolean login() throws IOException, NotBoundException {
+        try {
+            UnicastRemoteObject.unexportObject(gameScreen, true);
+        } catch (NoSuchObjectException e) {
+            logger.log(Level.FINE, e.getMessage());
+        }
         RemoteServer server = (RemoteServer) LocateRegistry.getRegistry(loginInfo.ip, loginInfo.portNumber).lookup("Server");
         UnicastRemoteObject.exportObject(gameScreen, 0);
         remoteChannel = server.rmiLogin(gameScreen, loginInfo.nickname, loginInfo.password);
