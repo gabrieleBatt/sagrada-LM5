@@ -30,6 +30,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static javafx.scene.paint.Color.RED;
 import static javafx.scene.paint.Color.WHITE;
 
 
@@ -145,7 +146,6 @@ public class GuiGameScreen extends GameScreen {
         gameScene.getStylesheets().addAll(this.getClass().getResource("/clientResources/gui/guiGameScreen.css").toExternalForm());
         tableStackPane.setId("table");
         gameGridPane.setMinSize(GuiView.WIDTH,GuiView.HEIGHT);
-
     }
 
     private void setButton(Button button, StdId stdId) {
@@ -639,12 +639,8 @@ public class GuiGameScreen extends GameScreen {
 
     @Override
     public void showAll( ) throws RemoteException{
-        showGameStage();
-    }
-
-    private void showGameStage(){
         Platform.runLater(() -> {
-
+            gameStage.setScene(gameScene);
             showWindows();
 
             if(playersList.size() > 2)
@@ -680,13 +676,11 @@ public class GuiGameScreen extends GameScreen {
                 JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(GLASS_WINDOW_PATH + windowName + JSON_EXTENSION));
                 List<String> restrictions = new ArrayList<>((JSONArray) jsonObject.get(WINDOW_CELLS));
                 for (int i = 0; i < CELL_NUM; i++) {
-
                     if(restrictions.get(i).charAt(0) == ' ') {
                         this.cells[i] = new CellButton(new ImageView(NO_RESTRICTION));
                     }else {
                         this.cells[i] = new CellButton(new ImageView(new Image(RESOURCE + "/restrictions/restr" + restrictions.get(i).charAt(0) + PNG)));
                     }
-
                     final int x = i/COLUMNS;
                     final int y = i%COLUMNS;
                     this.cells[i].showingImage = this.cells[i].restriction;
@@ -803,8 +797,15 @@ public class GuiGameScreen extends GameScreen {
                     opponentsWindowPane.setHgap(10);
                     for (int i = 0; i < playersList.size(); i++) {
                         PlayerClass player = playersList.get(i);
-                        player.playerText.setText(player.nickname + "\n" + Message.TOKENS + ": " + player.tokens);
-                        player.playerText.setFill(WHITE);
+                        String playerString = player.nickname;
+                        if (!player.connected){
+                            playerString = playerString + "\n" + Message.convertMessage(Message.OFFLINE.toString());
+                            player.playerText.setFill(RED);
+                        }else {
+                            playerString = playerString + "\n" + Message.TOKENS + ": " + player.tokens;
+                            player.playerText.setFill(WHITE);
+                        }
+                        player.playerText.setText(playerString);
                         VBox playerVBox = new VBox();
                         playerVBox.setAlignment(Pos.CENTER);
                         playerVBox.setSpacing(15);

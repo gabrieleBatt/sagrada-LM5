@@ -93,7 +93,7 @@ public class GuiConnectionScreen extends ConnectionScreen {
             //invisible button to speed up connection
             Button button = new Button();
             button.setOnAction(event -> {
-                loginInfo = new LoginInfo(RMI, "Player"+number,50002,"127.0.0.1","Password"+number);
+                loginInfo = new LoginInfo(SOCKET, "Player"+number,50003,"127.0.0.1","p"+number);
                 isReadyToConnect = true;
                 btn.setDisable(true);
             });
@@ -185,7 +185,6 @@ public class GuiConnectionScreen extends ConnectionScreen {
     @Override
     public LoginInfo getConnectionInfo() {
         setScene();
-
         waitInput();
         return loginInfo;
     }
@@ -193,7 +192,6 @@ public class GuiConnectionScreen extends ConnectionScreen {
     @Override
     public boolean reConnect() {
         setScene();
-
         waitInput();
         return isReadyToConnect;
     }
