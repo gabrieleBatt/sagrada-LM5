@@ -39,11 +39,6 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public boolean isOffline() {
-        try {
-            gameScreen.showAll();
-        } catch (RemoteException e) {
-            setOffline();
-        }
         return isOffline;
     }
 
@@ -137,6 +132,8 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
                         Cell c = player.getGlassWindow().getCell(i, j);
                         if (c.isOccupied())
                             gameScreen.setCellContent(player.getNickname(), i, j, c.getDie().getId());
+                        else
+                            gameScreen.setCellContent(player.getNickname(), i, j, " ");
                     }
                 }
             }

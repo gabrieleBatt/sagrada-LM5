@@ -4,6 +4,6 @@
   "socketPortNumber": 50003,
   "timerSeconds": 10,
   "turnTime": 180,
-  "responseTime": 25,
-  "pingTimeout": 1
+  "responseTime": 180,
+  "pingTimeout": 1000
 }

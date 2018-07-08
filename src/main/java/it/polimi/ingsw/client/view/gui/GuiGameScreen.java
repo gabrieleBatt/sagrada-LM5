@@ -324,7 +324,6 @@ public class GuiGameScreen extends GameScreen {
 
     @Override
     public void setCellContent(String nickname, int x, int y, String die) throws RemoteException{
-
         Optional<PlayerClass> playerClassOptional = playersList.stream()
                 .filter(p -> p.nickname.equals(nickname))
                 .findFirst();
@@ -667,8 +666,7 @@ public class GuiGameScreen extends GameScreen {
             this.cells = new CellButton[CELL_NUM];
 
             for (int i = 0; i < CELL_NUM; i++) {
-                this.cells[i] = new CellButton();
-                this.cells[i].restriction = new ImageView(NO_RESTRICTION);
+                this.cells[i] = new CellButton(new ImageView(NO_RESTRICTION));
                 this.cells[i].setGraphic(this.cells[i].restriction);
             }
         }
@@ -682,11 +680,11 @@ public class GuiGameScreen extends GameScreen {
                 JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(GLASS_WINDOW_PATH + windowName + JSON_EXTENSION));
                 List<String> restrictions = new ArrayList<>((JSONArray) jsonObject.get(WINDOW_CELLS));
                 for (int i = 0; i < CELL_NUM; i++) {
-                    this.cells[i] = new CellButton();
+
                     if(restrictions.get(i).charAt(0) == ' ') {
-                        this.cells[i].restriction = new ImageView(NO_RESTRICTION);
+                        this.cells[i] = new CellButton(new ImageView(NO_RESTRICTION));
                     }else {
-                        this.cells[i].restriction = new ImageView(new Image(RESOURCE + "/restrictions/restr" + restrictions.get(i).charAt(0) + PNG));
+                        this.cells[i] = new CellButton(new ImageView(new Image(RESOURCE + "/restrictions/restr" + restrictions.get(i).charAt(0) + PNG)));
                     }
 
                     final int x = i/COLUMNS;
@@ -741,8 +739,12 @@ public class GuiGameScreen extends GameScreen {
 
     private class CellButton extends Button {
         String idCell;
-        ImageView restriction;
+        private final ImageView restriction;
         ImageView showingImage;
+
+        CellButton(ImageView restriction){
+            this.restriction = restriction;
+        }
     }
 
     private class ToolButton extends Button{

@@ -76,6 +76,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
                     logger.log(Level.WARNING, e.getMessage());
                 }
             }
+            logger.log(Level.WARNING, PING_TIMEOUT);
         }).start();
     }
 
@@ -85,15 +86,10 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      */
     @Override
     public boolean isOffline() {
-        try {
-            if(!socket.getInetAddress().isReachable(Math.toIntExact(pingTimeout)))
-                setOffline();
-        } catch (IOException e) {
+        if (out.checkError())
             setOffline();
-        }
         return !connected;
     }
-
     /**
      * Sends a message to visualize
      */

@@ -195,7 +195,6 @@ public class GuiConnectionScreen extends ConnectionScreen {
         setScene();
 
         waitInput();
-        stage.setFullScreen(true);
         return isReadyToConnect;
     }
 
