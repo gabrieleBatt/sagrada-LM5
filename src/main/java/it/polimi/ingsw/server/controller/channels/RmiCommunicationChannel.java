@@ -176,8 +176,8 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
     public synchronized GlassWindow chooseWindow(List<GlassWindow> glassWindows) {
         if(isOffline())
             return glassWindows.get(ThreadLocalRandom.current().nextInt(0, glassWindows.size()));
+        Timer timer = new Timer();
         try {
-            Timer timer = new Timer();
             startTimer(timer, this);
             String use = gameScreen.getWindow(glassWindows.stream().map(Identifiable::getId).collect(Collectors.toList()));
             Optional<GlassWindow> optionalGlassWindow = glassWindows.stream().filter(g -> g.getId().equals(use)).findAny();
@@ -188,6 +188,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
         } catch (RemoteException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
+        endTimer(timer);
         setOffline();
         return glassWindows.get(ThreadLocalRandom.current().nextInt(0, glassWindows.size()));
     }
@@ -234,6 +235,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
             try {
                 ret.append(function.apply(use, string));
             } catch (RemoteException e) {
+                endTimer(timer);
                 setOffline();
                 ret.append(CommunicationChannel.fakeResponse(canSkip, undoEnabled, options));
             }
@@ -263,7 +265,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
         if (selection.isPresent()) {
             return selection.get();
         }
-
+        endTimer(timer);
         setOffline();
         return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);
     }
@@ -273,7 +275,7 @@ public final class RmiCommunicationChannel extends CommunicationChannel implemen
      */
     @Override
     public void setOffline() {
-            super.setOffline();
+        super.setOffline();
         try {
             UnicastRemoteObject.unexportObject(this,true);
         } catch (NoSuchObjectException e) {

@@ -31,25 +31,10 @@ import java.util.stream.Collectors;
 public final class SocketCommunicationChannel extends CommunicationChannel {
 
     private static final Logger logger = LogMaker.getLogger(SocketCommunicationChannel.class.getName(), Level.ALL);
-    private static long pingTimeout;
     private final Socket socket;
     private final BufferedReader in;
     private final PrintWriter out;
     private boolean connected;
-    private static final String PING_TIMEOUT = "pingTimeout";
-    private static final int STD_PING_TIMEOUT = 1;
-    private static final String CONFIG_PATH = "resources/ServerResources/config.json";
-
-
-    static {
-        JSONObject config;
-        try {
-            config = (JSONObject)new JSONParser().parse(new FileReader(new File(CONFIG_PATH)));
-            pingTimeout = (long)config.get(PING_TIMEOUT);
-        } catch (ParseException | IOException e) {
-            pingTimeout = STD_PING_TIMEOUT;
-        }
-    }
 
     /**
      * Creates a new SocketCommChannel communicating with a single client
@@ -64,20 +49,6 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
         this.socket = socket;
         this.in = in;
         this.out = out;
-        pingUntilConnected(pingTimeout);
-    }
-
-    private void pingUntilConnected(long timeout){
-        new Thread(() -> {
-            while (!isOffline()) {
-                try {
-                    Thread.sleep(timeout);
-                } catch (InterruptedException e) {
-                    logger.log(Level.WARNING, e.getMessage());
-                }
-            }
-            logger.log(Level.WARNING, PING_TIMEOUT);
-        }).start();
     }
 
     /**
@@ -86,7 +57,7 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
      */
     @Override
     public boolean isOffline() {
-        if (out.checkError())
+        if (!socket.isConnected())
             setOffline();
         return !connected;
     }
@@ -252,14 +223,17 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
                     if (glassWindow.isPresent()) {
                         return glassWindow.get();
                     } else {
+                        endTimer(timer);
                         setOffline();
                     }
                 } else {
+                    endTimer(timer);
                     setOffline();
                 }
             }
         }catch(ParseException | IOException | NullPointerException e){
             logger.log(Level.WARNING, e.getMessage(), e);
+            endTimer(timer);
             setOffline();
         }
         return glassWindows.get(ThreadLocalRandom.current().nextInt(0, glassWindows.size()));
@@ -321,7 +295,6 @@ public final class SocketCommunicationChannel extends CommunicationChannel {
             }
         }catch(ParseException  | IOException |NullPointerException e){
             logger.log(Level.WARNING, e.getMessage(), e);
-            setOffline();
         }
         setOffline();
         return CommunicationChannel.fakeResponse(canSkip, undoEnabled, options);

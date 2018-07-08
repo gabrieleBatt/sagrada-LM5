@@ -188,10 +188,11 @@ public class Game implements Runnable {
      * @param newCc communicationChannel to add
      */
     synchronized void changeChannel(CommunicationChannel newCc){
-        commChannels = getCommChannels().stream()
+        List<CommunicationChannel> newList = getCommChannels().stream()
                 .filter(cc -> !cc.getNickname().equals(newCc.getNickname()))
                 .collect(Collectors.toList());
-        commChannels.add(newCc);
+        newList.add(newCc);
+        commChannels = newList;
     }
 
     /**

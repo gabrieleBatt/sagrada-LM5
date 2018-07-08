@@ -84,12 +84,12 @@ public class TurnActionCommand implements ActionCommand{
             actionChosen = cc.chooseFrom(options, Message.NEXT_MOVE.name(), true, false);
             doActionChosen(actionChosen);
         }while(reset);
+        options.remove(actionChosen);
         backUp();
         do{
             reset = false;
             //choose second action
             if(!skip) {
-                options.remove(actionChosen);
                 actionChosen = cc.chooseFrom(options, Message.NEXT_MOVE.name(), true, true);
                 doActionChosen(actionChosen);
             }
