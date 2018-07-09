@@ -1,0 +1,1 @@
+To execute the client Gui instead of Cli, add the flags [-g] or [-gui] 
